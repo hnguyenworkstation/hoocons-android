@@ -7,18 +7,10 @@
     android:background="@color/white"
     android:layout_height="match_parent">
 
-    <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
-        android:id="@+id/slogin_loader"
-        android:layout_marginTop="@dimen/intro_logo_padding"
-        android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/intro_logo_size"
-        android:layout_height="@dimen/intro_logo_size"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/icon_image"
-        app:cfl_border="true"
-        app:cfl_border_width="2dp"
-        app:cfl_progress="80"
-        app:cfl_wave_amplitude="0.06"
-        app:cfl_wave_color="@color/colorPrimary"/>
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:src="@drawable/ic_logo_image"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

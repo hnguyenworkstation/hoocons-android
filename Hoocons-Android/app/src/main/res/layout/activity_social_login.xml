@@ -7,18 +7,14 @@
     xmlns:flatui="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
-        android:id="@+id/slogin_loader"
+    <ImageView
+        android:id="@+id/logo_image"
         android:layout_marginTop="@dimen/margin_48"
         android:layout_centerHorizontal="true"
         android:layout_width="@dimen/intro_logo_size"
         android:layout_height="@dimen/intro_logo_size"
-        android:src="@drawable/icon_image"
-        app:cfl_border="true"
-        app:cfl_border_width="2dp"
-        app:cfl_progress="80"
-        app:cfl_wave_amplitude="0.06"
-        app:cfl_wave_color="@color/colorPrimary"/>
+        android:src="@drawable/ic_logo_image"
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/slogin_title"
@@ -27,7 +23,7 @@
         android:gravity="center"
         android:layout_marginTop="@dimen/margin_16"
         android:text="@string/welcome"
-        android:layout_below="@id/slogin_loader"
+        android:layout_below="@id/logo_image"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/slide_title"
         android:textColor="@color/black"
