@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Hoocons</string>
+
+
+    <string name="tabbar_featured">Featured</string>
+    <string name="tabbar_nearme">Near me</string>
+    <string name="tabbar_chatroom">Messages</string>
+    <string name="tabbar_notif">Notification</string>
+    <string name="tabbar_more">More</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- FAILED CONNECTION SCREEN -->
+    <string name="no_connection_tittle">Failed to connect to internet</string>
+    <string name="no_connection_message">Please check your device\'s internet connection and try again</string>
+
+    <!-- NOTIFICATION FRAGMENT -->
+    <string name="null_notification_title">No notifications yet</string>
+    <string name="null_notification_message">You have not received any notifications from your followed friends yet. Start making friends now! Click here</string>
+
+    <!-- AROUND FRAGMENT -->
+    <string name="seemore">see more</string>
+    <string name="nearme_user">User Around</string>
+    <string name="nearme_event">Events Around</string>
+    <string name="empty_local_screen_title">Your location is OFF</string>
+    <string name="empty_local_screen_message">Turn on your device\'s location to see what is going on around you! Click here</string>
+
+
+    <!-- Setting Strings -->
+    <string name="setting">Settings</string>
+    <string name="setting_notif">Notifications</string>
+    <string name="setting_account">Account</string>
+    <string name="setting_emails">Emails</string>
+    <string name="setting_login_as">login as hnguyen3@gmail.com</string>
+    <string name="setting_signout">Sign Out</string>
+    <string name="action_phone_login">Phone Verification</string>
+    <string name="action_login">Already a member? Login</string>
+    <string name="continue_with_phone_number">Continue with phone number</string>
+    <string name="login_hint_text">Use phone number and password to identify</string>
+    <string name="continue_text">Continue</string>
+    <string name="reload">Try to Reload</string>
+    <string name="welcome">Welcome to Hoocon community</string>
+    <string name="welcome_desc">A newer, stronger way to connect \n everyone over the world</string>
+
+</resources>

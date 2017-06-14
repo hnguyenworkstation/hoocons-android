@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/featured"
+        android:icon="@drawable/ic_home_white_24dp"
+        android:enabled="true"
+        android:title="@string/tabbar_featured"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/nearme"
+        android:icon="@drawable/ic_near_me_white_24dp"
+        android:title="@string/tabbar_nearme"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/chat_list"
+        android:icon="@drawable/ic_chat_white_24dp"
+        android:title="@string/tabbar_chatroom"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/ic_notifications_white_24dp"
+        android:title="@string/tabbar_notif"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more_horiz_white_24dp"
+        android:title="@string/tabbar_more"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+</menu>

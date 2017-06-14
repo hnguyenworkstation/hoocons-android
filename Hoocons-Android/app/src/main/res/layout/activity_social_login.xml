@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
+        android:id="@+id/slogin_loader"
+        android:layout_marginTop="@dimen/margin_48"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/intro_logo_size"
+        android:layout_height="@dimen/intro_logo_size"
+        android:src="@drawable/icon_image"
+        app:cfl_border="true"
+        app:cfl_border_width="2dp"
+        app:cfl_progress="80"
+        app:cfl_wave_amplitude="0.06"
+        app:cfl_wave_color="@color/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/slogin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_16"
+        android:text="@string/welcome"
+        android:layout_below="@id/slogin_loader"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/slide_title"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slogin_title"
+        android:layout_marginTop="@dimen/margin_16"
+        android:id="@+id/slogin_desc"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/welcome_desc"
+        android:textSize="@dimen/slide_desc"
+        android:textColor="@color/black"/>
+
+    <com.cengalabs.flatui.views.FlatButton
+        android:layout_above="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/slogin_phonelogin"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/active_button"
+        android:drawableStart="@drawable/ic_dialpad_white_24dp"
+        android:text="@string/action_phone_login"
+        android:padding="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_12"
+        android:layout_margin="@dimen/margin_16"
+        flatui:fl_theme="@array/orange"
+        flatui:fl_fontFamily="roboto"
+        flatui:fl_fontWeight="bold"
+        flatui:fl_touchEffect="fl_ripple"
+        flatui:fl_fontExtension="ttf"/>
+
+    <TextView
+        android:layout_marginBottom="@dimen/margin_24"
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/action_login"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_10"/>
+</RelativeLayout>
