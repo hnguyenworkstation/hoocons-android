@@ -3,71 +3,76 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    xmlns:flatui="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/colorPrimaryDark"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/logo_image"
-        android:layout_marginTop="@dimen/margin_48"
-        android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/intro_logo_size"
-        android:layout_height="@dimen/intro_logo_size"
-        android:src="@drawable/icon_image"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:id="@+id/slogin_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/margin_16"
-        android:text="@string/welcome"
-        android:layout_below="@id/logo_image"
-        android:layout_centerHorizontal="true"
-        android:textSize="@dimen/slide_title"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/slogin_title"
-        android:layout_marginTop="@dimen/margin_16"
-        android:id="@+id/slogin_desc"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:text="@string/welcome_desc"
-        android:textSize="@dimen/slide_desc"
-        android:textColor="@color/black"/>
-
-    <com.cengalabs.flatui.views.FlatButton
-        android:layout_above="@+id/register"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/slogin_phonelogin"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/active_button"
-        android:drawableStart="@drawable/ic_dialpad_white_24dp"
-        android:text="@string/action_phone_login"
-        android:padding="@dimen/margin_8"
-        android:layout_marginTop="@dimen/margin_12"
-        android:layout_margin="@dimen/margin_16"
-        flatui:fl_theme="@array/orange"
-        flatui:fl_fontFamily="roboto"
-        flatui:fl_fontWeight="bold"
-        flatui:fl_touchEffect="fl_ripple"
-        flatui:fl_fontExtension="ttf"/>
+        android:layout_height="match_parent"
+        card_view:cardCornerRadius="8dp">
 
-    <TextView
-        android:layout_marginBottom="@dimen/margin_24"
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/action_login"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_10"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/logo_image"
+                android:layout_marginTop="@dimen/margin_48"
+                android:layout_centerHorizontal="true"
+                android:layout_width="@dimen/intro_logo_size"
+                android:layout_height="@dimen/intro_logo_size"
+                android:src="@drawable/icon_image"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/slogin_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/welcome"
+                android:layout_below="@id/logo_image"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/slide_title"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/slogin_title"
+                android:layout_marginTop="@dimen/margin_16"
+                android:id="@+id/slogin_desc"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/welcome_desc"
+                android:textSize="@dimen/slide_desc"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/register_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_24"
+                android:text="@string/continue_with_phone_number"
+                android:layout_above="@+id/register"
+                android:textStyle="bold"
+                android:background="@drawable/active_button"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:layout_marginBottom="@dimen/margin_24"
+                android:id="@+id/register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/action_login"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_10"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

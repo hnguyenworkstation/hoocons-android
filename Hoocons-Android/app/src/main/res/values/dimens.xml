@@ -129,7 +129,7 @@
     <dimen name="cardview_medicon_size">30dp</dimen>
 
     <!-- Intro Activity Dimen -->
-    <dimen name="intro_logo_size">200dp</dimen>
+    <dimen name="intro_logo_size">148dp</dimen>
     <dimen name="dots_height">30dp</dimen>
     <dimen name="dots_margin_bottom">20dp</dimen>
     <dimen name="img_width_height">120dp</dimen>

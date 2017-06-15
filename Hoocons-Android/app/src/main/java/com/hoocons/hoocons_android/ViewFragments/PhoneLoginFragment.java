@@ -1,34 +1,15 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class FeaturedFragment extends Fragment {
-    @BindView(R.id.screen_no_connection_error)
-    RelativeLayout mErrorScreen;
-    @BindView(R.id.screen_featured_fragment)
-    RelativeLayout mMainScreen;
-    @BindView(R.id.swipe_ref_layout)
-    SwipeRefreshLayout mSwipeRefLayout;
-    @BindView(R.id.bottom_menu)
-    RelativeLayout mBottomMenuLayout;
-    @BindView(R.id.header_profile)
-    ImageView mImageHeader;
-
+public class PhoneLoginFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -36,12 +17,12 @@ public class FeaturedFragment extends Fragment {
     private String mParam2;
 
 
-    public FeaturedFragment() {
+    public PhoneLoginFragment() {
         // Required empty public constructor
     }
 
-    public static FeaturedFragment newInstance(String param1, String param2) {
-        FeaturedFragment fragment = new FeaturedFragment();
+    public static PhoneLoginFragment newInstance(String param1, String param2) {
+        PhoneLoginFragment fragment = new PhoneLoginFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,9 +43,9 @@ public class FeaturedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_featured, container, false);
-        ButterKnife.bind(this, rootView);
+        View rootView = inflater.inflate(R.layout.fragment_phone_login, container, false);
 
         return rootView;
     }
+
 }

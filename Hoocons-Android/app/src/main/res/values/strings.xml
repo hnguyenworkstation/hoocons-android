@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">Hoocons</string>
-
-
     <string name="tabbar_featured">Featured</string>
     <string name="tabbar_nearme">Near me</string>
     <string name="tabbar_chatroom">Messages</string>
@@ -26,7 +23,6 @@
     <string name="empty_local_screen_title">Your location is OFF</string>
     <string name="empty_local_screen_message">Turn on your device\'s location to see what is going on around you! Click here</string>
 
-
     <!-- Setting Strings -->
     <string name="setting">Settings</string>
     <string name="setting_notif">Notifications</string>
@@ -36,7 +32,7 @@
     <string name="setting_signout">Sign Out</string>
     <string name="action_phone_login">Phone Verification</string>
     <string name="action_login">Already a member? Login</string>
-    <string name="continue_with_phone_number">Continue with phone number</string>
+    <string name="continue_with_phone_number">Register with phone number</string>
     <string name="login_hint_text">Use phone number and password to identify</string>
     <string name="continue_text">Continue</string>
     <string name="reload">Try to Reload</string>
