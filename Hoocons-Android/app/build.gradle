@@ -32,14 +32,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
-
-
-
-
-
-
-    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:customtabs:25.3.1'
     compile 'com.android.support:mediarouter-v7:25.3.1'
@@ -49,11 +41,12 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-core-utils:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:10.2.6'
-    compile 'com.google.android.gms:play-services-places:10.2.6'
-    compile 'com.google.android.gms:play-services-nearby:10.2.6'
-    compile 'com.google.android.gms:play-services-identity:10.2.6'
-    compile 'com.google.android.gms:play-services-location:10.2.6'
+    compile 'com.google.android.gms:play-services-maps:11.0.0'
+    compile 'com.google.android.gms:play-services-places:11.0.0'
+    compile 'com.google.android.gms:play-services-nearby:11.0.0'
+    compile 'com.google.android.gms:play-services-identity:11.0.0'
+    compile 'com.google.android.gms:play-services-location:11.0.0'
+    compile 'com.google.firebase:firebase-auth:11.0.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -76,3 +69,4 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'com.google.gms.google-services'

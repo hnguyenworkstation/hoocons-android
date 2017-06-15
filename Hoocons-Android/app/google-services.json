@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "964957524811",
+    "firebase_url": "https://hoocons-54816.firebaseio.com",
+    "project_id": "hoocons-54816",
+    "storage_bucket": "hoocons-54816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964957524811:android:1e179414d5eedb8c",
+        "android_client_info": {
+          "package_name": "com.hoocons.hoocons_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964957524811-fatovn9lpv65cnimcsalrj3qlukvsg2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEYkxl9aeazSa5tiqkSy4aE2_Upjn97qs"
+        },
+        {
+          "current_key": "AIzaSyCpNi1X2igq7O1HvO72ZyMZu9GdJuWWUBo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
