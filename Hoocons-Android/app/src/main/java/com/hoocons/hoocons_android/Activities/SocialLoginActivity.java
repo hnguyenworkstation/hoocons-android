@@ -1,6 +1,8 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -18,5 +20,12 @@ public class SocialLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social_login);
         ButterKnife.bind(this);
+
+        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
+            }
+        });
     }
 }

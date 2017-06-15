@@ -5,19 +5,96 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.hoocons.hoocons_android.ViewFragments.PhoneLoginFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        card_view:cardCornerRadius="8dp">
+        card_view:cardCornerRadius="12dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/custom_toolbar"
+                android:layout_alignParentTop="true">
+                <include layout="@layout/custom_login_actionbar"/>
+            </RelativeLayout>
 
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/custom_toolbar">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_12"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.hbb20.CountryCodePicker
+                            android:layout_marginTop="2dp"
+                            android:id="@+id/country_code_picker"
+                            android:layout_width="wrap_content"
+                            app:defaultNameCode="US"
+                            app:textSize="20sp"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Phone number"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:ellipsize="start"
+                            android:textSize="20sp"
+                            android:textColor="@android:color/black"/>
+                    </LinearLayout>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:ellipsize="start"
+                        android:textSize="20sp"
+                        android:textColor="@android:color/black"/>
+
+                    <Button
+                        android:id="@+id/register_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="148dp"
+                        android:layout_height="38dp"
+                        android:layout_margin="@dimen/margin_12"
+                        android:text="Verify"
+                        android:layout_above="@+id/register"
+                        android:textStyle="normal"
+                        android:background="@drawable/active_button"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_marginBottom="@dimen/margin_24"
+                        android:id="@+id/forget_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_reset_password"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_10"/>
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

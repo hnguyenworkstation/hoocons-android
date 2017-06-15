@@ -6,10 +6,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.hoocons.hoocons_android.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PhoneLoginFragment extends Fragment {
+    @BindView(R.id.action_close)
+    ImageButton mCloseButton;
+    @BindView(R.id.action_back)
+    ImageButton mBackButton;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -44,6 +53,7 @@ public class PhoneLoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_phone_login, container, false);
+        ButterKnife.bind(this, rootView);
 
         return rootView;
     }

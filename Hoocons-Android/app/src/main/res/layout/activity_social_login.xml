@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        card_view:cardCornerRadius="8dp">
+        card_view:cardCornerRadius="12dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:layout_margin="@dimen/margin_24"
                 android:text="@string/continue_with_phone_number"
                 android:layout_above="@+id/register"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:background="@drawable/active_button"
                 android:textColor="@color/white"/>
 
@@ -72,7 +72,6 @@
                 android:text="@string/action_login"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_10"/>
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

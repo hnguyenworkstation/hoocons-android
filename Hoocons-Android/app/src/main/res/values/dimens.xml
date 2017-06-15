@@ -23,7 +23,7 @@
 
     <!-- Actionbar Dimen -->
     <dimen name="actionbar_size">50dp</dimen>
-    <dimen name="actionbar_margin">2dp</dimen>
+    <dimen name="actionbar_margin">12dp</dimen>
     <dimen name="actionbar_margin_profile">15dp</dimen>
     <dimen name="actionbar_username_size">22sp</dimen>
     <dimen name="actionbar_nickname_size">14sp</dimen>
@@ -46,6 +46,8 @@
     <dimen name="chat_avatar_corner">4dp</dimen>
     <dimen name="chat_avatar_marginright">30dp</dimen>
     <dimen name="chat_footer_dimen">30dp</dimen>
+    <dimen name="custom_toolbar_height">48dp</dimen>
+    <dimen name="custom_toolbar_text_size">24sp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_4">4dp</dimen>
