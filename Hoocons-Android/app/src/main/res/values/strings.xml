@@ -38,6 +38,8 @@
     <string name="user_display_name">Full name</string>
     <string name="user_nickname">Nickname</string>
     <string name="check">Check</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>
