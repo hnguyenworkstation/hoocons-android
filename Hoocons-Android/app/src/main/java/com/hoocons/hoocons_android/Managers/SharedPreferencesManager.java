@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
  * Created by hNguyen on 6/5/2017.
  */
 public class SharedPreferencesManager {
-    private final String TOKEN = "TOKEN";
+    private final String USER_TOKEN = "USER_TOKEN";
     private final String FCMTOKEN = "FCMTOKEN";
     private final String FCMTOKEN_OLD = "TOKENOLD";
     private final String KEY_PREF = "5p46h@7";
@@ -47,5 +47,13 @@ public class SharedPreferencesManager {
 
     public boolean isFirstLaunch() {
         return sharedPreferences.getBoolean(IS_FIRST_LAUNCH, true);
+    }
+
+    public void setUserToken(String token) {
+        sharedPreferences.edit().putString(USER_TOKEN, token).apply();
+    }
+
+    public String getUserToken() {
+        return sharedPreferences.getString(USER_TOKEN, "");
     }
 }

@@ -73,7 +73,6 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
             mStateArg = getArguments().getString(STATE_ARG);
         }
 
-        mVerificationInProgress = false;
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
