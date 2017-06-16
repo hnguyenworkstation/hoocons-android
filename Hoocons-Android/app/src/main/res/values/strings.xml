@@ -30,6 +30,14 @@
     <string name="send_code">Send code</string>
     <string name="verify">Verify</string>
     <string name="resend">Send again</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="submit">Submit</string>
+    <string name="user_info">User Information</string>
+    <string name="user_display_name">Full name</string>
+    <string name="user_nickname">Nickname</string>
+    <string name="check">Check</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>

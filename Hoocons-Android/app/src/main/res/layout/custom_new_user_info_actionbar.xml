@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/custom_toolbar_height">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/user_info"
+        android:textSize="@dimen/custom_toolbar_text_size"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:layout_centerVertical="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginEnd="@dimen/margin_12"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray_alpha"/>
+
+</RelativeLayout>

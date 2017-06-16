@@ -22,12 +22,9 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.hoocons.hoocons_android.R;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.concurrent.Executor;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class VerifyPhoneFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.action_close)
@@ -43,31 +40,28 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
     private final String TAG = VerifyPhoneFragment.class.getSimpleName();
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String STATE_ARG = "STATE_ARG";
 
-    private String mParam1;
-    private String mParam2;
-
-    private static final int STATE_INITIALIZED = 1;
-    private static final int STATE_CODE_SENT = 2;
+    private static final String STATE_RESET_PASSWORD = "RESET_PASSWORD";
+    private static final String STATE_REGISTER = "REGISTER";
 
     private FirebaseAuth mFirebaseAuth;
     private String mCountryCode;
 
     private boolean mVerificationInProgress = false;
+    private SweetAlertDialog pDialog;
     private String mPhoneNumber;
+    private String mStateArg;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     public VerifyPhoneFragment() {
 
     }
 
-    public static VerifyPhoneFragment newInstance(String param1, String param2) {
+    public static VerifyPhoneFragment newInstance(String stateArg) {
         VerifyPhoneFragment fragment = new VerifyPhoneFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(STATE_ARG, stateArg);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,8 +70,7 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mStateArg = getArguments().getString(STATE_ARG);
         }
 
         mVerificationInProgress = false;
@@ -88,12 +81,14 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 Log.d(TAG, "onVerificationCompleted:" + credential);
                 mVerificationInProgress = false;
+                pDialog.dismiss();
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
                 Log.w(TAG, "onVerificationFailed", e);
                 mVerificationInProgress = false;
+                pDialog.dismiss();
 
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
 
@@ -106,11 +101,11 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
             public void onCodeSent(String verificationId,
                                    PhoneAuthProvider.ForceResendingToken token) {
                 Log.d(TAG, "onCodeSent:" + verificationId);
-
+                pDialog.dismiss();
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
                 ft.replace(R.id.login_container,
-                        VerifyCodeFragment.newInstance(verificationId, mPhoneNumber),
+                        VerifyCodeFragment.newInstance(verificationId, mPhoneNumber, mStateArg),
                         "verify_code_fragment");
                 ft.commit();
             }
@@ -177,6 +172,7 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.submit_button:
                 if (!mVerificationInProgress && validatePhoneNumber()) {
+                    showProcessDialog();
                     mPhoneNumber = String.format("%s%s", mCountryCode, mPhoneInput.getText().toString());
                     startPhoneNumberVerification(mPhoneNumber);
                 }
@@ -184,5 +180,12 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
             default:
                 break;
         }
+    }
+
+    private void showProcessDialog() {
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
+        pDialog.setCancelable(false);
+        pDialog.show();
     }
 }
