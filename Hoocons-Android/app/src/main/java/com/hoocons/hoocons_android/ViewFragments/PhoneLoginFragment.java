@@ -3,10 +3,12 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.hoocons.hoocons_android.R;
 
@@ -16,8 +18,8 @@ import butterknife.ButterKnife;
 public class PhoneLoginFragment extends Fragment {
     @BindView(R.id.action_close)
     ImageButton mCloseButton;
-    @BindView(R.id.action_back)
-    ImageButton mBackButton;
+    @BindView(R.id.forget_password)
+    TextView mResetPasswordText;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -54,6 +56,16 @@ public class PhoneLoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_phone_login, container, false);
         ButterKnife.bind(this, rootView);
+
+        mResetPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
+                ft.replace(R.id.login_container, new VerifyPhoneFragment(), "verify_phone_fragment");
+                ft.commit();
+            }
+        });
 
         return rootView;
     }

@@ -12,14 +12,13 @@
         android:id="@+id/action_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:src="@drawable/ic_arrow_back_colored"
         android:layout_marginStart="@dimen/actionbar_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/confirmation_code"
         android:textSize="@dimen/custom_toolbar_text_size"
         android:textColor="@color/black"
         android:textAlignment="center"

@@ -23,6 +23,14 @@
     <string name="empty_local_screen_title">Your location is OFF</string>
     <string name="empty_local_screen_message">Turn on your device\'s location to see what is going on around you! Click here</string>
 
+    <!-- LOGIN SCREENS-->
+    <string name="verify_phone_number">Verify Phone Number</string>
+    <string name="confirmation_code">Confirmation Code</string>
+    <string name="confirm_code_explain">Enter the code that have been sent to your phone through SMS</string>
+    <string name="send_code">Send code</string>
+    <string name="verify">Verify</string>
+    <string name="resend">Send again</string>
+
     <!-- Setting Strings -->
     <string name="setting">Settings</string>
     <string name="setting_notif">Notifications</string>
