@@ -47,7 +47,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.SocialLoginActivity" />
-        <activity android:name=".Activities.LoginActivity"></activity>
+        <activity android:name=".Activities.LoginActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
