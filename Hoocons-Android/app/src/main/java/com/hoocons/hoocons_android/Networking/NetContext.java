@@ -40,7 +40,7 @@ public class NetContext {
 
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl("http://hoocons.herokuapp.com/")
+                .baseUrl("http://127.0.0.1:5000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
