@@ -13,6 +13,16 @@
         android:textColor="@color/black"
         android:textAlignment="center"
         android:layout_centerVertical="true"/>
+    
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/margin_24"
+        android:indeterminate="true"/>
 
     <View
         android:layout_width="match_parent"

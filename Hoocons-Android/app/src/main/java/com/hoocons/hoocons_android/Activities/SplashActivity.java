@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -28,11 +29,25 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, IntroActivity.class));
+                commitNextStage();
                 finish();
             }
         }, SPLASH_TIME_OUT);
 
+    }
+
+    private void commitNextStage() {
+        if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
+            startActivity(new Intent(SplashActivity.this, IntroActivity.class));
+        } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
+            startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+        } else if (SharedPreferencesManager.getDefault().isNeededToRequestInfo()) {
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class)
+                    .putExtra("REQUEST_INFO", true)
+                    .putExtra("SKIP_LOGIN", true));
+        } else {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        }
     }
 
     @Override
