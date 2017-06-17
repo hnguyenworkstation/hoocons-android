@@ -35,10 +35,10 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
 
     @Override
     protected void onPostExecute(String s) {
-        if (token == null) {
+        if (SharedPreferencesManager.getDefault().getUserToken() == null) {
             checkAvailability();
         } else {
-
+            retrieveUserInfo();
         }
     }
 
@@ -67,8 +67,7 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
             @Override
             public void onResponse(Call<TokenRespond> call, Response<TokenRespond> response) {
                 if (response.code() == 200) {
-                    token = response.body().getAccessToken();
-                    SharedPreferencesManager.getDefault().setUserToken(token);
+                    SharedPreferencesManager.getDefault().setUserToken(response.body().getAccessToken());
                 }
             }
 
@@ -86,12 +85,10 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
 
     private void checkAvailability() {
         UserServices services =  NetContext.instance.create(UserServices.class);
-
         services.checkUsernameAvailability(new CredentialRequest(username)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-
                     EventBus.getDefault().post(new NewUserRequest());
                 } else {
                     EventBus.getDefault().post(new LoginFailedRequest());

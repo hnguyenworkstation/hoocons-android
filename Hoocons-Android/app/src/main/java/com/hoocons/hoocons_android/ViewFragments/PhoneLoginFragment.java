@@ -4,6 +4,7 @@ package com.hoocons.hoocons_android.ViewFragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PhoneLoginFragment extends Fragment implements View.OnClickListener{
+    private final String TAG = PhoneLoginFragment.class.getSimpleName();
+
     @BindView(R.id.action_close)
     ImageButton mCloseButton;
     @BindView(R.id.forget_password)
@@ -148,6 +151,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     showProcessDialog();
                     mPhoneNumber = String.format("%s%s", mCountryCode, mPhoneInput.getText().toString());
 
+                    Log.e(TAG, String.format("Phone #: %s", mPhoneNumber));
                     // Execute task to login
                     new LoginAndCheckUserInfoTask(mPhoneNumber, mPasswordInput.getText()
                             .toString()).execute();

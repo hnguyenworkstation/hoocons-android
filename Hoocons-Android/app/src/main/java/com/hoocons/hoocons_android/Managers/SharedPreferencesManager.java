@@ -54,6 +54,6 @@ public class SharedPreferencesManager {
     }
 
     public String getUserToken() {
-        return sharedPreferences.getString(USER_TOKEN, "");
+        return sharedPreferences.getString(USER_TOKEN, null);
     }
 }

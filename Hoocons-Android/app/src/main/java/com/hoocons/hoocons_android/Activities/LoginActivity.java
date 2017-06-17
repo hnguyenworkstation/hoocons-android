@@ -14,7 +14,7 @@ import com.hoocons.hoocons_android.ViewFragments.VerifyPhoneFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class LoginActivity extends DraggerActivity {
+public class LoginActivity extends BaseActivity {
     private FragmentTransaction mFragTransition;
     private FragmentManager mFragManager;
 
