@@ -40,6 +40,13 @@
     <string name="check">Check</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="error_phone_number">invalid phone number</string>
+    <string name="error_password">must enter password</string>
+    <string name="login_failed">Login failed! Please try again</string>
+    <string name="new_user_question">New User?</string>
+    <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>
+    <string name="register">Register</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>
