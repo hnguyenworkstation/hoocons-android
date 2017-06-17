@@ -132,7 +132,11 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
     private boolean validateNicknameField() {
         String nickname = mNicknameInput.getText().toString();
-        if (nickname.matches("[a-zA-Z0-9]*")) {
+        if (nickname.isEmpty()) {
+            mNicknameInput.setError(getResources().getString(R.string.error_empty_nickname));
+            return false;
+        }
+        if (nickname.matches("[a-zA-Z0-9]*") && nickname.length() >= 5) {
             return true;
         } else {
             mNicknameInput.setError(getResources().getString(R.string.nickname_error));
