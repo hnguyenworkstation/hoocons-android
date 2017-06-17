@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +36,7 @@ public class BaseApplication extends Application {
         }
 
         // Override font
+        TypefaceProvider.registerDefaultIconSets();
         FontOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
         FontOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Light.ttf");
     }

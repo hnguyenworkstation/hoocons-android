@@ -1,4 +1,4 @@
-package com.hoocons.hoocons_android.Networking.Responds;
+package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by hungnguyen on 6/16/17.
  */
-public class UserInfoRespond {
+public class UserInfoResponse {
     @SerializedName("id")
     private String id;
     @SerializedName("username")

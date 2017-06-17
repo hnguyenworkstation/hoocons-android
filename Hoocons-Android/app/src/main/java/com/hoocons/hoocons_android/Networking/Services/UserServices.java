@@ -1,8 +1,8 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
-import com.hoocons.hoocons_android.Networking.Responds.TokenRespond;
-import com.hoocons.hoocons_android.Networking.Responds.UserInfoRespond;
+import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,13 +14,11 @@ import retrofit2.http.POST;
  */
 public interface UserServices {
     @POST("/login")
-    Call<TokenRespond> login(@Body CredentialRequest request);
+    Call<TokenResponse> login(@Body CredentialRequest request);
     @POST("/api/user/availability")
     Call<Void> checkUsernameAvailability(@Body CredentialRequest request);
 
 
     @GET("/api/user/get/info")
-    Call<UserInfoRespond> getUserInfo();
-
-
+    Call<UserInfoResponse> getUserInfo();
 }

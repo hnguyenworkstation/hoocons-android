@@ -1,4 +1,4 @@
-package com.hoocons.hoocons_android.Networking.Responds;
+package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by hungnguyen on 6/16/17.
  */
 
-public class TokenRespond {
+public class TokenResponse {
     @SerializedName("access_token")
     private String accessToken;
 

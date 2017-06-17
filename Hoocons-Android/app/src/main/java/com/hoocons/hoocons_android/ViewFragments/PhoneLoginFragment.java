@@ -11,17 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.hoocons.hoocons_android.EventBus.LoginFailedRequest;
 import com.hoocons.hoocons_android.EventBus.NewUserRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCancelledRequest;
-import com.hoocons.hoocons_android.Networking.NetContext;
-import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
-import com.hoocons.hoocons_android.Networking.Responds.TokenRespond;
-import com.hoocons.hoocons_android.Networking.Services.UserServices;
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.LoginAndCheckUserInfoTask;
 
@@ -31,9 +27,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PhoneLoginFragment extends Fragment implements View.OnClickListener{
     private final String TAG = PhoneLoginFragment.class.getSimpleName();
@@ -120,6 +113,13 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
         ft.replace(R.id.login_container, new VerifyPhoneFragment(), "verify_phone_fragment");
+        ft.commit();
+    }
+
+    private void commitUserInfoUpdateScreen() {
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
+        ft.replace(R.id.login_container, new NewUserInfoFragment(), "new_user_info_fragment");
         ft.commit();
     }
 
@@ -211,5 +211,11 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
         pDialog.dismiss();
         Toast.makeText(getContext(), getResources().getString(R.string.login_failed),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(UserInfoRequest request) {
+        pDialog.dismiss();
+        commitUserInfoUpdateScreen();
     }
 }

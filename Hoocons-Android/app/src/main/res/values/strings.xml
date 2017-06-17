@@ -47,6 +47,7 @@
     <string name="new_user_question">New User?</string>
     <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>
     <string name="register">Register</string>
+    <string name="update">Update</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>

@@ -6,12 +6,13 @@ import android.widget.Toast;
 import com.hoocons.hoocons_android.EventBus.LoginFailedRequest;
 import com.hoocons.hoocons_android.EventBus.NewUserRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCancelledRequest;
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
-import com.hoocons.hoocons_android.Networking.Responds.TokenRespond;
+import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
-import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -63,16 +64,16 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
 
     private void attemptToLogin(String phoneNumber, String password) {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.login(new CredentialRequest(phoneNumber, password)).enqueue(new Callback<TokenRespond>() {
+        services.login(new CredentialRequest(phoneNumber, password)).enqueue(new Callback<TokenResponse>() {
             @Override
-            public void onResponse(Call<TokenRespond> call, Response<TokenRespond> response) {
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.code() == 200) {
                     SharedPreferencesManager.getDefault().setUserToken(response.body().getAccessToken());
                 }
             }
 
             @Override
-            public void onFailure(Call<TokenRespond> call, Throwable t) {
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
 
             }
         });
@@ -80,7 +81,26 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
 
 
     private void retrieveUserInfo() {
+        UserServices services =  NetContext.instance.create(UserServices.class);
+        services.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+            @Override
+            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
+                if (response.code() == 200) {
+                    UserInfoResponse resp = response.body();
 
+                    if (resp.getUsername().equals(resp.getNickname())) {
+                        EventBus.getDefault().post(new UserInfoRequest());
+                    } else {
+                        // Todo: update infomation here
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     private void checkAvailability() {
