@@ -20,6 +20,7 @@ public class SharedPreferencesManager {
     private final String KEY_PREF = "5p46h@7";
     private final String USER_TOKEN = "USER_TOKEN";
     private final String REQUEST_UPDATE_INFO = "REQUEST_UPDATE_INFO";
+    private final String USER_NAME = "USERNAME";
 
     /* ******************************************
     * APPLICATION INITIALIZATION PREFERENCES
@@ -68,6 +69,13 @@ public class SharedPreferencesManager {
         return sharedPreferences.getBoolean(REQUEST_UPDATE_INFO, true);
     }
 
+    public void setUserName(String name){
+        sharedPreferences.edit().putString(USER_NAME, name).apply();
+    }
+
+    public String getUserName() {
+        return sharedPreferences.getString(USER_NAME, "");
+    }
 
     /* ******************************************
     * APPLICATION BEHAVIOR PREFERENCES

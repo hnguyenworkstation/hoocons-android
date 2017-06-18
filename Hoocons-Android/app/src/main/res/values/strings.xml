@@ -53,6 +53,9 @@
     <string name="checked">Checked</string>
     <string name="nickname_unavailable">This nickname is taken</string>
     <string name="error_empty_nickname">Nickname must not be empty</string>
+    <string name="error_empty_name">Display name must be provided</string>
+    <string name="birthday">Birthday</string>
+    <string name="updating">Updating</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>

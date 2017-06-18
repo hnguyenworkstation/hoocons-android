@@ -88,10 +88,14 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
                 if (response.code() == 200) {
                     UserInfoResponse resp = response.body();
 
-                    if (resp.getUsername().equals(resp.getNickname())) {
-                        EventBus.getDefault().post(new UserInfoRequest());
-                    } else {
-                        // Todo: update infomation here
+                    if (resp != null) {
+                        SharedPreferencesManager.getDefault().setUserName(resp.getUsername());
+
+                        if (resp.getUsername().equals(resp.getNickname())) {
+                            EventBus.getDefault().post(new UserInfoRequest());
+                        } else {
+                            // Todo: update infomation here
+                        }
                     }
                 }
             }

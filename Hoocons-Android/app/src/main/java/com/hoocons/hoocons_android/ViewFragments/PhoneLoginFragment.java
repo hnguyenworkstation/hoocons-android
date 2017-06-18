@@ -18,6 +18,7 @@ import com.hoocons.hoocons_android.EventBus.LoginFailedRequest;
 import com.hoocons.hoocons_android.EventBus.NewUserRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCancelledRequest;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.LoginAndCheckUserInfoTask;
 
@@ -216,6 +217,9 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     @Subscribe
     public void onEvent(UserInfoRequest request) {
         pDialog.dismiss();
+
+        AppUtils.signInAnonymously(getActivity());
+
         commitUserInfoUpdateScreen();
     }
 }

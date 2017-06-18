@@ -1,7 +1,9 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
@@ -20,19 +22,28 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.FieldAvailableRequest;
 import com.hoocons.hoocons_android.EventBus.FieldUnavailableRequest;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.CheckNicknameAvailabilityTask;
+import com.hoocons.hoocons_android.Tasks.UpdateUserInfoTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.iwf.photopicker.PhotoPicker;
 
 public class NewUserInfoFragment extends Fragment implements View.OnClickListener,
         DatePickerDialog.OnDateSetListener{
@@ -57,6 +68,7 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+
     private final String TAG = NewUserInfoFragment.class.getSimpleName();
 
     private static final String ARG_PARAM1 = "param1";
@@ -67,8 +79,10 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
     private int mBirthYear;
     private String mBirthTime;
+    private String mProfileImagePath;
 
     private DatePickerDialog datePickerDialog;
+    private SweetAlertDialog pDialog;
 
     public NewUserInfoFragment() {
 
@@ -99,19 +113,12 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         View rootView = inflater.inflate(R.layout.fragment_new_user_info, container, false);
         ButterKnife.bind(this, rootView);
 
-        initView();
-
         mCheckNicknameBtn.setOnClickListener(this);
         mBirthDayText.setOnClickListener(this);
+        mProfileImgView.setOnClickListener(this);
+        mSubmitBtn.setOnClickListener(this);
 
         return rootView;
-    }
-
-    private void initView() {
-        Calendar now = Calendar.getInstance();
-        mBirthDayText.setText(String.format("%s/%s/%s", now.get(Calendar.MONTH) + 1,
-                now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.YEAR)));
-        mBirthDayText.setInputType(InputType.TYPE_NULL);
     }
 
     private void showDatePickerDialog() {
@@ -144,6 +151,24 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    private boolean validateNameField() {
+        String name = mDisplayNameInput.getText().toString();
+        if (name.isEmpty()) {
+            mDisplayNameInput.setError(getResources().getString(R.string.error_empty_name));
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showProcessDialog() {
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
+        pDialog.setTitleText(getResources().getString(R.string.updating));
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -156,6 +181,23 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
             case R.id.birthday_txt:
                 showDatePickerDialog();
                 break;
+            case R.id.profile_image:
+                AppUtils.startImagePickerFromFragment(getContext(), this, 1);
+                break;
+            case R.id.submit_button:
+                if (validateNameField() && validateNicknameField() && validateBirthday()) {
+                    showProcessDialog();
+                    new UpdateUserInfoTask(
+                            mDisplayNameInput.getText().toString(),
+                            mNicknameInput.getText().toString(),
+                            mGenderFemale.isChecked() ?
+                                    AppConstant.GENDER_FEMALE :
+                                    AppConstant.GENDER_MALE,
+                            mBirthTime,
+                            mProfileImagePath)
+                            .execute();
+                }
+                break;
             default:
                 break;
         }
@@ -165,7 +207,32 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         this.mBirthTime = String.format("%s-%s-%s", year, month + 1, dayOfMonth);
         this.mBirthYear = year;
-        mBirthDayText.setText(mBirthTime);
+        mBirthDayText.setText(String.format("%s/%s/%s", dayOfMonth, month + 1, year));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null){
+            final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+            if (images.size() >= 1) {
+                loadProfileImage(images.get(0));
+            }
+        }
+    }
+
+    private void loadProfileImage(String image) {
+        mProfileImagePath = image;
+
+        Glide.with(getContext())
+                .load(image)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideCircleTransformation(getContext()))
+                .placeholder(R.drawable.ab_progress)
+                .error(R.drawable.image_holder)
+                .crossFade()
+                .into(mProfileImgView);
     }
 
 
