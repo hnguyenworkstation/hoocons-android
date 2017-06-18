@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hoocons.hoocons_android">
 
@@ -35,8 +34,8 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon"
-        android:windowSoftInputMode="adjustResize">
+        android:windowSoftInputMode="adjustResize"
+        tools:replace="android:icon">
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.IntroActivity" />
         <activity android:name=".Activities.SplashActivity">
@@ -47,12 +46,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.SocialLoginActivity" />
-        <activity android:name=".Activities.LoginActivity"
+        <activity
+            android:name=".Activities.LoginActivity"
             android:configChanges="orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-
 
         <!-- ACTIVITIES FOR PHOTO PICKER -->
         <activity
@@ -61,6 +60,7 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".Activities.UserProfileActivity"></activity>
     </application>
 
 </manifest>

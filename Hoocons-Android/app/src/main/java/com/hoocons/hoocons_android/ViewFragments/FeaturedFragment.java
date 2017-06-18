@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.hoocons.hoocons_android.Activities.UserProfileActivity;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -64,6 +66,13 @@ public class FeaturedFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_featured, container, false);
         ButterKnife.bind(this, rootView);
+
+        mImageHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), UserProfileActivity.class));
+            }
+        });
 
         return rootView;
     }
