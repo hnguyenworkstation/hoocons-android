@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 /**
  * Created by hungnguyen on 6/16/17.
@@ -54,4 +55,14 @@ public interface UserServices {
      ********************************** */
     @GET("/api/user/get/info")
     Call<UserInfoResponse> getUserInfo();
+
+
+    /**********************************
+     * @Method: PUT
+     * @Name: updateUserInfo
+     * @Argument: UserInfoResponse
+     * @Purpose: update user data in the database
+     ********************************** */
+    @PUT("/api/user/update/info")
+    Call<UserInfoResponse> updateUserInfo(@Body UserInformationRequest request);
 }

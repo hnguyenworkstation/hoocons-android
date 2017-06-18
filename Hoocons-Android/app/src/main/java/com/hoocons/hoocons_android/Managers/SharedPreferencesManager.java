@@ -21,6 +21,7 @@ public class SharedPreferencesManager {
     private final String USER_TOKEN = "USER_TOKEN";
     private final String REQUEST_UPDATE_INFO = "REQUEST_UPDATE_INFO";
     private final String USER_NAME = "USERNAME";
+    private final String USER_NICKNAME = "USER_NICKNAME";
 
     /* ******************************************
     * APPLICATION INITIALIZATION PREFERENCES
@@ -75,6 +76,14 @@ public class SharedPreferencesManager {
 
     public String getUserName() {
         return sharedPreferences.getString(USER_NAME, "");
+    }
+
+    public void setUserNickname(String nickname) {
+        sharedPreferences.edit().putString(USER_NICKNAME, nickname).apply();
+    }
+
+    public String getUserNickname() {
+        return sharedPreferences.getString(USER_NICKNAME, "");
     }
 
     /* ******************************************

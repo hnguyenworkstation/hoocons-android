@@ -47,6 +47,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        overridePendingTransition(R.anim.fix_anim, R.anim.slide_out_to_bottom);
 
         ButterKnife.bind(this);
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/transparent"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.hoocons.hoocons_android.Activities.MainActivity">
 
     <android.support.v7.widget.CardView

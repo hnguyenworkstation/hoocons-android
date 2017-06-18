@@ -56,6 +56,7 @@
     <string name="error_empty_name">Display name must be provided</string>
     <string name="birthday">Birthday</string>
     <string name="updating">Updating</string>
+    <string name="bad_request">Can not connect to server!</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>

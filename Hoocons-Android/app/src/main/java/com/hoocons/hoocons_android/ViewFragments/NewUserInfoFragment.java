@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
@@ -26,8 +27,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.FieldAvailableRequest;
 import com.hoocons.hoocons_android.EventBus.FieldUnavailableRequest;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
@@ -235,6 +238,11 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 .into(mProfileImgView);
     }
 
+    private void completeLoginProcess() {
+        pDialog.dismiss();
+        EventBus.getDefault().post(new CompleteLoginRequest());
+    }
+
 
     /**********************************************
      * EVENTBUS CATCHING FIELDS
@@ -259,7 +267,13 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     }
 
     @Subscribe
-    public void onEvent(BadRequest request) {
+    public void onEvent(TaskCompleteRequest request) {
+        completeLoginProcess();
+    }
 
+    @Subscribe
+    public void onEvent(BadRequest request) {
+        pDialog.dismiss();
+        Toast.makeText(getContext(), getResources().getString(R.string.bad_request), Toast.LENGTH_SHORT).show();
     }
 }

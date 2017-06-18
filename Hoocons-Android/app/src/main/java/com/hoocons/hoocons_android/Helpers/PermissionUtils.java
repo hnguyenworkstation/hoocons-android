@@ -18,7 +18,7 @@ public class PermissionUtils {
     private static final String TAG = PermissionUtils.class.getSimpleName();
     private static PermissionUtils permissionUtil = null;
 
-    public static final boolean isOverMarshmallow() {
+    public static boolean isOverMarshmallow() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
@@ -42,7 +42,7 @@ public class PermissionUtils {
         return false;
     }
 
-    public static final List<String> findDeniedPermissions(Activity activity, List<String> permissions) {
+    public static List<String> findDeniedPermissions(Activity activity, List<String> permissions) {
         if (permissions == null || permissions.size() == 0) {
             return null;
         } else {
@@ -65,7 +65,7 @@ public class PermissionUtils {
     }
 
 
-    public static final void requestPermissions(Activity activity, int requestCode, List<String> mListPermissions) {
+    public static void requestPermissions(Activity activity, int requestCode, List<String> mListPermissions) {
         if (mListPermissions == null || mListPermissions.size() == 0) {
             return;
         }

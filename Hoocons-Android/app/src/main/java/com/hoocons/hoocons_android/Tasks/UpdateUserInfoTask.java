@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Tasks;
 
+import android.app.usage.UsageEvents;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,16 +14,26 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
 import com.hoocons.hoocons_android.Helpers.FirebaseConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+import com.hoocons.hoocons_android.Networking.Services.UserServices;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by hungnguyen on 6/17/17.
@@ -64,7 +75,34 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
     }
 
     private void uploadDataToServer(String profileUrl) {
+        // Todo: Check location information here and push with it
+        String url = profileUrl != null? profileUrl : "";
 
+        UserServices services = NetContext.instance.create(UserServices.class);
+        services.updateUserInfo(new UserInformationRequest(displayName,
+                nickname,
+                gender,
+                birthday,
+                url,
+                -179,
+                -85))
+                .enqueue(new Callback<UserInfoResponse>() {
+            @Override
+            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
+                if (response.code() == 200) {
+                    SharedPreferencesManager manager = SharedPreferencesManager.getDefault();
+                    manager.setRequestUpdateInfo(false);
+                    manager.setUserNickname(response.body().getNickname());
+
+                    EventBus.getDefault().post(new TaskCompleteRequest());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
+                EventBus.getDefault().post(new BadRequest());
+            }
+        });
     }
 
     private String uploadUserProfile(String mImagePath) throws InterruptedException {
