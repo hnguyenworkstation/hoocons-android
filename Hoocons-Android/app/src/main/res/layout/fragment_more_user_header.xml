@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_margin="@dimen/margin_16"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/profile_header_large_size"
+        android:layout_height="@dimen/profile_header_large_size"
+        android:src="@drawable/logo_image"
+        android:scaleType="fitCenter"
+        android:id="@+id/profile_header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_name"
+            android:textSize="@dimen/option_title_size"
+            android:textColor="@color/black"
+            android:text="Hung Q Nguyen"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nick_name"
+            android:textSize="@dimen/text_12"
+            android:textColor="@color/gray_alpha"
+            android:text="/@hnguyen123"/>
+
+    </LinearLayout>
+</LinearLayout>

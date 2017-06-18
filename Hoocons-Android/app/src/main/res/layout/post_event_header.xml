@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/margin_12"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/postfeed_profile_size"
+        android:layout_height="@dimen/postfeed_profile_size"
+        android:src="@drawable/logo_image"
+        android:id="@+id/post_event_profile"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_name"
+            android:textSize="@dimen/option_text_size"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/margin_4"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Hung Q Nguyen"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:id="@+id/event_privacy"
+                style="@style/wrapping_button"
+                android:textSize="@dimen/text_12"
+                app:bootstrapText=" {fa_globe} Public {fa_caret_down}"
+                app:bootstrapBrand="secondary"
+                app:buttonMode="regular"
+                app:showOutline="true"
+                app:roundedCorners="true"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:id="@+id/event_locatopn"
+                style="@style/wrapping_button"
+                android:textSize="@dimen/text_12"
+                app:bootstrapText=" {fa_location_arrow} Off"
+                app:bootstrapBrand="secondary"
+                app:buttonMode="regular"
+                app:showOutline="true"
+                app:roundedCorners="true"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

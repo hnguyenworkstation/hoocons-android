@@ -18,24 +18,27 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/verify_phone_number"
+        android:text="@string/new_event"
+        android:layout_marginStart="@dimen/margin_16"
         android:textSize="@dimen/custom_toolbar_text_size"
         android:textColor="@color/black"
-        android:textAlignment="center"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
         android:layout_toStartOf="@+id/action_close"/>
 
 
-    <ImageButton
+    <Button
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/icon_button"
+        style="?android:textAppearanceSmall"
         android:id="@+id/action_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close_colored"
-        android:layout_marginEnd="@dimen/actionbar_margin"/>
+        android:textStyle="bold"
+        android:textSize="@dimen/text_16"
+        android:clickable="false"
+        android:background="@null"
+        android:text="POST"/>
 
     <View
         android:layout_width="match_parent"
@@ -44,5 +47,4 @@
         android:layout_marginEnd="@dimen/margin_12"
         android:layout_alignParentBottom="true"
         android:background="@color/gray_alpha"/>
-
 </RelativeLayout>

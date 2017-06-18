@@ -18,8 +18,9 @@
     <dimen name="text_10">10sp</dimen>
     <dimen name="text_11">11sp</dimen>
     <dimen name="text_12">12sp</dimen>
-    <dimen name="text_14">14dp</dimen>
-    <dimen name="text_16">16dp</dimen>
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_18">18sp</dimen>
 
     <!-- Actionbar Dimen -->
     <dimen name="actionbar_size">50dp</dimen>
@@ -47,7 +48,7 @@
     <dimen name="chat_avatar_marginright">30dp</dimen>
     <dimen name="chat_footer_dimen">30dp</dimen>
     <dimen name="custom_toolbar_height">48dp</dimen>
-    <dimen name="custom_toolbar_text_size">20sp</dimen>
+    <dimen name="custom_toolbar_text_size">18sp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_4">4dp</dimen>
@@ -116,7 +117,7 @@
 
     <!-- Post Feed Activity -->
     <dimen name="postfeed_textsize">20sp</dimen>
-    <dimen name="postfeed_profile_size">80dp</dimen>
+    <dimen name="postfeed_profile_size">64dp</dimen>
     <dimen name="postfeed_image_height">200dp</dimen>
 
     <!-- Event Card View -->
@@ -262,6 +263,7 @@
 
     <!-- Override Bottombar dimens-->
     <dimen name="design_bottom_navigation_height" tools:override="true">56dp</dimen>
+    <dimen name="profile_header_large_size">80dp</dimen>
 
 
     <!-- Featured Fragment dimens -->
@@ -272,4 +274,5 @@
     <dimen name="flexible_space_height">72dp</dimen>
     <dimen name="flexible_space_image_height">240dp</dimen>
     <dimen name="flexible_space_show_fab_offset">120dp</dimen>
+    <dimen name="decorator_line_height">0.6dp</dimen>
 </resources>
