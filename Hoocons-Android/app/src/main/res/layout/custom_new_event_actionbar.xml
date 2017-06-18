@@ -24,14 +24,14 @@
         android:textColor="@color/black"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
-        android:layout_toStartOf="@+id/action_close"/>
+        android:layout_toStartOf="@+id/action_post"/>
 
 
     <Button
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         style="?android:textAppearanceSmall"
-        android:id="@+id/action_close"
+        android:id="@+id/action_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"

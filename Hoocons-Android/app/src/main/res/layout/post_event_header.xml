@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_8"
-                android:id="@+id/event_locatopn"
+                android:id="@+id/event_location"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_12"
                 app:bootstrapText=" {fa_location_arrow} Off"

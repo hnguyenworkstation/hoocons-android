@@ -81,8 +81,11 @@
     <string name="contact_us">Contact us</string>
     <string name="logout">Logout</string>
     <string name="app_info">App Info</string>
+    <string name="add_more_contents">Add more contents</string>
 
     <!-- New Event Activity -->
     <string name="new_event">New Event</string>
+    <string name="delete_title">Delete?</string>
+    <string name="delete_warning">All your changes will be permanently removed!</string>
 
 </resources>

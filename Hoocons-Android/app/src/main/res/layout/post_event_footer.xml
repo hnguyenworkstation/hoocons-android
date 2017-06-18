@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginStart="@dimen/margin_12"
+    android:layout_marginEnd="@dimen/margin_12">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/gray_alpha"/>
+
+    <LinearLayout
+        android:padding="@dimen/margin_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/add_more_contents"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/text_16"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_weight="5"
+            android:textColor="@color/black"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/event_add_photo"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_gallery_colored"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/event_add_video"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_video_colored"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/event_add_location"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_location_colored"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/event_add_sound"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_recorder_colored"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/event_add_gif"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_gif_colored"/>
+    </LinearLayout>
+</RelativeLayout>
