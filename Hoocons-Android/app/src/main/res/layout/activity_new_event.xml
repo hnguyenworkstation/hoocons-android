@@ -33,7 +33,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -46,18 +46,29 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/new_event_header"
-                        android:id="@+id/new_event_content">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/new_event_single_content"
-                            android:layout_centerHorizontal="true"
-                            android:visibility="gone">
-                            <include layout="@layout/new_event_single_content_layout"/>
-                        </RelativeLayout>
+                        android:id="@+id/new_event_single_content"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="gone">
+                        <include layout="@layout/new_event_single_content_layout"/>
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/new_event_multiple_images"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/new_event_header"
+                        android:orientation="vertical">
+
+                        <org.lucasr.twowayview.widget.TwoWayView
+                            android:id="@+id/images_two_way_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:scrollbars="vertical"
+                            app:twowayview_layoutManager="SpannableGridLayoutManager"
+                            app:twowayview_numColumns="3"
+                            app:twowayview_numRows="30" />
+                    </LinearLayout>
                 </RelativeLayout>
             </android.support.v4.widget.NestedScrollView>
 

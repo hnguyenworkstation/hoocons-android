@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.EventBus.LoadedGifUriRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
@@ -31,6 +32,7 @@ import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.ArrayList;
 
@@ -74,7 +76,14 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.loading_progress)
     ProgressBar mLoadingProgress;
 
+    // Multiple images View
+    @BindView(R.id.images_two_way_view)
+    TwoWayView mTwoWayView;
+    @BindView(R.id.new_event_multiple_images)
+    RelativeLayout mMultipleImagesLayout;
 
+    private ArrayList<String> imagePaths;
+    private ImageLoaderAdapter mImagesAdapter;
     private final int PHOTO_PICKER = 1;
 
     @Override
@@ -83,6 +92,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
+
+        imagePaths = new ArrayList<>();
 
         initView();
     }
@@ -126,7 +137,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
-
+        mImagesAdapter = new ImageLoaderAdapter(this, imageList, mTwoWayView);
+        mTwoWayView.setAdapter(mImagesAdapter);
     }
 
     @Override
