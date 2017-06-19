@@ -76,6 +76,7 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final int PHOTO_PICKER = 5;
 
     private String mParam1;
     private String mParam2;
@@ -185,7 +186,7 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 showDatePickerDialog();
                 break;
             case R.id.profile_image:
-                AppUtils.startImagePickerFromFragment(getContext(), this, 1);
+                AppUtils.startImagePickerFromFragment(getContext(), this, 1, PHOTO_PICKER);
                 break;
             case R.id.submit_button:
                 if (validateNameField() && validateNicknameField() && validateBirthday()) {

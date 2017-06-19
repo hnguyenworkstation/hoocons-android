@@ -18,24 +18,24 @@ import me.iwf.photopicker.PhotoPicker;
  */
 
 public class AppUtils {
-    public static void startImagePicker(Activity activity, int maxNum) {
+    public static void startImagePicker(Activity activity, int maxNum, int code) {
         PhotoPicker.builder()
                 .setPhotoCount(maxNum)
                 .setGridColumnCount(3)
                 .setPreviewEnabled(false)
                 .setShowCamera(true)
                 .setShowGif(true)
-                .start(activity);
+                .start(activity, code);
     }
 
-    public static void startImagePickerFromFragment(Context context, Fragment fragment, int maxNum) {
+    public static void startImagePickerFromFragment(Context context, Fragment fragment, int maxNum, int code) {
         PhotoPicker.builder()
                 .setPhotoCount(maxNum)
                 .setGridColumnCount(3)
                 .setPreviewEnabled(false)
                 .setShowCamera(true)
                 .setShowGif(true)
-                .start(context, fragment);
+                .start(context, fragment, code);
     }
 
     public static void signInAnonymously(Activity activity) {

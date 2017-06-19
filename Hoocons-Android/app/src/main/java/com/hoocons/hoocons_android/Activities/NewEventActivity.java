@@ -1,8 +1,10 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.iwf.photopicker.PhotoPicker;
+import xyz.klinker.giphy.Giphy;
+import xyz.klinker.giphy.GiphyActivity;
+import xyz.klinker.giphy.GiphyApiHelper;
 
 public class NewEventActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.action_back)
@@ -47,6 +56,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.event_add_gif)
     ImageView mAddGifBtn;
 
+    private final int PHOTO_PICKER = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +70,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
+        mAddGifBtn.setOnClickListener(this);
     }
 
     private void showAlert() {
@@ -105,18 +117,6 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null){
-            final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-
-            if (images.size() >= 1) {
-                loadPickedImage(images);
-            }
-        }
-    }
-
     private void loadPickedImage(ArrayList<String> imageList) {
 
     }
@@ -125,13 +125,39 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.event_add_photo:
-                AppUtils.startImagePicker(this, 20);
+                AppUtils.startImagePicker(this, 20, PHOTO_PICKER);
                 break;
             case R.id.action_back:
                 onBackPressed();
                 break;
+            case R.id.event_add_gif:
+                new Giphy.Builder(NewEventActivity.this, AppConstant.GIPHY_PUBLIC_KEY)// their public BETA key
+                        .maxFileSize(2 * 1024 * 1024) //2 mb
+                        .start();
+                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Giphy.REQUEST_GIPHY) {
+            if (resultCode == Activity.RESULT_OK) {
+                String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
+
+                new LoadPreviewGifTask(this, downloadUrl).execute();
+            }
+        } else if (requestCode == PHOTO_PICKER) {
+            if (data != null){
+                final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+                if (images.size() >= 1) {
+                    loadPickedImage(images);
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

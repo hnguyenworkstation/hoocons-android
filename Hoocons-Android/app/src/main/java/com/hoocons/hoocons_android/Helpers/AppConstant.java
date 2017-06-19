@@ -7,4 +7,6 @@ package com.hoocons.hoocons_android.Helpers;
 public class AppConstant {
     public static final String GENDER_MALE = "Male";
     public static final String GENDER_FEMALE = "Female";
+
+    public static final String GIPHY_PUBLIC_KEY = "dc6zaTOxFJmzC";
 }
