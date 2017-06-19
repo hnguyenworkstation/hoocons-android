@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -143,7 +144,7 @@ public class GiphyActivity extends AppCompatActivity {
             }
         });
 
-        recycler.setLayoutManager(new LinearLayoutManager(GiphyActivity.this));
+        recycler.setLayoutManager(new GridLayoutManager(GiphyActivity.this, 2));
         recycler.setAdapter(adapter);
     }
 

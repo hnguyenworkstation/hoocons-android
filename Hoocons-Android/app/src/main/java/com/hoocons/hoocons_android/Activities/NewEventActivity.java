@@ -191,7 +191,6 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     @Subscribe
     public void onEvent(LoadedGifUriRequest request) {
-        Log.e(TAG, String.format("%s", request.getGifUri().toString()));
         Glide.with(this)
                 .load(request.getGifUri())
                 .asGif()

@@ -13,7 +13,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 
 public class GiphyAdapter extends RecyclerView.Adapter<GiphyAdapter.GifViewHolder> {
-
     private static final int VIEW_TYPE_HEADER = 1;
     private static final int VIEW_TYPE_NORMAL = 2;
 
@@ -41,18 +40,18 @@ public class GiphyAdapter extends RecyclerView.Adapter<GiphyAdapter.GifViewHolde
     @Override
     public void onBindViewHolder(GifViewHolder holder, int position) {
         if (position != 0) {
-            holder.bind(gifs.get(position - 1));
+            holder.bind(gifs.get(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return gifs.size() + 1;
+        return gifs.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_NORMAL;
+        return VIEW_TYPE_NORMAL;
     }
 
     class GifViewHolder extends RecyclerView.ViewHolder {

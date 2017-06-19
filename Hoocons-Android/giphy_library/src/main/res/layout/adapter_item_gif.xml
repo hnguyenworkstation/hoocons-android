@@ -13,10 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hoocons.hoocons_android.CustomUI.SquareImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="272dp"
+    android:layout_height="248dp"
     android:layout_margin="4dp"
     android:background="#20000000" >
 
@@ -26,4 +26,4 @@
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
-</FrameLayout>
+</com.hoocons.hoocons_android.CustomUI.SquareImageView>
