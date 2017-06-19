@@ -20,7 +20,9 @@
 
                 <include android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    layout="@layout/screen_featured_fragment"/>
+                    layout="@layout/screen_featured_fragment"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -59,7 +61,9 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_search"/>
+            android:background="@drawable/icon_button"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_search_colored"/>
 
         <ImageButton
             android:layout_margin="@dimen/margin_4"
@@ -71,7 +75,8 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_search"/>
-
+            android:background="@drawable/icon_button"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_add_circle_colored"/>
     </RelativeLayout>
 </FrameLayout>

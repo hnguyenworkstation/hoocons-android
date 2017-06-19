@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -40,7 +39,6 @@ import butterknife.ButterKnife;
 import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
 import xyz.klinker.giphy.GiphyActivity;
-import xyz.klinker.giphy.GiphyApiHelper;
 
 public class NewEventActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.action_back)
@@ -101,15 +99,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .setMessage(getString(R.string.delete_warning))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        FragmentManager fm = getFragmentManager();
-                        if (fm.getBackStackEntryCount() > 0) {
-                            Log.i(TAG, "popping backstack");
-                            fm.popBackStack();
-                            finish();
-                            overridePendingTransition(R.anim.fade_in_from_left, R.anim.fade_out_to_right);
-                        } else {
-                            Log.i(TAG, "nothing on backstack, calling super");
-                        }
+                        finishActivity();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -121,21 +111,17 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .show();
     }
 
+    private void finishActivity() {
+        this.finish();
+        overridePendingTransition(R.anim.fix_anim, R.anim.slide_down_out);
+    }
+
     @Override
     public void onBackPressed(){
         if (true) {
             showAlert();
         } else {
-            FragmentManager fm = getFragmentManager();
-            if (fm.getBackStackEntryCount() > 0) {
-                Log.i(TAG, "popping backstack");
-                fm.popBackStack();
-                finish();
-                overridePendingTransition(R.anim.fade_in_from_left, R.anim.fade_out_to_right);
-            } else {
-                Log.i(TAG, "nothing on backstack, calling super");
-                super.onBackPressed();
-            }
+            finishActivity();
         }
     }
 
@@ -162,14 +148,32 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private void updateUIforGifEvent() {
+        // display the holder content
+        mSingleContentView.setVisibility(View.VISIBLE);
+        mDeleteSingleContent.bringToFront();
+
+        // update the add more content options
+        mAddPhotoBtn.setVisibility(View.GONE);
+        mAddLocationBtn.setVisibility(View.GONE);
+        mAddVideoBtn.setVisibility(View.GONE);
+        mAddSoundBtn.setVisibility(View.GONE);
+    }
+
+    private void updateUIforNormalEvent() {
+        mAddPhotoBtn.setVisibility(View.VISIBLE);
+        mAddLocationBtn.setVisibility(View.VISIBLE);
+        mAddVideoBtn.setVisibility(View.VISIBLE);
+        mAddSoundBtn.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Giphy.REQUEST_GIPHY) {
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
 
-                mSingleContentView.setVisibility(View.VISIBLE);
-
+                updateUIforGifEvent();
                 new LoadPreviewGifTask(this, downloadUrl).execute();
             }
         } else if (requestCode == PHOTO_PICKER) {
@@ -192,7 +196,6 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .load(request.getGifUri())
                 .asGif()
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .listener(new RequestListener<Uri, GifDrawable>() {
                     @Override

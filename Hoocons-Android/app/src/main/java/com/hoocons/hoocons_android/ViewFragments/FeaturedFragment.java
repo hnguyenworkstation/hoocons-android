@@ -21,7 +21,7 @@ import com.hoocons.hoocons_android.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeaturedFragment extends Fragment {
+public class FeaturedFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.screen_no_connection_error)
     RelativeLayout mErrorScreen;
     @BindView(R.id.screen_featured_fragment)
@@ -80,13 +80,26 @@ public class FeaturedFragment extends Fragment {
             }
         });
 
-        mAddBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), NewEventActivity.class));
-            }
-        });
+        mAddBtn.setOnClickListener(this);
 
         return rootView;
+    }
+
+    private void startNewEventActivity() {
+        startActivity(new Intent(getActivity(), NewEventActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_add:
+                startNewEventActivity();
+                break;
+            case R.id.action_search:
+                break;
+            default:
+                break;
+        }
     }
 }
