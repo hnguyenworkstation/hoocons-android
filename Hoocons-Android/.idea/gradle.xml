@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/giphy_library" />
+            <option value="$PROJECT_DIR$/swipecard_library" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
