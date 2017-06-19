@@ -15,6 +15,7 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
 import com.hoocons.hoocons_android.Helpers.FirebaseConstant;
@@ -94,7 +95,7 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
                     manager.setRequestUpdateInfo(false);
                     manager.setUserNickname(response.body().getNickname());
 
-                    EventBus.getDefault().post(new TaskCompleteRequest());
+                    EventBus.getDefault().post(new CompleteLoginRequest());
                 }
             }
 

@@ -4,6 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.LoadedGifUriRequest;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +31,11 @@ public class LoadPreviewGifTask extends AsyncTask<Void, Void, Uri> {
 
     @Override
     protected void onPostExecute(Uri uri) {
-        super.onPostExecute(uri);
+        if (uri != null) {
+            EventBus.getDefault().post(new LoadedGifUriRequest(uri));
+        } else {
+            EventBus.getDefault().post(new BadRequest());
+        }
     }
 
     @Override

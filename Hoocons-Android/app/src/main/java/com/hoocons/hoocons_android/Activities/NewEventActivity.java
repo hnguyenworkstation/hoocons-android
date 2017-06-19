@@ -12,16 +12,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.EventBus.LoadedGifUriRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -56,11 +66,23 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.event_add_gif)
     ImageView mAddGifBtn;
 
+    // Single Content view
+    @BindView(R.id.new_event_single_content)
+    RelativeLayout mSingleContentView;
+    @BindView(R.id.event_single_content)
+    AdjustableImageView mSingleContentImage;
+    @BindView(R.id.delete_single_content)
+    ImageButton mDeleteSingleContent;
+    @BindView(R.id.loading_progress)
+    ProgressBar mLoadingProgress;
+
+
     private final int PHOTO_PICKER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
 
@@ -146,6 +168,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
 
+                mSingleContentView.setVisibility(View.VISIBLE);
+
                 new LoadPreviewGifTask(this, downloadUrl).execute();
             }
         } else if (requestCode == PHOTO_PICKER) {
@@ -159,5 +183,34 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Subscribe
+    public void onEvent(LoadedGifUriRequest request) {
+        Log.e(TAG, String.format("%s", request.getGifUri().toString()));
+        Glide.with(this)
+                .load(request.getGifUri())
+                .asGif()
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .crossFade()
+                .listener(new RequestListener<Uri, GifDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, Uri model,
+                                               Target<GifDrawable> target,
+                                               boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, Uri model,
+                                                   Target<GifDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        mLoadingProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mSingleContentImage);
     }
 }

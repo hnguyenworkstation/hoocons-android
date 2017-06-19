@@ -68,7 +68,9 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.code() == 200) {
-                    SharedPreferencesManager.getDefault().setUserToken(response.body().getAccessToken());
+                    String tok = response.body().getAccessToken();
+
+                    SharedPreferencesManager.getDefault().setUserToken(tok);
                 }
             }
 
