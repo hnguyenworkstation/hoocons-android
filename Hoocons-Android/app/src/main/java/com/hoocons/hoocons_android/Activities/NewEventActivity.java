@@ -7,11 +7,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,7 +38,6 @@ import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.ArrayList;
 
@@ -66,6 +71,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.event_add_gif)
     ImageView mAddGifBtn;
 
+    @BindView(R.id.new_event_text_content)
+    EditText mTextContentInput;
+
     // Single Content view
     @BindView(R.id.new_event_single_content)
     RelativeLayout mSingleContentView;
@@ -77,10 +85,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     ProgressBar mLoadingProgress;
 
     // Multiple images View
-    @BindView(R.id.images_two_way_view)
-    TwoWayView mTwoWayView;
-    @BindView(R.id.new_event_multiple_images)
-    RelativeLayout mMultipleImagesLayout;
+    @BindView(R.id.new_event_images_list)
+    RecyclerView mImagesRecycler;
 
     private ArrayList<String> imagePaths;
     private ImageLoaderAdapter mImagesAdapter;
@@ -137,8 +143,11 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
-        mImagesAdapter = new ImageLoaderAdapter(this, imageList, mTwoWayView);
-        mTwoWayView.setAdapter(mImagesAdapter);
+        mImagesAdapter = new ImageLoaderAdapter(this, imageList);
+        mImagesRecycler.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
+        mImagesRecycler.setAdapter(mImagesAdapter);
+        mImagesRecycler.setItemAnimator(new DefaultItemAnimator());
+        mImagesRecycler.setNestedScrollingEnabled(false);
     }
 
     @Override

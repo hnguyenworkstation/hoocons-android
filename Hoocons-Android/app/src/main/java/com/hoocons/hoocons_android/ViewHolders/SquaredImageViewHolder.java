@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.SquareImageView;
 import com.hoocons.hoocons_android.R;
 
 import java.io.File;
@@ -29,17 +31,11 @@ import butterknife.ButterKnife;
  */
 public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image_holder)
-    ImageView mImageView;
+    AdjustableImageView mImageView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
     @BindView(R.id.image_root)
-    AdjustableImageView mImageRoot;
-
-    private static final int PHOTO_ANIMATION_DELAY = 600;
-    private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
-
-    private boolean lockedAnimations = false;
-    private int lastAnimatedItem = -1;
+    SquareImageView mImageRoot;
 
     private int position;
 
@@ -52,6 +48,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         this.position = position;
         File file = new File(imageLink);
         Uri imageUri = Uri.fromFile(file);
+        Log.e("Test", imageUri.toString());
 
         Glide.with(context)
                 .load(imageUri)
@@ -70,31 +67,6 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
                     }
                 })
                 .into(mImageView);
-    }
-
-    private void animatePhoto() {
-        if (!lockedAnimations) {
-            if (lastAnimatedItem == position) {
-                setLockedAnimations(true);
-            }
-
-            long animationDelay = PHOTO_ANIMATION_DELAY + position * 30;
-
-            this.mImageRoot.setScaleY(0);
-            this.mImageRoot.setScaleX(0);
-
-            this.mImageRoot.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
-                    .setStartDelay(animationDelay)
-                    .start();
-        }
-    }
-
-    private void setLockedAnimations(boolean lockedAnimations) {
-        this.lockedAnimations = lockedAnimations;
     }
 
 }
