@@ -88,5 +88,4 @@
     <string name="delete_title">Delete?</string>
     <string name="delete_warning">All your changes will be permanently removed!</string>
     <string name="new_event_hint">Write a message</string>
-
 </resources>

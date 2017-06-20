@@ -20,4 +20,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/progress_bar"
         android:indeterminate="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_alpha_30"
+        android:visibility="gone"
+        android:id="@+id/image_filter">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/num_cover"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="48dp"
+            android:textStyle="bold"
+            android:text="+6"/>
+    </RelativeLayout>
 </com.hoocons.hoocons_android.CustomUI.SquareImageView>

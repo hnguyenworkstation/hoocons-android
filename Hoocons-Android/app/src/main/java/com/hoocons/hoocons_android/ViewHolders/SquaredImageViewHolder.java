@@ -10,6 +10,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,6 +38,10 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
     ProgressBar mProgressBar;
     @BindView(R.id.image_root)
     SquareImageView mImageRoot;
+    @BindView(R.id.image_filter)
+    RelativeLayout mImageFilter;
+    @BindView(R.id.num_cover)
+    TextView mNumCovered;
 
     private int position;
 
@@ -44,7 +50,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initImage(Context context, String imageLink, final int position) {
+    public void initImage(Context context, String imageLink, final int position, final boolean isLast, final int listSize) {
         this.position = position;
         File file = new File(imageLink);
         Uri imageUri = Uri.fromFile(file);
@@ -67,6 +73,12 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
                     }
                 })
                 .into(mImageView);
+
+        if (isLast) {
+            mImageFilter.setVisibility(View.VISIBLE);
+            String num = String.format("+%s", String.valueOf(listSize-position-1));
+            mNumCovered.setText(num);
+        }
     }
 
 }

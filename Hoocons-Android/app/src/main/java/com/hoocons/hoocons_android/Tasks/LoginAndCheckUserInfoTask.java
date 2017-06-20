@@ -23,7 +23,6 @@ import retrofit2.Response;
 /**
  * Created by hungnguyen on 6/17/17.
  */
-
 public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String> {
     private String username;
     private String password;
@@ -36,9 +35,10 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
 
     @Override
     protected void onPostExecute(String s) {
-        if (SharedPreferencesManager.getDefault().getUserToken() == null) {
+        if (s == null) {
             checkAvailability();
         } else {
+            SharedPreferencesManager.getDefault().setUserToken(s);
             retrieveUserInfo();
         }
     }
@@ -53,6 +53,7 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
         try {
             if (!username.isEmpty() && !password.isEmpty()) {
                 attemptToLogin(username, password);
+                return token;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,9 +69,10 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.code() == 200) {
-                    String tok = response.body().getAccessToken();
+                    TokenResponse response1 = response.body();
 
-                    SharedPreferencesManager.getDefault().setUserToken(tok);
+                    assert response1 != null;
+                    token = response1.getAccessToken();
                 }
             }
 

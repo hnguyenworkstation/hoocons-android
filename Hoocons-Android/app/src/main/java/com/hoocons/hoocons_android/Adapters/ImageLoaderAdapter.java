@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHolder> {
     private ArrayList<String> imageList;
     private Context context;
+    private final int MAX_ITEMS = 6;
 
     public ImageLoaderAdapter(Context context, ArrayList<String> imageList) {
         this.imageList = imageList;
@@ -33,12 +34,15 @@ public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHol
 
     @Override
     public void onBindViewHolder(SquaredImageViewHolder holder, int position) {
-        holder.initImage(context, imageList.get(position), position);
+        holder.initImage(context, imageList.get(position), position, position==(MAX_ITEMS-1), imageList.size());
         Log.e("Test", "position " + String.valueOf(position));
     }
 
     @Override
     public int getItemCount() {
+        if (imageList.size() > MAX_ITEMS)
+            return MAX_ITEMS;
+
         return imageList.size();
     }
 }
