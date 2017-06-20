@@ -88,4 +88,16 @@
     <string name="delete_title">Delete?</string>
     <string name="delete_warning">All your changes will be permanently removed!</string>
     <string name="new_event_hint">Write a message</string>
+    <string name="event_mode">Mode</string>
+    <string name="mode_public">Public. Everyone can see this event</string>
+    <string name="short_public">Public</string>
+    <string name="mode_friend">Friends. Only friends can see your event</string>
+    <string name="mode_private">Private. Only you can see this event</string>
+    <string name="mode_warning">Warning. Make this event under content warning</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="action_share">Share</string>
+    <string name="liked">Liked</string>
+    <string name="like">Like</string>
+    <string name="comment">Comment</string>
 </resources>

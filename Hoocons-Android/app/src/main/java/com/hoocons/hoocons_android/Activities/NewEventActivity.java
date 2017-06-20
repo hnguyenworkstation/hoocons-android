@@ -35,6 +35,7 @@ import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
+import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,14 +53,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     ImageButton mBack;
     @BindView(R.id.action_post)
     Button mPostBtn;
-    @BindView(R.id.post_event_profile)
-    ImageView mProfileImage;
     @BindView(R.id.display_name)
     TextView mDisplayName;
-    @BindView(R.id.event_privacy)
-    BootstrapButton mPrivacyBtn;
-    @BindView(R.id.event_location)
-    BootstrapButton mLocationBtn;
     @BindView(R.id.event_add_photo)
     ImageView mAddPhotoBtn;
     @BindView(R.id.event_add_video)
@@ -73,6 +68,14 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.new_event_text_content)
     EditText mTextContentInput;
+    @BindView(R.id.post_event_profile)
+    ImageView mProfileImage;
+    @BindView(R.id.event_privacy)
+    BootstrapButton mPrivacyBtn;
+    @BindView(R.id.event_location)
+    BootstrapButton mEventLocation;
+    @BindView(R.id.event_warning)
+    BootstrapButton mWarningButton;
 
     // Single Content view
     @BindView(R.id.new_event_single_content)
@@ -108,6 +111,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
         mAddGifBtn.setOnClickListener(this);
+
+        mPrivacyBtn.setOnClickListener(this);
     }
 
     private void showAlert() {
@@ -126,6 +131,11 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private void showMode() {
+        EventModeSheetFragment fragment = new EventModeSheetFragment();
+        fragment.show(getSupportFragmentManager(), null);
     }
 
     private void finishActivity() {
@@ -163,6 +173,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 new Giphy.Builder(NewEventActivity.this, AppConstant.GIPHY_PUBLIC_KEY)// their public BETA key
                         .maxFileSize(2 * 1024 * 1024) //2 mb
                         .start();
+                break;
+            case R.id.event_privacy:
+                showMode();
                 break;
             default:
                 break;

@@ -44,7 +44,7 @@
                 android:id="@+id/event_privacy"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_12"
-                app:bootstrapText=" {fa_globe} Public {fa_caret_down}"
+                app:bootstrapText="{fa_globe}  Public  {fa_caret_down}"
                 app:bootstrapBrand="secondary"
                 app:buttonMode="regular"
                 app:showOutline="true"
@@ -57,10 +57,23 @@
                 android:id="@+id/event_location"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_12"
-                app:bootstrapText=" {fa_location_arrow} Off"
+                app:bootstrapText="{fa_location_arrow}  Off"
                 app:bootstrapBrand="secondary"
                 app:buttonMode="regular"
                 app:showOutline="true"
+                app:roundedCorners="true"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:id="@+id/event_warning"
+                style="@style/wrapping_button"
+                android:visibility="gone"
+                android:textSize="@dimen/text_12"
+                app:bootstrapText="Warning"
+                app:bootstrapBrand="danger"
+                app:buttonMode="regular"
                 app:roundedCorners="true"/>
         </LinearLayout>
     </LinearLayout>

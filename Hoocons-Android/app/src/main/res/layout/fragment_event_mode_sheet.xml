@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/radio_visibility"
+        android:checkedButton="@+id/radio_public"
+        android:layout_margin="@dimen/margin_8">
+
+        <RadioButton
+            android:text="@string/mode_public"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/radio_public"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="@string/mode_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/radio_friends"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="@string/mode_private"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/radio_private"
+            android:layout_weight="1" />
+
+    </RadioGroup>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_8"
+        android:id="@+id/compose_hide_text"
+        android:text="@string/mode_warning" />
+</LinearLayout>
