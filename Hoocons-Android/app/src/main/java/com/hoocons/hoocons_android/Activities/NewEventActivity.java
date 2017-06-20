@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
@@ -28,6 +32,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
@@ -38,6 +55,7 @@ import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Manifest;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
@@ -53,7 +71,7 @@ import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
 import xyz.klinker.giphy.GiphyActivity;
 
-public class NewEventActivity extends BaseActivity implements View.OnClickListener{
+public class NewEventActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.action_back)
     ImageButton mBack;
     @BindView(R.id.action_post)
@@ -102,6 +120,10 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     private String mMode = "Public";
 
+    private static final int PLACE_PICKER_REQUEST = 1;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +142,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mAddGifBtn.setOnClickListener(this);
 
         mPrivacyBtn.setOnClickListener(this);
+        mAddLocationBtn.setOnClickListener(this);
     }
 
     private void showAlert() {
@@ -150,6 +173,20 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         overridePendingTransition(R.anim.fix_anim, R.anim.slide_down_out);
     }
 
+    private void openGooglePlacePicker() {
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+            Intent intent = intentBuilder.build(NewEventActivity.this);
+            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onBackPressed(){
         if (true) {
@@ -169,6 +206,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mImagesRecycler.setNestedScrollingEnabled(false);
     }
 
+    private void openCustomPlacePicker() {
+        startActivity(new Intent(NewEventActivity.this, PlacePickerActivity.class));
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -185,6 +225,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.event_privacy:
                 showMode();
+                break;
+            case R.id.event_add_location:
+                openCustomPlacePicker();
                 break;
             default:
                 break;
@@ -233,7 +276,18 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Giphy.REQUEST_GIPHY) {
+        if (requestCode == PLACE_PICKER_REQUEST
+                && resultCode == Activity.RESULT_OK) {
+
+            final Place place = PlacePicker.getPlace(this, data);
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = (String) place.getAttributions();
+            if (attributions == null) {
+                attributions = "";
+            }
+            Log.e(TAG, String.format("Name: %s, Address: %s, Attributes: %s", name, address, attributions));
+        } else if (requestCode == Giphy.REQUEST_GIPHY) {
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
                 loadGif(downloadUrl);
@@ -283,7 +337,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Subscribe
-    public void onEvnet(WarningContentRequest request) {
+    public void onEvent(WarningContentRequest request) {
         if (request.isRequested()) {
             mWarningButton.setVisibility(View.VISIBLE);
         } else {
