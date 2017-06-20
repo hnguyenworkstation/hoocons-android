@@ -23,13 +23,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
 import com.hoocons.hoocons_android.EventBus.LoadedGifUriRequest;
+import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
+import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
+import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -95,6 +100,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private ImageLoaderAdapter mImagesAdapter;
     private final int PHOTO_PICKER = 1;
 
+    private String mMode = "Public";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +160,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
+        imagePaths.clear();
+        imagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
         mImagesRecycler.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
         mImagesRecycler.setAdapter(mImagesAdapter);
@@ -201,14 +210,34 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mAddSoundBtn.setVisibility(View.VISIBLE);
     }
 
+    private void loadGif(String url) {
+        Glide.with(this)
+                .load(url)
+                .asGif()
+                .fitCenter()
+                .crossFade()
+                .listener(new RequestListener<String, GifDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        mLoadingProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mSingleContentImage);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Giphy.REQUEST_GIPHY) {
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
-
+                loadGif(downloadUrl);
                 updateUIforGifEvent();
-                new LoadPreviewGifTask(this, downloadUrl).execute();
             }
         } else if (requestCode == PHOTO_PICKER) {
             if (data != null){
@@ -223,30 +252,42 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @Subscribe
-    public void onEvent(LoadedGifUriRequest request) {
-        Glide.with(this)
-                .load(request.getGifUri())
-                .asGif()
-                .fitCenter()
-                .crossFade()
-                .listener(new RequestListener<Uri, GifDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, Uri model,
-                                               Target<GifDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
-                    }
 
-                    @Override
-                    public boolean onResourceReady(GifDrawable resource, Uri model,
-                                                   Target<GifDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        mLoadingProgress.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(mSingleContentImage);
+
+    /**********************************************
+     * EVENTBUS CATCHING FIELDS
+     *
+     *  + PublicModeRequest: Request Public Mode
+     *
+     *  +
+     ***********************************************/
+    @Subscribe
+    public void onEvent(PublicModeRequest request) {
+        mMode = "Public";
+        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_GLOBE, mMode, FontAwesome.FA_CARET_DOWN);
+        mPrivacyBtn.setText(text);
+    }
+
+    @Subscribe
+    public void onEvent(PrivateModeRequest request) {
+        mMode = "Private";
+        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_USER, mMode, FontAwesome.FA_CARET_DOWN);
+        mPrivacyBtn.setText(text);
+    }
+
+    @Subscribe
+    public void onEvent(FriendModeRequest request) {
+        mMode = "Friend";
+        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_USERS, mMode, FontAwesome.FA_CARET_DOWN);
+        mPrivacyBtn.setText(text);
+    }
+
+    @Subscribe
+    public void onEvnet(WarningContentRequest request) {
+        if (request.isRequested()) {
+            mWarningButton.setVisibility(View.VISIBLE);
+        } else {
+            mWarningButton.setVisibility(View.GONE);
+        }
     }
 }

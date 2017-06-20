@@ -40,6 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_8"
-        android:id="@+id/compose_hide_text"
+        android:id="@+id/event_warning"
         android:text="@string/mode_warning" />
 </LinearLayout>
