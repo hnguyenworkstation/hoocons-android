@@ -8,7 +8,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/decorator_line_height"
         android:layout_alignParentTop="true"
         android:background="@color/gray_alpha"/>
 

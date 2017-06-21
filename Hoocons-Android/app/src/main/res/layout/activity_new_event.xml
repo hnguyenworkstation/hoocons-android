@@ -29,7 +29,8 @@
             <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
                 android:layout_below="@+id/custom_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_above="@+id/new_event_footer">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -43,23 +44,34 @@
                         <include layout="@layout/post_event_header"/>
                     </RelativeLayout>
 
+                    <EditText
+                        android:layout_margin="@dimen/margin_8"
+                        android:layout_below="@+id/new_event_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/new_event_text_content"
+                        android:textColorHint="@color/gray_alpha"
+                        android:hint="@string/new_event_hint"
+                        android:textColor="@color/black"
+                        android:background="@color/transparent"
+                        android:textSize="@dimen/text_16"
+                        android:fontFamily="roboto"/>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/new_event_single_content"
+                        android:layout_below="@+id/new_event_text_content"
                         android:layout_centerHorizontal="true"
                         android:visibility="gone">
                         <include layout="@layout/new_event_single_content_layout"/>
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/new_event_multiple_images"
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_below="@+id/new_event_text_content"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@+id/new_event_header"
-                        android:orientation="vertical">
-                        <include layout="@layout/new_event_multiple_images_layout"/>
-                    </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:id="@+id/new_event_images_list" />
                 </RelativeLayout>
             </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 

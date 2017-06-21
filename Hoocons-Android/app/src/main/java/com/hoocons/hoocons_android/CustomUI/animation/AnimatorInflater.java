@@ -101,14 +101,12 @@ public class AnimatorInflater {
         } catch (XmlPullParserException ex) {
             NotFoundException rnf =
                     new NotFoundException("Can't load animation resource ID #0x" +
-                    Integer.toHexString(id));
-            rnf.initCause(ex);
+                    Integer.toHexString(id), ex);
             throw rnf;
         } catch (IOException ex) {
             NotFoundException rnf =
                     new NotFoundException("Can't load animation resource ID #0x" +
-                    Integer.toHexString(id));
-            rnf.initCause(ex);
+                    Integer.toHexString(id), ex);
             throw rnf;
         } finally {
             if (parser != null) parser.close();

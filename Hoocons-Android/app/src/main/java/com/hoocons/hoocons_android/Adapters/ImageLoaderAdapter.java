@@ -2,18 +2,13 @@ package com.hoocons.hoocons_android.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
-
-import org.lucasr.twowayview.TwoWayLayoutManager;
-import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
-import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.ArrayList;
 
@@ -23,12 +18,11 @@ import java.util.ArrayList;
 public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHolder> {
     private ArrayList<String> imageList;
     private Context context;
-    private final TwoWayView mTwoWayView;
+    private final int MAX_ITEMS = 6;
 
-    public ImageLoaderAdapter(Context context, ArrayList<String> imageList, TwoWayView twoWayView) {
+    public ImageLoaderAdapter(Context context, ArrayList<String> imageList) {
         this.imageList = imageList;
         this.context =context;
-        this.mTwoWayView = twoWayView;
     }
 
     @Override
@@ -41,32 +35,14 @@ public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHol
 
     @Override
     public void onBindViewHolder(SquaredImageViewHolder holder, int position) {
-
-        boolean isVertical = (mTwoWayView.getOrientation()
-                == TwoWayLayoutManager.Orientation.VERTICAL);
-        holder.initImage(context, imageList.get(position), position);
-
-        View itemViewIs = holder.itemView;
-        Integer itemId = position;
-
-        final SpannableGridLayoutManager.LayoutParams lp =
-                (SpannableGridLayoutManager.LayoutParams) itemViewIs.getLayoutParams();
-
-        final int span1 = (itemId == 0 || itemId == 3 ? 2 : 1);
-        final int span2 = (itemId == 0 ? 2 : (itemId == 3 ? 3 : 1));
-
-        final int colSpan = (isVertical ? span2 : span1);
-        final int rowSpan = (isVertical ? span1 : span2);
-
-        if (lp.rowSpan != rowSpan || lp.colSpan != colSpan) {
-            lp.rowSpan = rowSpan;
-            lp.colSpan = colSpan;
-            itemViewIs.setLayoutParams(lp);
-        }
+        holder.initImage(context, imageList.get(position), position, position == MAX_ITEMS - 1, imageList.size());
     }
 
     @Override
     public int getItemCount() {
+        if (imageList.size() > MAX_ITEMS)
+            return MAX_ITEMS;
+
         return imageList.size();
     }
 }
