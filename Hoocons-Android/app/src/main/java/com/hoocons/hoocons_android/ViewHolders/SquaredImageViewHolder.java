@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -65,6 +66,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        Log.e("Viewholder", "onResourceReady: complete");
                         mProgressBar.setVisibility(View.GONE);
                         return false;
                     }

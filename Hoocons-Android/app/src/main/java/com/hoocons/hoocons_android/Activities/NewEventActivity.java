@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -99,6 +101,12 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
+        mTwoWayView.setHasFixedSize(false);
+        mTwoWayView.setLongClickable(true);
+
+        mImagesAdapter = new ImageLoaderAdapter(this, imagePaths, mTwoWayView);
+        mTwoWayView.setAdapter(mImagesAdapter);
+
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
         mAddGifBtn.setOnClickListener(this);
@@ -137,8 +145,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
-        mImagesAdapter = new ImageLoaderAdapter(this, imageList, mTwoWayView);
-        mTwoWayView.setAdapter(mImagesAdapter);
+        imagePaths = imageList;
+        mImagesAdapter.notifyDataSetChanged();
     }
 
     @Override

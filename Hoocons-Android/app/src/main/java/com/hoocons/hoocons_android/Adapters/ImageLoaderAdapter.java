@@ -33,13 +33,15 @@ public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHol
 
     @Override
     public SquaredImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(context).inflate(R.layout.viewholder_square_image,
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.viewholder_square_image,
                 parent, false);
         return new SquaredImageViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SquaredImageViewHolder holder, int position) {
+
         boolean isVertical = (mTwoWayView.getOrientation()
                 == TwoWayLayoutManager.Orientation.VERTICAL);
         holder.initImage(context, imageList.get(position), position);
