@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,11 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
@@ -32,16 +26,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -55,9 +42,7 @@ import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
-import com.hoocons.hoocons_android.Manifest;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.Tasks.LoadPreviewGifTask;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -197,8 +182,6 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
-        imagePaths = imageList;
-        mImagesAdapter.notifyDataSetChanged();
         imagePaths.clear();
         imagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
@@ -279,18 +262,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST
-                && resultCode == Activity.RESULT_OK) {
-
-            final Place place = PlacePicker.getPlace(this, data);
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-            String attributions = (String) place.getAttributions();
-            if (attributions == null) {
-                attributions = "";
-            }
-            Log.e(TAG, String.format("Name: %s, Address: %s, Attributes: %s", name, address, attributions));
-        } else if (requestCode == Giphy.REQUEST_GIPHY) {
+        if (requestCode == Giphy.REQUEST_GIPHY) {
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
                 loadGif(downloadUrl);
