@@ -26,11 +26,7 @@ public class PermissionUtils {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 int checkCallPhonePermission = ContextCompat.checkSelfPermission(activity, permissionName);
-                if (checkCallPhonePermission == PackageManager.PERMISSION_GRANTED) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return checkCallPhonePermission == PackageManager.PERMISSION_GRANTED;
             } else {
                 return true;
             }

@@ -244,7 +244,7 @@ public abstract class Animator implements Cloneable {
      * Notifications indicate animation related events, such as the end or the
      * repetition of the animation.</p>
      */
-    public static interface AnimatorListener {
+    public interface AnimatorListener {
         /**
          * <p>Notifies the start of the animation.</p>
          *

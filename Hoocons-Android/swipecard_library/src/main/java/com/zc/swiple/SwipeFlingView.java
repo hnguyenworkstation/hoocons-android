@@ -806,13 +806,10 @@ public class SwipeFlingView extends AdapterView {
                 + ";ScaleX:" + (child.getScaleX())
                 + ";hasActiveView:" + mRecycleBin.hasActiveView()
                 + ";isTopView:" + mRecycleBin.isTopView(child));
-        if (child.getVisibility() != View.VISIBLE
+        return !(child.getVisibility() != View.VISIBLE
                 || child.getScaleX() <= 1.0f - SCALE_STEP
                 || !mRecycleBin.hasActiveView()
-                || !mRecycleBin.isTopView(child)) {
-            return false;
-        }
-        return true;
+                || !mRecycleBin.isTopView(child));
     }
 
     protected void onViewCaptured(View capturedChild, int activePointerId) {
@@ -1222,10 +1219,7 @@ public class SwipeFlingView extends AdapterView {
 
         boolean isTopView(View view) {
             int index = mActiveViews.indexOf(view);
-            if (index == mActiveViews.size() - 1) {
-                return true;
-            }
-            return false;
+            return index == mActiveViews.size() - 1;
         }
 
         void addActiveView(View view, int pos) {
@@ -1317,10 +1311,7 @@ public class SwipeFlingView extends AdapterView {
                     ++num;
                 }
             }
-            if (num == count) {
-                return false;
-            }
-            return true;
+            return num != count;
         }
 
         /**
