@@ -1,5 +1,8 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +23,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -48,6 +52,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -64,6 +69,10 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
     RecyclerView mPlaceList;
     @BindView(R.id.sliding_up_panel)
     SlidingUpPanelLayout mSlidingUpPanelLayout;
+    @BindView(R.id.custom_toolbar)
+    RelativeLayout mCustomToolbar;
+    @BindView(R.id.place_search_view)
+    MaterialSearchView mSearchView;
 
     private static final String TAG = "Map";
     private final int REQUEST_CODE_AUTOCOMPLETE = 1;
@@ -89,6 +98,7 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
     private static final int PERMISSION_REQUEST_CODE = 100;
     private float slideLayoutOffset = -1;
 
+    private boolean isToolbarHiding = false;
 
     @Override
     @RequiresPermission(anyOf = {android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -112,7 +122,38 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         initSlidingPanelView();
+        initSearchToolbar();
         fetchLocation();
+    }
+
+    private void initSearchToolbar() {
+        mSearchView.setVoiceSearch(true);
+
+        mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // executeQuery(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
     }
 
 
@@ -129,13 +170,11 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 Log.d(TAG, "onPanelStateChanged: prevoius state : " + previousState + "  new state: " + newState);
-                if(slideLayoutOffset < 0.2&&
-                        ( previousState== SlidingUpPanelLayout.PanelState.ANCHORED
-                                || previousState== SlidingUpPanelLayout.PanelState.EXPANDED))
-                {
+                if(slideLayoutOffset < 0.2 &&
+                        ( previousState == SlidingUpPanelLayout.PanelState.ANCHORED
+                                || previousState == SlidingUpPanelLayout.PanelState.EXPANDED)) {
                     mSlidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
-
             }
         });
     }
@@ -329,6 +368,7 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
                 return;
         }
     }
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)

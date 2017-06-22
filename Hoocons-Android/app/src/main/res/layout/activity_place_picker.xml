@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/custom_toolbar"
                 android:layout_alignParentTop="true">
-                <include layout="@layout/custom_new_event_actionbar"/>
+                <include layout="@layout/custom_place_picker_actionbar"/>
             </RelativeLayout>
 
             <com.sothree.slidinguppanel.SlidingUpPanelLayout

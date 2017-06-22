@@ -100,6 +100,8 @@
     <string name="liked">Liked</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
+
+    <!-- Map Picker Activity -->
     <string name="place_details">
     <![CDATA[
         <b>%1$s</b>
@@ -113,4 +115,6 @@
         Website: %5$s
     ]]>
     </string>
+
+    <string name="place_search">Search places around</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="?attr/actionBarSize">
+
+    <ImageButton
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/icon_button"
+        android:id="@+id/action_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_colored"
+        android:layout_marginStart="@dimen/actionbar_margin"/>
+
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/place_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/action_back"
+        app:searchBackground="@color/searchBackground"
+        app:searchBackIcon="@drawable/ic_search_back"
+        app:searchCloseIcon="@drawable/ic_search_close"
+        android:textColor="@color/primaryText"
+        android:textColorHint="@color/secondaryText"
+        android:hint="@string/place_search"/>
+</RelativeLayout>
