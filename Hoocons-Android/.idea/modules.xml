@@ -3,8 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Hoocons-Android.iml" filepath="$PROJECT_DIR$/Hoocons-Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Hoocons-Android.iml" filepath="$PROJECT_DIR$/Hoocons-Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/giphy_library/giphy_library.iml" filepath="$PROJECT_DIR$/giphy_library/giphy_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/giphy_library/giphy_library.iml" filepath="$PROJECT_DIR$/giphy_library/giphy_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swipecard_library/swipecard_library.iml" filepath="$PROJECT_DIR$/swipecard_library/swipecard_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/swipecard_library/swipecard_library.iml" filepath="$PROJECT_DIR$/swipecard_library/swipecard_library.iml" />
     </modules>
   </component>
