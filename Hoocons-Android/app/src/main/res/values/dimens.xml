@@ -10,6 +10,7 @@
 
     <dimen name="tab_height">48dp</dimen>
     <dimen name="tab_padding">12dp</dimen>
+    <dimen name="activity_card_corner">12dp</dimen>
 
     <!-- Text Dimen -->
     <dimen name="text_4">4sp</dimen>

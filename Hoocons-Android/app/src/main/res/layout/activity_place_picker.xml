@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/root_view"
-        card_view:cardCornerRadius="12dp">
+        card_view:cardCornerRadius="@dimen/activity_card_corner">
 
         <RelativeLayout
             android:layout_width="match_parent"
