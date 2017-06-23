@@ -5,11 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.hoocons.hoocons_android.ViewFragments.AroundFragment;
 import com.hoocons.hoocons_android.ViewFragments.CommunicationFragment;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
 import com.hoocons.hoocons_android.ViewFragments.MoreFragment;
 import com.hoocons.hoocons_android.ViewFragments.NotificationFragment;
+import com.hoocons.hoocons_android.ViewFragments.DiscoverFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +17,20 @@ import java.util.List;
 /**
  * Created by hungnguyen on 6/3/17.
  */
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class MainViewPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList = new ArrayList<>();
     private List<String> mFragmentTitle = new ArrayList<>();
     private final int MAX_FRAGMENTS = 5;
 
     private FeaturedFragment featuredFragment;
-    private AroundFragment aroundFragment;
+    private DiscoverFragment discoverFragment;
     private CommunicationFragment communicationFragment;
     private NotificationFragment notificationFragment;
     private MoreFragment moreFragment;
 
     public Context mContext;
 
-    public ViewPagerAdapter(Context mContext, FragmentManager manager) {
+    public MainViewPagerAdapter(Context mContext, FragmentManager manager) {
         super(manager);
         this.mContext = mContext;
     }
@@ -43,9 +43,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                     featuredFragment = FeaturedFragment.newInstance("0", "test");
                 return featuredFragment;
             case 1:
-                if (aroundFragment == null)
-                    aroundFragment = AroundFragment.newInstance("0", "test");
-                return aroundFragment;
+                if (discoverFragment == null)
+                    discoverFragment = DiscoverFragment.newInstance("0", "test");
+                return discoverFragment;
             case 2:
                 if (communicationFragment == null) {
                     communicationFragment = CommunicationFragment.newInstance("0", "test");

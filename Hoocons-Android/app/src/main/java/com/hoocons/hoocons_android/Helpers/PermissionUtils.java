@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * Created by hungnguyen on 6/17/17.
  */
-
 public class PermissionUtils {
     private static final String TAG = PermissionUtils.class.getSimpleName();
     private static PermissionUtils permissionUtil = null;
@@ -61,25 +60,23 @@ public class PermissionUtils {
     }
 
 
-    public static void requestPermissions(Activity activity, int requestCode, List<String> mListPermissions) {
+    public static boolean requestPermissions(Activity activity, int requestCode, List<String> mListPermissions) {
         if (mListPermissions == null || mListPermissions.size() == 0) {
-            return;
+            return true;
         }
 
         if (!isOverMarshmallow()) {
-            // Android 6.0以下不用申请.
-            return;
-
+            return true;
         } else {
             List<String> deniedPermissionList = findDeniedPermissions(activity, mListPermissions);
 
             if (deniedPermissionList != null && deniedPermissionList.size() > 0) {
                 Log.i(TAG, "requestPermissions: ");
                 activity.requestPermissions(deniedPermissionList.toArray(new String[deniedPermissionList.size()]), requestCode);
+                return false;
             }
+
+            return true;
         }
-
     }
-
-
 }

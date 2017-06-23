@@ -1,9 +1,13 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +18,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,13 +42,16 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     RelativeLayout mBottomMenuLayout;
     @BindView(R.id.header_profile)
     ImageView mImageHeader;
-    @BindView(R.id.action_search)
-    ImageButton mSearchBtn;
+    @BindView(R.id.action_near_me)
+    ImageButton mNearMeBtn;
     @BindView(R.id.action_add)
     ImageButton mAddBtn;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private final int LOCATION_PERMISSION_REQUEST = 1;
+    private final String TAG = FeaturedFragment.class.getSimpleName();
 
     private String mParam1;
     private String mParam2;
@@ -81,6 +94,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         });
 
         mAddBtn.setOnClickListener(this);
+        mNearMeBtn.setOnClickListener(this);
 
         return rootView;
     }
@@ -90,16 +104,52 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+    private void startNearMeActivity() {
+        startActivity(new Intent(getActivity(), AroundActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    private boolean mayNeedLocationPermission() {
+        List<String> permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        return PermissionUtils.requestPermissions(getActivity(), LOCATION_PERMISSION_REQUEST, permissions);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_add:
                 startNewEventActivity();
                 break;
-            case R.id.action_search:
+            case R.id.action_near_me:
+                if (mayNeedLocationPermission()) {
+                    startNearMeActivity();
+                }
                 break;
             default:
                 break;
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST:
+                Log.i(TAG, "Received response for Location permission request.");
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
+                    startNearMeActivity();
+                } else {
+                    Log.i(TAG, "LOCATION permission was NOT granted.");
+                }
+                return;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                return;
         }
     }
 }

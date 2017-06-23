@@ -1,28 +1,13 @@
 package com.hoocons.hoocons_android.Activities;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
-import com.hoocons.hoocons_android.Adapters.ViewPagerAdapter;
-import com.hoocons.hoocons_android.CustomUI.BottomNavigationViewHelper;
+import com.hoocons.hoocons_android.Adapters.MainViewPagerAdapter;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.SlidingMenu.SlidingMenu;
-import com.hoocons.hoocons_android.SlidingMenu.app.SlidingActivity;
-import com.hoocons.hoocons_android.SlidingMenu.app.SlidingFragmentActivity;
-import com.hoocons.hoocons_android.ViewFragments.AroundFragment;
-import com.hoocons.hoocons_android.ViewFragments.CommunicationFragment;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
-import com.hoocons.hoocons_android.ViewFragments.MoreFragment;
-import com.hoocons.hoocons_android.ViewFragments.NotificationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +18,11 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.tablayout)
     TabLayout mTabLayout;
 
-    private ViewPagerAdapter mViewPagerAdapter;
+    private MainViewPagerAdapter mMainViewPagerAdapter;
 
     private final int[] mTabsIcons = {
             R.drawable.ic_tab_home,
-            R.drawable.ic_tab_near_me,
+            R.drawable.ic_tab_discover,
             R.drawable.ic_tab_chat,
             R.drawable.ic_tab_notification,
             R.drawable.ic_tab_setting
@@ -60,12 +45,12 @@ public class MainActivity extends BaseActivity {
     * SETTING UP BOTTOM BAR
     * */
     private void initViewPager() {
-        mViewPagerAdapter = new ViewPagerAdapter(this.getBaseContext(), getSupportFragmentManager());
+        mMainViewPagerAdapter = new MainViewPagerAdapter(this.getBaseContext(), getSupportFragmentManager());
 
         /** the ViewPager requires a minimum of 1 as OffscreenPageLimit */
-        int limit = (mViewPagerAdapter.getCount() > 1 ? mViewPagerAdapter.getCount() - 1 : 1);
+        int limit = (mMainViewPagerAdapter.getCount() > 1 ? mMainViewPagerAdapter.getCount() - 1 : 1);
 
-        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setAdapter(mMainViewPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -79,8 +64,8 @@ public class MainActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         // getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-                        if (mViewPagerAdapter.getItem(position) == null) {
-                            mViewPagerAdapter.addFragment(new FeaturedFragment(), "Featured");
+                        if (mMainViewPagerAdapter.getItem(position) == null) {
+                            mMainViewPagerAdapter.addFragment(new FeaturedFragment(), "Featured");
                         }
                         break;
                     default:
@@ -114,8 +99,8 @@ public class MainActivity extends BaseActivity {
     * MENUS ARE SET FROM EACH MENU
     * */
     private void invalidateFragmentMenus(int position){
-        for(int i = 0; i < mViewPagerAdapter.getCount(); i++){
-            mViewPagerAdapter.getItem(i).setHasOptionsMenu(i == position);
+        for(int i = 0; i < mMainViewPagerAdapter.getCount(); i++){
+            mMainViewPagerAdapter.getItem(i).setHasOptionsMenu(i == position);
         }
         invalidateOptionsMenu(); //or respectively its support method.
     }

@@ -56,18 +56,17 @@
             android:layout_marginStart="@dimen/margin_8"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:id="@+id/action_search"
+            android:id="@+id/action_near_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_8"
             android:layout_marginEnd="@dimen/margin_8"
             android:background="@drawable/icon_button"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_search_colored"/>
+            android:src="@drawable/ic_near_me_selected"/>
 
         <ImageButton
             android:layout_margin="@dimen/margin_4"
-            android:layout_marginStart="@dimen/margin_8"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:id="@+id/action_add"

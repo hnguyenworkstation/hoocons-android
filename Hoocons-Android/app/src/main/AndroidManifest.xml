@@ -68,7 +68,8 @@
         <activity android:name=".Activities.UserProfileActivity" />
         <activity android:name=".Activities.NewEventActivity" />
         <activity android:name=".Activities.PlacePickerActivity" />
-        <activity android:name=".Activities.ChatActivity"></activity>
+        <activity android:name=".Activities.ChatActivity" />
+        <activity android:name=".Activities.AroundActivity"></activity>
     </application>
 
 </manifest>
