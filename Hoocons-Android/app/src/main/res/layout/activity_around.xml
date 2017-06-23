@@ -19,22 +19,37 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/screen_around_fragment"
-                android:visibility="gone">
-
-                <include android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    layout="@layout/screen_around_fragment"/>
+                android:id="@+id/custom_toolbar"
+                android:layout_alignParentTop="true">
+                <include layout="@layout/custom_around_actionbar"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/screen_null_around_fragment">
+                android:layout_height="match_parent"
+                android:id="@+id/content_layout"
+                android:layout_below="@+id/custom_toolbar">
 
-                <include android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    layout="@layout/screen_empty_around_fragment"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/screen_around_fragment"
+                    android:visibility="gone">
+
+                    <include android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        layout="@layout/screen_around_fragment"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/screen_null_around_fragment">
+
+                    <include android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        layout="@layout/screen_empty_around_fragment"/>
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

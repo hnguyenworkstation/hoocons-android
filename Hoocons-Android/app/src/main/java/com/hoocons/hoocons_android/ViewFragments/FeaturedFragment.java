@@ -107,6 +107,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     private void startNearMeActivity() {
         startActivity(new Intent(getActivity(), AroundActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        getActivity().overridePendingTransition(R.anim.slide_bottom_up, R.anim.fix_anim);
     }
 
     private boolean mayNeedLocationPermission() {
