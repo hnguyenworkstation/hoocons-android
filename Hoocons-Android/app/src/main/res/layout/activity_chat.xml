@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/chatroom_footer"
                 android:layout_alignParentBottom="true">
-                <include layout="@layout/custom_place_picker_actionbar"/>
+                <include layout="@layout/chatroom_footer"/>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

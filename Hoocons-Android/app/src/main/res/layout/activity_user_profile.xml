@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/custom_toolbar"
+                android:background="@color/white"
                 android:visibility="gone"
                 android:layout_alignParentTop="true">
                 <include layout="@layout/custom_new_user_info_actionbar"/>
@@ -29,8 +30,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/custom_toolbar">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/image"
@@ -61,6 +61,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/flexible_space_image_height"
                             android:background="@android:color/transparent" />
+
+                        <LinearLayout
+                            android:background="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <include layout="@layout/profile_header_info"/>
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="match_parent"
