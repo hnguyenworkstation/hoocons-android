@@ -54,7 +54,7 @@
                 app:buttonMode="regular"
                 app:showOutline="true"
                 app:roundedCorners="true"
-                app:bootstrapSize="sm"/>
+                app:bootstrapSize="md"/>
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                 app:buttonMode="regular"
                 app:showOutline="false"
                 app:roundedCorners="true"
-                app:bootstrapSize="sm"/>
+                app:bootstrapSize="md"/>
 
         </LinearLayout>
     </LinearLayout>

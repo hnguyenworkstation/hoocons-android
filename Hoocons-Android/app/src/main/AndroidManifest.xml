@@ -65,7 +65,13 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".Activities.UserProfileActivity" />
+
+        <activity android:name=".Activities.UserProfileActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"/>
+
         <activity android:name=".Activities.NewEventActivity" />
         <activity android:name=".Activities.PlacePickerActivity" />
         <activity android:name=".Activities.ChatActivity" />

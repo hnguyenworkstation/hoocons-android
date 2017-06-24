@@ -16,6 +16,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.CustomUI.view.ViewPropertyAnimator;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -24,15 +25,17 @@ import com.hoocons.hoocons_android.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserProfileActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class UserProfileActivity extends DraggerActivity implements ObservableScrollViewCallbacks {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
+    @BindView(R.id.obs_scrollview)
+    ObservableScrollView mScrollView;
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
+    private final String TAG = UserProfileActivity.class.getSimpleName();
 
     private View mImageView;
     private View mOverlayView;
-    private ObservableScrollView mScrollView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
 
@@ -49,10 +52,10 @@ public class UserProfileActivity extends BaseActivity implements ObservableScrol
 
         mImageView = findViewById(R.id.image);
         mOverlayView = findViewById(R.id.overlay);
-        mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
+
+
         mScrollView.setScrollViewCallbacks(this);
         setTitle(null);
-
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
             public void run() {
@@ -63,6 +66,8 @@ public class UserProfileActivity extends BaseActivity implements ObservableScrol
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        setSlideEnabled(scrollY == 0);
+
         // Translate overlay and image
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
         int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
