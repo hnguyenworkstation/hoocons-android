@@ -31,6 +31,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.hoocons.hoocons_android.Managers.BaseApplication;
+
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -277,10 +279,10 @@ import java.util.logging.Logger;
 		int height = SystemUtils.getScreenHeight(paramActivity) - SystemUtils.getStatusBarHeight(paramActivity)
 				- SystemUtils.getAppHeight(paramActivity);
 		if (height == 0) {
-			height = ActivityHelper.getIntShareData(GlobalContext.getInstance(), "KeyboardHeight", 400);
+			height = ActivityHelper.getIntShareData(BaseApplication.getInstance(), "KeyboardHeight", 400);
 		}
 		else {
-			ActivityHelper.putIntShareData(GlobalContext.getInstance(), "KeyboardHeight", height);
+			ActivityHelper.putIntShareData(BaseApplication.getInstance(), "KeyboardHeight", height);
 		}
 
 

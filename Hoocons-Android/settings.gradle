@@ -1,3 +1,4 @@
 include ':app'
 include ':giphy_library'
 include ':swipecard_library'
+include ':emotion_helper'

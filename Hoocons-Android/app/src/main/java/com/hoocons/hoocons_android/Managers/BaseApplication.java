@@ -8,6 +8,7 @@ import android.support.multidex.MultiDex;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
+import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,6 +40,11 @@ public class BaseApplication extends Application {
         TypefaceProvider.registerDefaultIconSets();
         FontOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
         FontOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Light.ttf");
+
+        try {
+            EmotionsDB.checkEmotions();
+        } catch (Exception e) {
+        }
     }
 
     @Override

@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_4">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/controllers">
 
-</LinearLayout>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:background="@drawable/rounded_edit_text"
+            android:id="@+id/chat_input_content"
+            android:hint="Enter Something"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/chatroom_send"/>
+
+        <ImageButton
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/icon_button"
+            android:id="@+id/chatroom_send"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:src="@drawable/ic_location_colored"/>
+    </RelativeLayout>
+</RelativeLayout>
