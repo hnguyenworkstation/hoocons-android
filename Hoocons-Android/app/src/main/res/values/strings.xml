@@ -81,7 +81,9 @@
     <string name="contact_us">Contact us</string>
     <string name="logout">Logout</string>
     <string name="app_info">App Info</string>
+    <string name="fun_activities">Fun Activities</string>
     <string name="add_more_contents">Add more contents</string>
+    <string name="find_love">Find your match</string>
 
     <!-- New Event Activity -->
     <string name="new_event">New Event</string>
@@ -118,4 +120,5 @@
 
     <string name="place_search">Search places around</string>
     <string name="around_me">Around Me</string>
+    <string name="write_a_message">Write a message</string>
 </resources>

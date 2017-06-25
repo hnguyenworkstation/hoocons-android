@@ -26,6 +26,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/header"
+                android:id="@+id/fun_activities">
+                <include layout="@layout/fragment_more_fun_activities"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fun_activities"
                 android:id="@+id/app_info">
                 <include layout="@layout/fragment_more_app_setting"/>
             </RelativeLayout>

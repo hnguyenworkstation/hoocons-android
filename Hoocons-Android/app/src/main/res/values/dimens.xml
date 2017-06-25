@@ -265,8 +265,8 @@
     <!-- Override Bottombar dimens-->
     <dimen name="design_bottom_navigation_height" tools:override="true">56dp</dimen>
     <dimen name="profile_header_large_size">80dp</dimen>
-    <dimen name="emotion_size">24dip</dimen>
-    <dimen name="publish_emotion_size">28dip</dimen>
+    <dimen name="emotion_size">16dip</dimen>
+    <dimen name="publish_emotion_size">18dip</dimen>
 
 
     <!-- Featured Fragment dimens -->

@@ -11,14 +11,16 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.text.style.ImageSpan;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -36,6 +38,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         EmotionFragment.OnEmotionSelectedListener {
     @BindView(R.id.chatroom_send)
     ImageButton mSendButton;
+    @BindView(R.id.chatroom_emoji)
+    ImageButton mEmojiButton;
     @BindView(R.id.emo_container)
     View mEmoContainer;
     @BindView(R.id.chat_input_content)
@@ -49,6 +53,39 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
 
+
+    private final TextWatcher editContentWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (mTextInput.getText().toString().length() > 0) {
+                mSendButton.setSelected(true);
+            } else {
+                mSendButton.setSelected(false);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    private final View.OnKeyListener keyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_DEL) {
+                Log.e(TAG, "onKey: DELETE");
+                shouldRemoveLastIcon();
+            }
+            return false;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +96,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                 emotionFragment, "EmotionFragment").commit();
 
         initEmotionLayout();
-        initClickListener();
+        initOnListener();
     }
 
     private void initEmotionLayout() {
@@ -92,8 +129,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         });
     }
 
-    private void initClickListener() {
+    private void initOnListener() {
         mSendButton.setOnClickListener(this);
+        mEmojiButton.setOnClickListener(this);
+
+        mTextInput.addTextChangedListener(editContentWatcher);
+        mTextInput.setOnKeyListener(keyListener);
     }
 
     private void switchEmotionSoftInput() {
@@ -101,10 +142,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
             hideEmotionView(true);
         } else {
             showEmotionView(SystemUtils.isKeyBoardShow(this));
+
         }
     }
 
     private void showEmotionView(boolean showAnimation) {
+        mEmojiButton.setSelected(true);
+
         if (showAnimation) {
             transitioner.setDuration(200);
         } else {
@@ -131,6 +175,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void hideEmotionView(boolean showKeyBoard) {
+        mEmojiButton.setSelected(false);
+
         if (mEmoContainer.isShown()) {
             if (showKeyBoard) {
                 LinearLayout.LayoutParams localLayoutParams = (LinearLayout.LayoutParams)
@@ -164,7 +210,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.chatroom_send:
+            case R.id.chatroom_emoji:
                 switchEmotionSoftInput();
                 break;
             default:
@@ -204,14 +250,39 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                 return source;
             }
         }
-
     };
+
+    private void shouldRemoveLastIcon() {
+        String text = mTextInput.getText().toString();
+        int index = 0;
+        if (text.charAt(text.length() - 1) == ']') {
+            for(int i = text.length() - 1; i > 0 ; i--) {
+                if (text.charAt(i) == '[') {
+                    index = i;
+                    break;
+                }
+            }
+        } else {
+            return;
+        }
+
+        String bracket = text.substring(index, text.length() - 1);
+        byte[] emotionBytes = EmotionsDB.getEmotion(bracket);
+
+        if (emotionBytes != null) {
+            if (index > 0) {
+                text = text.substring(0, index - 1);
+            } else {
+                text = "";
+            }
+            mTextInput.setText(text);
+        }
+    }
 
     @Override
     public void onBackPressed() {
         if (mEmoContainer.isShown()) {
             hideEmotionView(false);
-            return;
         }
 
         super.onBackPressed();

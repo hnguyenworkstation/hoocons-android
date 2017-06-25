@@ -195,17 +195,11 @@ public class EmotionsDB {
     }
 
     static class EmotionTable {
-
         static final String table = "org_aisen_weibo_sina_emotions";
-
         static final String id = "org_aisen_weibo_sina_id";
-
         static final String key = "org_aisen_weibo_sina_key";
-
         static final String file = "org_aisen_weibo_sina_file";
-
         static final String value = "org_aisen_weibo_sina_value";
-
     }
 
 }

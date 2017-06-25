@@ -15,7 +15,6 @@ import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
 import org.aisen.android.network.task.TaskException;
-import org.aisen.android.support.inject.ViewInject;
 import org.aisen.android.ui.fragment.AGridFragment;
 import org.aisen.android.ui.fragment.adapter.ARecycleViewItemView;
 import org.aisen.android.ui.fragment.itemview.IITemView;

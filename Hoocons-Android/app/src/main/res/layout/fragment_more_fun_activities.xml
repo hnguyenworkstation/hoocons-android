@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:paddingStart="@dimen/margin_16"
+        android:paddingTop="@dimen/margin_16"
+        android:paddingBottom="@dimen/margin_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:text="@string/fun_activities"
+        android:textSize="@dimen/text_14"
+        android:textColor="@color/gray_alpha"/>
+
+    <View
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/decorator_line_height"
+        android:background="@color/gray_alpha"/>
+
+    <TextView
+        android:id="@+id/find_love"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableLeft="@drawable/cat_heart"
+        android:drawablePadding="@dimen/margin_16"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/margin_8"
+        android:paddingStart="@dimen/margin_16"
+        android:paddingTop="@dimen/margin_8"
+        android:text="@string/find_love"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_16" />
+
+</LinearLayout>

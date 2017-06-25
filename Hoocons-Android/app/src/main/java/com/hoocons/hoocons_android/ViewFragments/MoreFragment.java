@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.R;
@@ -20,6 +21,8 @@ import butterknife.ButterKnife;
 public class MoreFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.profile_header)
     ImageView mUserProfile;
+    @BindView(R.id.find_love)
+    TextView mFindLove;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -58,7 +61,15 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
+        initView();
+
         mUserProfile.setOnClickListener(this);
+        mFindLove.setOnClickListener(this);
+    }
+
+    private void initView() {
+
     }
 
     @Override
@@ -71,11 +82,15 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_header:
                 startActivity(new Intent(getActivity(), ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                break;
+            case R.id.find_love:
+
                 break;
             default:
                 break;
