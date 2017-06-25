@@ -14,6 +14,12 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "boolean", "LOGE", "true"
+        buildConfigField "boolean", "LOGW", "true"
+        buildConfigField "boolean", "LOGI", "true"
+        buildConfigField "boolean", "LOGD", "true"
+        buildConfigField "boolean", "LOGV", "true"
     }
     buildTypes {
         release {

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.Activities.ChatActivity;
+import com.hoocons.hoocons_android.Activities.FindMatchActivity;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -83,6 +84,13 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    private void startFindMatchActivity() {
+        Intent findMatchIntent = new Intent(getActivity(), FindMatchActivity.class);
+        findMatchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(findMatchIntent);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -90,7 +98,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.find_love:
-
+                startFindMatchActivity();
                 break;
             default:
                 break;
