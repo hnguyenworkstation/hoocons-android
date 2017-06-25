@@ -28,7 +28,6 @@ import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.ViewFragments.EmotionFragment;
 
 import org.aisen.android.common.utils.BitmapUtil;
-import org.aisen.android.support.inject.ViewInject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -173,7 +172,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-
     @Override
     public void onEmotionSelected(Emotion emotion) {
         Editable editAble = mTextInput.getEditableText();
@@ -213,6 +211,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     public void onBackPressed() {
         if (mEmoContainer.isShown()) {
             hideEmotionView(false);
+            return;
         }
 
         super.onBackPressed();

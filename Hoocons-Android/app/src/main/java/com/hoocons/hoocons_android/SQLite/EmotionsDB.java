@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.aisen.android.common.context.GlobalContext;
 import org.aisen.android.common.utils.FileUtils;
@@ -27,7 +28,7 @@ public class EmotionsDB {
     private static SQLiteDatabase emotionsDb;
 
     static {
-        emotionsDb = new SqliteDbHelper(BaseApplication.getInstance(), "emotions_v6.db", 1).getWritableDatabase();
+        emotionsDb = new SqliteDbHelper(BaseApplication.getInstance(), "hoocons_emotions.db", 1).getWritableDatabase();
     }
 
     static class SqliteDbHelper extends SQLiteOpenHelper {
@@ -46,7 +47,6 @@ public class EmotionsDB {
             dropDb(db);
             onCreate(db);
         }
-
     }
 
     static void dropDb(SQLiteDatabase db) {
@@ -54,8 +54,6 @@ public class EmotionsDB {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 db.execSQL("DROP TABLE " + cursor.getString(0));
-
-                Logger.d(TAG, "删除表 = " + cursor.getString(0));
             }
         }
         if (cursor != null) {
@@ -74,10 +72,10 @@ public class EmotionsDB {
             cursor = emotionsDb.rawQuery(sql, null);
             if (cursor != null && cursor.moveToNext()) {
                 int count = cursor.getInt(0);
-                if (count > 0)
+                if (count > 0) {
                     tableExist = true;
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -97,7 +95,6 @@ public class EmotionsDB {
         }
 
         boolean insertEmotions = true;
-
         try {
             cursor = emotionsDb.rawQuery(" select count(*) as c from " + EmotionTable.table, null);
             if (cursor != null && cursor.moveToFirst()) {
@@ -123,6 +120,7 @@ public class EmotionsDB {
 
                         emotionsDb.beginTransaction();
                         emotionsDb.execSQL(String.format("delete from %s", EmotionTable.table));
+
                         for (Object key : keySet) {
                             String value = properties.getProperty(key.toString());
                             Logger.w(TAG, String.format("emotion's key(%s), value(%s)", key, value));
@@ -149,15 +147,9 @@ public class EmotionsDB {
         }
     }
 
-    //	static ZHConverter converter;
     public static byte[] getEmotion(String key) {
-//		if (converter == null)
-//			converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
-//		key = converter.convert(key);
-
         Cursor cursor = emotionsDb.rawQuery(" SELECT " + EmotionTable.value + " FROM " + EmotionTable.table + " WHERE " + EmotionTable.key + " = ? ",
                 new String[] { key });
-
         try {
             if (cursor.moveToFirst()) {
                 byte[] data = cursor.getBlob(cursor.getColumnIndex(EmotionTable.value));

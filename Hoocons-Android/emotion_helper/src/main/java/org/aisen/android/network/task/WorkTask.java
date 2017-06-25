@@ -1,12 +1,15 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package org.aisen.android.network.task;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 import android.text.TextUtils;
-
-import org.aisen.android.common.utils.Logger;
-
+import android.util.Log;
 import java.util.ArrayDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -22,115 +25,39 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.aisen.android.common.utils.Logger;
+import org.aisen.android.network.task.ITaskManager;
+import org.aisen.android.network.task.TaskException;
 
 public abstract class WorkTask<Params, Progress, Result> {
 	private static final String TAG = "WorkTask";
-
-	/**
-	 * 加载图片默认是10个线程
-	 */
 	private static final int CORE_IMAGE_POOL_SIZE = 10;
-
-	/**
-	 * 默认核心线程是5个
-	 */
 	private static final int CORE_POOL_SIZE = 5;
-	/**
-	 * 默认执行最大线程是128个
-	 */
 	private static final int MAXIMUM_POOL_SIZE = 128;
 	private static final int KEEP_ALIVE = 1;
-
 	private TaskException exception;
-
 	private boolean cancelByUser;
-
 	private static final ThreadFactory sThreadFactory = new ThreadFactory() {
 		private final AtomicInteger mCount = new AtomicInteger(1);
 
 		public Thread newThread(Runnable r) {
-			return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
+			return new Thread(r, "AsyncTask #" + this.mCount.getAndIncrement());
 		}
 	};
+	private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue(10);
+	public static final Executor THREAD_POOL_EXECUTOR;
+	public static final Executor IMAGE_POOL_EXECUTOR;
+	public static final Executor SERIAL_EXECUTOR;
+	private static final int MESSAGE_POST_RESULT = 1;
+	private static final int MESSAGE_POST_PROGRESS = 2;
+	private static final WorkTask.InternalHandler sHandler;
+	private static volatile Executor sDefaultExecutor;
+	private final WorkerRunnable mWorker;
+	private final FutureTask mFuture;
+	private volatile WorkTask.Status mStatus;
+	private final AtomicBoolean mTaskInvoked;
+	private String taskId;
 
-	/**
-	 * 执行队列，默认是10个，超过10个后会开启新的线程，如果已运行线程大于 {@link #MAXIMUM_POOL_SIZE}，执行异常策略
-	 */
-	private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(10);
-
-	/**
-	 * 默认线程池，最大执行{@link #CORE_POOL_SIZE}+{@link #MAXIMUM_POOL_SIZE}个线程
-	 */
-	public static final Executor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS,
-			sPoolWorkQueue, sThreadFactory);
-
-	/**
-	 * 固定大小为{@link #CORE_IMAGE_POOL_SIZE}的线程池<br/>
-	 * 无界线程池，可以加载无限个线程
-	 */
-	public static final Executor IMAGE_POOL_EXECUTOR = Executors.newFixedThreadPool(CORE_IMAGE_POOL_SIZE, sThreadFactory);
-
-	/**
-	 * An {@link Executor} that executes tasks one at a time in serial order.
-	 * This serialization is global to a particular process.
-	 */
-	public static final Executor SERIAL_EXECUTOR = new SerialExecutor();
-
-	private static final int MESSAGE_POST_RESULT = 0x1;
-	private static final int MESSAGE_POST_PROGRESS = 0x2;
-
-	private static final InternalHandler sHandler = new InternalHandler();
-
-	private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;
-	private final WorkerRunnable<Params, Result> mWorker;
-	private final FutureTask<Result> mFuture;
-
-	private volatile Status mStatus = Status.PENDING;
-
-	private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
-
-	private static class SerialExecutor implements Executor {
-		final ArrayDeque<Runnable> mTasks = new ArrayDeque<Runnable>();
-		Runnable mActive;
-
-		public synchronized void execute(final Runnable r) {
-			mTasks.offer(new Runnable() {
-				public void run() {
-					try {
-						r.run();
-					} finally {
-						scheduleNext();
-					}
-				}
-			});
-			if (mActive == null) {
-				scheduleNext();
-			}
-		}
-
-		protected synchronized void scheduleNext() {
-			if ((mActive = mTasks.poll()) != null) {
-				THREAD_POOL_EXECUTOR.execute(mActive);
-			}
-		}
-	}
-
-	public enum Status {
-		/**
-		 * Indicates that the task has not been executed yet.
-		 */
-		PENDING,
-		/**
-		 * Indicates that the task is running.
-		 */
-		RUNNING,
-		/**
-		 * Indicates that {@link WorkTask#onPostExecute} has finished.
-		 */
-		FINISHED,
-	}
-
-	/** @hide Used to force static handler to be created. */
 	public static void init() {
 		sHandler.getLooper();
 	}
@@ -139,10 +66,8 @@ public abstract class WorkTask<Params, Progress, Result> {
 		sDefaultExecutor = exec;
 	}
 
-	private String taskId;
-
 	public String getTaskId() {
-		return taskId;
+		return this.taskId;
 	}
 
 	public void setTaskId(String taskId) {
@@ -156,226 +81,154 @@ public abstract class WorkTask<Params, Progress, Result> {
 	}
 
 	public WorkTask() {
-		mWorker = new WorkerRunnable<Params, Result>() {
+		this.mStatus = WorkTask.Status.PENDING;
+		this.mTaskInvoked = new AtomicBoolean();
+		this.mWorker = new WorkTask.WorkerRunnable() {
 			public Result call() throws Exception {
-				mTaskInvoked.set(true);
-
-				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-				return postResult(doInBackground(mParams));
+				WorkTask.this.mTaskInvoked.set(true);
+				Process.setThreadPriority(10);
+				return WorkTask.this.postResult(WorkTask.this.doInBackground((Params[]) this.mParams));
 			}
 		};
-
-		mFuture = new FutureTask<Result>(mWorker) {
-			@Override
+		this.mFuture = new FutureTask(this.mWorker) {
 			protected void done() {
 				try {
-					final Result result = get();
-
-					postResultIfNotInvoked(result);
-				} catch (InterruptedException e) {
-					android.util.Log.w(TAG, e);
-				} catch (ExecutionException e) {
-					throw new RuntimeException("An error occured while executing doInBackground()", e.getCause());
-				} catch (CancellationException e) {
-					postResultIfNotInvoked(null);
-				} catch (Throwable t) {
-					throw new RuntimeException("An error occured while executing " + "doInBackground()", t);
+					Object t = this.get();
+					WorkTask.this.postResultIfNotInvoked((Result) t);
+				} catch (InterruptedException var2) {
+					Log.w("WorkTask", var2);
+				} catch (ExecutionException var3) {
+					throw new RuntimeException("An error occured while executing doInBackground()", var3.getCause());
+				} catch (CancellationException var4) {
+					WorkTask.this.postResultIfNotInvoked(null);
+				} catch (Throwable var5) {
+					throw new RuntimeException("An error occured while executing doInBackground()", var5);
 				}
+
 			}
 		};
 	}
 
 	private void postResultIfNotInvoked(Result result) {
-		final boolean wasTaskInvoked = mTaskInvoked.get();
-		if (!wasTaskInvoked) {
-			postResult(result);
+		boolean wasTaskInvoked = this.mTaskInvoked.get();
+		if(!wasTaskInvoked) {
+			this.postResult(result);
 		}
+
 	}
 
 	private Result postResult(Result result) {
-		Message message = sHandler.obtainMessage(MESSAGE_POST_RESULT, new AsyncTaskResult<Result>(this, result));
+		Message message = sHandler.obtainMessage(1, new WorkTask.AsyncTaskResult(this, new Object[]{result}));
 		message.sendToTarget();
 		return result;
 	}
 
-	public final Status getStatus() {
-		return mStatus;
+	public final WorkTask.Status getStatus() {
+		return this.mStatus;
 	}
 
-	/**
-	 * 线程开始执行
-	 */
 	protected void onPrepare() {
-
 	}
 
-	/**
-	 * {@link #workInBackground(Object...)} 发生异常
-	 */
 	protected void onFailure(TaskException exception) {
-
 	}
 
-	/**
-	 * 没有抛出异常，且<tt>Result</tt>不为<tt>Null</tt>
-	 */
 	protected void onSuccess(Result result) {
-
 	}
 
 	protected Params[] getParams() {
-		return mWorker.mParams;
+		return (Params[]) this.mWorker.mParams;
 	}
 
-	/**
-	 * 线程结束，不管线程结束是什么状态，都会执行这个方法
-	 */
 	protected void onFinished() {
-		Logger.d(TAG, String.format("%s --->onFinished()", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run ")));
+		Logger.d("WorkTask", String.format("%s --->onFinished()", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run "}));
 	}
 
-	/**
-	 * 异步执行方法
-	 * 
-	 * @param params
-	 * @return
-	 * @throws TaskException
-	 */
-	abstract public Result workInBackground(Params... params) throws TaskException;
+	public abstract Result workInBackground(Params... var1) throws TaskException;
 
 	private Result doInBackground(Params... params) {
-		Logger.d(TAG, String.format("%s --->doInBackground()", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run ")));
+		Logger.d("WorkTask", String.format("%s --->doInBackground()", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run "}));
 
 		try {
-			return workInBackground(params);
-		} catch (TaskException e) {
-			e.printStackTrace();
-			exception = e;
+			return this.workInBackground(params);
+		} catch (TaskException var3) {
+			var3.printStackTrace();
+			this.exception = var3;
+			return null;
 		}
-
-		return null;
 	}
 
-	final protected void onPreExecute() {
-		Logger.d(TAG, String.format("%s --->onTaskStarted()", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run ")));
-		onPrepare();
+	protected final void onPreExecute() {
+		Logger.d("WorkTask", String.format("%s --->onTaskStarted()", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run "}));
+		this.onPrepare();
 	}
 
-	final protected void onPostExecute(Result result) {
-		if (exception == null) {
-			Logger.d(TAG, String.format("%s --->onTaskSuccess()", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run ")));
-			onSuccess(result);
-		}
-		else if (exception != null) {
-			Logger.d(
-					TAG,
-					String.format("%s --->onFailure(), \nError msg --->", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run "),
-							exception.getMessage()));
-			onFailure(exception);
+	protected final void onPostExecute(Result result) {
+		if(this.exception == null) {
+			Logger.d("WorkTask", String.format("%s --->onTaskSuccess()", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run "}));
+			this.onSuccess(result);
+		} else if(this.exception != null) {
+			Logger.d("WorkTask", String.format("%s --->onFailure(), \nError msg --->", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run ", this.exception.getMessage()}));
+			this.onFailure(this.exception);
 		}
 
-		onFinished();
+		this.onFinished();
 	}
 
 	protected void onProgressUpdate(Progress... values) {
 	}
 
 	protected void onCancelled(Result result) {
-		_onCancelled();
+		this._onCancelled();
 	}
 
 	private void _onCancelled() {
-		onCancelled();
-
-		onFinished();
+		this.onCancelled();
+		this.onFinished();
 	}
 
 	protected void onCancelled() {
-		Logger.d(TAG, String.format("%s --->onCancelled()", TextUtils.isEmpty(taskId) ? "run " : (taskId + " run ")));
+		Logger.d("WorkTask", String.format("%s --->onCancelled()", new Object[]{TextUtils.isEmpty(this.taskId)?"run ":this.taskId + " run "}));
 	}
 
 	public final boolean isCancelled() {
-		return mFuture.isCancelled();
+		return this.mFuture.isCancelled();
 	}
 
 	public boolean isCancelByUser() {
-		return cancelByUser;
+		return this.cancelByUser;
 	}
 
 	public boolean cancel(boolean mayInterruptIfRunning) {
-		cancelByUser = true;
-
-		return mFuture.cancel(mayInterruptIfRunning);
+		this.cancelByUser = true;
+		return this.mFuture.cancel(mayInterruptIfRunning);
 	}
 
 	public final Result get() throws InterruptedException, ExecutionException {
-		return mFuture.get();
+		return (Result) this.mFuture.get();
 	}
 
 	public final Result get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-		return mFuture.get(timeout, unit);
+		return (Result) this.mFuture.get(timeout, unit);
 	}
 
-	/**
-	 * 连续执行线程，所有的线程都是按照队列一个一个执行下去的
-	 * 
-	 * @param params
-	 * @return
-	 */
 	public final WorkTask<Params, Progress, Result> executeOnSerialExecutor(Params... params) {
-		return executeOnExecutor(SERIAL_EXECUTOR, params);
+		return this.executeOnExecutor(SERIAL_EXECUTOR, params);
 	}
 
-	/**
-	 * 加载图片的线程池
-	 * 
-	 * @param params
-	 * @return
-	 */
 	public final WorkTask<Params, Progress, Result> executrOnImageExecutor(Params... params) {
-		return executeOnExecutor(IMAGE_POOL_EXECUTOR, params);
+		return this.executeOnExecutor(IMAGE_POOL_EXECUTOR, params);
 	}
 
-	/**
-	 * 默认线程池{@link #THREAD_POOL_EXECUTOR}
-	 * 
-	 * @param params
-	 * @return
-	 */
 	public final WorkTask<Params, Progress, Result> execute(Params... params) {
-		return executeOnExecutor(THREAD_POOL_EXECUTOR, params);
+		return this.executeOnExecutor(THREAD_POOL_EXECUTOR, params);
 	}
 
 	public final WorkTask<Params, Progress, Result> executeOnExecutor(Executor exec, Params... params) {
-		if (mStatus != Status.PENDING) {
-			switch (mStatus) {
-			case RUNNING:
-				throw new IllegalStateException("Cannot execute task:" + " the task is already running.");
-			case FINISHED:
-				throw new IllegalStateException("Cannot execute task:" + " the task has already been executed "
-						+ "(a task can be executed only once)");
-			}
-		}
-
-		mStatus = Status.RUNNING;
-
-		if (Looper.myLooper() == Looper.getMainLooper()) {
-			onPreExecute();
-		}
-		else {
-			sHandler.post(new Runnable() {
-
-				@Override
-				public void run() {
-					onPreExecute();
-				}
-
-			});
-		}
-
-		mWorker.mParams = params;
-		exec.execute(mFuture);
-
+		this.mStatus = WorkTask.Status.RUNNING;
+		this.onPreExecute();
+		this.mWorker.mParams = params;
+		exec.execute(this.mFuture);
 		return this;
 	}
 
@@ -384,53 +237,104 @@ public abstract class WorkTask<Params, Progress, Result> {
 	}
 
 	protected final void publishProgress(Progress... values) {
-		if (!isCancelled()) {
-			sHandler.obtainMessage(MESSAGE_POST_PROGRESS, new AsyncTaskResult<Progress>(this, values)).sendToTarget();
+		if(!this.isCancelled()) {
+			sHandler.obtainMessage(2, new WorkTask.AsyncTaskResult(this, values)).sendToTarget();
 		}
+
 	}
 
 	private void finish(Result result) {
-		if (isCancelled()) {
-			onCancelled(result);
+		if(this.isCancelled()) {
+			this.onCancelled(result);
 		} else {
-			onPostExecute(result);
+			this.onPostExecute(result);
 		}
-		mStatus = Status.FINISHED;
+
+		this.mStatus = WorkTask.Status.FINISHED;
 	}
 
-	private static class InternalHandler extends Handler {
-
-		InternalHandler() {
-			super(Looper.getMainLooper());
-		}
-
-		@SuppressWarnings({ "unchecked" })
-		@Override
-		public void handleMessage(Message msg) {
-			AsyncTaskResult result = (AsyncTaskResult) msg.obj;
-			switch (msg.what) {
-			case MESSAGE_POST_RESULT:
-				// There is only one result
-				result.mTask.finish(result.mData[0]);
-				break;
-			case MESSAGE_POST_PROGRESS:
-				result.mTask.onProgressUpdate(result.mData);
-				break;
-			}
-		}
-	}
-
-	private static abstract class WorkerRunnable<Params, Result> implements Callable<Result> {
-		Params[] mParams;
+	static {
+		THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(5, 128, 1L, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
+		IMAGE_POOL_EXECUTOR = Executors.newFixedThreadPool(10, sThreadFactory);
+		SERIAL_EXECUTOR = new WorkTask.SerialExecutor();
+		sHandler = new WorkTask.InternalHandler();
+		sDefaultExecutor = SERIAL_EXECUTOR;
 	}
 
 	private static class AsyncTaskResult<Data> {
 		final WorkTask mTask;
 		final Data[] mData;
 
+		@SafeVarargs
 		AsyncTaskResult(WorkTask task, Data... data) {
-			mTask = task;
-			mData = data;
+			this.mTask = task;
+			this.mData = data;
+		}
+	}
+
+	private abstract static class WorkerRunnable<Params, Result> implements Callable<Result> {
+		Params[] mParams;
+
+		private WorkerRunnable() {
+		}
+	}
+
+	private static class InternalHandler extends Handler {
+		private InternalHandler() {
+		}
+
+		public void handleMessage(Message msg) {
+			WorkTask.AsyncTaskResult result = (WorkTask.AsyncTaskResult)msg.obj;
+			switch(msg.what) {
+				case 1:
+					result.mTask.finish(result.mData[0]);
+					break;
+				case 2:
+					result.mTask.onProgressUpdate(result.mData);
+			}
+
+		}
+	}
+
+	public static enum Status {
+		PENDING,
+		RUNNING,
+		FINISHED;
+
+		private Status() {
+		}
+	}
+
+	private static class SerialExecutor implements Executor {
+		final ArrayDeque<Runnable> mTasks;
+		Runnable mActive;
+
+		private SerialExecutor() {
+			this.mTasks = new ArrayDeque<>();
+		}
+
+		public synchronized void execute(final Runnable r) {
+			this.mTasks.offer(new Runnable() {
+				public void run() {
+					try {
+						r.run();
+					} finally {
+						SerialExecutor.this.scheduleNext();
+					}
+
+				}
+			});
+			if(this.mActive == null) {
+				this.scheduleNext();
+			}
+
+		}
+
+		private synchronized void scheduleNext() {
+			if((this.mActive = (Runnable)this.mTasks.poll()) != null) {
+				WorkTask.THREAD_POOL_EXECUTOR.execute(this.mActive);
+			}
+
 		}
 	}
 }

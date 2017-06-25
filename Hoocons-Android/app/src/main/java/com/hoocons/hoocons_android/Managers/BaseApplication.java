@@ -10,12 +10,13 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
+import org.aisen.android.common.context.GlobalContext;
 import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by hungnguyen on 6/3/17.
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends GlobalContext {
     public static final String TAG = BaseApplication.class
             .getSimpleName();
     private static BaseApplication mInstance;
