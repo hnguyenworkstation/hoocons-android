@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;

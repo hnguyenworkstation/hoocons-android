@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -8,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/single_content"
+        android:background="@color/gray_alpha"
         android:layout_margin="@dimen/margin_8">
 
         <RelativeLayout
@@ -17,11 +19,14 @@
             <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/gray_alpha"
                 android:adjustViewBounds="true"
                 android:minHeight="248dp"
                 android:minWidth="248dp"
                 android:scaleType="fitCenter"
-                android:id="@+id/event_single_content"/>
+                android:id="@+id/event_single_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
 
             <ProgressBar
                 android:id="@+id/loading_progress"

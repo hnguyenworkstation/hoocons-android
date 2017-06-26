@@ -16,16 +16,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFEEEEEE"
             android:clipChildren="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+                <include layout="@layout/custom_find_match_actionbar"/>
+            </RelativeLayout>
 
             <com.king.view.flutteringlayout.FlutteringLayout
                 android:id="@+id/flutteringLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="18dp"
                 app:duration="3000"
-                app:enter_duration="300"
+                app:enter_duration="100"
                 app:scale="1.0"/>
 
             <include

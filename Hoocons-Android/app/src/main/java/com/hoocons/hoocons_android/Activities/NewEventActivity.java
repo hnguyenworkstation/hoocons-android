@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -244,6 +245,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .load(url)
                 .asGif()
                 .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
                 .listener(new RequestListener<String, GifDrawable>() {
                     @Override
