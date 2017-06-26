@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.hoocons.hoocons_android.CustomUI.swipe_cards.SwipeFlingBottomLayout;
 import com.hoocons.hoocons_android.DumbData.TestUserData;
 import com.hoocons.hoocons_android.Helpers.RetrofitHelper;
 import com.hoocons.hoocons_android.R;
+import com.king.view.flutteringlayout.FlutteringLayout;
 import com.zc.swiple.SwipeFlingView;
 
 import org.aisen.android.ui.activity.basic.BaseActivity;
@@ -32,12 +34,16 @@ public class FindMatchActivity extends BaseActivity implements SwipeFlingView.On
     SwipeFlingView mSwipeFlingView;
     @BindView(R.id.swipe_fling_bottom)
     SwipeFlingBottomLayout mBottomFlingLayout;
+    @BindView(R.id.flutteringLayout)
+    FlutteringLayout mFlutteringLayout;
 
     private int mPageIndex = 0;
     private boolean mIsRequestGirlList;
     private ArrayList<CardEntity> mGrilList = new ArrayList<>();
 
     private UserFindMatchAdapter mAdapter;
+    private final Handler handler = new Handler();
+    private final int delay = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +58,18 @@ public class FindMatchActivity extends BaseActivity implements SwipeFlingView.On
     private void initView() {
         mAdapter = new UserFindMatchAdapter(this, mGrilList);
         mSwipeFlingView.setAdapter(mAdapter);
-        mSwipeFlingView.setOnSwipeFlingListener(this);//SimpleOnSwipeListener/OnSwipeListener
+        mSwipeFlingView.setOnSwipeFlingListener(this);
         mSwipeFlingView.setOnItemClickListener(this);
         mBottomFlingLayout.setOnBottomItemClickListener(this);
+
+        mFlutteringLayout.bringToFront();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFlutteringLayout.addHeart();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     private void updateListView(ArrayList<CardEntity> list) {
