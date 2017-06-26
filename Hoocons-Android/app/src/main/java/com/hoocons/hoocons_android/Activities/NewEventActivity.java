@@ -225,6 +225,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         // display the holder content
         mSingleContentView.setVisibility(View.VISIBLE);
         mDeleteSingleContent.bringToFront();
+        mLoadingProgress.bringToFront();
 
         // update the add more content options
         mAddPhotoBtn.setVisibility(View.GONE);
