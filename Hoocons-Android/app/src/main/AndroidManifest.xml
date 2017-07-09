@@ -55,6 +55,9 @@
             android:value="@string/facebook_app_id" />
         <meta-data android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
+        <meta-data
+            android:name="com.hoocons.hoocons_android.CustomUI.GlideConfiguration"
+            android:value="GlideModule" />
 
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity" />
