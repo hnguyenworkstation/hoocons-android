@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import com.facebook.FacebookSdk;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
@@ -36,6 +37,9 @@ public class BaseApplication extends GlobalContext {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             builder.detectFileUriExposure();
         }
+
+        // Initializing facebook
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Override font
         TypefaceProvider.registerDefaultIconSets();

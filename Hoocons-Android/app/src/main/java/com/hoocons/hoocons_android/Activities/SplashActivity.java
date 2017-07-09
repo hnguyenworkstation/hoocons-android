@@ -29,15 +29,10 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                skipLogin();
-                finish();
+                commitNextStage();
             }
         }, SPLASH_TIME_OUT);
 
-    }
-
-    private void skipLogin() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
     private void commitNextStage() {
@@ -52,6 +47,8 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }
+
+        this.finish();
     }
 
     @Override

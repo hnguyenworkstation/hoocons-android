@@ -1,19 +1,52 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.BinderThread;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.accountkit.Account;
+import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
+import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
+import com.facebook.accountkit.ui.AccountKitActivity;
+import com.facebook.accountkit.ui.AccountKitConfiguration;
+import com.facebook.accountkit.ui.LoginType;
+import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SocialLoginActivity extends BaseActivity {
-    @BindView(R.id.register_button)
+    @BindView(R.id.login_button)
+    Button mLoginBtn;
+    @BindView(R.id.register_btn)
     Button mRegisterBtn;
+
+    private CallbackManager callbackManager;
+    private SweetAlertDialog mAlertDialog;
+
+    private static final int REQUEST_IMAGE_VIEW_PERMISSION = 111;
+    private static final int REQUEST_LOCATION_PERMISSION = 222;
+    private static final int APP_REQUEST_CODE = 124;
+
+    private static final BaseApplication mInstance = BaseApplication.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +54,138 @@ public class SocialLoginActivity extends BaseActivity {
         setContentView(R.layout.activity_social_login);
         ButterKnife.bind(this);
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+        AccountKit.initialize(this);
+        checkPermission();
+
+        mAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        mAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mAlertDialog.setTitleText("Loading");
+        mAlertDialog.setCancelable(false);
+
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
             }
         });
+
+        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneRegister();
+            }
+        });
     }
+
+    private void phoneRegister() {
+        final Intent intent = new Intent(this, AccountKitActivity.class);
+
+        AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
+                new AccountKitConfiguration.AccountKitConfigurationBuilder(
+                        LoginType.PHONE,
+                        AccountKitActivity.ResponseType.TOKEN);
+
+        AccountKitActivity a = new AccountKitActivity();
+
+        intent.putExtra(
+                AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
+                configurationBuilder.build());
+
+        startActivityForResult(intent, APP_REQUEST_CODE);
+    }
+
+    private void checkPermission() {
+        if (!PermissionUtils.isPermissionValid(SocialLoginActivity.this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                && !PermissionUtils.isPermissionValid(SocialLoginActivity.this,
+                android.Manifest.permission.CAMERA)) {
+
+            List<String> permissions = new ArrayList<>();
+            permissions.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            permissions.add(android.Manifest.permission.CAMERA);
+
+            PermissionUtils.requestPermissions(SocialLoginActivity.this,
+                    REQUEST_IMAGE_VIEW_PERMISSION, permissions);
+        }
+
+        if (!PermissionUtils.isPermissionValid(SocialLoginActivity.this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                && !PermissionUtils.isPermissionValid(SocialLoginActivity.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            List<String> permissions = new ArrayList<>();
+            permissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+            permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+            PermissionUtils.requestPermissions(SocialLoginActivity.this,
+                    REQUEST_LOCATION_PERMISSION, permissions);
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == APP_REQUEST_CODE) {
+            mAlertDialog.show();
+            final AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
+            String toastMessage;
+            if (loginResult.getError() != null) {
+                toastMessage = loginResult.getError().getErrorType().getMessage();
+                mAlertDialog.hide();
+            } else if (loginResult.wasCancelled()) {
+                toastMessage = "Login Cancelled";
+                mAlertDialog.hide();
+            } else {
+                if (loginResult.getAccessToken() != null) {
+                    toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
+                    checkAccount();
+                    loginResult.getFinalAuthorizationState();
+                } else {
+                    toastMessage = String.format(
+                            "Success:%s...", loginResult.getAuthorizationCode().substring(0, 10));
+                    checkAccount();
+                    mAlertDialog.hide();
+                }
+            }
+            Toast.makeText(mInstance, toastMessage, Toast.LENGTH_SHORT).show();
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void checkAccount() {
+        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+            @Override
+            public void onSuccess(final Account account) {
+                mAlertDialog.hide();
+                final PhoneNumber phoneNumber = account.getPhoneNumber();
+                final String phoneNumberString = phoneNumber.toString();
+            }
+
+            @Override
+            public void onError(final AccountKitError error) {
+                mAlertDialog.hide();
+                Log.e("AccountKit", error.toString());
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
 }

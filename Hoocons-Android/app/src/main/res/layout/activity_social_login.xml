@@ -51,25 +51,30 @@
                 android:textColor="@color/black"/>
 
             <Button
-                android:id="@+id/register_button"
+                android:id="@+id/login_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_24"
                 android:text="@string/continue_with_phone_number"
-                android:layout_above="@+id/register"
                 android:textStyle="normal"
                 android:background="@drawable/active_button"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:layout_marginLeft="@dimen/margin_24"
+                android:layout_marginRight="@dimen/margin_24"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_above="@+id/register_btn"
+                android:layout_centerHorizontal="true" />
 
-            <TextView
+            <Button
+                android:background="@null"
                 android:layout_marginBottom="@dimen/margin_24"
-                android:id="@+id/register"
+                style="?android:textAppearanceSmall"
+                android:id="@+id/register_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="@string/action_login"
+                android:text="@string/action_register"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_10"/>
         </RelativeLayout>
