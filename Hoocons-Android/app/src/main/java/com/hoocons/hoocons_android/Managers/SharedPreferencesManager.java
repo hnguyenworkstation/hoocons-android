@@ -23,6 +23,7 @@ public class SharedPreferencesManager {
     private final String USER_NAME = "USERNAME";
     private final String USER_PASSWORD = "PASSWORD";
     private final String USER_NICKNAME = "USER_NICKNAME";
+    private final String REQUEST_USER_INFO = "REQUEST_USER_INFO";
 
     /* ******************************************
     * APPLICATION INITIALIZATION PREFERENCES
@@ -90,6 +91,14 @@ public class SharedPreferencesManager {
     public void setCredentials(String[] credentials) {
         sharedPreferences.edit().putString(USER_NAME, credentials[0]).apply();
         sharedPreferences.edit().putString(USER_PASSWORD, credentials[1]).apply();
+    }
+
+    public void setRequestUserInfo(boolean isNeed) {
+        sharedPreferences.edit().putBoolean(REQUEST_USER_INFO, isNeed).apply();
+    }
+
+    public boolean isRequestedInfo() {
+        return sharedPreferences.getBoolean(REQUEST_USER_INFO, true);
     }
 
     /* ******************************************

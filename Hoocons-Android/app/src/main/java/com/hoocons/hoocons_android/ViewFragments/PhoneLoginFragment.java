@@ -153,7 +153,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     mPhoneNumber = String.format("%s%s", mCountryCode, mPhoneInput.getText().toString());
 
                     Log.e(TAG, String.format("Phone #: %s", mPhoneNumber));
-                    
+
                     new LoginAndCheckUserInfoTask(mPhoneNumber, mPasswordInput.getText()
                             .toString()).execute();
                 }

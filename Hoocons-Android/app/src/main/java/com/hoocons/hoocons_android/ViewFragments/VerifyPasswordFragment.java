@@ -97,6 +97,7 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
 
     private void attemptToRegister(final String password, String repass) {
         if (isValidPassword(password, repass)) {
+            showProcessDialog();
             UserServices services = NetContext.instance.create(UserServices.class);
             services.register(new CredentialRequest(mPhoneNumber, password)).enqueue(new Callback<TokenResponse>() {
                 @Override
@@ -107,10 +108,12 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
                     } else {
                         Toast.makeText(getContext(), "Register failed!", Toast.LENGTH_SHORT).show();
                     }
+                    pDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<TokenResponse> call, Throwable t) {
+                    pDialog.dismiss();
                     Toast.makeText(getContext(), "Server issue! Please try again later", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -133,7 +136,7 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
                 "new_user_info_fragment");
         ft.commit();
     }
-    
+
 
     private boolean isValidPassword(String pass, String repass) {
         if (pass.isEmpty()) {
@@ -155,6 +158,22 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
         pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
         pDialog.setCancelable(false);
         pDialog.show();
+    }
+
+    @Override
+    public void onStop() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     @Override
