@@ -21,6 +21,7 @@ public class SharedPreferencesManager {
     private final String USER_TOKEN = "USER_TOKEN";
     private final String REQUEST_UPDATE_INFO = "REQUEST_UPDATE_INFO";
     private final String USER_NAME = "USERNAME";
+    private final String USER_PASSWORD = "PASSWORD";
     private final String USER_NICKNAME = "USER_NICKNAME";
 
     /* ******************************************
@@ -48,8 +49,6 @@ public class SharedPreferencesManager {
 
 
 
-
-
     /* ******************************************
     * USER CONTENTS PREFERENCES
     * *******************************************/
@@ -70,20 +69,27 @@ public class SharedPreferencesManager {
         return sharedPreferences.getBoolean(REQUEST_UPDATE_INFO, true);
     }
 
-    public void setUserName(String name){
-        sharedPreferences.edit().putString(USER_NAME, name).apply();
+    public String getUserNickname() {
+        return sharedPreferences.getString(USER_NICKNAME, "");
+    }
+
+    public void setUserNickname(String nickName){
+        sharedPreferences.edit().putString(USER_NICKNAME, nickName).apply();
     }
 
     public String getUserName() {
         return sharedPreferences.getString(USER_NAME, "");
     }
 
-    public void setUserNickname(String nickname) {
-        sharedPreferences.edit().putString(USER_NICKNAME, nickname).apply();
+    public String[] getCredentials() {
+        String username = sharedPreferences.getString(USER_NAME, "");
+        String password = sharedPreferences.getString(USER_PASSWORD, "");
+        return new String[] {username, password};
     }
 
-    public String getUserNickname() {
-        return sharedPreferences.getString(USER_NICKNAME, "");
+    public void setCredentials(String[] credentials) {
+        sharedPreferences.edit().putString(USER_NAME, credentials[0]).apply();
+        sharedPreferences.edit().putString(USER_PASSWORD, credentials[1]).apply();
     }
 
     /* ******************************************

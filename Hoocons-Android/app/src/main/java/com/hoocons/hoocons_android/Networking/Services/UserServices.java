@@ -17,6 +17,14 @@ import retrofit2.http.PUT;
  * Created by hungnguyen on 6/16/17.
  */
 public interface UserServices {
+    /**********************************
+     * @Method: POST
+     * @Name: Register
+     * @Argument: both credentials
+     * @Purpose: Login and receive token
+     ********************************** */
+    @POST("/user/register/")
+    Call<TokenResponse> register(@Body CredentialRequest request);
 
     /**********************************
      * @Method: POST

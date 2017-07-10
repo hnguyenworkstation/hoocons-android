@@ -130,7 +130,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
             mPhoneInput.setError(getResources().getString(R.string.error_phone_number));
             return false;
         } else if (mPasswordInput.getText().toString().length() == 0) {
-            mPasswordInput.setError(getResources().getString(R.string.error_password));
+            mPasswordInput.setError(getResources().getString(R.string.error_empty_password));
             return false;
         }
         return true;
@@ -153,7 +153,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     mPhoneNumber = String.format("%s%s", mCountryCode, mPhoneInput.getText().toString());
 
                     Log.e(TAG, String.format("Phone #: %s", mPhoneNumber));
-                    // Execute task to login
+                    
                     new LoginAndCheckUserInfoTask(mPhoneNumber, mPasswordInput.getText()
                             .toString()).execute();
                 }

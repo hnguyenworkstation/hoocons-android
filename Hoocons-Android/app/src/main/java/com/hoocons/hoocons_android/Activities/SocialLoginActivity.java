@@ -50,6 +50,7 @@ public class SocialLoginActivity extends BaseActivity {
     private static final int REQUEST_IMAGE_VIEW_PERMISSION = 111;
     private static final int REQUEST_LOCATION_PERMISSION = 222;
     private static final int ACCOUNT_KIT_REQUEST = 124;
+    private final String PROCESS_REGISTER = "register_process";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +202,11 @@ public class SocialLoginActivity extends BaseActivity {
                                 mAlertDialog.hide();
 
                                 if (response.code() == 200) {
-                                    Toast.makeText(SocialLoginActivity.this, "New user", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(SocialLoginActivity.this,
+                                            LoginActivity.class)
+                                        .putExtra("PHONE_NUMBER", phoneNumberString)
+                                        .putExtra("REQUIRE_PASSWORD_SCREEN", true)
+                                        .putExtra("PROCESS", PROCESS_REGISTER));
                                 } else if (response.code() == 201) {
                                     showLoginOptionDialog();
                                 }

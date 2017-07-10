@@ -14,6 +14,7 @@ import com.hoocons.hoocons_android.Manifest;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.NewUserInfoFragment;
 import com.hoocons.hoocons_android.ViewFragments.PhoneLoginFragment;
+import com.hoocons.hoocons_android.ViewFragments.VerifyPasswordFragment;
 import com.hoocons.hoocons_android.ViewFragments.VerifyPhoneFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,6 +32,11 @@ public class LoginActivity extends BaseActivity {
 
     private boolean updateInfo;
     private boolean skipLogin;
+    private boolean requirePasswordScreen;
+    private String process;
+    private String phoneNumber;
+
+    private final String PROCESS_REGISTER = "register_process";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,9 @@ public class LoginActivity extends BaseActivity {
 
         updateInfo = intent.getBooleanExtra("REQUEST_INFO", true);
         skipLogin = intent.getBooleanExtra("SKIP_LOGIN", false);
+        requirePasswordScreen = intent.getBooleanExtra("REQUIRE_PASSWORD_SCREEN", false);
+        process = intent.getStringExtra("PROCESS");
+        phoneNumber = intent.getStringExtra("PHONE_NUMBER");
 
         loginFragment = new PhoneLoginFragment();
         verifyPhoneFragment = new VerifyPhoneFragment();
@@ -51,6 +60,10 @@ public class LoginActivity extends BaseActivity {
 
         if (skipLogin) {
             mFragTransition.replace(R.id.login_container, new NewUserInfoFragment());
+            mFragTransition.commit();
+        } else if (requirePasswordScreen) {
+            mFragTransition.replace(R.id.login_container,
+                    VerifyPasswordFragment.newInstance(phoneNumber, process));
             mFragTransition.commit();
         } else {
             mFragTransition.replace(R.id.login_container, loginFragment);

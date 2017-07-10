@@ -83,7 +83,6 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
         });
     }
 
-
     private void retrieveUserInfo() {
         UserServices services =  NetContext.instance.create(UserServices.class);
         services.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
@@ -93,8 +92,6 @@ public class LoginAndCheckUserInfoTask extends AsyncTask<String, String, String>
                     UserInfoResponse resp = response.body();
 
                     if (resp != null) {
-                        SharedPreferencesManager.getDefault().setUserName(resp.getUsername());
-
                         if (resp.getUsername().equals(resp.getNickname())) {
                             EventBus.getDefault().post(new UserInfoRequest());
                         } else {

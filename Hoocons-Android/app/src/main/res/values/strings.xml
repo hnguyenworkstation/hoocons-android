@@ -47,7 +47,8 @@
     <string name="female">Female</string>
     <string name="phone_number">Phone Number</string>
     <string name="error_phone_number">invalid phone number</string>
-    <string name="error_password">must enter password</string>
+    <string name="error_empty_password">you must enter password</string>
+    <string name="error_pass_not_match">password does not match</string>
     <string name="login_failed">Login failed! Please try again</string>
     <string name="new_user_question">New User?</string>
     <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>

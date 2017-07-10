@@ -1,22 +1,30 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
+import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
+import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VerifyPasswordFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.action_back)
@@ -34,14 +42,14 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
 
     private static final String STATE_RESET_PASSWORD = "RESET_PASSWORD";
-    private static final String STATE_REGISTER = "REGISTER";
+    private final String PROCESS_REGISTER = "register_process";
 
     private String mState;
     private String mPhoneNumber;
     private SweetAlertDialog pDialog;
 
     public VerifyPasswordFragment() {
-        // Required empty public constructor
+
     }
 
     public static VerifyPasswordFragment newInstance(String phoneNumber, String stateArg){
@@ -65,11 +73,81 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_verify_password, container, false);
         ButterKnife.bind(this, rootView);
 
+        initView();
+
         return rootView;
+    }
+
+    private void initView() {
+        if (mState.equals(PROCESS_REGISTER)) {
+            mSubmitBtn.setText(getResources().getString(R.string.register));
+
+            mSubmitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attemptToRegister(mPassword.getText().toString(),
+                            mConfirmPassword.getText().toString());
+                }
+            });
+        }
+    }
+
+    private void attemptToRegister(final String password, String repass) {
+        if (isValidPassword(password, repass)) {
+            UserServices services = NetContext.instance.create(UserServices.class);
+            services.register(new CredentialRequest(mPhoneNumber, password)).enqueue(new Callback<TokenResponse>() {
+                @Override
+                public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                    if (response.code() == 201) {
+                        Toast.makeText(getContext(), "Register success!", Toast.LENGTH_SHORT).show();
+                        registerSuccess(response.body().getAccessToken(), mPhoneNumber, password);
+                    } else {
+                        Toast.makeText(getContext(), "Register failed!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TokenResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Server issue! Please try again later", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void registerSuccess(String token, String phoneNumber, String password) {
+        SharedPreferencesManager.getDefault()
+                .setUserToken(token);
+        SharedPreferencesManager.getDefault()
+                .setCredentials(new String[] {phoneNumber, password});
+
+        requestUpdateInfoScreen();
+    }
+
+    private void requestUpdateInfoScreen() {
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
+        ft.replace(R.id.login_container, new NewUserInfoFragment(),
+                "new_user_info_fragment");
+        ft.commit();
+    }
+    
+
+    private boolean isValidPassword(String pass, String repass) {
+        if (pass.isEmpty()) {
+            mPassword.setError(getResources().getString(R.string.error_empty_password));
+            return false;
+        } else if (repass.isEmpty()) {
+            mConfirmPassword.setError(getResources().getString(R.string.error_empty_password));
+            return false;
+        } else if (!pass.equals(repass)) {
+            mConfirmPassword.setError(getResources().getString(R.string.error_pass_not_match));
+            return false;
+        }
+
+        return true;
     }
 
     private void showProcessDialog() {
