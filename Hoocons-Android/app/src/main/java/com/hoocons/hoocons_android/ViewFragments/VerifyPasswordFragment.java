@@ -155,6 +155,7 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
 
     private void showProcessDialog() {
         pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText(getResources().getString(R.string.registering));
         pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
         pDialog.setCancelable(false);
         pDialog.show();

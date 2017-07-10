@@ -95,6 +95,7 @@ public class SocialLoginActivity extends BaseActivity {
         mAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sDialog) {
+                sDialog.dismiss();
                 startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
             }
         });
@@ -106,6 +107,7 @@ public class SocialLoginActivity extends BaseActivity {
                 sweetAlertDialog.dismiss();
             }
         });
+        mAlertDialog.show();
     }
 
     private void phoneRegister() {
