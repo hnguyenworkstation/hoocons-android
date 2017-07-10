@@ -23,7 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by hungnguyen on 6/16/17.
  */
-
 public class NetContext {
     private static final String TAG = NetContext.class.getSimpleName();
     public static NetContext instance = new NetContext();
@@ -40,7 +39,7 @@ public class NetContext {
 
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl("https://dry-ravine-18402.herokuapp.com/")
+                .baseUrl("http://hcdev.ap-southeast-1.elasticbeanstalk.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -100,7 +99,6 @@ public class NetContext {
                 request = chain.request()
                         .newBuilder().build();
             return chain.proceed(request);
-
         }
     }
 

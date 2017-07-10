@@ -24,7 +24,7 @@ public interface UserServices {
      * @Argument: both credentials
      * @Purpose: Login and receive token
      ********************************** */
-    @POST("/login")
+    @POST("/user/login/")
     Call<TokenResponse> login(@Body CredentialRequest request);
 
     /**********************************
@@ -33,7 +33,7 @@ public interface UserServices {
      * @Argument: username
      * @Purpose: check if the username has been registered or not
      ********************************** */
-    @POST("/api/user/username/check")
+    @POST("/user/check/username/")
     Call<Void> checkUsernameAvailability(@Body CredentialRequest request);
 
 
@@ -43,7 +43,7 @@ public interface UserServices {
      * @Argument: username
      * @Purpose: check if the nickname has been registered or not
      ********************************** */
-    @POST("/api/user/nickname/check")
+    @POST("/user/check/nickname/")
     Call<Void> checkNicknameAvailability(@Body UserInformationRequest request);
 
 

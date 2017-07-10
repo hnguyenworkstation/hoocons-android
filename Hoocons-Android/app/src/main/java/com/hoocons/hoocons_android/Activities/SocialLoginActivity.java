@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -23,6 +24,7 @@ import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
 
@@ -32,6 +34,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SocialLoginActivity extends BaseActivity {
     @BindView(R.id.login_button)
@@ -44,9 +49,7 @@ public class SocialLoginActivity extends BaseActivity {
 
     private static final int REQUEST_IMAGE_VIEW_PERMISSION = 111;
     private static final int REQUEST_LOCATION_PERMISSION = 222;
-    private static final int APP_REQUEST_CODE = 124;
-
-    private static final BaseApplication mInstance = BaseApplication.getInstance();
+    private static final int ACCOUNT_KIT_REQUEST = 124;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +60,8 @@ public class SocialLoginActivity extends BaseActivity {
         AccountKit.initialize(this);
         checkPermission();
 
-        mAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        mAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        mAlertDialog.setTitleText("Loading");
-        mAlertDialog.setCancelable(false);
+        callbackManager = CallbackManager.Factory.create();
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +78,35 @@ public class SocialLoginActivity extends BaseActivity {
         });
     }
 
+    private void showLoadingDialog() {
+        mAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        mAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mAlertDialog.setTitleText("Loading");
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.show();
+    }
+
+    private void showLoginOptionDialog() {
+        mAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        mAlertDialog.setTitleText(getResources().getString(R.string.return_user_question));
+        mAlertDialog.setContentText(getResources().getString(R.string.registered_account_detected));
+        mAlertDialog.setConfirmText(getResources().getString(R.string.login));
+        mAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sDialog) {
+                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
+            }
+        });
+
+        mAlertDialog.setCancelText(getResources().getString(R.string.cancel));
+        mAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+            }
+        });
+    }
+
     private void phoneRegister() {
         final Intent intent = new Intent(this, AccountKitActivity.class);
 
@@ -85,13 +115,11 @@ public class SocialLoginActivity extends BaseActivity {
                         LoginType.PHONE,
                         AccountKitActivity.ResponseType.TOKEN);
 
-        AccountKitActivity a = new AccountKitActivity();
-
         intent.putExtra(
                 AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
                 configurationBuilder.build());
 
-        startActivityForResult(intent, APP_REQUEST_CODE);
+        startActivityForResult(intent, ACCOUNT_KIT_REQUEST);
     }
 
     private void checkPermission() {
@@ -125,29 +153,34 @@ public class SocialLoginActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == APP_REQUEST_CODE) {
-            mAlertDialog.show();
+
+        if (requestCode == ACCOUNT_KIT_REQUEST) {
+            showLoadingDialog();
+
             final AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
             String toastMessage;
+
             if (loginResult.getError() != null) {
                 toastMessage = loginResult.getError().getErrorType().getMessage();
+
                 mAlertDialog.hide();
             } else if (loginResult.wasCancelled()) {
                 toastMessage = "Login Cancelled";
+
                 mAlertDialog.hide();
             } else {
+                checkAccount();
+
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
-                    checkAccount();
                     loginResult.getFinalAuthorizationState();
                 } else {
                     toastMessage = String.format(
                             "Success:%s...", loginResult.getAuthorizationCode().substring(0, 10));
-                    checkAccount();
-                    mAlertDialog.hide();
                 }
             }
-            Toast.makeText(mInstance, toastMessage, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(SocialLoginActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -157,9 +190,29 @@ public class SocialLoginActivity extends BaseActivity {
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
             public void onSuccess(final Account account) {
-                mAlertDialog.hide();
                 final PhoneNumber phoneNumber = account.getPhoneNumber();
                 final String phoneNumberString = phoneNumber.toString();
+
+                UserServices userServices = NetContext.instance.create(UserServices.class);
+                userServices.checkUsernameAvailability(new CredentialRequest(phoneNumberString))
+                        .enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                mAlertDialog.hide();
+
+                                if (response.code() == 200) {
+                                    Toast.makeText(SocialLoginActivity.this, "New user", Toast.LENGTH_SHORT).show();
+                                } else if (response.code() == 201) {
+                                    showLoginOptionDialog();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                mAlertDialog.hide();
+                                Toast.makeText(SocialLoginActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
 
             @Override

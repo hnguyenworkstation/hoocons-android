@@ -91,6 +91,11 @@
     <string name="add_more_contents">Add more contents</string>
     <string name="find_love">Find your match</string>
 
+    <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="return_user_question">Return user?</string>
+    <string name="registered_account_detected">This phone number has been registered</string>
+
     <!-- New Event Activity -->
     <string name="new_event">New Event</string>
     <string name="delete_title">Delete?</string>
