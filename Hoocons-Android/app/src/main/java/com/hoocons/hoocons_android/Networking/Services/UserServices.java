@@ -61,7 +61,7 @@ public interface UserServices {
      * @Argument: void
      * @Purpose: retrieve user info from backend
      ********************************** */
-    @GET("/api/user/get/info")
+    @GET("/user/info/")
     Call<UserInfoResponse> getUserInfo();
 
 
@@ -71,6 +71,6 @@ public interface UserServices {
      * @Argument: UserInfoResponse
      * @Purpose: update user data in the database
      ********************************** */
-    @PUT("/api/user/update/info")
+    @PUT("/user/update/info")
     Call<UserInfoResponse> updateUserInfo(@Body UserInformationRequest request);
 }

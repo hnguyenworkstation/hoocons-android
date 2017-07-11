@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.github.ppamorim.dragger.LazyDraggerActivity;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Manifest;
@@ -75,7 +77,6 @@ public class LoginActivity extends BaseActivity {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
     }
 
     /* *************************************************

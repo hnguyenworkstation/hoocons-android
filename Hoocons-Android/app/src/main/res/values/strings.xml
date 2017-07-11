@@ -50,7 +50,10 @@
     <string name="registering">Registering..</string>
     <string name="error_empty_password">you must enter password</string>
     <string name="error_pass_not_match">password does not match</string>
-    <string name="login_failed">Login failed! Please try again</string>
+    <string name="login_failed">Login failed! Please check username or password</string>
+    <string name="server_error">Server error! Please try again later</string>
+    <string name="warning">Warning</string>
+    <string name="account_banned_warn">This account has been banned</string>
     <string name="new_user_question">New User?</string>
     <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>
     <string name="register">Register</string>

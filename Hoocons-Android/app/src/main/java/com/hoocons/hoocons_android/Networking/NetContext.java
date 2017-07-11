@@ -33,8 +33,8 @@ public class NetContext {
     private NetContext() {
         client = new OkHttpClient
                 .Builder().connectTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(new LoggerInterceptor())
                 .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new LoggerInterceptor())
                 .build();
 
         retrofit = new Retrofit.Builder()

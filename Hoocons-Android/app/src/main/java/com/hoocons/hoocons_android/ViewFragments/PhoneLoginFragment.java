@@ -14,20 +14,21 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
-import com.hoocons.hoocons_android.EventBus.LoginFailedRequest;
-import com.hoocons.hoocons_android.EventBus.NewUserRequest;
-import com.hoocons.hoocons_android.EventBus.TaskCancelledRequest;
-import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
+import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.Tasks.LoginAndCheckUserInfoTask;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PhoneLoginFragment extends Fragment implements View.OnClickListener{
     private final String TAG = PhoneLoginFragment.class.getSimpleName();
@@ -75,18 +76,14 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_phone_login, container, false);
         ButterKnife.bind(this, rootView);
 
-        // Init default values
         mCountryCode = mCountryCodePicker.getDefaultCountryCodeWithPlus();
 
         initView();
@@ -95,7 +92,6 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void initView() {
-
         mResetPasswordBtn.setOnClickListener(this);
 
         mLoginBtn.setOnClickListener(this);
@@ -114,13 +110,6 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
         ft.replace(R.id.login_container, new VerifyPhoneFragment(), "verify_phone_fragment");
-        ft.commit();
-    }
-
-    private void commitUserInfoUpdateScreen() {
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
-        ft.replace(R.id.login_container, new NewUserInfoFragment(), "new_user_info_fragment");
         ft.commit();
     }
 
@@ -151,11 +140,9 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                 if (validateLoginFields()) {
                     showProcessDialog();
                     mPhoneNumber = String.format("%s%s", mCountryCode, mPhoneInput.getText().toString());
-
                     Log.e(TAG, String.format("Phone #: %s", mPhoneNumber));
 
-                    new LoginAndCheckUserInfoTask(mPhoneNumber, mPasswordInput.getText()
-                            .toString()).execute();
+                    attemptToLogin(mPhoneNumber, mPasswordInput.getText().toString());
                 }
                 break;
             case R.id.forget_password:
@@ -164,6 +151,87 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
             default:
                 break;
         }
+    }
+
+    private void showWarningDialog() {
+        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getResources().getString(R.string.warning))
+                .setContentText(getResources().getString(R.string.account_banned_warn))
+                .setConfirmText("OK")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+
+    private void attemptToLogin(String phoneNumber, String password) {
+        UserServices services = NetContext.instance.create(UserServices.class);
+        services.login(new CredentialRequest(phoneNumber, password)).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                if (response.code() == 201) {
+                    // Code 201: login complete
+                    TokenResponse response1 = response.body();
+                    assert response1 != null;
+
+                    SharedPreferencesManager.getDefault().setUserToken(response1.getAccessToken());
+                    AppUtils.signInAnonymously(getActivity());
+                    getUserInfo();
+                } else if (response.code() == 401) {
+                    // Code 401: wrong credentials
+                    pDialog.dismiss();
+                    Toast.makeText(getContext(), getResources().getString(R.string.login_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else if (response.code() ==  403) {
+                    pDialog.dismiss();
+                    // Code 403: this account is banned
+                    showWarningDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                Toast.makeText(getContext(), getResources().getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getUserInfo() {
+        UserServices service = NetContext.instance.create(UserServices.class);
+        service.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+            @Override
+            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
+                UserInfoResponse resp = response.body();
+                pDialog.dismiss();
+                if (response.code() == 200) {
+                    // Code 200 is success getting user data
+                    if (resp.getNickname().equals(resp.getUsername())){
+                        SharedPreferencesManager.getDefault().setRequestUpdateInfo(true);
+                        commitUserInfoUpdateScreen();
+                    }
+                } else if (response.code() == 404) {
+                    // Code 404 is not found info
+                    // Todo: handle code 404
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
+                pDialog.dismiss();
+                Toast.makeText(getContext(), getResources().getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void commitUserInfoUpdateScreen() {
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
+        ft.replace(R.id.login_container, new NewUserInfoFragment(), "new_user_info_fragment");
+        ft.commit();
     }
 
     private void showNewUserDialog() {
@@ -188,38 +256,5 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
 
     /**********************************************
      * EVENTBUS CATCHING FIELDS
-     *
-     *  + TaskCancelledRequest: Catching if login request cancelled
-     *
-     *  + NewUserRequest: Catching if this user has not registered
-     *
-     *  + LoginFailedRequest: wrong credentials have sent to server
     ***********************************************/
-    @Subscribe
-    public void onEvent(TaskCancelledRequest request) {
-        pDialog.dismiss();
-        Toast.makeText(getContext(), "Process cancelled", Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onEvent(NewUserRequest request) {
-        pDialog.dismiss();
-        showNewUserDialog();
-    }
-
-    @Subscribe
-    public void onEvent(LoginFailedRequest request) {
-        pDialog.dismiss();
-        Toast.makeText(getContext(), getResources().getString(R.string.login_failed),
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onEvent(UserInfoRequest request) {
-        pDialog.dismiss();
-
-        AppUtils.signInAnonymously(getActivity());
-
-        commitUserInfoUpdateScreen();
-    }
 }

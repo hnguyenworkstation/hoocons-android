@@ -8,37 +8,35 @@ import java.util.List;
  * Created by hungnguyen on 6/16/17.
  */
 public class UserInfoResponse {
-    @SerializedName("id")
-    private String id;
+    @SerializedName("user")
+    private int userPK;
     @SerializedName("username")
     private String username;
+    @SerializedName("location")
+    private LocationResponse location;
     @SerializedName("display_name")
     private String displayName;
     @SerializedName("nickname")
     private String nickname;
+    @SerializedName("birthday")
+    private String birthday;
     @SerializedName("gender")
     private String gender;
     @SerializedName("profile_url")
     private String profileUrl;
-    @SerializedName("location")
-    private float[] location;
-    @SerializedName("last_online")
-    private String lastOnline;
-    @SerializedName("friends")
-    private List<String> friends;
-    @SerializedName("friends_request_from")
-    private List<String> friendsRequestFrom;
-    @SerializedName("friends_request_to")
-    private List<String> friendsRequestTo;
-    @SerializedName("ignoring_users")
-    private List<String> ignoringUsers;
+    @SerializedName("join_date")
+    private String joinDate;
+    @SerializedName("last_action_at")
+    private String lastActionAt;
+    @SerializedName("is_sharing_location")
+    private boolean isSharingLocation;
 
-    public String getId() {
-        return id;
+    public int getUserPK() {
+        return userPK;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserPK(int userPk) {
+        this.userPK = userPk;
     }
 
     public String getUsername() {
@@ -47,6 +45,14 @@ public class UserInfoResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public LocationResponse getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationResponse location) {
+        this.location = location;
     }
 
     public String getDisplayName() {
@@ -65,6 +71,14 @@ public class UserInfoResponse {
         this.nickname = nickname;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     public String getGender() {
         return gender;
     }
@@ -81,51 +95,27 @@ public class UserInfoResponse {
         this.profileUrl = profileUrl;
     }
 
-    public float[] getLocation() {
-        return location;
+    public String getJoinDate() {
+        return joinDate;
     }
 
-    public void setLocation(float[] location) {
-        this.location = location;
+    public void setJoinDate(String joinDate) {
+        this.joinDate = joinDate;
     }
 
-    public String getLastOnline() {
-        return lastOnline;
+    public String getLastActionAt() {
+        return lastActionAt;
     }
 
-    public void setLastOnline(String lastOnline) {
-        this.lastOnline = lastOnline;
+    public void setLastActionAt(String lastActionAt) {
+        this.lastActionAt = lastActionAt;
     }
 
-    public List<String> getFriends() {
-        return friends;
+    public boolean getIsSharingLocation() {
+        return isSharingLocation;
     }
 
-    public void setFriends(List<String> friends) {
-        this.friends = friends;
-    }
-
-    public List<String> getFriendsRequestFrom() {
-        return friendsRequestFrom;
-    }
-
-    public void setFriendsRequestFrom(List<String> friendsRequestFrom) {
-        this.friendsRequestFrom = friendsRequestFrom;
-    }
-
-    public List<String> getFriendsRequestTo() {
-        return friendsRequestTo;
-    }
-
-    public void setFriendsRequestTo(List<String> friendsRequestTo) {
-        this.friendsRequestTo = friendsRequestTo;
-    }
-
-    public List<String> getIgnoringUsers() {
-        return ignoringUsers;
-    }
-
-    public void setIgnoringUsers(List<String> ignoringUsers) {
-        this.ignoringUsers = ignoringUsers;
+    public void setIsSharingLocation(boolean isSharingLocation) {
+        this.isSharingLocation = isSharingLocation;
     }
 }

@@ -189,6 +189,21 @@ public class SocialLoginActivity extends BaseActivity {
         }
     }
 
+    private void showWarningDialog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getResources().getString(R.string.warning))
+                .setContentText(getResources().getString(R.string.account_banned_warn))
+                .setConfirmText("OK")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+
     private void checkAccount() {
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
@@ -204,13 +219,18 @@ public class SocialLoginActivity extends BaseActivity {
                                 mAlertDialog.hide();
 
                                 if (response.code() == 200) {
+                                    // code 200: New user
                                     startActivity(new Intent(SocialLoginActivity.this,
                                             LoginActivity.class)
                                         .putExtra("PHONE_NUMBER", phoneNumberString)
                                         .putExtra("REQUIRE_PASSWORD_SCREEN", true)
                                         .putExtra("PROCESS", PROCESS_REGISTER));
                                 } else if (response.code() == 201) {
+                                    // Code 201: phone number has been registered with us
                                     showLoginOptionDialog();
+                                } else if (response.code() == 403) {
+                                    // Code 406: This account has been banned
+                                    showWarningDialog();
                                 }
                             }
 
