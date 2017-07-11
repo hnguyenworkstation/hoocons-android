@@ -12,8 +12,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIME_OUT = 2000;
@@ -29,10 +40,55 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                commitNextStage();
+                checkValidState();
             }
         }, SPLASH_TIME_OUT);
+    }
 
+    private void checkValidState() {
+        if (SharedPreferencesManager.getDefault().getUserToken() != null &&
+                SharedPreferencesManager.getDefault().getUserId() == -1) {
+            UserServices service = NetContext.instance.create(UserServices.class);
+            service.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+                @Override
+                public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
+                    UserInfoResponse resp = response.body();
+
+                    if (response.code() == 200) {
+                        SharedPreferencesManager.getDefault().setUserId(resp.getUserPK());
+                        if (resp.getNickname().equals(resp.getUsername())){
+                            SharedPreferencesManager.getDefault().setRequestUpdateInfo(true);
+                        } else {
+                            SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
+                        }
+
+                        commitNextStage();
+                    } else if (response.code() == 404) {
+                        showWarningDialog();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserInfoResponse> call, Throwable t) {
+                    showWarningDialog();
+                }
+            });
+        }
+    }
+
+    private void showWarningDialog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getResources().getString(R.string.warning))
+                .setContentText(getResources().getString(R.string.fetch_user_info_error))
+                .setConfirmText("OK")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismiss();
+                        commitNextStage();
+                    }
+                })
+                .show();
     }
 
     private void commitNextStage() {

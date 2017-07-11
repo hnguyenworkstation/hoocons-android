@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
+import com.hoocons.hoocons_android.Activities.MainActivity;
+import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.NetContext;
@@ -22,6 +25,8 @@ import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -208,14 +213,18 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                 UserInfoResponse resp = response.body();
                 pDialog.dismiss();
                 if (response.code() == 200) {
+                    SharedPreferencesManager.getDefault().setUserId(resp.getUserPK());
                     // Code 200 is success getting user data
                     if (resp.getNickname().equals(resp.getUsername())){
                         SharedPreferencesManager.getDefault().setRequestUpdateInfo(true);
                         commitUserInfoUpdateScreen();
+                    } else {
+                        SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
+                        EventBus.getDefault().post(new CompleteLoginRequest());
                     }
                 } else if (response.code() == 404) {
                     // Code 404 is not found info
-                    // Todo: handle code 404
+                    // Todo: handle code 404 -- If UserId is null, reload user info on splash
                 }
             }
 
