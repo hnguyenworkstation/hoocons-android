@@ -71,6 +71,6 @@ public interface UserServices {
      * @Argument: UserInfoResponse
      * @Purpose: update user data in the database
      ********************************** */
-    @PUT("/user/update/info")
-    Call<UserInfoResponse> updateUserInfo(@Body UserInformationRequest request);
+    @PUT("/user/update/")
+    Call<Void> updateUserInfo(@Body UserInformationRequest request);
 }

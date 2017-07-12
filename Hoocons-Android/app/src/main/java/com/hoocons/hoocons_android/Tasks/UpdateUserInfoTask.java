@@ -81,29 +81,20 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
 
         UserServices services = NetContext.instance.create(UserServices.class);
         services.updateUserInfo(new UserInformationRequest(displayName,
-                nickname,
-                gender,
-                birthday,
-                url,
-                -179,
-                -85))
-                .enqueue(new Callback<UserInfoResponse>() {
-            @Override
-            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
-                if (response.code() == 200) {
-                    SharedPreferencesManager manager = SharedPreferencesManager.getDefault();
-                    manager.setRequestUpdateInfo(false);
-                    manager.setUserNickname(response.body().getNickname());
+                nickname, gender, birthday, url, 0, 0))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.code() == 200) {
+                            EventBus.getDefault().post(new CompleteLoginRequest());
+                        }
+                    }
 
-                    EventBus.getDefault().post(new CompleteLoginRequest());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
-                EventBus.getDefault().post(new BadRequest());
-            }
-        });
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        EventBus.getDefault().post(new BadRequest());
+                    }
+                });
     }
 
     private String uploadUserProfile(String mImagePath) throws InterruptedException {

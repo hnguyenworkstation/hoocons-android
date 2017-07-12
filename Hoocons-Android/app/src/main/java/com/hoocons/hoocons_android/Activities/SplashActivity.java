@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
+import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
@@ -29,6 +31,8 @@ import retrofit2.Response;
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIME_OUT = 2000;
 
+    final UserServices service = NetContext.instance.create(UserServices.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +44,54 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                checkValidState();
+                if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
+                    startActivity(new Intent(SplashActivity.this, IntroActivity.class));
+                } else {
+                    reCaptureToken();
+                }
             }
         }, SPLASH_TIME_OUT);
     }
 
-    private void checkValidState() {
+    private void reCaptureToken() {
+        String[] cred = SharedPreferencesManager.getDefault().getCredentials();
+        if (cred[0] != null && cred[1] != null) {
+            SharedPreferencesManager.getDefault().setUserToken(null);
+            service.login(new CredentialRequest(cred[0], cred[1])).enqueue(new Callback<TokenResponse>() {
+                @Override
+                public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                    if (response.code() == 201) {
+                        TokenResponse token = response.body();
+
+                        assert token != null;
+                        checkValidState(token.getAccessToken());
+                    } else {
+                        Toast.makeText(SplashActivity.this,
+                                getResources().getString(R.string.no_connection),
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TokenResponse> call, Throwable t) {
+                    Toast.makeText(SplashActivity.this,
+                            getResources().getString(R.string.no_connection),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.no_connection) , Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+        }
+    }
+
+    private void checkValidState(String token) {
+        SharedPreferencesManager.getDefault()
+                .setUserToken(token);
+
         if (SharedPreferencesManager.getDefault().getUserToken() != null &&
                 SharedPreferencesManager.getDefault().getUserId() == -1) {
-            UserServices service = NetContext.instance.create(UserServices.class);
             service.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
                 @Override
                 public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
@@ -73,6 +116,8 @@ public class SplashActivity extends AppCompatActivity {
                     showWarningDialog();
                 }
             });
+        } else {
+            commitNextStage();
         }
     }
 

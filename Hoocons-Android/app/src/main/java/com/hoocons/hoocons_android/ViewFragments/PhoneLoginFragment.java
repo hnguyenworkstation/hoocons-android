@@ -173,7 +173,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
 
-    private void attemptToLogin(String phoneNumber, String password) {
+    private void attemptToLogin(final String phoneNumber, final String password) {
         UserServices services = NetContext.instance.create(UserServices.class);
         services.login(new CredentialRequest(phoneNumber, password)).enqueue(new Callback<TokenResponse>() {
             @Override
@@ -184,6 +184,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     assert response1 != null;
 
                     SharedPreferencesManager.getDefault().setUserToken(response1.getAccessToken());
+                    SharedPreferencesManager.getDefault().setCredentials(new String[] {phoneNumber, password});
                     AppUtils.signInAnonymously(getActivity());
                     getUserInfo();
                 } else if (response.code() == 401) {
@@ -213,13 +214,11 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                 UserInfoResponse resp = response.body();
                 pDialog.dismiss();
                 if (response.code() == 200) {
-                    SharedPreferencesManager.getDefault().setUserId(resp.getUserPK());
+                    attachUserPk(resp.getUserPK());
                     // Code 200 is success getting user data
                     if (resp.getNickname().equals(resp.getUsername())){
-                        SharedPreferencesManager.getDefault().setRequestUpdateInfo(true);
                         commitUserInfoUpdateScreen();
                     } else {
-                        SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
                         EventBus.getDefault().post(new CompleteLoginRequest());
                     }
                 } else if (response.code() == 404) {
@@ -234,6 +233,10 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getContext(), getResources().getString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void attachUserPk(int pk) {
+        SharedPreferencesManager.getDefault().setUserId(pk);
     }
 
     private void commitUserInfoUpdateScreen() {
