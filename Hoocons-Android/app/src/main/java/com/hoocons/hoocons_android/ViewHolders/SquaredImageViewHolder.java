@@ -58,8 +58,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
 
         Glide.with(context)
                 .load(imageUri)
-                .fitCenter()
-                .crossFade()
+                .centerCrop()
                 .listener(new RequestListener<Uri, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
