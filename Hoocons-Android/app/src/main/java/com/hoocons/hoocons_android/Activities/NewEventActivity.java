@@ -53,6 +53,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
 import xyz.klinker.giphy.GiphyActivity;
@@ -100,7 +101,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.new_event_images_list)
     RecyclerView mImagesRecycler;
 
-    private ArrayList<String> imagePaths;
+    private ArrayList<String> mImagePaths;
     private ImageLoaderAdapter mImagesAdapter;
     private final int PHOTO_PICKER = 1;
 
@@ -118,7 +119,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
 
-        imagePaths = new ArrayList<>();
+        mImagePaths = new ArrayList<>();
 
         initView();
     }
@@ -133,20 +134,24 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void showAlert() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.delete_title))
-                .setMessage(getString(R.string.delete_warning))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getResources().getString(R.string.delete_title))
+                .setContentText(getResources().getString(R.string.delete_warning))
+                .setCancelText(getResources().getString(R.string.cancel))
+                .setConfirmText(getResources().getString(R.string.discard))
+                .showCancelButton(true)
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                         finishActivity();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismiss();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
@@ -174,9 +179,13 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private boolean doesHaveContent() {
+        return mTextContentInput.getText().length() > 0 || mImagePaths.size() > 0;
+    }
+
     @Override
     public void onBackPressed(){
-        if (true) {
+        if (doesHaveContent()) {
             showAlert();
         } else {
             finishActivity();
@@ -184,8 +193,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadPickedImage(ArrayList<String> imageList) {
-        imagePaths.clear();
-        imagePaths.addAll(imageList);
+        mImagePaths.clear();
+        mImagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
 
         mImagesRecycler.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
@@ -215,7 +224,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 showMode();
                 break;
             case R.id.event_add_location:
-                openCustomPlacePicker();
+                openGooglePlacePicker();
                 break;
             default:
                 break;

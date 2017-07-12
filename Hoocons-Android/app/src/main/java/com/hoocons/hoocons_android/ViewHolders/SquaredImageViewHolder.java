@@ -5,6 +5,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -19,6 +20,11 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.facebook.rebound.BaseSpringSystem;
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringSystem;
+import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.SquareImageView;
 import com.hoocons.hoocons_android.R;
@@ -43,6 +49,10 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.num_cover)
     TextView mNumCovered;
 
+    private final BaseSpringSystem mSpringSystem = SpringSystem.create();
+    private final ImageSpringListener springListener = new ImageSpringListener();
+    private Spring mScaleSpring;
+
     private int position;
 
     public SquaredImageViewHolder(View itemView) {
@@ -55,6 +65,26 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         File file = new File(imageLink);
         Uri imageUri = Uri.fromFile(file);
         Log.e("Test", imageUri.toString());
+
+        // Create the animation spring.
+        mScaleSpring = mSpringSystem.createSpring();
+        mScaleSpring.addListener(springListener);
+
+        mImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mScaleSpring.setEndValue(0.3);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mScaleSpring.setEndValue(0);
+                        break;
+                }
+                return true;
+            }
+        });
 
         Glide.with(context)
                 .load(imageUri)
@@ -81,4 +111,18 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    private class ImageSpringListener extends SimpleSpringListener {
+        @Override
+        public void onSpringUpdate(Spring spring) {
+            // On each update of the spring value, we adjust the scale of the image view to match the
+            // springs new value. We use the SpringUtil linear interpolation function mapValueFromRangeToRange
+            // to translate the spring's 0 to 1 scale to a 100% to 50% scale range and apply that to the View
+            // with setScaleX/Y. Note that rendering is an implementation detail of the application and not
+            // Rebound itself. If you need Gingerbread compatibility consider using NineOldAndroids to update
+            // your view properties in a backwards compatible manner.
+            float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
+            mImageView.setScaleX(mappedValue);
+            mImageView.setScaleY(mappedValue);
+        }
+    }
 }
