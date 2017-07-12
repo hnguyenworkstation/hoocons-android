@@ -1,18 +1,26 @@
 package com.hoocons.hoocons_android.Managers;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.config.Configuration;
+import com.birbit.android.jobqueue.log.CustomLogger;
+import com.birbit.android.jobqueue.scheduling.FrameworkJobSchedulerService;
+import com.birbit.android.jobqueue.scheduling.GcmJobSchedulerService;
 import com.facebook.FacebookSdk;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.hoocons.hoocons_android.Tasks.Jobs.HooconsGCMJobService;
+import com.hoocons.hoocons_android.Tasks.Jobs.HooconsJobService;
 
 import org.aisen.android.common.context.GlobalContext;
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by hungnguyen on 6/3/17.
@@ -22,6 +30,7 @@ public class BaseApplication extends GlobalContext {
             .getSimpleName();
     private static BaseApplication mInstance;
     public static Context context;
+    private JobManager jobManager;
 
     @Override
     public void onCreate() {
@@ -50,6 +59,8 @@ public class BaseApplication extends GlobalContext {
             EmotionsDB.checkEmotions();
         } catch (Exception e) {
         }
+
+        getJobManager();
     }
 
     @Override
@@ -61,6 +72,60 @@ public class BaseApplication extends GlobalContext {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    private void configureJobManager() {
+        Configuration.Builder builder = new Configuration.Builder(this)
+                .customLogger(new CustomLogger() {
+                    private static final String TAG = "JOBS";
+                    @Override
+                    public boolean isDebugEnabled() {
+                        return true;
+                    }
+
+                    @Override
+                    public void d(String text, Object... args) {
+                        Log.d(TAG, String.format(text, args));
+                    }
+
+                    @Override
+                    public void e(Throwable t, String text, Object... args) {
+                        Log.e(TAG, String.format(text, args), t);
+                    }
+
+                    @Override
+                    public void e(String text, Object... args) {
+                        Log.e(TAG, String.format(text, args));
+                    }
+
+                    @Override
+                    public void v(String text, Object... args) {
+
+                    }
+                })
+                .minConsumerCount(1) //always keep at least one consumer alive
+                .maxConsumerCount(3) //up to 3 consumers at a time
+                .loadFactor(3) //3 jobs per consumer
+                .consumerKeepAlive(120);//wait 2 minute
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.scheduler(FrameworkJobSchedulerService.createSchedulerFor(this,
+                    HooconsJobService.class), true);
+        } else {
+            int enableGcm = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            if (enableGcm == ConnectionResult.SUCCESS) {
+                builder.scheduler(GcmJobSchedulerService.createSchedulerFor(this,
+                        HooconsGCMJobService.class), true);
+            }
+        }
+
+        jobManager = new JobManager(builder.build());
+    }
+
+    public synchronized JobManager getJobManager() {
+        if (jobManager == null) {
+            configureJobManager();
+        }
+        return jobManager;
     }
 
     public static synchronized BaseApplication getInstance() {
