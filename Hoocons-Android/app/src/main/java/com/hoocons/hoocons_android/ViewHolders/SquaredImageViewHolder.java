@@ -70,7 +70,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(springListener);
 
-        mImageView.setOnTouchListener(new View.OnTouchListener() {
+        mImageRoot.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -121,8 +121,8 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
             // Rebound itself. If you need Gingerbread compatibility consider using NineOldAndroids to update
             // your view properties in a backwards compatible manner.
             float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
-            mImageView.setScaleX(mappedValue);
-            mImageView.setScaleY(mappedValue);
+            mImageRoot.setScaleX(mappedValue);
+            mImageRoot.setScaleY(mappedValue);
         }
     }
 }
