@@ -105,6 +105,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private final int PHOTO_PICKER = 1;
 
     private String mMode = "Public";
+    private boolean isWarningContent = false;
 
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
@@ -150,7 +151,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void showMode() {
-        EventModeSheetFragment fragment = new EventModeSheetFragment();
+        EventModeSheetFragment fragment = EventModeSheetFragment.newInstance(mMode, isWarningContent);
         fragment.show(getSupportFragmentManager(), null);
     }
 
@@ -221,7 +222,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void updateUIforGifEvent() {
+    private void updateUIForGifEvent() {
         // display the holder content
         mSingleContentView.setVisibility(View.VISIBLE);
         mDeleteSingleContent.bringToFront();
@@ -234,7 +235,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mAddSoundBtn.setVisibility(View.GONE);
     }
 
-    private void updateUIforNormalEvent() {
+    private void updateUIForNormalEvent() {
         mAddPhotoBtn.setVisibility(View.VISIBLE);
         mAddLocationBtn.setVisibility(View.VISIBLE);
         mAddVideoBtn.setVisibility(View.VISIBLE);
@@ -269,7 +270,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             if (resultCode == Activity.RESULT_OK) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
                 loadGif(downloadUrl);
-                updateUIforGifEvent();
+                updateUIForGifEvent();
             }
         } else if (requestCode == PHOTO_PICKER) {
             if (data != null){
@@ -285,13 +286,11 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
     /**********************************************
      * EVENTBUS CATCHING FIELDS
-     *
      *  + PublicModeRequest: Request Public Mode
-     *
-     *  +
+     *  + PrivateModeRequest: Request private mode
+     *  + WarningContentRequest: Request warning data
      ***********************************************/
     @Subscribe
     public void onEvent(PublicModeRequest request) {
@@ -318,8 +317,10 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     public void onEvent(WarningContentRequest request) {
         if (request.isRequested()) {
             mWarningButton.setVisibility(View.VISIBLE);
+            isWarningContent = true;
         } else {
             mWarningButton.setVisibility(View.GONE);
+            isWarningContent = false;
         }
     }
 }

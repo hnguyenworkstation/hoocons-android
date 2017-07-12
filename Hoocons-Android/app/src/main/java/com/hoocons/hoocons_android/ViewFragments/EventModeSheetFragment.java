@@ -35,10 +35,36 @@ public class EventModeSheetFragment extends BottomSheetDialogFragment implements
     @BindView(R.id.radio_private)
     RadioButton mPrivateRad;
 
+    private final static String MODE = "MODE";
+    private final static String WARNING = "WARNING";
+    private String mode;
+    private boolean isWarning;
+
+    private final static String publicMode = "Public";
+    private final static String privateMode = "Private";
+    private final static String friendMode = "Friend";
+
     public EventModeSheetFragment() {
         // Required empty public constructor
     }
 
+    public static EventModeSheetFragment newInstance(String mode, boolean isWarning) {
+        EventModeSheetFragment fragment = new EventModeSheetFragment();
+        Bundle args = new Bundle();
+        args.putString(MODE, mode);
+        args.putBoolean(WARNING, isWarning);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mode = getArguments().getString(MODE);
+            isWarning = getArguments().getBoolean(WARNING);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +78,26 @@ public class EventModeSheetFragment extends BottomSheetDialogFragment implements
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        initView();
+
         mWarningContent.setOnClickListener(this);
         mPublicRad.setOnClickListener(this);
         mFriendsRad.setOnClickListener(this);
         mPrivateRad.setOnClickListener(this);
+    }
+
+    private void initView() {
+        if (mode.equals(privateMode)) {
+            mPrivateRad.setChecked(true);
+        } else if (mode.equals(publicMode)) {
+            mPublicRad.setChecked(true);
+        } else if (mode.equals(friendMode)) {
+            mFriendsRad.setChecked(true);
+        }
+
+        if (isWarning) {
+            mWarningContent.setChecked(true);
+        }
     }
 
     @Override
