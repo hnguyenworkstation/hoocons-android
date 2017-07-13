@@ -6,6 +6,10 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.Region;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.config.Configuration;
@@ -16,6 +20,7 @@ import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
+import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.Tasks.Jobs.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.Jobs.HooconsJobService;
@@ -31,6 +36,7 @@ public class BaseApplication extends GlobalContext {
     private static BaseApplication mInstance;
     public static Context context;
     private JobManager jobManager;
+    private AmazonS3Client s3Client;
 
     @Override
     public void onCreate() {
@@ -126,6 +132,17 @@ public class BaseApplication extends GlobalContext {
             configureJobManager();
         }
         return jobManager;
+    }
+
+    public synchronized AmazonS3Client getAwsS3Client() {
+        if (s3Client == null) {
+            s3Client = new AmazonS3Client( new BasicAWSCredentials(
+                    getApplicationContext().getResources().getString(R.string.aws_key_id),
+                    getApplicationContext().getResources().getString(R.string.aws_secret)));
+            s3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.AP_SOUTHEAST_1));
+        }
+
+        return s3Client;
     }
 
     public static synchronized BaseApplication getInstance() {

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
+import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
@@ -43,7 +44,9 @@ import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,6 +107,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<String> mImagePaths;
     private ImageLoaderAdapter mImagesAdapter;
     private final int PHOTO_PICKER = 1;
+    private SweetAlertDialog mDialog;
 
     private String mMode = "Public";
     private boolean isWarningContent = false;
@@ -111,6 +115,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+    private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,10 +136,11 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
         mPrivacyBtn.setOnClickListener(this);
         mAddLocationBtn.setOnClickListener(this);
+        mPostBtn.setOnClickListener(this);
     }
 
     private void showAlert() {
-        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        mDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getResources().getString(R.string.delete_title))
                 .setContentText(getResources().getString(R.string.delete_warning))
                 .setCancelText(getResources().getString(R.string.cancel))
@@ -151,8 +157,17 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismiss();
                     }
-                })
-                .show();
+                });
+
+        mDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     private void showMode() {
@@ -206,6 +221,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private void openCustomPlacePicker() {
         startActivity(new Intent(NewEventActivity.this, PlacePickerActivity.class));
     }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -226,9 +243,21 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             case R.id.event_add_location:
                 openGooglePlacePicker();
                 break;
+            case R.id.action_post:
+                if (true) {
+                    postEvent();
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    private void postEvent() {
+        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3),
+                mTextContentInput.getText().toString(),
+                mImagePaths, "Public");
+        jobManager.addJobInBackground(job);
     }
 
     private void updateUIForGifEvent() {

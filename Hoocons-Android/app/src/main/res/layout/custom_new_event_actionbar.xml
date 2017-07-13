@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:text="@string/new_event"
         android:layout_marginStart="@dimen/margin_16"
+        android:textStyle="bold"
         android:textSize="@dimen/custom_toolbar_text_size"
         android:textColor="@color/black"
         android:layout_centerVertical="true"

@@ -140,4 +140,10 @@
     <string name="place_search">Search places around</string>
     <string name="around_me">Around Me</string>
     <string name="write_a_message">Write a message</string>
+
+
+    <!-- APIS & Secret Fields -->
+    <string name="aws_s3">elasticbeanstalk-ap-southeast-1-845076927108</string>
+    <string name="aws_key_id">AKIAJUC2KVVEWYYLJKBQ</string>
+    <string name="aws_secret">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</string>
 </resources>
