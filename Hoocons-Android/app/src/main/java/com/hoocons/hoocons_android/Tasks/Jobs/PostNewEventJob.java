@@ -13,8 +13,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
@@ -63,9 +65,11 @@ public class PostNewEventJob extends Job implements Serializable {
     public void onRun() throws Throwable {
         try {
             Log.e("POST NEW EVENT JOB", "onRun: get to run");
-            ArrayList<String> urls = uploadAllImage();
+
+            ArrayList<Media> medias = uploadAllImage();
+
             EventServices services = NetContext.instance.create(EventServices.class);
-            services.postEvent(new EventInfoRequest(textContent, urls, null, privacy, 0,0))
+            services.postEvent(new EventInfoRequest(textContent, medias, null, privacy, 0,0))
                     .enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -94,11 +98,11 @@ public class PostNewEventJob extends Job implements Serializable {
     }
 
     @Nullable
-    private ArrayList<String> uploadAllImage() {
+    private ArrayList<Media> uploadAllImage() {
         try {
             String timeStamp = String.valueOf(new Date().getTime());
 
-            final ArrayList<String> _uploadedImages = new ArrayList<String>();
+            final ArrayList<Media> _uploadedImages = new ArrayList<>();
             final CountDownLatch uploadDone = new CountDownLatch(imagePaths.size());
             AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
 
@@ -121,7 +125,7 @@ public class PostNewEventJob extends Job implements Serializable {
                         + s3 + "/medias/" + fileName;
 
                 uploadDone.countDown();
-                _uploadedImages.add(_finalUrl);
+                _uploadedImages.add(new Media(_finalUrl, AppConstant.MEDIA_TYPE_IMAGE));
             }
             uploadDone.await();
 

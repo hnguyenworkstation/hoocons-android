@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Requests;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Models.Media;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public class EventInfoRequest {
     @SerializedName("text_content")
     private String textContent;
     @SerializedName("medias")
-    private ArrayList<String> medias;
+    private ArrayList<Media> medias;
     @SerializedName("tags")
     private ArrayList<String> tags;
     @SerializedName("privacy")
@@ -24,7 +25,7 @@ public class EventInfoRequest {
     @SerializedName("srid")
     private final int srid = 4326;
 
-    public EventInfoRequest(String textContent, ArrayList<String> medias,
+    public EventInfoRequest(String textContent, ArrayList<Media> medias,
                             ArrayList<String> tags, String privacy, long latitude,
                             long longitude) {
         this.textContent = textContent;
@@ -43,11 +44,11 @@ public class EventInfoRequest {
         this.textContent = textContent;
     }
 
-    public ArrayList<String> getMedias() {
+    public ArrayList<Media> getMedias() {
         return medias;
     }
 
-    public void setMedias(ArrayList<String> medias) {
+    public void setMedias(ArrayList<Media> medias) {
         this.medias = medias;
     }
 

@@ -174,6 +174,14 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onDestroy() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.check_nickname_btn:
