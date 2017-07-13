@@ -24,16 +24,19 @@ public class EventInfoRequest {
     private long longitude;
     @SerializedName("srid")
     private final int srid = 4326;
+    @SerializedName("event_type")
+    private String eventType;
 
     public EventInfoRequest(String textContent, ArrayList<Media> medias,
                             ArrayList<String> tags, String privacy, long latitude,
-                            long longitude) {
+                            long longitude, String eventType) {
         this.textContent = textContent;
         this.medias = medias;
         this.tags = tags;
         this.privacy = privacy;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.eventType = eventType;
     }
 
     public String getTextContent() {

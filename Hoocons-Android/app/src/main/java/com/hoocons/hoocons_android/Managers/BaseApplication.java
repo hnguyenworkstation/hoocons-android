@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -20,12 +21,15 @@ import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
+import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.Tasks.Jobs.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.Jobs.HooconsJobService;
 
 import org.aisen.android.common.context.GlobalContext;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by hungnguyen on 6/3/17.
@@ -41,6 +45,8 @@ public class BaseApplication extends GlobalContext {
     @Override
     public void onCreate() {
         super.onCreate();
+        EventBus.getDefault().register(this);
+
         mInstance = BaseApplication.this;
         context = getApplicationContext();
 
@@ -151,6 +157,13 @@ public class BaseApplication extends GlobalContext {
 
     public static synchronized BaseApplication context() {
         return (BaseApplication) context;
+    }
+
+
+    /**/
+    @Subscribe
+    public void onEvent(PostEventSuccess task) {
+        Toast.makeText(mInstance, "Upload event complete", Toast.LENGTH_SHORT).show();
     }
 
 }

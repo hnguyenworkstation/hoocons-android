@@ -10,9 +10,18 @@ public class AppConstant {
 
     public static final String GIPHY_PUBLIC_KEY = "dc6zaTOxFJmzC";
 
+    // Media type
     public static final String MEDIA_TYPE_IMAGE = "Img";
     public static final String MEDIA_TYPE_GIF = "Gif";
     public static final String MEDIA_TYPE_VIDEO = "Vid";
     public static final String MEDIA_TYPE_MOMENT = "Mmt";
 
+    // Event type
+    public static final String EVENT_TYPE_TEXT = "Txt";
+    public static final String EVENT_TYPE_SINGLE_IMAGE = "Sigm";
+    public static final String EVENT_TYPE_MULT_IMAGE = "Migm";
+    public static final String EVENT_TYPE_SINGLE_VIDEO = "Svid";
+    public static final String EVENT_TYPE_SINGLE_VOICE = "Svoi";
+    public static final String EVENT_TYPE_SINGLE_GIF = "Sgif";
+    public static final String EVENT_TYPE_CHECK_IN = "Chk";
 }

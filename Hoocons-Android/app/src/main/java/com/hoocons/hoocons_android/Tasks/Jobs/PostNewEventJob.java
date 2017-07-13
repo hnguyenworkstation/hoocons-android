@@ -13,6 +13,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
@@ -21,6 +22,8 @@ import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,36 +47,40 @@ public class PostNewEventJob extends Job implements Serializable {
     private ArrayList<String> imagePaths;
     private String privacy;
     private String s3;
+    private String eventType;
 
     public PostNewEventJob(String s3, String text,
                            ArrayList<String> imagePaths,
-                           String privacy) {
+                           String privacy, String eventType) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
         localId = -System.currentTimeMillis();
         this.textContent = text;
         this.imagePaths = imagePaths;
         this.privacy = privacy;
         this.s3 = s3;
+        this.eventType = eventType;
     }
 
     @Override
     public void onAdded() {
-        Log.e("POST NEW EVENT JOB", "onAdded: added");
+
     }
 
     @Override
     public void onRun() throws Throwable {
         try {
-            Log.e("POST NEW EVENT JOB", "onRun: get to run");
-
             ArrayList<Media> medias = uploadAllImage();
+            final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
+                    privacy, 0,0, eventType);
 
             EventServices services = NetContext.instance.create(EventServices.class);
-            services.postEvent(new EventInfoRequest(textContent, medias, null, privacy, 0,0))
+            services.postEvent(request)
                     .enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Log.e("GASDASd", "onResponse: asdasdasd");
+                            if (response.code() == 200) {
+                                EventBus.getDefault().post(new PostEventSuccess());
+                            }
                         }
 
                         @Override

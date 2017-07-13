@@ -254,10 +254,22 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void postEvent() {
+        String eventType;
+
+        if (mImagePaths.size() == 1) {
+            eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
+        } else if (mImagePaths.size() > 1) {
+            eventType = AppConstant.EVENT_TYPE_SINGLE_IMAGE;
+        } else {
+            eventType = AppConstant.EVENT_TYPE_TEXT;
+        }
+
         PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3),
                 mTextContentInput.getText().toString(),
-                mImagePaths, "Public");
+                mImagePaths, mMode, eventType);
         jobManager.addJobInBackground(job);
+
+        finish();
     }
 
     private void updateUIForGifEvent() {
