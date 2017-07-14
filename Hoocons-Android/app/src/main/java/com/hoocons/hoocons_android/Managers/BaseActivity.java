@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 
 import org.aisen.android.common.setting.SettingUtility;
@@ -32,6 +33,10 @@ public class BaseActivity extends AppCompatActivity implements BitmapOwner, ITas
         super.onCreate(savedInstanceState);
         mInstance = this;
         this.taskManager = new TaskManager();
+
+        if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == 0){
+            GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this);
+        }
     }
 
     @Override

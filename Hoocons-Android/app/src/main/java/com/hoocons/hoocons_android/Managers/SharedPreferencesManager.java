@@ -9,8 +9,7 @@ import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
  * Created by hNguyen on 6/5/2017.
  */
 public class SharedPreferencesManager {
-    private final String FCMTOKEN = "FCMTOKEN";
-    private final String FCMTOKEN_OLD = "TOKENOLD";
+    private final String FCM_TOKEN = "FCMTOKEN";
 
     private SharedPreferences sharedPreferences;
     private int PRIVATE_MODE = 0;
@@ -53,6 +52,13 @@ public class SharedPreferencesManager {
         return instance;
     }
 
+    public void setFcmToken(String token) {
+        sharedPreferences.edit().putString(FCM_TOKEN, token).apply();
+    }
+
+    public String getFcmToken() {
+        return sharedPreferences.getString(FCM_TOKEN, null);
+    }
 
     /* ******************************************
     * USER CONTENTS PREFERENCES

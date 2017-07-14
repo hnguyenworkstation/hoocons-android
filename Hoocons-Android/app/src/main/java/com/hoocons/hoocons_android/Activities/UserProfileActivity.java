@@ -9,10 +9,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -21,6 +31,8 @@ import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.CustomUI.view.ViewPropertyAnimator;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -31,6 +43,20 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     RelativeLayout mCustomToolbar;
     @BindView(R.id.obs_scrollview)
     ObservableScrollView mScrollView;
+    @BindView(R.id.profile_header)
+    ImageView mProfileImage;
+    @BindView(R.id.display_name)
+    TextView mDisplayName;
+    @BindView(R.id.nick_name)
+    TextView mNickname;
+    @BindView(R.id.action_friend_status)
+    BootstrapButton mAddFriendBtn;
+    @BindView(R.id.action_send_message)
+    BootstrapButton mSendMessageBtn;
+    @BindView(R.id.wallpaper_progress_bar)
+    ProgressBar mWallpaperProgress;
+    @BindView(R.id.profile_progress_bar)
+    ProgressBar mProfileProgress;
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
@@ -64,8 +90,39 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
 
     private void initDetailedView() {
         if (isMySelf) {
+            UserInfoResponse response = SharedPreferencesManager.getDefault().getUserKeyInfo();
+            loadProfileImage(response.getProfileUrl());
 
+            String nickname = "@" + response.getNickname();
+
+            mDisplayName.setText(response.getDisplayName());
+            mNickname.setText(nickname);
         }
+    }
+
+    private void loadProfileImage(String url) {
+        Glide.with(this)
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        mProfileImage.setVisibility(View.VISIBLE);
+                        mProfileProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mProfileImage);
     }
 
     private void initGeneralView() {

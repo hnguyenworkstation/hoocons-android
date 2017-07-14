@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="@dimen/profile_header_large_size"
-        android:layout_height="@dimen/profile_header_large_size"
-        android:src="@drawable/logo_image"
-        android:scaleType="fitCenter"
-        android:id="@+id/profile_header"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:visibility="invisible"
+            android:layout_width="@dimen/profile_header_large_size"
+            android:layout_height="@dimen/profile_header_large_size"
+            android:src="@drawable/logo_image"
+            android:scaleType="centerCrop"
+            android:id="@+id/profile_header"/>
+
+        <ProgressBar
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_centerInParent="true"
+            android:id="@+id/profile_progress_bar"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
