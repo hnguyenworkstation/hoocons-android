@@ -47,6 +47,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/flexible_space_image_height"
+                        android:layout_gravity="top"
                         android:background="@color/black_alpha_12">
 
                         <ImageView
@@ -89,7 +90,18 @@
                                 android:background="@color/white"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <include layout="@layout/profile_header_info"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:background="@color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <include layout="@layout/profile_info_details"/>
+
                             </LinearLayout>
 
                             <TextView

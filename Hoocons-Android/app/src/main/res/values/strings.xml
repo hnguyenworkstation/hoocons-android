@@ -140,6 +140,9 @@
     <string name="place_search">Search places around</string>
     <string name="around_me">Around Me</string>
     <string name="write_a_message">Write a message</string>
+    <string name="location">Location</string>
+    <string name="work">Work</string>
+    <string name="hobbies">Hobbies</string>
 
 
     <!-- APIS & Secret Fields -->
