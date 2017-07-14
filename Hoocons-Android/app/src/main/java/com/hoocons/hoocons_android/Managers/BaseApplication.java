@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.Region;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.config.Configuration;
@@ -24,8 +23,8 @@ import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.Tasks.Jobs.HooconsGCMJobService;
-import com.hoocons.hoocons_android.Tasks.Jobs.HooconsJobService;
+import com.hoocons.hoocons_android.Tasks.JobServices.HooconsGCMJobService;
+import com.hoocons.hoocons_android.Tasks.JobServices.HooconsJobService;
 
 import org.aisen.android.common.context.GlobalContext;
 import org.greenrobot.eventbus.EventBus;

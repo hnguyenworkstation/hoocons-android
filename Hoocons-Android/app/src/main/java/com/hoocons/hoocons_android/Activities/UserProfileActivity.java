@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -38,6 +39,15 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private View mOverlayView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
+    private boolean isMySelf;
+    private Intent mIntent;
+
+    private final String USERID = "USERID";
+    private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
+    private final String USER_NICKNAME = "USER_NICKNAME";
+    private final String IS_FRIEND = "IS_FRIEND";
+    private final String USER_PROFILE_URL = "USER_PROFILE_URL";
+    private final String MYSELF = "IS_MY_SELF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,20 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
+        mIntent = getIntent();
+        isMySelf = mIntent.getBooleanExtra(MYSELF, false);
+
+        initGeneralView();
+        initDetailedView();
+    }
+
+    private void initDetailedView() {
+        if (isMySelf) {
+
+        }
+    }
+
+    private void initGeneralView() {
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mActionBarSize = 148;
 
@@ -52,7 +76,6 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
 
         mImageView = findViewById(R.id.image);
         mOverlayView = findViewById(R.id.overlay);
-
 
         mScrollView.setScrollViewCallbacks(this);
         setTitle(null);

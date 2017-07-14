@@ -1,4 +1,4 @@
-package com.hoocons.hoocons_android.Tasks.Jobs;
+package com.hoocons.hoocons_android.Tasks.JobProperties;
 
 /**
  * Created by hungnguyen on 7/12/17.

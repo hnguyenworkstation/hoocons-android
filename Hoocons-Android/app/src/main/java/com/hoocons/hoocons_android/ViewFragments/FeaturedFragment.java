@@ -53,6 +53,14 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     private final int LOCATION_PERMISSION_REQUEST = 1;
     private final String TAG = FeaturedFragment.class.getSimpleName();
 
+
+    private final String USERID = "USERID";
+    private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
+    private final String USER_NICKNAME = "USER_NICKNAME";
+    private final String IS_FRIEND = "IS_FRIEND";
+    private final String USER_PROFILE_URL = "USER_PROFILE_URL";
+    private final String MYSELF = "IS_MY_SELF";
+
     private String mParam1;
     private String mParam2;
 
@@ -89,7 +97,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         mImageHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), UserProfileActivity.class));
+                startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra(MYSELF, true));
             }
         });
 

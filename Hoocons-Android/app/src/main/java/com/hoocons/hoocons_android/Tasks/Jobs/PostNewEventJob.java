@@ -1,10 +1,8 @@
 package com.hoocons.hoocons_android.Tasks.Jobs;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -21,12 +19,12 @@ import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
-import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.JobProperties.JobGroup;
+import com.hoocons.hoocons_android.Tasks.JobProperties.Priority;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,8 +46,9 @@ public class PostNewEventJob extends Job implements Serializable {
     private String privacy;
     private String s3;
     private String eventType;
+    private String gifUrl;
 
-    public PostNewEventJob(String s3, String text,
+    public PostNewEventJob(String s3, String text, String gifUrl,
                            ArrayList<String> imagePaths,
                            String privacy, String eventType) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
@@ -59,6 +58,7 @@ public class PostNewEventJob extends Job implements Serializable {
         this.privacy = privacy;
         this.s3 = s3;
         this.eventType = eventType;
+        this.gifUrl = gifUrl;
     }
 
     @Override
@@ -69,7 +69,14 @@ public class PostNewEventJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         try {
-            ArrayList<Media> medias = uploadAllImage();
+            ArrayList<Media> medias = new ArrayList<>();
+
+            if (eventType.equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
+                medias.add(new Media(gifUrl, AppConstant.MEDIA_TYPE_GIF));
+            } else {
+                medias = uploadAllImage();
+            }
+
             final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
                     privacy, 0,0, eventType);
 

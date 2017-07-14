@@ -1,4 +1,4 @@
-package com.hoocons.hoocons_android.Tasks.Jobs;
+package com.hoocons.hoocons_android.Tasks.JobProperties;
 
 /**
  * Created by hungnguyen on 7/12/17.
@@ -6,4 +6,5 @@ package com.hoocons.hoocons_android.Tasks.Jobs;
 
 public class JobGroup {
     public static final String event = "event_group";
+    public static final String userInfo = "user_info_group";
 }

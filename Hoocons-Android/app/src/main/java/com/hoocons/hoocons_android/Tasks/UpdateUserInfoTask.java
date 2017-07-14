@@ -77,7 +77,7 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
 
     private void uploadDataToServer(String profileUrl) {
         // Todo: Check location information here and push with it
-        String url = profileUrl != null? profileUrl : "";
+        final String url = profileUrl != null? profileUrl : "";
 
         UserServices services = NetContext.instance.create(UserServices.class);
         services.updateUserInfo(new UserInformationRequest(displayName,
@@ -86,6 +86,9 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
+                            SharedPreferencesManager.getDefault()
+                                    .setUserKeyInfo(new UserInfoResponse(displayName,
+                                            nickname, url));
                             EventBus.getDefault().post(new CompleteLoginRequest());
                         }
                     }

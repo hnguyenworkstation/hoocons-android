@@ -31,6 +31,12 @@ public class UserInfoResponse {
     @SerializedName("is_sharing_location")
     private boolean isSharingLocation;
 
+    public UserInfoResponse(String displayName, String nickname, String profileUrl) {
+        this.displayName = displayName;
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+    }
+
     public int getUserPK() {
         return userPK;
     }

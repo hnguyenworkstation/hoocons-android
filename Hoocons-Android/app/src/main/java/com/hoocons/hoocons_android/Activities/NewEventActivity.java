@@ -10,6 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +21,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -52,6 +56,7 @@ import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -116,6 +121,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
+    private String gifUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +136,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
+        setActivePostButton(false);
+
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
         mAddGifBtn.setOnClickListener(this);
@@ -137,6 +145,27 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mPrivacyBtn.setOnClickListener(this);
         mAddLocationBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
+
+        mTextContentInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    setActivePostButton(true);
+                } else {
+                    setActivePostButton(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void showAlert() {
@@ -195,7 +224,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private boolean doesHaveContent() {
-        return mTextContentInput.getText().length() > 0 || mImagePaths.size() > 0;
+        return mTextContentInput.getText().length() > 0 || mImagePaths.size() > 0 || gifUrl != null;
     }
 
     @Override
@@ -207,7 +236,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void loadPickedImage(ArrayList<String> imageList) {
+    private void loadPickedImages(ArrayList<String> imageList) {
+        updateUIForMultiImageEvent();
+
         mImagePaths.clear();
         mImagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
@@ -244,8 +275,10 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 openGooglePlacePicker();
                 break;
             case R.id.action_post:
-                if (true) {
+                if (doesHaveContent()) {
                     postEvent();
+                } else {
+                    Toast.makeText(this, "No content", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -260,16 +293,26 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
         } else if (mImagePaths.size() > 1) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_IMAGE;
+        } else if (gifUrl != null) {
+            eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
-        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3),
+        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3), gifUrl,
                 mTextContentInput.getText().toString(),
                 mImagePaths, mMode, eventType);
         jobManager.addJobInBackground(job);
 
         finish();
+    }
+
+    private void setActivePostButton(boolean isActive) {
+        if (isActive) {
+            mPostBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        } else {
+            mPostBtn.setTextColor(getResources().getColor(R.color.gray_alpha));
+        }
     }
 
     private void updateUIForGifEvent() {
@@ -285,6 +328,32 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mAddSoundBtn.setVisibility(View.GONE);
     }
 
+    private void updateUIForSingleImageEvent() {
+        // display the holder content
+        mSingleContentView.setVisibility(View.VISIBLE);
+        mDeleteSingleContent.bringToFront();
+        mLoadingProgress.bringToFront();
+
+        // update the add more content options
+        mAddPhotoBtn.setVisibility(View.VISIBLE);
+        mAddLocationBtn.setVisibility(View.VISIBLE);
+        mAddGifBtn.setVisibility(View.GONE);
+        mAddVideoBtn.setVisibility(View.GONE);
+        mAddSoundBtn.setVisibility(View.GONE);
+    }
+
+    private void updateUIForMultiImageEvent() {
+        // display the holder content
+        mSingleContentView.setVisibility(View.GONE);
+
+        // update the add more content options
+        mAddPhotoBtn.setVisibility(View.VISIBLE);
+        mAddLocationBtn.setVisibility(View.VISIBLE);
+        mAddGifBtn.setVisibility(View.GONE);
+        mAddVideoBtn.setVisibility(View.GONE);
+        mAddSoundBtn.setVisibility(View.GONE);
+    }
+
     private void updateUIForNormalEvent() {
         mAddPhotoBtn.setVisibility(View.VISIBLE);
         mAddLocationBtn.setVisibility(View.VISIBLE);
@@ -293,6 +362,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadGif(String url) {
+        gifUrl = url;
         Glide.with(this)
                 .load(url)
                 .asGif()
@@ -314,6 +384,32 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .into(mSingleContentImage);
     }
 
+    private void loadPickedSingleImage(String path) {
+        updateUIForSingleImageEvent();
+
+        mImagePaths.clear();
+        mImagePaths.add(path);
+
+        Glide.with(this)
+                .load(new File(path))
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<File, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, File model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, File model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        mLoadingProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mSingleContentImage);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Giphy.REQUEST_GIPHY) {
@@ -326,8 +422,10 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             if (data != null){
                 final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
-                if (images.size() >= 1) {
-                    loadPickedImage(images);
+                if (images.size() > 1) {
+                    loadPickedImages(images);
+                } else if (images.size() == 1) {
+                    loadPickedSingleImage(images.get(0));
                 }
             }
         } else {

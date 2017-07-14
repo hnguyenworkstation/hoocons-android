@@ -219,6 +219,10 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     if (resp.getNickname().equals(resp.getUsername())){
                         commitUserInfoUpdateScreen();
                     } else {
+                        SharedPreferencesManager.getDefault()
+                                .setUserKeyInfo(new UserInfoResponse(resp.getDisplayName(),
+                                        resp.getNickname(), resp.getProfileUrl()));
+
                         EventBus.getDefault().post(new CompleteLoginRequest());
                     }
                 } else if (response.code() == 404) {

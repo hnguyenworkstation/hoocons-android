@@ -3,6 +3,8 @@ package com.hoocons.hoocons_android.Managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+
 /**
  * Created by hNguyen on 6/5/2017.
  */
@@ -22,6 +24,8 @@ public class SharedPreferencesManager {
     private final String REQUEST_UPDATE_INFO = "REQUEST_UPDATE_INFO";
     private final String USER_NAME = "USERNAME";
     private final String USER_PASSWORD = "PASSWORD";
+    private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
+    private final String USER_PROFILE_URL = "USER_PROFILE_URL";
     private final String USER_NICKNAME = "USER_NICKNAME";
     private final String REQUEST_USER_INFO = "REQUEST_USER_INFO";
     private final String USER_ID = "USER_ID";
@@ -50,7 +54,6 @@ public class SharedPreferencesManager {
     }
 
 
-
     /* ******************************************
     * USER CONTENTS PREFERENCES
     * *******************************************/
@@ -69,14 +72,6 @@ public class SharedPreferencesManager {
 
     public boolean isNeededToRequestInfo() {
         return sharedPreferences.getBoolean(REQUEST_UPDATE_INFO, true);
-    }
-
-    public String getUserNickname() {
-        return sharedPreferences.getString(USER_NICKNAME, "");
-    }
-
-    public void setUserNickname(String nickName){
-        sharedPreferences.edit().putString(USER_NICKNAME, nickName).apply();
     }
 
     public String getUserName() {
@@ -109,6 +104,46 @@ public class SharedPreferencesManager {
     public void setUserId(int id) {
         sharedPreferences.edit().putInt(USER_ID, id).apply();
     }
+
+    public void setUserKeyInfo(UserInfoResponse info) {
+        sharedPreferences.edit()
+                .putString(USER_DISPLAY_NAME, info.getDisplayName())
+                .putString(USER_NICKNAME, info.getNickname())
+                .putString(USER_PROFILE_URL, info.getProfileUrl()).apply();
+    }
+
+    public UserInfoResponse getUserKeyInfo() {
+        String displayName = sharedPreferences.getString(USER_DISPLAY_NAME, "");
+        String nickName = sharedPreferences.getString(USER_NICKNAME, "");
+        String profileUrl = sharedPreferences.getString(USER_PROFILE_URL, "");
+
+        return new UserInfoResponse(displayName, nickName, profileUrl);
+    }
+
+    public String getUserNickname() {
+        return sharedPreferences.getString(USER_NICKNAME, "");
+    }
+
+    public void setUserNickname(String nickName){
+        sharedPreferences.edit().putString(USER_NICKNAME, nickName).apply();
+    }
+
+    public String getUserDisplayName() {
+        return sharedPreferences.getString(USER_DISPLAY_NAME, "");
+    }
+
+    public void setUserDisplayName(String displayName){
+        sharedPreferences.edit().putString(USER_DISPLAY_NAME, displayName).apply();
+    }
+
+    public String getUserProfileUrl() {
+        return sharedPreferences.getString(USER_PROFILE_URL, "");
+    }
+
+    public void setUserProfileUrl(String url){
+        sharedPreferences.edit().putString(USER_PROFILE_URL, url).apply();
+    }
+
 
     /* ******************************************
     * APPLICATION BEHAVIOR PREFERENCES
