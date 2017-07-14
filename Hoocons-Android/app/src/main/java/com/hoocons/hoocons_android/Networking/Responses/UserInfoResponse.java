@@ -24,6 +24,8 @@ public class UserInfoResponse {
     private String gender;
     @SerializedName("profile_url")
     private String profileUrl;
+    @SerializedName("wallpaper_url")
+    private String wallPaperUrl;
     @SerializedName("join_date")
     private String joinDate;
     @SerializedName("last_action_at")
@@ -123,5 +125,21 @@ public class UserInfoResponse {
 
     public void setIsSharingLocation(boolean isSharingLocation) {
         this.isSharingLocation = isSharingLocation;
+    }
+
+    public String getWallPaperUrl() {
+        return wallPaperUrl;
+    }
+
+    public void setWallPaperUrl(String wallPaperUrl) {
+        this.wallPaperUrl = wallPaperUrl;
+    }
+
+    public boolean isSharingLocation() {
+        return isSharingLocation;
+    }
+
+    public void setSharingLocation(boolean sharingLocation) {
+        isSharingLocation = sharingLocation;
     }
 }

@@ -55,4 +55,8 @@ public class AppUtils {
                 });
     }
 
+    public static String getDefaultProfileUrl() {
+        return "http://res.cloudinary.com/dumfykuvl/image/upload/v1493749974/images_lm0sjf.jpg";
+    }
+
 }

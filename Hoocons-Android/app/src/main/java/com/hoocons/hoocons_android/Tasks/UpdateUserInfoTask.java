@@ -18,6 +18,7 @@ import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.FirebaseConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
@@ -86,9 +87,16 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
-                            SharedPreferencesManager.getDefault()
-                                    .setUserKeyInfo(new UserInfoResponse(displayName,
-                                            nickname, url));
+                            if (url.equals("")) {
+                                SharedPreferencesManager.getDefault()
+                                        .setUserKeyInfo(new UserInfoResponse(displayName,
+                                                nickname, AppUtils.getDefaultProfileUrl()));
+                            } else {
+                                SharedPreferencesManager.getDefault()
+                                        .setUserKeyInfo(new UserInfoResponse(displayName,
+                                                nickname, url));
+                            }
+
                             EventBus.getDefault().post(new CompleteLoginRequest());
                         }
                     }

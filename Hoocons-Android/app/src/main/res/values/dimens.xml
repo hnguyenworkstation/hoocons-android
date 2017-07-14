@@ -253,6 +253,7 @@
     <!-- New Thread Activity -->
     <dimen name="media_review_height">180dp</dimen>
     <dimen name="small_media_review_height">90dp</dimen>
+    <dimen name="small_profile_actionbar">40dp</dimen>
     <dimen name="media_review_width">120dp</dimen>
     <dimen name="creater_profile_size">60dp</dimen>
     <dimen name="reply_profile_size">48dp</dimen>

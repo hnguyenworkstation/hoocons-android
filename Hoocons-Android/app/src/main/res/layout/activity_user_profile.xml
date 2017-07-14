@@ -50,7 +50,7 @@
                         android:background="@color/black_alpha_12">
 
                         <ImageView
-                            android:id="@+id/image"
+                            android:id="@+id/wallpaper_image"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/flexible_space_image_height"
                             android:scaleType="fitXY"/>
