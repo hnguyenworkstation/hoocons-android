@@ -31,29 +31,32 @@
     <application
         android:name=".Managers.BaseApplication"
         android:allowBackup="true"
+        android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustResize"
         tools:replace="android:icon">
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
 
-        <meta-data android:name="com.facebook.accountkit.ApplicationName"
+        <meta-data
+            android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data android:name="com.facebook.accountkit.ClientToken"
+        <meta-data
+            android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
         <meta-data
             android:name="com.hoocons.hoocons_android.CustomUI.GlideConfiguration"
@@ -65,36 +68,41 @@
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.MainActivity"
+        <activity
+            android:name=".Activities.MainActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.IntroActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.IntroActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.SplashActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SocialLoginActivity"
+        <activity
+            android:name=".Activities.SocialLoginActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.LoginActivity"
             android:configChanges="orientation"
@@ -115,47 +123,50 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".Activities.NewEventActivity"
+        <activity
+            android:name=".Activities.NewEventActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
         </activity>
-        <activity android:name=".Activities.PlacePickerActivity"
+        <activity
+            android:name=".Activities.PlacePickerActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ChatActivity"
             android:configChanges="orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AroundActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.AroundActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.DetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.DetailActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.FindMatchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.FindMatchActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <service
-            android:name=".Tasks.JobServices.FirebaseMessageService">
+        <service android:name=".Tasks.JobServices.FirebaseMessageService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".Tasks.JobServices.InstanceIdFCM">
+        <service android:name=".Tasks.JobServices.InstanceIdFCM">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service android:name=".Tasks.JobServices.HooconsJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <service
+            android:name=".Tasks.JobServices.HooconsJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".Tasks.JobServices.HooconsGCMJobService"
             android:exported="true"
@@ -164,5 +175,8 @@
                 <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
             </intent-filter>
         </service>
+
+        <activity android:name=".Activities.NewMeetingActivity"></activity>
     </application>
+
 </manifest>

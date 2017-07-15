@@ -12,8 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Activities.FindMatchActivity;
+import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -24,6 +28,10 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     ImageView mUserProfile;
     @BindView(R.id.find_love)
     TextView mFindLove;
+    @BindView(R.id.display_name)
+    TextView mDisplayName;
+    @BindView(R.id.nick_name)
+    TextView mNickname;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -70,7 +78,21 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+        loadProfileImage();
 
+        mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
+        String nickname = "@" + SharedPreferencesManager.getDefault().getUserNickname();
+        mNickname.setText(nickname);
+    }
+
+    private void loadProfileImage() {
+        Glide.with(this)
+                .load(SharedPreferencesManager.getDefault().getUserProfileUrl())
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .transform(new GlideCircleTransformation(getContext()))
+                .into(mUserProfile);
     }
 
     @Override

@@ -18,11 +18,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
+import com.hoocons.hoocons_android.Activities.NewMeetingActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 
 import java.util.ArrayList;
@@ -94,6 +102,8 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.fragment_featured, container, false);
         ButterKnife.bind(this, rootView);
 
+        initView();
+
         mImageHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,8 +117,22 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
+    private void initView() {
+        loadImageHeader();
+    }
+
+    private void loadImageHeader() {
+        Glide.with(this)
+                .load(SharedPreferencesManager.getDefault().getUserProfileUrl())
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .transform(new GlideCircleTransformation(getContext()))
+                .into(mImageHeader);
+    }
+
     private void startNewEventActivity() {
-        startActivity(new Intent(getActivity(), NewEventActivity.class)
+        startActivity(new Intent(getActivity(), NewMeetingActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 

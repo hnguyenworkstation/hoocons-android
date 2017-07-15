@@ -51,6 +51,8 @@ dependencies {
     compile project(':giphy_library')
     compile project(':swipecard_library')
     compile project(':emotion_helper')
+
+    compile files('libs/rebound-0.3.8.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:customtabs:25.3.1'
     compile 'com.android.support:mediarouter-v7:25.3.1'
@@ -100,13 +102,11 @@ dependencies {
     compile 'com.hbb20:ccp:1.8'
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.birbit:android-priority-jobqueue:2.0.1'
-
     compile 'com.amazonaws:aws-android-sdk-core:2.4.5'
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.5'
     compile 'com.amazonaws:aws-android-sdk-ddb:2.4.5'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile files('libs/rebound-0.3.8.jar')
 }
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.google.gms.google-services'

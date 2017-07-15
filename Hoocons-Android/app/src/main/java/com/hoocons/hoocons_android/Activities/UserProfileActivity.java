@@ -88,7 +88,6 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
 
-    private View mImageView;
     private View mOverlayView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
