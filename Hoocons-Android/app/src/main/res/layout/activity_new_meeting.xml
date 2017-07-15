@@ -21,10 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/custom_toolbar"
-                android:background="@color/white"
-                android:visibility="gone"
                 android:layout_alignParentTop="true">
-                <include layout="@layout/custom_new_user_info_actionbar"/>
+                <include layout="@layout/custom_new_meeting_actionbar"/>
             </RelativeLayout>
 
             <FrameLayout
@@ -58,10 +56,37 @@
                 <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
                     android:id="@+id/obs_scrollview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:overScrollMode="never"
                     android:scrollbars="none">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/flexible_space_image_height"
+                            android:background="@android:color/transparent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/margin_12">
+
+                                <include layout="@layout/new_meeting_info_form"
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
                 </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
                 <View

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -24,6 +25,10 @@ public class NewMeetingActivity extends BaseActivity implements ObservableScroll
     RelativeLayout mCustomToolbar;
     @BindView(R.id.header_area)
     RelativeLayout mHeaderArea;
+    @BindView(R.id.custom_bar_text)
+    TextView mCustomBarText;
+    @BindView(R.id.linear)
+    View mCustomBarLinear;
 
     private View mOverlayView;
     private int mActionBarSize;
@@ -74,10 +79,22 @@ public class NewMeetingActivity extends BaseActivity implements ObservableScroll
         Log.i(TAG, String.format("onScrollChanged: %s", String.valueOf(scrollY)));
 
         if (scrollY >= 480) {
-            mCustomToolbar.setVisibility(View.VISIBLE);
+            showCustomBar();
         } else {
-            mCustomToolbar.setVisibility(View.GONE);
+            hideCustomBar();
         }
+    }
+
+    private void hideCustomBar() {
+        mCustomBarText.setVisibility(View.GONE);
+        mCustomBarLinear.setVisibility(View.GONE);
+        mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+    }
+
+    private void showCustomBar() {
+        mCustomBarText.setVisibility(View.VISIBLE);
+        mCustomBarLinear.setVisibility(View.VISIBLE);
+        mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.white));
     }
 
     @Override
