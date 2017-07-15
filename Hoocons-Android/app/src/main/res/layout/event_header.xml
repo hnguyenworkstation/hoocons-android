@@ -65,7 +65,7 @@
                 android:layout_height="@dimen/card_time_logo"
                 android:layout_marginStart="@dimen/margin_8"
                 android:layout_weight=".5"
-                android:id="@+id/location_icon"
+                android:id="@+id/event_location_icon"
                 android:src="@drawable/ic_location_color" />
 
             <TextView
@@ -82,7 +82,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/event_options"
+        android:id="@+id/header_event_options"
         android:background="@drawable/icon_button"
         android:layout_width="@dimen/cardview_medicon_size"
         android:layout_height="@dimen/cardview_medicon_size"

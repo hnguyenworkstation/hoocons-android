@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/postfeed_image_height"
             android:id="@+id/event_check_in_location"
@@ -38,6 +38,7 @@
                 android:layout_marginBottom="@dimen/margin_8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/event_check_in_type"
                 android:layout_below="@+id/event_check_in_name"
                 android:textSize="@dimen/text_14"
                 android:text="An choi"/>

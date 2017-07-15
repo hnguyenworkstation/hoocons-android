@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/margin_4">
 
     <TextView
-        android:id="@+id/event_user_name"
+        android:id="@+id/event_intro_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_16"
@@ -16,7 +16,7 @@
         android:textColor="@color/black"/>
 
     <ImageButton
-        android:id="@+id/event_options"
+        android:id="@+id/event_intro_options"
         android:background="@drawable/icon_button"
         android:layout_width="@dimen/cardview_smallicon_size"
         android:layout_height="@dimen/cardview_smallicon_size"
