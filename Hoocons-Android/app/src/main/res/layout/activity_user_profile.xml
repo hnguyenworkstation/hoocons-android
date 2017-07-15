@@ -104,6 +104,12 @@
 
                             </LinearLayout>
 
+                            <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+                                android:layout_width="match_parent"
+                                android:id="@+id/event_recycler"
+                                android:layout_height="wrap_content"
+                                android:scrollbars="vertical"/>
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

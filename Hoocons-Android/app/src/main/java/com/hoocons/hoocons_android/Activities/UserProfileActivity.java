@@ -26,6 +26,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -85,6 +86,9 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     @BindView(R.id.small_profile_progress_bar)
     ProgressBar mSmallProfileProgress;
 
+    @BindView(R.id.event_recycler)
+    ObservableRecyclerView mEventRecycler;
+
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
 
@@ -135,7 +139,13 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
             mActionBarDisplayName.setText(response.getDisplayName());
             mDisplayName.setText(response.getDisplayName());
             mNickname.setText(nickname);
+
+            initEventRecyclerView();
         }
+    }
+
+    private void initEventRecyclerView() {
+
     }
 
     private void loadActionBarProfileImage(String url) {
