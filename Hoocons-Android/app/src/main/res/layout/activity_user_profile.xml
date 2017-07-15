@@ -37,7 +37,7 @@
                     android:background="@color/white"
                     android:visibility="gone"
                     android:layout_alignParentTop="true">
-                    <include layout="@layout/custom_new_user_info_actionbar"/>
+                    <include layout="@layout/custom_profile_actionbar"/>
                 </RelativeLayout>
 
                 <FrameLayout

@@ -1,10 +1,12 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -32,19 +34,26 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
+import com.hoocons.hoocons_android.Adapters.EventAdapter;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.CustomUI.view.ViewPropertyAnimator;
+import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,6 +115,11 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private final String MYSELF = "IS_MY_SELF";
 
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
+    private List<EventResponse> eventResponseList;
+    private final int EVENT_PACK = 15;
+    private boolean canLoadMore = true;
+
+    private EventAdapter mEventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,14 +129,20 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
+        eventResponseList = new ArrayList<>();
+        mEventAdapter = new EventAdapter(this, eventResponseList);
+
         mIntent = getIntent();
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
 
+        initGeneralView();
+
         if (isMySelf) {
             jobManager.addJobInBackground(new GetSelfInfoJob());
+            jobManager.addJobInBackground(new FetchCreatedEventJob(eventResponseList.size(),
+                    eventResponseList.size() + EVENT_PACK));
         }
 
-        initGeneralView();
         initDetailedView();
     }
 
@@ -145,7 +165,10 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     }
 
     private void initEventRecyclerView() {
-
+        mEventRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mEventRecycler.setHasFixedSize(false);
+        mEventRecycler.setScrollViewCallbacks(this);
+        mEventRecycler.setAdapter(mEventAdapter);
     }
 
     private void loadActionBarProfileImage(String url) {
@@ -294,5 +317,16 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     @Subscribe
     public void onEvent(FetchUserInfoCompleteEvBusRequest request) {
         initViewWithCompleteInfo(request.getmResponse());
+    }
+
+    @Subscribe
+    public void onEvent(FetchEventListSuccessEvBusRequest request) {
+        if (request.getResponseList().size() < EVENT_PACK) {
+            canLoadMore = false;
+        }
+
+        eventResponseList.addAll(request.getResponseList());
+        mEventAdapter.notifyItemRangeInserted(eventResponseList.size() - eventResponseList.size() - 1,
+                eventResponseList.size() - 1);
     }
 }

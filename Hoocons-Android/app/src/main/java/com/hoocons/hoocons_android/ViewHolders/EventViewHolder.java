@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.support.annotation.Dimension;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -122,12 +123,18 @@ public class EventViewHolder extends ViewHolder {
     }
 
     private void initEventContent() {
+        mTextContent.setText(eventResponse.getTextContent());
+
+        if (eventResponse.getTextContent().length() < 50) {
+            mTextContent.setTextSize(24);
+        } else {
+            mTextContent.setTextSize(18);
+        }
+
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
-            mTextContent.setText(eventResponse.getTextContent());
 
-            if (eventResponse.getTextContent().length() < 50) {
-
-            }
+        } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
+            loadSingleImage(eventResponse.getMedias().get(0).getUrl());
         }
     }
 
@@ -156,5 +163,32 @@ public class EventViewHolder extends ViewHolder {
                     }
                 })
                 .into(mUserProfileImage);
+    }
+
+    private void loadSingleImage(String url) {
+        assert mSingleMediaView != null;
+        Glide.with(mUserProfileImage.getContext())
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model,
+                                               Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        mSingleMediaView.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                })
+                .into(mSingleMediaView);
     }
 }
