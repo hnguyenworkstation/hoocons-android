@@ -36,7 +36,16 @@
                     android:layout_height="@dimen/flexible_space_image_height"
                     android:layout_gravity="top"
                     android:id="@+id/header_area"
-                    android:background="@color/black_alpha_12">
+                    android:background="@color/tab_selected">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+                        <include layout="@layout/new_meeting_header"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"/>
+                    </RelativeLayout>
 
                 </RelativeLayout>
 

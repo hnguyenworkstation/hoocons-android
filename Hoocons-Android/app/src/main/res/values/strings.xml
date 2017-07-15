@@ -144,6 +144,9 @@
     <string name="work">Work</string>
     <string name="hobbies">Hobbies</string>
 
+    <string name="new_meeting_title">Start a new meeting around you</string>
+    <string name="new_meeting_desc">Connect with new people, learn something, play something and… actually do something</string>
+
 
     <!-- APIS & Secret Fields -->
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/publish_photo_thumbnail_size"
+            android:layout_height="@dimen/publish_photo_thumbnail_size"
+            android:id="@+id/profile_img"
+            android:src="@drawable/logo_image"
+            android:scaleType="fitCenter"/>
+
+        <ImageView
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/meeting_owner_icon"/>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_margin="@dimen/margin_12"
+        android:text="@string/new_meeting_title"
+        android:textSize="@dimen/text_22"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_8"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_16"
+        android:textAlignment="center"
+        android:text="@string/new_meeting_desc"/>
+
+</LinearLayout>
