@@ -119,11 +119,11 @@
         android:text="@string/select_tags"/>
 
     <Button
-        android:id="@+id/submit_new_event"
-        style="?android:textAppearanceSmall"
+        android:id="@+id/submit_new_meeting"
+        style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_24"
         android:text="@string/submit"
         android:textStyle="bold"
         android:textAllCaps="true"
