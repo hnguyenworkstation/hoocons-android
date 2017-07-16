@@ -17,6 +17,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -73,22 +74,16 @@ public class AppUtils {
         return "http://res.cloudinary.com/dumfykuvl/image/upload/v1493749974/images_lm0sjf.jpg";
     }
 
-    private static SecretKey generateKey(String text)
-            throws NoSuchAlgorithmException, InvalidKeySpecException
-    {
-        return new SecretKeySpec(text.getBytes(), "AES");
-    }
+    public static String getRandomSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
 
-    public static String encryptMsg(String message)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
-            InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException,
-            UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException
-    {
-        Cipher cipher = null;
-        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, generateKey(message));
-        byte[] cipherText = cipher.doFinal(message.getBytes("UTF-8"));
-        return cipherText.toString();
     }
-
 }

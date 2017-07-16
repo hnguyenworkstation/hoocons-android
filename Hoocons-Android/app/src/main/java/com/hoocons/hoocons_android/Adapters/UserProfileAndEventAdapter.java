@@ -17,7 +17,7 @@ import java.util.List;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class UserCompleteInfoAdapter extends RecyclerView.Adapter<UserInfoAndEventViewHolder> {
+public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAndEventViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
 
@@ -32,7 +32,7 @@ public class UserCompleteInfoAdapter extends RecyclerView.Adapter<UserInfoAndEve
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
 
-    public UserCompleteInfoAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
+    public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
@@ -89,10 +89,16 @@ public class UserCompleteInfoAdapter extends RecyclerView.Adapter<UserInfoAndEve
         switch (response.getEventType()) {
             case AppConstant.EVENT_TYPE_TEXT:
                 return TYPE_EVENT_TEXT;
+
             case AppConstant.EVENT_TYPE_SINGLE_IMAGE:
                 return TYPE_EVENT_SINGLE_IMAGE;
+
+            case AppConstant.EVENT_TYPE_SINGLE_GIF:
+                return TYPE_EVENT_SINGLE_IMAGE;
+
             case AppConstant.EVENT_TYPE_MULT_IMAGE:
                 return TYPE_EVENT_MUL_IMAGES;
+
             case AppConstant.EVENT_TYPE_CHECK_IN:
                 return TYPE_EVENT_CHECKIN;
             default:

@@ -2,10 +2,7 @@ package com.hoocons.hoocons_android.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,13 +22,12 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.UserCompleteInfoAdapter;
+import com.hoocons.hoocons_android.Adapters.UserProfileAndEventAdapter;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
-import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
@@ -93,7 +88,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private final int EVENT_PACK = 15;
     private boolean canLoadMore = true;
 
-    private UserCompleteInfoAdapter mEventsAdapter;
+    private UserProfileAndEventAdapter mEventsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +102,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
 
         eventResponseList = new ArrayList<>();
-        mEventsAdapter = new UserCompleteInfoAdapter(this, eventResponseList, isMySelf);
+        mEventsAdapter = new UserProfileAndEventAdapter(this, eventResponseList, isMySelf);
 
         initGeneralView();
 

@@ -293,7 +293,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             eventType = AppConstant.EVENT_TYPE_SINGLE_IMAGE;
         } else if (mImagePaths.size() > 1) {
             eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
-        } else if (gifUrl != null) {
+        } else if (gifUrl != null && gifUrl.length() > 5) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;

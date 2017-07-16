@@ -15,6 +15,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
@@ -179,12 +180,36 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
 
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
             loadSingleImage(eventResponse.getMedias().get(0).getUrl());
+        } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
+            loadSingleGif(eventResponse.getMedias().get(0).getUrl());
         }
+    }
+
+    private void loadSingleGif(String url) {
+        Glide.with(mSingleMediaView.getContext())
+                .load(url)
+                .asGif()
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GifDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        mSingleContentProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mSingleMediaView);
     }
 
     private void loadSingleImage(String url) {
         assert mSingleMediaView != null;
-        Glide.with(mUserProfileImage.getContext())
+        Glide.with(mSingleMediaView.getContext())
                 .load(url)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)

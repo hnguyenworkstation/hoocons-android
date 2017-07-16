@@ -1,7 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Requests;
 
 import com.google.gson.annotations.SerializedName;
-import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Models.Media;
 
 /**
@@ -10,7 +9,7 @@ import com.hoocons.hoocons_android.Models.Media;
 
 public class UserInformationRequest {
     @SerializedName("profile_media")
-    private Media profileUrl;
+    private Media profileMedia;
     @SerializedName("gender")
     private String gender;
     @SerializedName("display_name")
@@ -29,22 +28,22 @@ public class UserInformationRequest {
     }
 
     public UserInformationRequest(String displayName, String nickname, String gender, String birthday,
-                                  Media profileUrl, double longitude, double latitude) {
+                                  Media profileMedia, double longitude, double latitude) {
         this.nickname = nickname;
         this.displayName = displayName;
         this.gender = gender;
         this.birthday = birthday;
-        this.profileUrl = profileUrl;
+        this.profileMedia = profileMedia;
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public Media getProfileUrl() {
-        return profileUrl;
+    public Media getProfileMedia() {
+        return profileMedia;
     }
 
-    public void setProfileUrl(Media profileUrl) {
-        this.profileUrl = profileUrl;
+    public void setProfileMedia(Media profileMedia) {
+        this.profileMedia = profileMedia;
     }
 
     public String getGender() {

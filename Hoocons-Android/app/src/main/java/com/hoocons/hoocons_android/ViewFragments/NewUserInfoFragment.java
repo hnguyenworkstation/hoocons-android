@@ -1,12 +1,10 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +31,10 @@ import com.hoocons.hoocons_android.EventBus.FieldUnavailableRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.CheckNicknameAvailabilityTask;
-import com.hoocons.hoocons_android.Tasks.UpdateUserInfoTask;
+import com.hoocons.hoocons_android.Tasks.Jobs.UpdateUserInfoJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,7 +69,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     TextView mDetailsText;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-
 
     private final String TAG = NewUserInfoFragment.class.getSimpleName();
 
@@ -199,15 +197,17 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
             case R.id.submit_button:
                 if (validateNameField() && validateNicknameField() && validateBirthday()) {
                     showProcessDialog();
-                    new UpdateUserInfoTask(
-                            mDisplayNameInput.getText().toString(),
-                            mNicknameInput.getText().toString(),
-                            mGenderFemale.isChecked() ?
-                                    AppConstant.GENDER_FEMALE :
-                                    AppConstant.GENDER_MALE,
-                            mBirthTime,
-                            mProfileImagePath)
-                            .execute();
+
+                    BaseApplication.getInstance().getJobManager().addJobInBackground(
+                            new UpdateUserInfoJob(
+                                    mDisplayNameInput.getText().toString(),
+                                    mNicknameInput.getText().toString(),
+                                    mGenderFemale.isChecked() ?
+                                            AppConstant.GENDER_FEMALE :
+                                            AppConstant.GENDER_MALE,
+                                    mBirthTime,
+                                    mProfileImagePath)
+                    );
                 }
                 break;
             default:
