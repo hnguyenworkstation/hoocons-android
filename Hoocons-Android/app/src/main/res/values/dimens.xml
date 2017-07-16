@@ -101,7 +101,7 @@
     <dimen name="pparound_onclick_logosize">80dp</dimen>
 
     <!-- Topic Item -->
-    <dimen name="topic_logo_size">45dp</dimen>
+    <dimen name="topic_logo_size">36dp</dimen>
     <dimen name="micro_padding">4dp</dimen>
 
     <!-- Event diments -->
@@ -137,7 +137,7 @@
     <dimen name="cardview_smallicon_size">18dp</dimen>
     <dimen name="cardview_medicon_width">42dp</dimen>
     <dimen name="cardview_medicon_height">28dp</dimen>
-    <dimen name="cardview_medicon_size">30dp</dimen>
+    <dimen name="cardview_medicon_size">24dp</dimen>
 
     <!-- Intro Activity Dimen -->
     <dimen name="intro_logo_size">148dp</dimen>

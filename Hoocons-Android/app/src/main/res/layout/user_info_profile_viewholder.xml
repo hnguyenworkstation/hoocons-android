@@ -16,14 +16,14 @@
             android:background="@android:color/transparent" />
 
         <LinearLayout
-            android:background="@color/white"
+            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <include layout="@layout/profile_header_info"/>
         </LinearLayout>
 
         <LinearLayout
-            android:background="@color/white"
+            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <include layout="@layout/profile_info_details"/>
