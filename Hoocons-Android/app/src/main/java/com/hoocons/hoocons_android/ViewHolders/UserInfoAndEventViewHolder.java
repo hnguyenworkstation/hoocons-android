@@ -2,6 +2,9 @@ package com.hoocons.hoocons_android.ViewHolders;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -18,13 +21,19 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
+import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +94,8 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.event_multi_media_content)
     RecyclerView mMultiMediaRecycler;
+
+    private MediaImagesAdapter mMultiImageAdapter;
 
     /* EVENT CHECK IN */
     @Nullable
@@ -156,7 +167,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         this.eventResponse = response;
 
         initEventHeader(context);
-        initEventContent();
+        initEventContent(context);
     }
 
     private void initEventHeader(Context context) {
@@ -165,7 +176,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         mTimeFrame.setText(eventResponse.getCreateAt());
     }
 
-    private void initEventContent() {
+    private void initEventContent(Context context) {
         if (eventResponse.getTextContent() != null) {
             mTextContent.setText(eventResponse.getTextContent());
 
@@ -182,7 +193,26 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             loadSingleImage(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
             loadSingleGif(eventResponse.getMedias().get(0).getUrl());
+        } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
+            loadMultipleImages(context, eventResponse.getMedias());
         }
+    }
+
+    private void loadMultipleImages(Context context, List<MediaResponse> mediaList) {
+        mMultiImageAdapter = new MediaImagesAdapter(context, mediaList);
+
+        assert mMultiMediaRecycler != null;
+        if (mediaList.size() % 2 == 0 && mediaList.size() <= 4) {
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 2,
+                    LinearLayoutManager.VERTICAL, false));
+        } else {
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 3,
+                    LinearLayoutManager.VERTICAL, false));
+        }
+
+        mMultiMediaRecycler.setAdapter(mMultiImageAdapter);
+        mMultiMediaRecycler.setItemAnimator(new DefaultItemAnimator());
+        mMultiMediaRecycler.setNestedScrollingEnabled(false);
     }
 
     private void loadSingleGif(String url) {

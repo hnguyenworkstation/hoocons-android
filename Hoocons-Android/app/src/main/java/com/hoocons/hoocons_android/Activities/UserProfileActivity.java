@@ -43,7 +43,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserProfileActivity extends DraggerActivity implements ObservableScrollViewCallbacks {
+public class UserProfileActivity extends DraggerActivity
+        implements ObservableScrollViewCallbacks, View.OnClickListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
     @BindView(R.id.obs_scrollview)
@@ -164,6 +165,10 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
                 mRecyclerView.scrollTo(mFlexibleSpaceImageHeight, 0);
             }
         });
+
+        mActionBack.setOnClickListener(this);
+        mActionMore.setOnClickListener(this);
+        mWallpaperImage.setOnClickListener(this);
     }
 
     private void loadWallPaperImage(String url) {
@@ -237,6 +242,11 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
 
     }
 
+    @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + PublicModeRequest: Request Public Mode
@@ -254,5 +264,18 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
 
         eventResponseList.addAll(request.getResponseList());
         mEventsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_back:
+                onBackPressed();
+                break;
+            case R.id.action_more:
+                break;
+            default:
+                break;
+        }
     }
 }
