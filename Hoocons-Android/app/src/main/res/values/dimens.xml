@@ -126,7 +126,7 @@
     <!-- Post Feed Activity -->
     <dimen name="postfeed_textsize">20sp</dimen>
     <dimen name="postfeed_profile_size">58dp</dimen>
-    <dimen name="postfeed_image_height">256dp</dimen>
+    <dimen name="postfeed_image_height">212dp</dimen>
     <dimen name="postfeed_max_image_height">512dp</dimen>
 
     <!-- Event Card View -->
