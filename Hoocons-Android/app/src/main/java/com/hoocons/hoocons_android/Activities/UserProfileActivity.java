@@ -1,46 +1,36 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.EventAdapter;
+import com.hoocons.hoocons_android.Adapters.EventsAdapter;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
-import com.hoocons.hoocons_android.CustomUI.view.ViewPropertyAnimator;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
-import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -62,41 +52,25 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
     @BindView(R.id.obs_scrollview)
-    ObservableScrollView mScrollView;
+    ObservableRecyclerView mRecyclerView;
 
-    @BindView(R.id.profile_header)
-    ImageView mProfileImage;
     @BindView(R.id.small_profile_header)
     ImageView mSmallProfileImage;
     @BindView(R.id.wallpaper_image)
     ImageView mWallpaperImage;
-
-    @BindView(R.id.display_name)
-    TextView mDisplayName;
-    @BindView(R.id.user_display_name)
-    TextView mActionBarDisplayName;
-    @BindView(R.id.nick_name)
-    TextView mNickname;
 
     @BindView(R.id.action_back)
     ImageButton mActionBack;
     @BindView(R.id.action_more)
     ImageButton mActionMore;
 
-    @BindView(R.id.action_friend_status)
-    BootstrapButton mAddFriendBtn;
-    @BindView(R.id.action_send_message)
-    BootstrapButton mSendMessageBtn;
-
     @BindView(R.id.wallpaper_progress_bar)
     ProgressBar mWallpaperProgress;
-    @BindView(R.id.profile_progress_bar)
-    ProgressBar mProfileProgress;
     @BindView(R.id.small_profile_progress_bar)
     ProgressBar mSmallProfileProgress;
 
-    @BindView(R.id.event_recycler)
-    ObservableRecyclerView mEventRecycler;
+    @BindView(R.id.user_display_name)
+    TextView mActionBarDisplayName;
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
@@ -119,7 +93,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private final int EVENT_PACK = 15;
     private boolean canLoadMore = true;
 
-    private EventAdapter mEventAdapter;
+    private EventsAdapter mEventsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +103,11 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
-        eventResponseList = new ArrayList<>();
-        mEventAdapter = new EventAdapter(this, eventResponseList);
-
         mIntent = getIntent();
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
+
+        eventResponseList = new ArrayList<>();
+        mEventsAdapter = new EventsAdapter(this, eventResponseList, isMySelf);
 
         initGeneralView();
 
@@ -143,32 +117,13 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
                     eventResponseList.size() + EVENT_PACK));
         }
 
-        initDetailedView();
-    }
-
-    private void initDetailedView() {
-        if (isMySelf) {
-            UserInfoResponse response = SharedPreferencesManager.getDefault().getUserKeyInfo();
-
-            // Load profile to both side
-            loadProfileImage(response.getProfileUrl());
-            loadActionBarProfileImage(response.getProfileUrl());
-
-            String nickname = "@" + response.getNickname();
-
-            mActionBarDisplayName.setText(response.getDisplayName());
-            mDisplayName.setText(response.getDisplayName());
-            mNickname.setText(nickname);
-
-            initEventRecyclerView();
-        }
+        initEventRecyclerView();
     }
 
     private void initEventRecyclerView() {
-        mEventRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mEventRecycler.setHasFixedSize(false);
-        mEventRecycler.setScrollViewCallbacks(this);
-        mEventRecycler.setAdapter(mEventAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setAdapter(mEventsAdapter);
     }
 
     private void loadActionBarProfileImage(String url) {
@@ -199,47 +154,19 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
                 .into(mSmallProfileImage);
     }
 
-    private void loadProfileImage(String url) {
-        Glide.with(this)
-                .load(url)
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .transform(new GlideCircleTransformation(this))
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        mProfileImage.setVisibility(View.VISIBLE);
-                        mProfileProgress.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(mProfileImage);
-    }
-
     private void initGeneralView() {
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mActionBarSize = 148;
 
         mCustomToolbar.bringToFront();
         mOverlayView = findViewById(R.id.overlay);
+        mRecyclerView.setScrollViewCallbacks(this);
 
-        mScrollView.setScrollViewCallbacks(this);
         setTitle(null);
-        ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
+        ScrollUtils.addOnGlobalLayoutListener(mRecyclerView, new Runnable() {
             @Override
             public void run() {
-                mScrollView.scrollTo(mFlexibleSpaceImageHeight, 0);
+                mRecyclerView.scrollTo(mFlexibleSpaceImageHeight, 0);
             }
         });
     }
@@ -273,6 +200,11 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
 
     private void initViewWithCompleteInfo(UserInfoResponse info) {
         loadWallPaperImage("https://c1.staticflickr.com/1/256/19767218293_aa4a9248d3.jpg");
+
+        assert mActionBarDisplayName != null;
+        mActionBarDisplayName.setText(info.getDisplayName());
+
+        loadActionBarProfileImage(info.getProfileUrl());
     }
 
     @Override
@@ -326,7 +258,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         }
 
         eventResponseList.addAll(request.getResponseList());
-        mEventAdapter.notifyItemRangeInserted(eventResponseList.size() - eventResponseList.size() - 1,
+        mEventsAdapter.notifyItemRangeInserted(eventResponseList.size() - eventResponseList.size() - 1,
                 eventResponseList.size() - 1);
     }
 }

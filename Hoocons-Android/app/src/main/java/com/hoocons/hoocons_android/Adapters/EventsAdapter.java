@@ -17,7 +17,7 @@ import java.util.List;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
 
@@ -29,9 +29,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private final int TYPE_EVENT_WEB = 5;
     private final int TYPE_EVENT_CHECKIN = 6;
 
-    public EventAdapter(Context context, List<EventResponse> responsesList) {
+    private final int USER_INFO_TAG_CARD = -1;
+    private boolean isMyself;
+
+    public EventsAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
         this.context = context;
         this.responseList = responsesList;
+        this.isMyself = isMyself;
     }
 
     @Override
@@ -39,6 +43,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
         View view = null;
 
         switch (viewType) {
+            case USER_INFO_TAG_CARD:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.user_info_profile_viewholder, parent, false);
+                break;
             case TYPE_EVENT_TEXT:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.event_text_only_viewholder, parent, false);
@@ -64,12 +72,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     @Override
     public void onBindViewHolder(EventViewHolder holder, int position) {
-        holder.initViewHolder(responseList.get(position));
+        if (position == 0) {
+            holder.initUserInfo(context, isMyself);
+        } else {
+            holder.initViewHolder(context, responseList.get(position - 1));
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        EventResponse response = responseList.get(position);
+        if (position == 0) {
+            return USER_INFO_TAG_CARD;
+        }
+
+        EventResponse response = responseList.get(position - 1);
         switch (response.getEventType()) {
             case AppConstant.EVENT_TYPE_TEXT:
                 return TYPE_EVENT_TEXT;

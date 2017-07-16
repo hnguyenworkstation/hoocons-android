@@ -1,6 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
-import android.support.annotation.Dimension;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.bumptech.glide.Glide;
@@ -20,7 +20,9 @@ import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -31,29 +33,33 @@ import butterknife.ButterKnife;
  */
 
 public class EventViewHolder extends ViewHolder {
-    /* EVENT TOP INTRO */
-    @BindView(R.id.event_top_intro)
-    LinearLayout mTopIntro;
-    @BindView(R.id.event_intro_info)
-    TextView mIntroInfo;
-    @BindView(R.id.event_intro_options)
-    ImageButton mIntroButton;
-
     /* EVENT HEADER */
+    @Nullable
     @BindView(R.id.event_user_profile)
     ImageView mUserProfileImage;
+
+    @Nullable
     @BindView(R.id.event_user_name)
     TextView mUserDisplayName;
+
+    @Nullable
     @BindView(R.id.event_timeframe)
     TextView mTimeFrame;
+
+    @Nullable
     @BindView(R.id.event_location_icon)
     ImageView mHeaderLocationIcon;
+
+    @Nullable
     @BindView(R.id.event_posted_location)
     TextView mPostedLocation;
+
+    @Nullable
     @BindView(R.id.header_event_options)
     ImageButton mHeaderMoreButton;
 
     /* EVENT TEXT CONTENT */
+    @Nullable
     @BindView(R.id.event_text_content)
     TextView mTextContent;
 
@@ -93,14 +99,46 @@ public class EventViewHolder extends ViewHolder {
     TextView mCheckinType;
 
     /* EVENT FOOTER */
+    @Nullable
     @BindView(R.id.event_likebtn)
     BootstrapButton mLikeBtn;
+
+    @Nullable
     @BindView(R.id.event_commentbtn)
     BootstrapButton mCommentBtn;
+
+    @Nullable
     @BindView(R.id.like_count)
     TextView mLikeCount;
+
+    @Nullable
     @BindView(R.id.comment_count)
     TextView mCommentCount;
+
+    /* */
+    @Nullable
+    @BindView(R.id.profile_header)
+    ImageView mProfileImage;
+
+    @Nullable
+    @BindView(R.id.display_name)
+    TextView mDisplayName;
+
+    @Nullable
+    @BindView(R.id.nick_name)
+    TextView mNickname;
+
+    @Nullable
+    @BindView(R.id.action_friend_status)
+    BootstrapButton mAddFriendBtn;
+
+    @Nullable
+    @BindView(R.id.action_send_message)
+    BootstrapButton mSendMessageBtn;
+
+    @Nullable
+    @BindView(R.id.profile_progress_bar)
+    ProgressBar mProfileProgress;
 
     private EventResponse eventResponse;
 
@@ -109,26 +147,28 @@ public class EventViewHolder extends ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initViewHolder(EventResponse response) {
+    public void initViewHolder(Context context, EventResponse response) {
         this.eventResponse = response;
 
-        initEventHeader();
+        initEventHeader(context);
         initEventContent();
     }
 
-    private void initEventHeader() {
-        loadProfileImage(eventResponse.getUserInfo().getProfileUrl());
+    private void initEventHeader(Context context) {
+        loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl());
         mUserDisplayName.setText(eventResponse.getUserInfo().getDisplayName());
         mTimeFrame.setText(eventResponse.getCreateAt());
     }
 
     private void initEventContent() {
-        mTextContent.setText(eventResponse.getTextContent());
+        if (eventResponse.getTextContent() != null) {
+            mTextContent.setText(eventResponse.getTextContent());
 
-        if (eventResponse.getTextContent().length() < 50) {
-            mTextContent.setTextSize(24);
-        } else {
-            mTextContent.setTextSize(18);
+            if (eventResponse.getTextContent().length() < 50) {
+                mTextContent.setTextSize(24);
+            } else {
+                mTextContent.setTextSize(18);
+            }
         }
 
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
@@ -136,33 +176,6 @@ public class EventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
             loadSingleImage(eventResponse.getMedias().get(0).getUrl());
         }
-    }
-
-    private void loadProfileImage(String url) {
-        Glide.with(mUserProfileImage.getContext())
-                .load(url)
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .transform(new GlideCircleTransformation(mUserProfileImage.getContext()))
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        mUserProfileImage.setVisibility(View.VISIBLE);
-                        return false;
-                    }
-                })
-                .into(mUserProfileImage);
     }
 
     private void loadSingleImage(String url) {
@@ -190,5 +203,59 @@ public class EventViewHolder extends ViewHolder {
                     }
                 })
                 .into(mSingleMediaView);
+    }
+
+    public void initUserInfo(Context context, boolean isMySelf) {
+        if (isMySelf) {
+            UserInfoResponse response = SharedPreferencesManager.getDefault().getUserKeyInfo();
+
+            // Load profile to both side
+            loadProfileImage(context, response.getProfileUrl());
+
+            String nickname = "@" + response.getNickname();
+
+            assert mDisplayName != null;
+            mDisplayName.setText(response.getDisplayName());
+            assert mNickname != null;
+            mNickname.setText(nickname);
+        }
+    }
+
+    private void loadProfileImage(Context context, String url) {
+        Glide.with(context)
+                .load(url)
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model,
+                                               Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        mProfileImage.setVisibility(View.VISIBLE);
+                        assert mProfileProgress != null;
+                        mProfileProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mProfileImage);
+    }
+
+    private void loadUserProfileImage(Context context, String url) {
+        Glide.with(context)
+                .load(url)
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .transform(new GlideCircleTransformation(context))
+                .into(mUserProfileImage);
     }
 }

@@ -132,7 +132,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     }
 
     private void startNewEventActivity() {
-        startActivity(new Intent(getActivity(), NewMeetingActivity.class)
+        startActivity(new Intent(getActivity(), NewEventActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 

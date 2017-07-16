@@ -299,8 +299,8 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
-        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3), gifUrl,
-                mTextContentInput.getText().toString(),
+        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3),
+                mTextContentInput.getText().toString(), gifUrl,
                 mImagePaths, mMode, eventType);
         jobManager.addJobInBackground(job);
 
