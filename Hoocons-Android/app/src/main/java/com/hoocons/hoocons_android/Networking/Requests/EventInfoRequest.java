@@ -31,8 +31,19 @@ public class EventInfoRequest {
                             ArrayList<String> tags, String privacy, long latitude,
                             long longitude, String eventType) {
         this.textContent = textContent;
-        this.medias = medias;
-        this.tags = tags;
+
+        if (medias != null) {
+            this.medias = medias;
+        } else {
+            this.medias = new ArrayList<>();
+        }
+
+        if (tags != null) {
+            this.tags = tags;
+        } else {
+            this.tags = new ArrayList<>();
+        }
+
         this.privacy = privacy;
         this.latitude = latitude;
         this.longitude = longitude;

@@ -5,7 +5,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -18,10 +24,13 @@ import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.FirebaseConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
@@ -29,6 +38,9 @@ import com.hoocons.hoocons_android.Networking.Services.UserServices;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
@@ -41,7 +53,7 @@ import retrofit2.Response;
  * Created by hungnguyen on 6/17/17.
  */
 
-public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
+public class UpdateUserInfoTask extends AsyncTask<String, String, Media> {
     private final String TAG = UpdateUserInfoTask.class.getSimpleName();
     private String displayName;
     private String nickname;
@@ -59,42 +71,35 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(Media s) {
         uploadDataToServer(s);
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Media doInBackground(String... params) {
         if (mImagePath != null) {
-            try {
-                return uploadUserProfile(mImagePath);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            return updateImageToS3(mImagePath);
         }
 
         return null;
     }
 
-    private void uploadDataToServer(String profileUrl) {
-        // Todo: Check location information here and push with it
-        final String url = profileUrl != null? profileUrl : "";
-
+    private void uploadDataToServer(final Media profileMedia) {
         UserServices services = NetContext.instance.create(UserServices.class);
         services.updateUserInfo(new UserInformationRequest(displayName,
-                nickname, gender, birthday, url, 0, 0))
+                nickname, gender, birthday, profileMedia, 0, 0))
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
-                            if (url.equals("")) {
+                            if (profileMedia == null) {
                                 SharedPreferencesManager.getDefault()
                                         .setUserKeyInfo(new UserInfoResponse(displayName,
                                                 nickname, AppUtils.getDefaultProfileUrl()));
                             } else {
                                 SharedPreferencesManager.getDefault()
                                         .setUserKeyInfo(new UserInfoResponse(displayName,
-                                                nickname, url));
+                                                nickname, profileMedia.getUrl()));
                             }
 
                             EventBus.getDefault().post(new CompleteLoginRequest());
@@ -108,56 +113,28 @@ public class UpdateUserInfoTask extends AsyncTask<String, String, String> {
                 });
     }
 
-    private String uploadUserProfile(String mImagePath) throws InterruptedException {
-        String userName = SharedPreferencesManager.getDefault().getUserName();
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference();
-        mStorage = mStorage.child(FirebaseConstant.STORAGE_PROFILE).child(userName);
+    @Nullable
+    private Media updateImageToS3(String imagePath) {
+        try {
+            String s3 = BaseApplication.getInstance().getS3AWS();
+            Log.e(TAG, "updateImageToS3: " +  s3);
+            String timeStamp = String.valueOf(new Date().getTime());
 
-        final ArrayList<String> _uploadedImages = new ArrayList<>();
-        final CountDownLatch uploadDone = new CountDownLatch(1);
+            AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
 
-        StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("image/jpeg")
-                .build();
+            String fileName = AppUtils.encryptMsg(timeStamp) + ".png";
 
-        String timeStamp = String.valueOf(new Date().getTime());
-        String fileName = userName + "_" + timeStamp + ".jpg";
+            PutObjectRequest por = new PutObjectRequest(s3 + "/profiles",
+                    fileName, new File(imagePath));
+            por.setCannedAcl(CannedAccessControlList.PublicRead);
 
-        byte[] arrBytes = ImageEncoder.encodeImage(mImagePath);
+            s3Client.putObject(por);
+            String _finalUrl = "https://s3-ap-southeast-1.amazonaws.com/"
+                    + s3 + "/profiles/" + fileName;
 
-        UploadTask uploadTask = mStorage.child(fileName).putBytes(arrBytes, metadata);
-        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                @SuppressWarnings("VisibleForTests")
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                System.out.println("Upload is " + progress + "% done");
-            }
-        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                System.out.println("Upload is paused");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                uploadDone.countDown();
-                EventBus.getDefault().post(new UploadImageFailed());
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                uploadDone.countDown();
-                @SuppressWarnings("VisibleForTests")
-                Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                _uploadedImages.add(downloadUrl.toString());
-            }
-        });
-
-        uploadDone.await();
-
-        if (_uploadedImages.size() > 0) {
-            return _uploadedImages.get(0);
+            return new Media(_finalUrl, AppConstant.MEDIA_TYPE_IMAGE);
+        } catch (Exception e) {
+            Log.e(TAG, "updateImageToS3: " +  e.toString());
         }
 
         return null;

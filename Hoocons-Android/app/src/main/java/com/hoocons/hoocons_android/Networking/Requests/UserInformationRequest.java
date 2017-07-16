@@ -2,14 +2,15 @@ package com.hoocons.hoocons_android.Networking.Requests;
 
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
+import com.hoocons.hoocons_android.Models.Media;
 
 /**
  * Created by hungnguyen on 6/17/17.
  */
 
 public class UserInformationRequest {
-    @SerializedName("profile_url")
-    private String profileUrl;
+    @SerializedName("profile_media")
+    private Media profileUrl;
     @SerializedName("gender")
     private String gender;
     @SerializedName("display_name")
@@ -28,7 +29,7 @@ public class UserInformationRequest {
     }
 
     public UserInformationRequest(String displayName, String nickname, String gender, String birthday,
-                                    String profileUrl, double longitude, double latitude) {
+                                  Media profileUrl, double longitude, double latitude) {
         this.nickname = nickname;
         this.displayName = displayName;
         this.gender = gender;
@@ -38,11 +39,11 @@ public class UserInformationRequest {
         this.latitude = latitude;
     }
 
-    public String getProfileUrl() {
+    public Media getProfileUrl() {
         return profileUrl;
     }
 
-    public void setProfileUrl(String profileUrl) {
+    public void setProfileUrl(Media profileUrl) {
         this.profileUrl = profileUrl;
     }
 

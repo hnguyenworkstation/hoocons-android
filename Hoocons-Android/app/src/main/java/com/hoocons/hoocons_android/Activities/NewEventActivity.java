@@ -290,16 +290,16 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         String eventType;
 
         if (mImagePaths.size() == 1) {
-            eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
-        } else if (mImagePaths.size() > 1) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_IMAGE;
+        } else if (mImagePaths.size() > 1) {
+            eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
         } else if (gifUrl != null) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
-        PostNewEventJob job =  new PostNewEventJob(getResources().getString(R.string.aws_s3),
+        PostNewEventJob job =  new PostNewEventJob (
                 mTextContentInput.getText().toString(), gifUrl,
                 mImagePaths, mMode, eventType);
         jobManager.addJobInBackground(job);

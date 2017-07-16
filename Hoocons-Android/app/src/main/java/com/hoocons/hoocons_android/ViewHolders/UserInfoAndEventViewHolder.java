@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class EventViewHolder extends ViewHolder {
+public class UserInfoAndEventViewHolder extends ViewHolder {
     /* EVENT HEADER */
     @Nullable
     @BindView(R.id.event_user_profile)
@@ -71,6 +71,10 @@ public class EventViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.event_single_media_content)
     AdjustableImageView mSingleMediaView;
+
+    @Nullable
+    @BindView(R.id.single_content_progressbar)
+    ProgressBar mSingleContentProgressBar;
 
     /* EVENT MULTI MEDIAS */
     @Nullable
@@ -142,7 +146,7 @@ public class EventViewHolder extends ViewHolder {
 
     private EventResponse eventResponse;
 
-    public EventViewHolder(View itemView) {
+    public UserInfoAndEventViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
@@ -198,7 +202,8 @@ public class EventViewHolder extends ViewHolder {
                                                    Target<GlideDrawable> target,
                                                    boolean isFromMemoryCache,
                                                    boolean isFirstResource) {
-                        mSingleMediaView.setVisibility(View.VISIBLE);
+                        assert mSingleContentProgressBar != null;
+                        mSingleContentProgressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })

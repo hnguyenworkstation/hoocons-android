@@ -101,7 +101,6 @@ import java.util.logging.Logger;
 
 	public static int getTitleBarHeight(Activity activity) {
 		int contentTop = activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
-		//statusBarHeight是上面所求的状态栏的高度  
 		int titleBarHeight = contentTop - getStatusBarHeight(activity);
 
 		return titleBarHeight;
@@ -140,12 +139,6 @@ import java.util.logging.Logger;
 		return hasSDCard() && sdcardCanWrite();
 	}
 
-	/**
-	 * 获取SDCARD的可用大小,单位字节
-	 *
-	 * @return
-	 */
-	@SuppressWarnings("deprecation")
 	public long getSdcardtAvailableStore() {
 
 		if (hasSdcardAndCanWrite()) {
@@ -182,11 +175,6 @@ import java.util.logging.Logger;
 		return NetWorkType.none;
 	}
 
-	/**
-	 * mac地址
-	 *
-	 * @return
-	 */
 	public static String getMacAddress(Context context) {
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();

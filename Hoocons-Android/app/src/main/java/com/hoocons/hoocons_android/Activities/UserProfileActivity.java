@@ -26,7 +26,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.EventsAdapter;
+import com.hoocons.hoocons_android.Adapters.UserCompleteInfoAdapter;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
@@ -93,7 +93,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
     private final int EVENT_PACK = 15;
     private boolean canLoadMore = true;
 
-    private EventsAdapter mEventsAdapter;
+    private UserCompleteInfoAdapter mEventsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
 
         eventResponseList = new ArrayList<>();
-        mEventsAdapter = new EventsAdapter(this, eventResponseList, isMySelf);
+        mEventsAdapter = new UserCompleteInfoAdapter(this, eventResponseList, isMySelf);
 
         initGeneralView();
 
@@ -258,7 +258,6 @@ public class UserProfileActivity extends DraggerActivity implements ObservableSc
         }
 
         eventResponseList.addAll(request.getResponseList());
-        mEventsAdapter.notifyItemRangeInserted(eventResponseList.size() - eventResponseList.size() - 1,
-                eventResponseList.size() - 1);
+        mEventsAdapter.notifyDataSetChanged();
     }
 }

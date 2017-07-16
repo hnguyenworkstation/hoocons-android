@@ -44,11 +44,10 @@ public class PostNewEventJob extends Job implements Serializable {
     private String textContent;
     private ArrayList<String> imagePaths;
     private String privacy;
-    private String s3;
     private String eventType;
     private String gifUrl;
 
-    public PostNewEventJob(String s3, String text, String gifUrl,
+    public PostNewEventJob(String text, String gifUrl,
                            ArrayList<String> imagePaths,
                            String privacy, String eventType) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
@@ -56,7 +55,6 @@ public class PostNewEventJob extends Job implements Serializable {
         this.textContent = text;
         this.imagePaths = imagePaths;
         this.privacy = privacy;
-        this.s3 = s3;
         this.eventType = eventType;
         this.gifUrl = gifUrl;
     }
@@ -78,7 +76,7 @@ public class PostNewEventJob extends Job implements Serializable {
             }
 
             final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
-                    privacy, 0,0, eventType);
+                    privacy, 0, 0, eventType);
 
             EventServices services = NetContext.instance.create(EventServices.class);
             services.postEvent(request)
@@ -114,6 +112,7 @@ public class PostNewEventJob extends Job implements Serializable {
     @Nullable
     private ArrayList<Media> uploadAllImage() {
         try {
+            String s3 = BaseApplication.getInstance().getS3AWS();
             String timeStamp = String.valueOf(new Date().getTime());
 
             final ArrayList<Media> _uploadedImages = new ArrayList<>();

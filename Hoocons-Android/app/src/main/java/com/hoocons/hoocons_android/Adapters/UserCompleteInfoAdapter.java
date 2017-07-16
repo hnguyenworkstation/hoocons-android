@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.ViewHolders.EventViewHolder;
+import com.hoocons.hoocons_android.ViewHolders.UserInfoAndEventViewHolder;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
+public class UserCompleteInfoAdapter extends RecyclerView.Adapter<UserInfoAndEventViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
 
@@ -32,14 +32,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
 
-    public EventsAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
+    public UserCompleteInfoAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
     }
 
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserInfoAndEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
         switch (viewType) {
@@ -67,11 +67,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
                 break;
         }
 
-        return new EventViewHolder(view);
+        return new UserInfoAndEventViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder holder, int position) {
+    public void onBindViewHolder(UserInfoAndEventViewHolder holder, int position) {
         if (position == 0) {
             holder.initUserInfo(context, isMyself);
         } else {
@@ -102,7 +102,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     @Override
     public int getItemCount() {
-        return responseList.size();
+        return responseList.size() + 1;
     }
 
     public void addLoadingFooter() {
