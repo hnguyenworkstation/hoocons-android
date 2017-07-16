@@ -120,9 +120,12 @@
         <activity
             android:name=".Activities.UserProfileActivity"
             android:configChanges="orientation"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
         <activity
             android:name=".Activities.NewEventActivity"
             android:configChanges="orientation"
@@ -139,7 +142,11 @@
             android:name=".Activities.ChatActivity"
             android:configChanges="orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
         <activity
             android:name=".Activities.AroundActivity"
             android:configChanges="orientation"

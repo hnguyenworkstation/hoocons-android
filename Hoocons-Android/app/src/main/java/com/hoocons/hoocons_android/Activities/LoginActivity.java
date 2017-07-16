@@ -78,8 +78,6 @@ public class LoginActivity extends BaseActivity {
         SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

@@ -205,8 +205,16 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void finishActivity() {
-        this.finish();
-        overridePendingTransition(R.anim.fix_anim, R.anim.slide_down_out);
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("ChannelActivity", "popping backstack");
+            fm.popBackStack();
+            finish();
+            overridePendingTransition(R.anim.fix_anim, R.anim.slide_down_out);
+        } else {
+            Log.i("ChannelActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
+        }
     }
 
     private void openGooglePlacePicker() {

@@ -51,7 +51,6 @@ dependencies {
     compile project(':giphy_library')
     compile project(':swipecard_library')
     compile project(':emotion_helper')
-
     compile files('libs/rebound-0.3.8.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:customtabs:25.3.1'
@@ -107,6 +106,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-ddb:2.4.5'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile files('libs/jiecaovideoplayer-5.7-sources.jar')
 }
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.google.gms.google-services'
