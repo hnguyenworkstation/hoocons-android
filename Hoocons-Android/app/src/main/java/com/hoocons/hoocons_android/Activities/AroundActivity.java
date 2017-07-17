@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.CustomUI.RippleAnimationLayout;
@@ -15,13 +16,17 @@ import com.hoocons.hoocons_android.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AroundActivity extends BaseActivity {
+public class AroundActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.search_around_view)
     RelativeLayout mSearchAroundView;
     @BindView(R.id.screen_null_around_fragment)
     RelativeLayout mNullScreen;
     @BindView(R.id.search_ripple_anim)
     RippleAnimationLayout mRippleAnimLayout;
+    @BindView(R.id.action_back)
+    ImageButton mActionBack;
+    @BindView(R.id.action_more)
+    ImageButton mActionMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,12 @@ public class AroundActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         runRippleAnimation();
+        addListeners();
+    }
+
+    private void addListeners() {
+        mActionBack.setOnClickListener(this);
+        mActionMore.setOnClickListener(this);
     }
 
     private void runRippleAnimation() {
@@ -70,6 +81,19 @@ public class AroundActivity extends BaseActivity {
         } else {
             Log.i("AroundActivity", "nothing on backstack, calling super");
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_back:
+                onBackPressed();
+                break;
+            case R.id.action_more:
+                break;
+            default:
+                break;
         }
     }
 }
