@@ -2,8 +2,13 @@ package com.hoocons.hoocons_android.Activities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,11 +63,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
 import xyz.klinker.giphy.GiphyActivity;
@@ -105,6 +115,11 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.loading_progress)
     ProgressBar mLoadingProgress;
 
+    @BindView(R.id.video_player)
+    JCVideoPlayerStandard mVideoPlayer;
+    @BindView(R.id.video_layout)
+    LinearLayout mVideoLayout;
+
     // Multiple images View
     @BindView(R.id.new_event_images_list)
     RecyclerView mImagesRecycler;
@@ -118,10 +133,12 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     private boolean isWarningContent = false;
 
     private static final int PLACE_PICKER_REQUEST = 1;
+    private static final int VIDEO_LIBRARY_REQUEST = 5;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private String gifUrl;
+    private String selectedVideoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +162,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         mPrivacyBtn.setOnClickListener(this);
         mAddLocationBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
+        mAddVideoBtn.setOnClickListener(this);
 
         mTextContentInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -279,6 +297,9 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             case R.id.event_privacy:
                 showMode();
                 break;
+            case R.id.event_add_video:
+                showVideoLibrary();
+                break;
             case R.id.event_add_location:
                 openGooglePlacePicker();
                 break;
@@ -292,6 +313,13 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    private void showVideoLibrary() {
+        Intent i = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        i.setType("video/*");
+        startActivityForResult(Intent.createChooser(i, "Select Video"), VIDEO_LIBRARY_REQUEST);
     }
 
     private void postEvent() {
@@ -418,26 +446,51 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                 .into(mSingleContentImage);
     }
 
+    public String getVideoPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if(cursor!=null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        else return null;
+    }
+
+    private void loadVideoLayout() {
+        mVideoPlayer.setUp(selectedVideoPath, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,
+                "Selected Video");
+        mVideoLayout.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Giphy.REQUEST_GIPHY) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Giphy.REQUEST_GIPHY) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
                 loadGif(downloadUrl);
                 updateUIForGifEvent();
-            }
-        } else if (requestCode == PHOTO_PICKER) {
-            if (data != null){
-                final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+            } else if (requestCode == PHOTO_PICKER) {
+                if (data != null){
+                    final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
-                if (images.size() > 1) {
-                    loadPickedImages(images);
-                } else if (images.size() == 1) {
-                    loadPickedSingleImage(images.get(0));
+                    if (images.size() > 1) {
+                        loadPickedImages(images);
+                    } else if (images.size() == 1) {
+                        loadPickedSingleImage(images.get(0));
+                    }
                 }
+            } else if (requestCode == VIDEO_LIBRARY_REQUEST) {
+                if (data != null) {
+                    selectedVideoPath = getVideoPath(data.getData());
+                    if (selectedVideoPath != null) {
+                        loadVideoLayout();
+                    }
+                    Toast.makeText(this, selectedVideoPath, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

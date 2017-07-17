@@ -276,6 +276,8 @@
     <dimen name="profile_header_large_size">64dp</dimen>
     <dimen name="emotion_size">16dip</dimen>
     <dimen name="publish_emotion_size">18dip</dimen>
+    <dimen name="rippleStrokeWidth">2dp</dimen>
+    <dimen name="rippleRadius">64dp</dimen>
 
 
     <!-- Featured Fragment dimens -->

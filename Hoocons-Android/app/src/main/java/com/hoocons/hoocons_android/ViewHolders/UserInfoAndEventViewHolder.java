@@ -26,6 +26,7 @@ import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -37,6 +38,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
  * Created by hungnguyen on 7/15/17.
@@ -85,6 +88,11 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.single_content_progressbar)
     ProgressBar mSingleContentProgressBar;
+
+    /* EVENT WITH VIDEO MEDIA */
+    @Nullable
+    @BindView(R.id.event_video_player)
+    JCVideoPlayerStandard mVideoPlayer;
 
     /* EVENT MULTI MEDIAS */
     @Nullable
@@ -195,7 +203,17 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             loadSingleGif(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
             loadMultipleImages(context, eventResponse.getMedias());
+        } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
+            loadVideoView(context, eventResponse.getMedias().get(0));
         }
+    }
+
+    private void loadVideoView(Context context, MediaResponse mediaResponse) {
+        assert mVideoPlayer != null;
+        mVideoPlayer.setUp(mediaResponse.getUrl(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "Testing");
+        Glide.with(mVideoPlayer.getContext())
+                .load(AppUtils.getDefaultProfileUrl())
+                .into(mVideoPlayer.thumbImageView);
     }
 
     private void loadMultipleImages(Context context, List<MediaResponse> mediaList) {

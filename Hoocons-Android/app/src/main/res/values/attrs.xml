@@ -93,7 +93,24 @@
             <!-- Push object to the end of its container, not changing its size. -->
             <flag name="end" value="0x00800005" />
         </attr>
-
     </declare-styleable>
+
+    <!--used for rippleAnimation -->
+    <!-- here I have defined some properties for ripple and their data types-->
+    <!--which is going to use from xml layout-->
+    <declare-styleable name="RippleAnimation">
+        <attr name="rb_color" format="color" />
+        <attr name="rb_strokeWidth" format="dimension" />
+        <attr name="rb_radius" format="dimension" />
+        <attr name="rb_duration" format="integer" />
+        <attr name="rb_rippleAmount" format="integer" />
+        <attr name="rb_scale" format="float" />
+
+        <attr name="rb_type" format="enum">
+            <enum name="fillRipple" value="0" />
+            <enum name="strokeRipple" value="1" />
+        </attr>
+    </declare-styleable>
+    <!--close declaration -->
 
 </resources>

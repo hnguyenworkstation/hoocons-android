@@ -71,6 +71,7 @@
     <color name="transparent">@android:color/transparent</color>
     <color name="divider">#e6e6e6</color>
     <color name="gray_white">#fff7f7f7</color>
+    <color name="rippleColor">#993498db</color>
 
     <!-- post colors -->
     <color name="event_text_color">#f3f3f3</color>
