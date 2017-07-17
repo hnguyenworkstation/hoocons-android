@@ -44,11 +44,23 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:id="@+id/screen_null_around_fragment">
 
                     <include android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         layout="@layout/screen_empty_around_fragment"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/search_around_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        layout="@layout/search_around_animation_view"/>
+
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
