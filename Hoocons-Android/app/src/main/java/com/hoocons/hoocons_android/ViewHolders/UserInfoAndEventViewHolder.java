@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -27,6 +28,7 @@ import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -164,6 +166,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @BindView(R.id.profile_progress_bar)
     ProgressBar mProfileProgress;
 
+    private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private EventResponse eventResponse;
 
     public UserInfoAndEventViewHolder(View itemView) {
@@ -176,6 +179,18 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
 
         initEventHeader(context);
         initEventContent(context);
+        initEventFooter();
+    }
+
+    private void initEventFooter() {
+        String likeCount = String.valueOf(eventResponse.getLikesCount()) + " likes";
+        String commentCount = String.valueOf(eventResponse.getCommentsCount() + " comments");
+        mLikeCount.setText(likeCount);
+        mCommentCount.setText(commentCount);
+
+        if (eventResponse.getIsLiked()) {
+
+        }
     }
 
     private void initEventHeader(Context context) {

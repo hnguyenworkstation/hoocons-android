@@ -295,7 +295,6 @@ public class UserProfileActivity extends DraggerActivity
         EventBus.getDefault().register(this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
