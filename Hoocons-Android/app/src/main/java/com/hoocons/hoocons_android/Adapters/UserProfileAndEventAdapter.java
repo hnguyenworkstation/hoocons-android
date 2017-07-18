@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.UserInfoAndEventViewHolder;
@@ -31,11 +32,16 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
 
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
+    private EventAdapterListener listener;
 
-    public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList, boolean isMyself) {
+    private final int EXTRA_ITEMS = 1;
+
+    public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList,
+                                      final EventAdapterListener listener, boolean isMyself) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
+        this.listener = listener;
     }
 
     @Override
@@ -75,7 +81,8 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
         if (position == 0) {
             holder.initUserInfo(context, isMyself);
         } else {
-            holder.initViewHolder(context, responseList.get(position - 1));
+            holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
+                    listener, position - EXTRA_ITEMS);
         }
     }
 
@@ -106,9 +113,13 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
         }
     }
 
+    public int getEXTRA_ITEMS() {
+        return EXTRA_ITEMS;
+    }
+
     @Override
     public int getItemCount() {
-        return responseList.size() + 1;
+        return responseList.size() + EXTRA_ITEMS;
     }
 
     public void addLoadingFooter() {

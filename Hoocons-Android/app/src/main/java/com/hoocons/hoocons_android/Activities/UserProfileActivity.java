@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.TagConstraint;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -28,12 +30,15 @@ import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
+import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,7 +50,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class UserProfileActivity extends DraggerActivity
-        implements ObservableScrollViewCallbacks, View.OnClickListener {
+        implements ObservableScrollViewCallbacks, View.OnClickListener,
+        EventAdapterListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
     @BindView(R.id.obs_scrollview)
@@ -104,7 +110,7 @@ public class UserProfileActivity extends DraggerActivity
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
 
         eventResponseList = new ArrayList<>();
-        mEventsAdapter = new UserProfileAndEventAdapter(this, eventResponseList, isMySelf);
+        mEventsAdapter = new UserProfileAndEventAdapter(this, eventResponseList, this, isMySelf);
 
         initGeneralView();
 
@@ -118,6 +124,7 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void initEventRecyclerView() {
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(mEventsAdapter);
@@ -306,5 +313,59 @@ public class UserProfileActivity extends DraggerActivity
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onLikeClicked(int position) {
+        EventResponse response = eventResponseList.get(position);
+        String likeTag = "LIKE-" + String.valueOf(response.getEventId());
+        String unlikeTag = "UNLIKE-" + String.valueOf(response.getEventId());
+
+        if (response.getIsLiked()) {
+            response.setIsLiked(false);
+            try {
+                jobManager.cancelJobsInBackground(null, TagConstraint.ANY, likeTag);
+            } catch (Exception e) {
+                Log.e(TAG, "onLikeClicked: " + e.toString());
+            } finally {
+                jobManager.addJobInBackground(new UnLikeEventJob(unlikeTag, response.getEventId()));
+            }
+        } else {
+            response.setIsLiked(true);
+            jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getEventId()));
+        }
+
+        // mEventsAdapter.notifyItemChanged(position + mEventsAdapter.getEXTRA_ITEMS());
+        mEventsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCommentClicked(int position) {
+
+    }
+
+    @Override
+    public void onShareClicked(View view, int position) {
+
+    }
+
+    @Override
+    public void onPhotoClicked(int position) {
+
+    }
+
+    @Override
+    public void onVideoClicked(int position) {
+
+    }
+
+    @Override
+    public void onWebThumbClicked(int position) {
+
+    }
+
+    @Override
+    public void onEventImageClicked(int eventPos, int imagePos) {
+
     }
 }

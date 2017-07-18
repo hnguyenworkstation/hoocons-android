@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,6 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,15 +26,19 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
+import com.facebook.rebound.BaseSpringSystem;
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringSystem;
+import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
-import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
@@ -166,56 +174,137 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @BindView(R.id.profile_progress_bar)
     ProgressBar mProfileProgress;
 
-    private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
-    private EventResponse eventResponse;
+    private Spring mLikeBtnScaleSpring;
+    private Spring mCommentBtnScaleSpring;
+    private final BaseSpringSystem mSpringSystem = SpringSystem.create();
 
     public UserInfoAndEventViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void initViewHolder(Context context, EventResponse response) {
-        this.eventResponse = response;
-
-        initEventHeader(context);
-        initEventContent(context);
-        initEventFooter();
+    public void initViewHolder(final Context context, final EventResponse response,
+                               final EventAdapterListener listener, final int position) {
+        initEventHeader(context, response);
+        initEventContent(context, response);
+        initEventFooter(context, response);
+        initOnClickListener(listener, position);
     }
 
-    private void initEventFooter() {
+    private void initOnClickListener(final EventAdapterListener listener, final int position) {
+        assert mLikeBtn != null;
+        mLikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onLikeClicked(position);
+            }
+        });
+    }
+
+    private void initEventFooter(Context context, final EventResponse eventResponse) {
+        assert mLikeBtn != null;
+        assert mLikeCount != null;
+        assert mCommentCount != null;
+        assert mCommentBtn != null;
+
+        mCommentBtnScaleSpring = mSpringSystem.createSpring();
+        mCommentBtnScaleSpring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
+
+                mCommentBtn.setScaleX(mappedValue);
+                mCommentBtn.setScaleY(mappedValue);
+            }
+        });
+
         String likeCount = String.valueOf(eventResponse.getLikesCount()) + " likes";
         String commentCount = String.valueOf(eventResponse.getCommentsCount() + " comments");
         mLikeCount.setText(likeCount);
         mCommentCount.setText(commentCount);
 
         if (eventResponse.getIsLiked()) {
-
+            mLikeBtn.setBootstrapBrand(DefaultBootstrapBrand.PRIMARY);
+            mLikeBtn.setBootstrapText(new BootstrapText.Builder(context)
+                    .addFontAwesomeIcon(FontAwesome.FA_THUMBS_UP)
+                    .addText(" " + context.getResources().getText(R.string.liked))
+                    .build());
+        } else {
+            mLikeBtn.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
+            mLikeBtn.setBootstrapText(new BootstrapText.Builder(context)
+                    .addFontAwesomeIcon(FontAwesome.FA_THUMBS_O_UP)
+                    .addText(" " + context.getResources().getText(R.string.like))
+                    .build());
         }
+
+        // Init Spring
+        mLikeBtnScaleSpring = mSpringSystem.createSpring();
+        mLikeBtnScaleSpring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
+
+                mLikeBtn.setScaleX(mappedValue);
+                mLikeBtn.setScaleY(mappedValue);
+            }
+        });
+
+        mLikeBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mLikeBtnScaleSpring.setEndValue(0.3);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mLikeBtnScaleSpring.setEndValue(0);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        mCommentBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mCommentBtnScaleSpring.setEndValue(0.3);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mCommentBtnScaleSpring.setEndValue(0);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
-    private void initEventHeader(Context context) {
+    private void initEventHeader(final Context context, final EventResponse eventResponse) {
         loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl());
         mUserDisplayName.setText(eventResponse.getUserInfo().getDisplayName());
         mTimeFrame.setText(eventResponse.getCreateAt());
     }
 
-    private void initEventContent(Context context) {
+    private void initEventContent(Context context, final EventResponse eventResponse) {
         if (eventResponse.getTextContent() != null) {
             mTextContent.setText(eventResponse.getTextContent());
 
             if (eventResponse.getTextContent().length() < 50) {
-                mTextContent.setTextSize(24);
+                mTextContent.setTextSize(20);
             } else {
-                mTextContent.setTextSize(18);
+                mTextContent.setTextSize(16);
             }
         }
 
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
 
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
-            loadSingleImage(eventResponse.getMedias().get(0).getUrl());
+            loadSingleImage(context, eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
-            loadSingleGif(eventResponse.getMedias().get(0).getUrl());
+            loadSingleGif(context, eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
             loadMultipleImages(eventResponse.getMedias());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
@@ -248,12 +337,12 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         mMultiMediaRecycler.setNestedScrollingEnabled(false);
     }
 
-    private void loadSingleGif(String url) {
-        Glide.with(mSingleMediaView.getContext())
+    private void loadSingleGif(final Context context, String url) {
+        Glide.with(context)
                 .load(url)
                 .asGif()
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .listener(new RequestListener<String, GifDrawable>() {
                     @Override
@@ -270,12 +359,12 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .into(mSingleMediaView);
     }
 
-    private void loadSingleImage(String url) {
+    private void loadSingleImage(final Context context, String url) {
         assert mSingleMediaView != null;
-        Glide.with(mSingleMediaView.getContext())
+        Glide.with(context)
                 .load(url)
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
