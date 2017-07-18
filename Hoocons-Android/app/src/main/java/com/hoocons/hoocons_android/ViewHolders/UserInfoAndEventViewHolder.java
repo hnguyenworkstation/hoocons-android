@@ -121,8 +121,12 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     LinearLayout mCheckinRoot;
 
     @Nullable
-    @BindView(R.id.event_check_in_location)
-    AdjustableImageView mCheckinMapView;
+    @BindView(R.id.event_location_map)
+    AdjustableImageView mLocationMapView;
+
+    @Nullable
+    @BindView(R.id.load_map_view_progress)
+    ProgressBar mLocMapProgress;
 
     @Nullable
     @BindView(R.id.event_check_in_name)
@@ -364,7 +368,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         assert mSingleMediaView != null;
         Glide.with(context)
                 .load(url)
-                .fitCenter()
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .crossFade()

@@ -3,12 +3,16 @@ package com.hoocons.hoocons_android.Activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -38,9 +42,18 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResult;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -53,8 +66,10 @@ import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
 import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
@@ -76,7 +91,9 @@ import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
 import xyz.klinker.giphy.GiphyActivity;
 
-public class NewEventActivity extends BaseActivity implements View.OnClickListener {
+public class NewEventActivity extends BaseActivity
+        implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
     @BindView(R.id.action_back)
     ImageButton mBack;
     @BindView(R.id.action_post)
@@ -124,21 +141,34 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.new_event_images_list)
     RecyclerView mImagesRecycler;
 
+    // Checkin View
+    @BindView(R.id.event_checkin_content)
+    RelativeLayout mCheckinView;
+    @BindView(R.id.event_location_map)
+    AdjustableImageView mLocationMapView;
+    @BindView(R.id.load_map_view_progress)
+    ProgressBar mLocMapProgress;
+    @BindView(R.id.event_check_in_name)
+    TextView mCheckinName;
+    @BindView(R.id.event_check_in_type)
+    TextView mCheckinType;
+
     private ArrayList<String> mImagePaths;
     private ImageLoaderAdapter mImagesAdapter;
-    private final int PHOTO_PICKER = 1;
     private SweetAlertDialog mDialog;
 
     private String mMode = "Public";
     private boolean isWarningContent = false;
 
-    private static final int PLACE_PICKER_REQUEST = 1;
-    private static final int VIDEO_LIBRARY_REQUEST = 5;
+    private final int PHOTO_PICKER = 1;
+    private final int PLACE_PICKER_REQUEST = 2;
+    private final int VIDEO_LIBRARY_REQUEST = 5;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private String gifUrl;
     private String selectedVideoPath;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +177,15 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(AppIndex.API).build();
+        mGoogleApiClient.connect();
+        Toast.makeText(this, "connected", Toast.LENGTH_SHORT).show();
+
         mImagePaths = new ArrayList<>();
 
         initView();
@@ -154,6 +193,7 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         setActivePostButton(false);
+        loadProfileImage(SharedPreferencesManager.getDefault().getUserProfileUrl());
 
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
@@ -184,6 +224,32 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+    }
+
+    private void loadProfileImage(String url) {
+        Glide.with(this)
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model,
+                                               Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(mProfileImage);
     }
 
     private void showAlert() {
@@ -241,7 +307,6 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
             Intent intent = intentBuilder.build(NewEventActivity.this);
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
-
         } catch (GooglePlayServicesRepairableException
                 | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
@@ -487,10 +552,48 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
                     }
                     Toast.makeText(this, selectedVideoPath, Toast.LENGTH_SHORT).show();
                 }
+            } else if (requestCode == PLACE_PICKER_REQUEST) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+
+                initCheckinPlace(place);
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
+    }
+
+    private void initCheckinPlace(Place place) {
+        mCheckinView.setVisibility(View.VISIBLE);
+
+        LatLng ll = place.getLatLng();
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(ll.latitude),
+                String.valueOf(ll.longitude)));
+
+        mCheckinName.setText(place.getName().toString());
+        mCheckinType.setText(place.getAddress().toString());
+    }
+
+    private void loadLocationMapView(String url) {
+        Glide.with(this)
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        mLocMapProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mLocationMapView);
     }
 
 
@@ -530,5 +633,22 @@ public class NewEventActivity extends BaseActivity implements View.OnClickListen
             mWarningButton.setVisibility(View.GONE);
             isWarningContent = false;
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "Cannot load google service", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
+        Toast.makeText(this, "Trying to reconnect to Google", Toast.LENGTH_SHORT).show();
+        mGoogleApiClient.connect();
     }
 }
