@@ -344,6 +344,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
+                .dontAnimate()
                 .listener(new RequestListener<String, GifDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
@@ -365,6 +366,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .load(url)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
                 .crossFade()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override

@@ -88,7 +88,9 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
 
         Glide.with(context)
                 .load(imageUri)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
+                .dontAnimate()
                 .listener(new RequestListener<Uri, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {

@@ -33,8 +33,7 @@
             android:id="@+id/num_cover"
             android:layout_centerInParent="true"
             android:textColor="@color/white"
-            android:textSize="48dp"
-            android:textStyle="bold"
+            android:textSize="@dimen/text_26"
             android:text="+6"/>
     </RelativeLayout>
 </com.hoocons.hoocons_android.CustomUI.SquareImageView>
