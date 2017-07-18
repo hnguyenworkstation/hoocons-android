@@ -43,6 +43,16 @@ public class EventResponse {
     private int commentsCount;
     @SerializedName("is_liked")
     private boolean isLiked;
+    @SerializedName("checkin_longitude")
+    private float checkinLongitude;
+    @SerializedName("checkin_latitude")
+    private float checkinLatitude;
+    @SerializedName("checkin_name")
+    private String checkinName;
+    @SerializedName("checkin_address")
+    private String checkinAddress;
+    @SerializedName("checkin_place_id")
+    private String checkinPlaceId;
 
     public int getEventId() {
         return eventId;
@@ -178,5 +188,65 @@ public class EventResponse {
 
     public void setIsLiked(boolean isLiked) {
         this.isLiked = isLiked;
+    }
+
+    public boolean isOnProfile() {
+        return onProfile;
+    }
+
+    public boolean isEdited() {
+        return isEdited;
+    }
+
+    public void setEdited(boolean edited) {
+        isEdited = edited;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public float getCheckinLongitude() {
+        return checkinLongitude;
+    }
+
+    public void setCheckinLongitude(float checkinLongitude) {
+        this.checkinLongitude = checkinLongitude;
+    }
+
+    public float getCheckinLatitude() {
+        return checkinLatitude;
+    }
+
+    public void setCheckinLatitude(float checkinLatitude) {
+        this.checkinLatitude = checkinLatitude;
+    }
+
+    public String getCheckinName() {
+        return checkinName;
+    }
+
+    public void setCheckinName(String checkinName) {
+        this.checkinName = checkinName;
+    }
+
+    public String getCheckinAddress() {
+        return checkinAddress;
+    }
+
+    public void setCheckinAddress(String checkinAddress) {
+        this.checkinAddress = checkinAddress;
+    }
+
+    public String getCheckinPlaceId() {
+        return checkinPlaceId;
+    }
+
+    public void setCheckinPlaceId(String checkinPlaceId) {
+        this.checkinPlaceId = checkinPlaceId;
     }
 }
