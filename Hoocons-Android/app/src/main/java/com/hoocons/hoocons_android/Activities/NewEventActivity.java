@@ -170,6 +170,12 @@ public class NewEventActivity extends BaseActivity
     private String selectedVideoPath;
     private GoogleApiClient mGoogleApiClient;
 
+    private double checkinLongitude = 0;
+    private double checkinLatitude = 0;
+    private String checkinName;
+    private String checkinAddress;
+    private String checkinPlaceId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -395,13 +401,16 @@ public class NewEventActivity extends BaseActivity
             eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
         } else if (gifUrl != null && gifUrl.length() > 5) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
+        } else if (checkinLatitude != 0 && checkinLongitude != 0) {
+            eventType = AppConstant.EVENT_TYPE_CHECK_IN;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
         PostNewEventJob job =  new PostNewEventJob (
                 mTextContentInput.getText().toString(), gifUrl,
-                mImagePaths, mMode, eventType);
+                mImagePaths, mMode, eventType, checkinLongitude, checkinLatitude,
+                checkinName, checkinAddress, checkinPlaceId);
         jobManager.addJobInBackground(job);
 
         finish();
@@ -565,6 +574,12 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void initCheckinPlace(Place place) {
+        checkinAddress = place.getAddress().toString();
+        checkinName = place.getName().toString();
+        checkinPlaceId = place.getId();
+        checkinLatitude = place.getLatLng().latitude;
+        checkinLongitude = place.getLatLng().longitude;
+
         mCheckinView.setVisibility(View.VISIBLE);
 
         LatLng ll = place.getLatLng();

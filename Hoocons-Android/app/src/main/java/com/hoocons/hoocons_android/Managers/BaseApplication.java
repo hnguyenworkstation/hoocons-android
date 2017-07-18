@@ -165,6 +165,7 @@ public class BaseApplication extends GlobalContext {
     public String getS3AWS() {
         return getResources().getString(R.string.aws_s3);
     }
+
     /**/
     @Subscribe
     public void onEvent(PostEventSuccess task) {

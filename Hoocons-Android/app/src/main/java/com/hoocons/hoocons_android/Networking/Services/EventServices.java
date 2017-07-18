@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -36,4 +38,23 @@ public interface EventServices {
      ********************************** */
     @GET("/event/get/created/start={start}/end={end}/")
     Call<List<EventResponse>> getCreatedEvent(@Path("start") int start, @Path("end") int end);
+
+
+    /**********************************
+     * @Method: POST
+     * @Name: likeEvent
+     * @Argument: VOID
+     * @Purpose: like a new event
+     ********************************** */
+    @POST("/event/like/id={event_id}/")
+    Call<Void> likeEvent(@Path("event_id") int id);
+
+    /**********************************
+     * @Method: DELETE
+     * @Name: unlikeEvent
+     * @Argument: VOID
+     * @Purpose: unlikeEvent a event
+     ********************************** */
+    @DELETE("/event/like/id={event_id}/")
+    Call<Void> unlikeEvent(@Path("event_id") int id);
 }

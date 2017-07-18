@@ -2,7 +2,9 @@ package com.hoocons.hoocons_android.Networking;
 
 import android.util.Log;
 
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.R;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -39,7 +41,7 @@ public class NetContext {
 
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl("http://hcdev.ap-southeast-1.elasticbeanstalk.com/")
+                .baseUrl(BaseApplication.getInstance().getResources().getString(R.string.base_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

@@ -9,18 +9,10 @@ import java.util.List;
  */
 
 public class LocationResponse {
-    @SerializedName("coordinates")
-    private float[] coordinates;
     @SerializedName("srid")
     private int srid;
-
-    public float[] getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(float[] coordinates) {
-        this.coordinates = coordinates;
-    }
+    @SerializedName("coordinates")
+    private double[] coordinates;
 
     public int getSrid() {
         return srid;
@@ -28,5 +20,13 @@ public class LocationResponse {
 
     public void setSrid(int srid) {
         this.srid = srid;
+    }
+
+    public double[] getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(double[] coordinates) {
+        this.coordinates = coordinates;
     }
 }

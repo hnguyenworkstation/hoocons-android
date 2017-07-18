@@ -33,9 +33,9 @@ public class EventInfoRequest {
     @SerializedName("on_profile")
     private boolean isOnProfile;
     @SerializedName("checkin_longitude")
-    private float checkinLongitude;
+    private double checkinLongitude;
     @SerializedName("checkin_latitude")
-    private float checkinLatitude;
+    private double checkinLatitude;
     @SerializedName("checkin_name")
     private String checkinName;
     @SerializedName("checkin_address")
@@ -45,7 +45,9 @@ public class EventInfoRequest {
 
     public EventInfoRequest(String textContent, ArrayList<Media> medias,
                             ArrayList<String> tags, String privacy, long latitude,
-                            long longitude, String eventType, boolean isOnProfile) {
+                            long longitude, String eventType, boolean isOnProfile,
+                            double checkinLongitude, double checkinLatitude, String checkinName,
+                            String checkinAddress, String checkinPlaceId) {
         this.textContent = textContent;
         this.isOnProfile = isOnProfile;
 
@@ -65,7 +67,14 @@ public class EventInfoRequest {
         this.latitude = latitude;
         this.longitude = longitude;
         this.eventType = eventType;
+
+        this.checkinPlaceId = checkinPlaceId;
+        this.checkinName = checkinName;
+        this.checkinAddress = checkinAddress;
+        this.checkinLatitude = checkinLatitude;
+        this.checkinLongitude = checkinLongitude;
     }
+
 
     public String getTextContent() {
         return textContent;
@@ -151,19 +160,19 @@ public class EventInfoRequest {
         isOnProfile = onProfile;
     }
 
-    public float getCheckinLongitude() {
+    public double getCheckinLongitude() {
         return checkinLongitude;
     }
 
-    public void setCheckinLongitude(float checkinLongitude) {
+    public void setCheckinLongitude(double checkinLongitude) {
         this.checkinLongitude = checkinLongitude;
     }
 
-    public float getCheckinLatitude() {
+    public double getCheckinLatitude() {
         return checkinLatitude;
     }
 
-    public void setCheckinLatitude(float checkinLatitude) {
+    public void setCheckinLatitude(double checkinLatitude) {
         this.checkinLatitude = checkinLatitude;
     }
 

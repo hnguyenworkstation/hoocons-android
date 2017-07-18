@@ -47,9 +47,15 @@ public class PostNewEventJob extends Job implements Serializable {
     private String eventType;
     private String gifUrl;
 
-    public PostNewEventJob(String text, String gifUrl,
-                           ArrayList<String> imagePaths,
-                           String privacy, String eventType) {
+    private double chkinLon;
+    private double chkinLat;
+    private String chkinName;
+    private String chkinAddress;
+    private String chkinId;
+
+    public PostNewEventJob(String text, String gifUrl, ArrayList<String> imagePaths,
+                           String privacy, String eventType, double chkinLong, double chkinLat,
+                           String chkinName, String chkinAddress, String chkinId) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
         localId = -System.currentTimeMillis();
         this.textContent = text;
@@ -57,6 +63,12 @@ public class PostNewEventJob extends Job implements Serializable {
         this.privacy = privacy;
         this.eventType = eventType;
         this.gifUrl = gifUrl;
+
+        this.chkinLat = chkinLat;
+        this.chkinId = chkinId;
+        this.chkinLon = chkinLong;
+        this.chkinName = chkinName;
+        this.chkinAddress = chkinAddress;
     }
 
     @Override
@@ -76,7 +88,7 @@ public class PostNewEventJob extends Job implements Serializable {
             }
 
             final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
-                    privacy, 0, 0, eventType, true);
+                    privacy, 0, 0, eventType, true, chkinLon, chkinLat, chkinName, chkinAddress, chkinId);
 
             EventServices services = NetContext.instance.create(EventServices.class);
             services.postEvent(request)

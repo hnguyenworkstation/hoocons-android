@@ -36,6 +36,7 @@ import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
@@ -313,8 +314,40 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             loadMultipleImages(eventResponse.getMedias());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
             loadVideoView(eventResponse.getMedias().get(0));
+        } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
+            loadCheckinMapView(eventResponse);
         }
     }
+
+    private void loadCheckinMapView(final EventResponse eventResponse) {
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[1]),
+                String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[0])));
+
+        mCheckinName.setText(eventResponse.getCheckinName());
+        mCheckinType.setText(eventResponse.getCheckinAddress());
+    }
+
+    private void loadLocationMapView(String url) {
+        Glide.with(mLocationMapView.getContext())
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        mLocMapProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mLocationMapView);
+    }
+
 
     private void loadVideoView(MediaResponse mediaResponse) {
         assert mVideoPlayer != null;

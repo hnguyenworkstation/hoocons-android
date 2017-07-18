@@ -35,18 +35,16 @@ public class EventResponse {
     private String containEvent;
     @SerializedName("location")
     private LocationResponse location;
-    @SerializedName("check_in_location")
-    private String checkInLocation;
+    @SerializedName("checkin_location")
+    private LocationResponse checkInLocation;
     @SerializedName("likes_count")
     private int likesCount;
     @SerializedName("comments_count")
     private int commentsCount;
+    @SerializedName("reports_count")
+    private int reportsCount;
     @SerializedName("is_liked")
     private boolean isLiked;
-    @SerializedName("checkin_longitude")
-    private float checkinLongitude;
-    @SerializedName("checkin_latitude")
-    private float checkinLatitude;
     @SerializedName("checkin_name")
     private String checkinName;
     @SerializedName("checkin_address")
@@ -158,11 +156,11 @@ public class EventResponse {
         this.location = location;
     }
 
-    public String getCheckInLocation() {
+    public LocationResponse getCheckInLocation() {
         return checkInLocation;
     }
 
-    public void setCheckInLocation(String checkInLocation) {
+    public void LocationResponse(LocationResponse checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 
@@ -210,22 +208,6 @@ public class EventResponse {
         isLiked = liked;
     }
 
-    public float getCheckinLongitude() {
-        return checkinLongitude;
-    }
-
-    public void setCheckinLongitude(float checkinLongitude) {
-        this.checkinLongitude = checkinLongitude;
-    }
-
-    public float getCheckinLatitude() {
-        return checkinLatitude;
-    }
-
-    public void setCheckinLatitude(float checkinLatitude) {
-        this.checkinLatitude = checkinLatitude;
-    }
-
     public String getCheckinName() {
         return checkinName;
     }
@@ -248,5 +230,17 @@ public class EventResponse {
 
     public void setCheckinPlaceId(String checkinPlaceId) {
         this.checkinPlaceId = checkinPlaceId;
+    }
+
+    public void setCheckInLocation(LocationResponse checkInLocation) {
+        this.checkInLocation = checkInLocation;
+    }
+
+    public int getReportsCount() {
+        return reportsCount;
+    }
+
+    public void setReportsCount(int reportsCount) {
+        this.reportsCount = reportsCount;
     }
 }
