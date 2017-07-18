@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class SemiUserInfoResponse {
     @SerializedName("user")
-    private int user;
+    private int userId;
     @SerializedName("display_name")
     private String displayName;
     @SerializedName("nickname")
@@ -23,11 +23,11 @@ public class SemiUserInfoResponse {
     private boolean isSharingLocation;
 
     public int getUser() {
-        return user;
+        return userId;
     }
 
     public void setUser(int user) {
-        this.user = user;
+        this.userId = user;
     }
 
     public String getDisplayName() {

@@ -20,4 +20,6 @@ public interface EventAdapterListener {
     void onWebThumbClicked(int position);
 
     void onEventImageClicked(int eventPos, int imagePos);
+
+    void onOptionClicked(View view, final int position);
 }

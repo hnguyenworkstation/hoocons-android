@@ -4,8 +4,10 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,6 +34,7 @@ import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
@@ -95,6 +98,7 @@ public class UserProfileActivity extends DraggerActivity
     private List<EventResponse> eventResponseList;
     private final int EVENT_PACK = 15;
     private boolean canLoadMore = true;
+    private PopupMenu eventPopup;
 
     private UserProfileAndEventAdapter mEventsAdapter;
 
@@ -323,6 +327,7 @@ public class UserProfileActivity extends DraggerActivity
 
         if (response.getIsLiked()) {
             response.setIsLiked(false);
+            response.setLikesCount(response.getLikesCount() - 1);
             try {
                 jobManager.cancelJobsInBackground(null, TagConstraint.ANY, likeTag);
             } catch (Exception e) {
@@ -332,6 +337,7 @@ public class UserProfileActivity extends DraggerActivity
             }
         } else {
             response.setIsLiked(true);
+            response.setLikesCount(response.getLikesCount() + 1);
             jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getEventId()));
         }
 
@@ -367,5 +373,32 @@ public class UserProfileActivity extends DraggerActivity
     @Override
     public void onEventImageClicked(int eventPos, int imagePos) {
 
+    }
+
+    @Override
+    public void onOptionClicked(View view, final int position) {
+        EventResponse response = eventResponseList.get(position);
+        eventPopup = new PopupMenu(UserProfileActivity.this, view);
+
+        if (response.getUserInfo().getUser() == SharedPreferencesManager.getDefault().getUserId()) {
+            // This event belong to me
+            eventPopup.inflate(R.menu.own_event_action);
+        }
+
+        eventPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.share_event:
+                        return true;
+                    case R.id.delete_event:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        eventPopup.show();
     }
 }

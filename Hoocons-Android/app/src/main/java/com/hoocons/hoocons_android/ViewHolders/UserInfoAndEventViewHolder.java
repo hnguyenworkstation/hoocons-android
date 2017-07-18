@@ -204,6 +204,22 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 listener.onLikeClicked(position);
             }
         });
+        
+        assert mCommentBtn != null;
+        mCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onCommentClicked(position);
+            }
+        });
+
+        assert mHeaderMoreButton != null;
+        mHeaderMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onOptionClicked(mHeaderMoreButton, position);
+            }
+        });
     }
 
     private void initEventFooter(Context context, final EventResponse eventResponse) {
