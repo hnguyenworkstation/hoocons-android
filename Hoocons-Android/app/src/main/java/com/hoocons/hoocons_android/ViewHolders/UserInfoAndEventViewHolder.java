@@ -83,7 +83,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
 
     @Nullable
     @BindView(R.id.event_single_media_content)
-    AdjustableImageView mSingleMediaView;
+    ImageView mSingleMediaView;
 
     @Nullable
     @BindView(R.id.single_content_progressbar)
@@ -202,13 +202,13 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
             loadSingleGif(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
-            loadMultipleImages(context, eventResponse.getMedias());
+            loadMultipleImages(eventResponse.getMedias());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
-            loadVideoView(context, eventResponse.getMedias().get(0));
+            loadVideoView(eventResponse.getMedias().get(0));
         }
     }
 
-    private void loadVideoView(Context context, MediaResponse mediaResponse) {
+    private void loadVideoView(MediaResponse mediaResponse) {
         assert mVideoPlayer != null;
         mVideoPlayer.setUp(mediaResponse.getUrl(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "Testing");
         Glide.with(mVideoPlayer.getContext())
@@ -216,15 +216,15 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .into(mVideoPlayer.thumbImageView);
     }
 
-    private void loadMultipleImages(Context context, List<MediaResponse> mediaList) {
-        mMultiImageAdapter = new MediaImagesAdapter(context, mediaList);
-
+    private void loadMultipleImages(List<MediaResponse> mediaList) {
         assert mMultiMediaRecycler != null;
+        mMultiImageAdapter = new MediaImagesAdapter(mMultiMediaRecycler.getContext(), mediaList);
+
         if (mediaList.size() % 2 == 0 && mediaList.size() <= 4) {
-            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 2,
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(mMultiMediaRecycler.getContext(), 2,
                     LinearLayoutManager.VERTICAL, false));
         } else {
-            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 3,
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(mMultiMediaRecycler.getContext(), 3,
                     LinearLayoutManager.VERTICAL, false));
         }
 
@@ -259,7 +259,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         assert mSingleMediaView != null;
         Glide.with(mSingleMediaView.getContext())
                 .load(url)
-                .centerCrop()
+                .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
                 .listener(new RequestListener<String, GlideDrawable>() {

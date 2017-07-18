@@ -76,7 +76,7 @@ public class PostNewEventJob extends Job implements Serializable {
             }
 
             final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
-                    privacy, 0, 0, eventType);
+                    privacy, 0, 0, eventType, true);
 
             EventServices services = NetContext.instance.create(EventServices.class);
             services.postEvent(request)

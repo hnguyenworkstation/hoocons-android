@@ -27,7 +27,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_12"
+            android:layout_marginEnd="@dimen/margin_8"
             android:textColor="@color/black"
             android:id="@+id/event_text_content"/>
 
@@ -35,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_checkin"
-            android:layout_margin="@dimen/margin_8"
+            android:layout_margin="@dimen/margin_12"
             android:orientation="vertical">
 
             <include layout="@layout/event_checkin_content"

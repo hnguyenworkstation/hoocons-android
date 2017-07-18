@@ -26,11 +26,18 @@ public class EventInfoRequest {
     private final int srid = 4326;
     @SerializedName("event_type")
     private String eventType;
+    @SerializedName("meetup_id")
+    private int meetUpId;
+    @SerializedName("channel_id")
+    private int channelId;
+    @SerializedName("on_profile")
+    private boolean isOnProfile;
 
     public EventInfoRequest(String textContent, ArrayList<Media> medias,
                             ArrayList<String> tags, String privacy, long latitude,
-                            long longitude, String eventType) {
+                            long longitude, String eventType, boolean isOnProfile) {
         this.textContent = textContent;
+        this.isOnProfile = isOnProfile;
 
         if (medias != null) {
             this.medias = medias;
@@ -98,4 +105,31 @@ public class EventInfoRequest {
         this.longitude = longitude;
     }
 
+    public int getSrid() {
+        return srid;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public int getMeetUpId() {
+        return meetUpId;
+    }
+
+    public void setMeetUpId(int meetUpId) {
+        this.meetUpId = meetUpId;
+    }
+
+    public int getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
+    }
 }

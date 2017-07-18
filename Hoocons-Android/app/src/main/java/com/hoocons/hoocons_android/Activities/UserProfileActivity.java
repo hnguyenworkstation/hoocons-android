@@ -276,6 +276,26 @@ public class UserProfileActivity extends DraggerActivity
         mEventsAdapter.notifyDataSetChanged();
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        EventBus.getDefault().register(this);
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

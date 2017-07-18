@@ -3,13 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="6dp"
+    android:padding="@dimen/margin_12"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_marginStart="@dimen/margin_8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -23,27 +22,26 @@
             android:id="@+id/event_likebtn"
             style="@style/wrapping_button"
             android:textSize="@dimen/text_12"
-            app:bootstrapText=" {fa_thumb_o_up} Like"
-            app:bootstrapBrand="secondary"
+            app:bootstrapSize="md"
+            app:bootstrapText=" {fa_thumbs_up} Like"
+            app:bootstrapBrand="regular"
             app:buttonMode="regular"
             app:showOutline="true"
             app:roundedCorners="true"/>
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/margin_8"
             android:id="@+id/event_commentbtn"
             style="@style/wrapping_button"
             android:textSize="@dimen/text_14"
+            app:bootstrapSize="md"
             app:bootstrapText=" {fa_mail_reply} Comment"
-            app:bootstrapBrand="secondary"
+            app:bootstrapBrand="regular"
             app:buttonMode="regular"
             app:showOutline="true"
             app:roundedCorners="true"/>
-
     </LinearLayout>
 
     <LinearLayout

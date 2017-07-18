@@ -8,7 +8,7 @@
     android:maxHeight="@dimen/postfeed_max_image_height"
     android:background="@color/gray_white">
 
-    <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+    <ImageView
         android:id="@+id/event_single_media_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

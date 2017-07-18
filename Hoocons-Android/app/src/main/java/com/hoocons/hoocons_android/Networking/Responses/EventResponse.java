@@ -11,8 +11,10 @@ import java.util.List;
 public class EventResponse {
     @SerializedName("event_id")
     private int eventId;
+    @SerializedName("on_profile")
+    private boolean onProfile;
     @SerializedName("user_info")
-    private UserInfo userInfo;
+    private SemiUserInfoResponse userInfo;
     @SerializedName("text_content")
     private String textContent;
     @SerializedName("event_type")
@@ -29,20 +31,18 @@ public class EventResponse {
     private List<MediaResponse> medias;
     @SerializedName("tags")
     private List<TagResponse> tags;
+    @SerializedName("contain_event")
+    private String containEvent;
     @SerializedName("location")
     private LocationResponse location;
     @SerializedName("check_in_location")
-    private LocationResponse checkInLocation;
+    private String checkInLocation;
     @SerializedName("likes_count")
     private int likesCount;
     @SerializedName("comments_count")
     private int commentsCount;
     @SerializedName("is_liked")
     private boolean isLiked;
-
-    public EventResponse() {
-
-    }
 
     public int getEventId() {
         return eventId;
@@ -52,11 +52,19 @@ public class EventResponse {
         this.eventId = eventId;
     }
 
-    public UserInfo getUserInfo() {
+    public boolean getOnProfile() {
+        return onProfile;
+    }
+
+    public void setOnProfile(boolean onProfile) {
+        this.onProfile = onProfile;
+    }
+
+    public SemiUserInfoResponse getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
+    public void setUserInfo(SemiUserInfoResponse userInfo) {
         this.userInfo = userInfo;
     }
 
@@ -124,6 +132,14 @@ public class EventResponse {
         this.tags = tags;
     }
 
+    public String getContainEvent() {
+        return containEvent;
+    }
+
+    public void setContainEvent(String containEvent) {
+        this.containEvent = containEvent;
+    }
+
     public LocationResponse getLocation() {
         return location;
     }
@@ -132,11 +148,11 @@ public class EventResponse {
         this.location = location;
     }
 
-    public LocationResponse getCheckInLocation() {
+    public String getCheckInLocation() {
         return checkInLocation;
     }
 
-    public void setCheckInLocation(LocationResponse checkInLocation) {
+    public void setCheckInLocation(String checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 
@@ -162,78 +178,5 @@ public class EventResponse {
 
     public void setIsLiked(boolean isLiked) {
         this.isLiked = isLiked;
-    }
-
-    public static class UserInfo {
-        @SerializedName("user")
-        private int user;
-        @SerializedName("display_name")
-        private String displayName;
-        @SerializedName("nickname")
-        private String nickname;
-        @SerializedName("profile_url")
-        private String profileUrl;
-        @SerializedName("last_action_at")
-        private String lastActionAt;
-        @SerializedName("location")
-        private String location;
-        @SerializedName("is_sharing_location")
-        private boolean isSharingLocation;
-
-        public int getUser() {
-            return user;
-        }
-
-        public void setUser(int user) {
-            this.user = user;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public String getProfileUrl() {
-            return profileUrl;
-        }
-
-        public void setProfileUrl(String profileUrl) {
-            this.profileUrl = profileUrl;
-        }
-
-        public String getLastActionAt() {
-            return lastActionAt;
-        }
-
-        public void setLastActionAt(String lastActionAt) {
-            this.lastActionAt = lastActionAt;
-        }
-
-        public String getLocation() {
-            return location;
-        }
-
-        public void setLocation(String location) {
-            this.location = location;
-        }
-
-        public boolean getIsSharingLocation() {
-            return isSharingLocation;
-        }
-
-        public void setIsSharingLocation(boolean isSharingLocation) {
-            this.isSharingLocation = isSharingLocation;
-        }
     }
 }
