@@ -1,61 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_8">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:layout_margin="@dimen/margin_8"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black_alpha_12"
-            android:id="@+id/mapview">
+            android:layout_height="wrap_content">
 
-            <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/postfeed_image_height"
-                android:id="@+id/event_location_map"
-                android:scaleType="centerCrop"/>
-
-            <ProgressBar
-                android:id="@+id/load_map_view_progress"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerInParent="true"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_below="@+id/mapview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/gray_white">
-
-            <TextView
-                android:layout_margin="@dimen/margin_8"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/event_check_in_name"
-                android:textSize="@dimen/text_18"
-                android:textStyle="bold"
-                android:text="Phan Thiet, Binh Thuan"/>
+                android:background="@color/black_alpha_12"
+                android:id="@+id/mapview">
 
-            <TextView
-                android:layout_marginEnd="@dimen/margin_8"
-                android:layout_marginStart="@dimen/margin_8"
-                android:layout_marginBottom="@dimen/margin_4"
+                <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/postfeed_image_height"
+                    android:id="@+id/event_location_map"
+                    android:scaleType="centerCrop"/>
+
+                <ProgressBar
+                    android:id="@+id/load_map_view_progress"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/mapview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/event_check_in_type"
-                android:layout_below="@+id/event_check_in_name"
-                android:textSize="@dimen/text_14"
-                android:text="An choi"/>
+                android:background="@color/gray_white">
 
+                <TextView
+                    android:layout_margin="@dimen/margin_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/event_check_in_name"
+                    android:textSize="@dimen/text_18"
+                    android:textStyle="bold"
+                    android:text="Phan Thiet, Binh Thuan"/>
+
+                <TextView
+                    android:layout_marginEnd="@dimen/margin_8"
+                    android:layout_marginStart="@dimen/margin_8"
+                    android:layout_marginBottom="@dimen/margin_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/event_check_in_type"
+                    android:layout_below="@+id/event_check_in_name"
+                    android:textSize="@dimen/text_14"
+                    android:text="An choi"/>
+
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

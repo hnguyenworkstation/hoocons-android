@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by hungnguyen on 7/15/17.
  */
-@Parcel
 public class EventResponse {
     @SerializedName("event_id")
     private int eventId;
