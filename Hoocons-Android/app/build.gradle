@@ -104,6 +104,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.5'
     compile 'com.amazonaws:aws-android-sdk-ddb:2.4.5'
     compile 'org.parceler:parceler-api:1.1.9'
+    compile 'com.vstechlab.easyfonts:easyfonts:1.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'org.parceler:parceler:1.1.9'
