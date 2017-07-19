@@ -56,6 +56,7 @@
     <dimen name="chat_footer_dimen">30dp</dimen>
     <dimen name="custom_toolbar_height">48dp</dimen>
     <dimen name="custom_toolbar_text_size">20sp</dimen>
+    <dimen name="custom_toolbar_small_text_size">14sp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_4">4dp</dimen>
