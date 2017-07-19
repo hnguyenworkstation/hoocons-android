@@ -57,6 +57,8 @@ public class UserProfileActivity extends DraggerActivity
         EventAdapterListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
+    @BindView(R.id.small_profile)
+    RelativeLayout mSmallProfile;
     @BindView(R.id.obs_scrollview)
     ObservableRecyclerView mRecyclerView;
 
@@ -75,6 +77,8 @@ public class UserProfileActivity extends DraggerActivity
     @BindView(R.id.small_profile_progress_bar)
     ProgressBar mSmallProfileProgress;
 
+    @BindView(R.id.linear)
+    View mLinear;
     @BindView(R.id.user_display_name)
     TextView mActionBarDisplayName;
 
@@ -129,6 +133,7 @@ public class UserProfileActivity extends DraggerActivity
 
     private void initEventRecyclerView() {
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(mEventsAdapter);
@@ -238,9 +243,15 @@ public class UserProfileActivity extends DraggerActivity
         Log.i(TAG, String.format("onScrollChanged: %s", String.valueOf(scrollY)));
 
         if (scrollY >= 480) {
-            mCustomToolbar.setVisibility(View.VISIBLE);
+            mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.white));
+            mSmallProfile.setVisibility(View.VISIBLE);
+            mActionBarDisplayName.setVisibility(View.VISIBLE);
+            mLinear.setVisibility(View.VISIBLE);
         } else {
-            mCustomToolbar.setVisibility(View.GONE);
+            mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+            mSmallProfile.setVisibility(View.GONE);
+            mLinear.setVisibility(View.GONE);
+            mActionBarDisplayName.setVisibility(View.GONE);
         }
     }
 

@@ -204,7 +204,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 listener.onLikeClicked(position);
             }
         });
-        
+
         assert mCommentBtn != null;
         mCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override

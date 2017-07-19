@@ -34,15 +34,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/custom_toolbar"
-                    android:background="@color/white"
-                    android:visibility="gone"
+                    android:background="@color/transparent"
                     android:layout_alignParentTop="true">
                     <include layout="@layout/custom_profile_actionbar"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:focusable="false">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
