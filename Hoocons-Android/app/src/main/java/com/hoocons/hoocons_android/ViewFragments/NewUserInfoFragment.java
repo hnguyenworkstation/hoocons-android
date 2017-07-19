@@ -23,7 +23,7 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
+import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.FieldAvailableRequest;
@@ -239,11 +239,11 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
         Glide.with(getContext())
                 .load(image)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new GlideCircleTransformation(getContext()))
-                .placeholder(R.drawable.ab_progress)
-                .error(R.drawable.image_holder)
-                .crossFade()
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions.placeholderOf(R.drawable.ab_progress))
+                .apply(RequestOptions.errorOf(R.drawable.image_holder))
                 .into(mProfileImgView);
     }
 

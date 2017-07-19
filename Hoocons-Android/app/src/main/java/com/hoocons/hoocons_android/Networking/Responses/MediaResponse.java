@@ -13,6 +13,8 @@ public class MediaResponse {
     private String url;
     @SerializedName("type")
     private String type;
+    @SerializedName("thumbnail")
+    private String thumbNail;
 
     public int getId() {
         return id;
@@ -36,5 +38,13 @@ public class MediaResponse {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getThumbNail() {
+        return thumbNail;
+    }
+
+    public void setThumbNail(String thumbNail) {
+        this.thumbNail = thumbNail;
     }
 }

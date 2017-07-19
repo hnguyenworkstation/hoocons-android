@@ -1,6 +1,9 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,12 +22,13 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
-import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
@@ -33,12 +37,10 @@ import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
-import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
-import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
@@ -182,6 +184,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     private Spring mLikeBtnScaleSpring;
     private Spring mCommentBtnScaleSpring;
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
+    private GifDrawable gifDrawable;
 
     public UserInfoAndEventViewHolder(View itemView) {
         super(itemView);
@@ -346,24 +349,22 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     private void loadLocationMapView(String url) {
         Glide.with(mLocationMapView.getContext())
                 .load(url)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         mLocMapProgress.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .into(mLocationMapView);
     }
-
 
     private void loadVideoView(MediaResponse mediaResponse) {
         assert mVideoPlayer != null;
@@ -390,50 +391,69 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         mMultiMediaRecycler.setNestedScrollingEnabled(false);
     }
 
-    private void loadSingleGif(final Context context, String url) {
+    private void loadSingleGif(final Context context, final String url) {
+        assert mSingleMediaView != null;
         Glide.with(context)
                 .load(url)
-                .asGif()
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade()
-                .dontAnimate()
-                .listener(new RequestListener<String, GifDrawable>() {
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                                   DataSource dataSource, boolean isFirstResource) {
+                        if (resource instanceof GifDrawable) {
+                            gifDrawable = (GifDrawable) resource;
+                        } else {
+                            gifDrawable = null;
+                        }
+
+                        assert mSingleContentProgressBar != null;
                         mSingleContentProgressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .into(mSingleMediaView);
+
+        mSingleMediaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("giphy_url", url);
+                clipboard.setPrimaryClip(clip);
+
+                if (gifDrawable != null) {
+                    if (gifDrawable.isRunning()) {
+                        gifDrawable.stop();
+                    } else {
+                        gifDrawable.start();
+                    }
+                }
+            }
+        });
+
     }
 
     private void loadSingleImage(final Context context, String url) {
         assert mSingleMediaView != null;
         Glide.with(context)
                 .load(url)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .crossFade()
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         assert mSingleContentProgressBar != null;
                         mSingleContentProgressBar.setVisibility(View.GONE);
                         return false;
@@ -459,24 +479,20 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void loadProfileImage(Context context, String url) {
+        assert mProfileImage != null;
         Glide.with(context)
                 .load(url)
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         mProfileImage.setVisibility(View.VISIBLE);
                         assert mProfileProgress != null;
                         mProfileProgress.setVisibility(View.GONE);
@@ -489,10 +505,9 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     private void loadUserProfileImage(Context context, String url) {
         Glide.with(context)
                 .load(url)
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .transform(new GlideCircleTransformation(context))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.circleCropTransform())
                 .into(mUserProfileImage);
     }
 }

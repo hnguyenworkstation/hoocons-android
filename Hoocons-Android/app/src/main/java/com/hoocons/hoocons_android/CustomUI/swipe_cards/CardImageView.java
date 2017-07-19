@@ -2,10 +2,10 @@ package com.hoocons.hoocons_android.CustomUI.swipe_cards;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.makeramen.roundedimageview.RoundedDrawable;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -27,12 +27,9 @@ public class CardImageView extends RoundedImageView {
     @Override
     public void setImageDrawable(Drawable drawable) {
         Drawable tempDrawable = drawable;
-        if (drawable instanceof GlideBitmapDrawable) {
+        if (drawable instanceof BitmapDrawable) {
             isLoadImgSucc = true;
-            /*if (mUser != null) {
-                mUser.setEndLoadTimeAnchor();
-            }*/
-            tempDrawable = new RoundedDrawable(((GlideBitmapDrawable) drawable).getBitmap());
+            tempDrawable = new RoundedDrawable(((BitmapDrawable) drawable).getBitmap());
         }
         super.setImageDrawable(tempDrawable);
     }
@@ -40,12 +37,6 @@ public class CardImageView extends RoundedImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
-        /*if (GraphicsUtils.isValidBitmap(bm)) {
-            isLoadImgSucc = true;
-            if (mUser != null) {
-                mUser.setEndLoadTimeAnchor();
-            }
-        }*/
     }
 
     public void setUser(CardEntity user) {

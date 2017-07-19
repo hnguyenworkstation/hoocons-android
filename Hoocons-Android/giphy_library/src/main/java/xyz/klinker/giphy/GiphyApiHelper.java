@@ -77,7 +77,7 @@ public class GiphyApiHelper {
 
         @Override
         protected String buildSearchUrl(String query) throws UnsupportedEncodingException {
-            return "http://api.giphy.com/v1/gifs/trending?api_key=" + getApiKey();
+            return "http://api.giphy.com/v1/gifs/trending?limit=200&api_key=" + getApiKey();
         }
     }
 
@@ -104,12 +104,10 @@ public class GiphyApiHelper {
             List<Gif> gifList = new ArrayList<>();
 
             try {
-                // create the connection
                 URL urlToRequest = new URL(buildSearchUrl(query));
                 HttpURLConnection urlConnection = (HttpURLConnection)
                         urlToRequest.openConnection();
 
-                // create JSON object from content
                 InputStream in = new BufferedInputStream(
                         urlConnection.getInputStream());
                 JSONObject root = new JSONObject(getResponseText(in));
@@ -209,7 +207,7 @@ public class GiphyApiHelper {
 
 
         Gif(String previewImage, String gifUrl, String mp4Url) {
-            this.previewImage = URLDecoder.decode(previewImage);
+            this.previewImage = URLDecoder  .decode(previewImage);
             this.gifUrl = URLDecoder.decode(gifUrl);
             this.mp4Url = URLDecoder.decode(mp4Url);
         }

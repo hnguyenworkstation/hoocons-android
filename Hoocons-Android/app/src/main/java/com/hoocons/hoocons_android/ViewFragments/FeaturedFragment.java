@@ -11,24 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
-import com.hoocons.hoocons_android.Activities.NewMeetingActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
-import com.hoocons.hoocons_android.CustomUI.GlideCircleTransformation;
-import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
@@ -126,10 +118,11 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     private void loadImageHeader() {
         Glide.with(this)
                 .load(SharedPreferencesManager.getDefault().getUserProfileUrl())
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .transform(new GlideCircleTransformation(getContext()))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions.placeholderOf(R.drawable.ab_progress))
+                .apply(RequestOptions.errorOf(R.drawable.image_holder))
                 .into(mImageHeader);
     }
 

@@ -59,9 +59,6 @@
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
         <meta-data
-            android:name="com.hoocons.hoocons_android.CustomUI.GlideConfiguration"
-            android:value="GlideModule" />
-        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_key" />
 

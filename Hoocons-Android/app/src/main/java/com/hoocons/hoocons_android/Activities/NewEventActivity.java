@@ -2,13 +2,13 @@ package com.hoocons.hoocons_android.Activities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.ContentResolver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -37,22 +37,20 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
-import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,7 +58,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
-import com.hoocons.hoocons_android.EventBus.LoadedGifUriRequest;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
 import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
@@ -78,14 +75,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import me.iwf.photopicker.PhotoPicker;
 import xyz.klinker.giphy.Giphy;
@@ -175,6 +169,7 @@ public class NewEventActivity extends BaseActivity
     private String checkinName;
     private String checkinAddress;
     private String checkinPlaceId;
+    private GifDrawable gifDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,26 +230,8 @@ public class NewEventActivity extends BaseActivity
     private void loadProfileImage(String url) {
         Glide.with(this)
                 .load(url)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .crossFade()
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        return false;
-                    }
-                })
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
                 .into(mProfileImage);
     }
 
@@ -470,27 +447,51 @@ public class NewEventActivity extends BaseActivity
         mAddSoundBtn.setVisibility(View.VISIBLE);
     }
 
-    private void loadGif(String url) {
+    private void loadGif(final String url) {
         gifUrl = url;
+
         Glide.with(this)
-                .load(url)
-                .asGif()
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .listener(new RequestListener<String, GifDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
-                        return false;
+            .load(url)
+            .apply(RequestOptions.centerCropTransform())
+            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+            .listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                            Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                               DataSource dataSource, boolean isFirstResource) {
+                    if (resource instanceof GifDrawable) {
+                        gifDrawable = (GifDrawable) resource;
+                    } else {
+                        gifDrawable = null;
                     }
 
-                    @Override
-                    public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        mLoadingProgress.setVisibility(View.GONE);
-                        return false;
+                    mLoadingProgress.setVisibility(View.GONE);
+                    return false;
+                }
+            })
+            .into(mSingleContentImage);
+
+        mSingleContentImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("giphy_url", url);
+                clipboard.setPrimaryClip(clip);
+
+                if (gifDrawable != null) {
+                    if (gifDrawable.isRunning()) {
+                        gifDrawable.stop();
+                    } else {
+                        gifDrawable.start();
                     }
-                })
-                .into(mSingleContentImage);
+                }
+            }
+        });
     }
 
     private void loadPickedSingleImage(String path) {
@@ -501,17 +502,17 @@ public class NewEventActivity extends BaseActivity
 
         Glide.with(this)
                 .load(new File(path))
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .listener(new RequestListener<File, GlideDrawable>() {
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, File model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, File model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         mLoadingProgress.setVisibility(View.GONE);
                         return false;
                     }
@@ -593,17 +594,17 @@ public class NewEventActivity extends BaseActivity
     private void loadLocationMapView(String url) {
         Glide.with(this)
                 .load(url)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         mLocMapProgress.setVisibility(View.GONE);
                         return false;
                     }

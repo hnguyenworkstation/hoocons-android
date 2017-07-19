@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by hungnguyen on 6/16/17.
  */
-@Parcel
 public class UserInfoResponse {
     @SerializedName("user")
     private int userPK;
