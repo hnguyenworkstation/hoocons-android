@@ -121,6 +121,7 @@
     <string name="liked">Liked</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
+    <string name="reply">Reply</string>
 
     <!-- Map Picker Activity -->
     <string name="place_details">

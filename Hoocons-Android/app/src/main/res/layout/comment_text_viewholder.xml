@@ -17,8 +17,8 @@
         <ImageView
             android:layout_marginEnd="@dimen/margin_4"
             android:layout_marginStart="@dimen/margin_4"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/comment_profile_size"
+            android:layout_height="@dimen/comment_profile_size"
             android:src="@drawable/logo_image"
             android:id="@+id/comment_userlogo"
             android:layout_alignParentStart="true"/>
@@ -48,24 +48,24 @@
                 android:ellipsize="end"
                 android:text="I am honored to be with you today at your commencement from one of the finest universities in the world. I never graduated from college. Truth be told, this is the closest I’ve ever gotten to a college graduation. Today I want to tell you three stories from my life. That’s it. No big deal. Just three stories."
                 />
+
+
+            <RelativeLayout
+                android:layout_margin="@dimen/margin_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_footer"
+                android:layout_below="@id/comment_content">
+                <include layout="@layout/comment_footer"/>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_margin="@dimen/margin_4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/comment_footer"
-        android:layout_below="@id/comment_content_wrapper">
-
-        <include layout="@layout/comment_footer"/>
-    </RelativeLayout>
-
     <View
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="@dimen/comment_profile_size"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@+id/comment_footer"
+        android:layout_below="@+id/comment_content_wrapper"
         android:background="@color/gray_alpha"
         android:layout_marginTop="2dp"/>
 </RelativeLayout>
