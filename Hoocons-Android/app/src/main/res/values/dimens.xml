@@ -184,7 +184,7 @@
     <dimen name="comment_time_text">12sp</dimen>
     <dimen name="comment_icon_size">18dp</dimen>
     <dimen name="comment_like_textsize">12sp</dimen>
-    <dimen name="comment_seemore_textsize">12dp</dimen>
+    <dimen name="comment_seemore_textsize">12sp</dimen>
     <dimen name="comment_button_height">20dp</dimen>
 
     <!-- User Card Grid Layout -->

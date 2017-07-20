@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:id="@+id/comment_layout"
+    android:background="@color/gray_white"
+    android:layout_margin="@dimen/comment_layout_margin"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_content_wrapper">
+
+        <ImageView
+            android:layout_marginEnd="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/logo_image"
+            android:id="@+id/comment_userlogo"
+            android:layout_alignParentStart="true"/>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment_body"
+            android:layout_toEndOf="@id/comment_userlogo">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_header">
+                <include layout="@layout/comment_header"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_content"
+                android:layout_below="@id/comment_header"
+                android:layout_marginStart="@dimen/comment_layout_start"
+                android:maxLines="5"
+                android:textColor="@color/black"
+                android:ellipsize="end"
+                android:text="I am honored to be with you today at your commencement from one of the finest universities in the world. I never graduated from college. Truth be told, this is the closest I’ve ever gotten to a college graduation. Today I want to tell you three stories from my life. That’s it. No big deal. Just three stories."
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_margin="@dimen/margin_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_footer"
+        android:layout_below="@id/comment_content_wrapper">
+
+        <include layout="@layout/comment_footer"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_marginStart="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/comment_footer"
+        android:background="@color/gray_alpha"
+        android:layout_marginTop="2dp"/>
+</RelativeLayout>
