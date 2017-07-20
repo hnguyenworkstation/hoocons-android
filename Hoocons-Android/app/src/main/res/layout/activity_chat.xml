@@ -61,7 +61,7 @@
                     android:id="@+id/emo_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_white"
+                    android:background="#343434"
                     android:visibility="gone"/>
             </LinearLayout>
         </RelativeLayout>

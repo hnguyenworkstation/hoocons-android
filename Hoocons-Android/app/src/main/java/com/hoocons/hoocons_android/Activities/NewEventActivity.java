@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
 import com.bumptech.glide.Glide;
@@ -225,11 +226,14 @@ public class NewEventActivity extends BaseActivity
 
             }
         });
+
+        mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
     }
 
     private void loadProfileImage(String url) {
         Glide.with(this)
                 .load(url)
+                .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
                 .into(mProfileImage);
@@ -622,22 +626,31 @@ public class NewEventActivity extends BaseActivity
     @Subscribe
     public void onEvent(PublicModeRequest request) {
         mMode = "Public";
-        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_GLOBE, mMode, FontAwesome.FA_CARET_DOWN);
-        mPrivacyBtn.setText(text);
+        mPrivacyBtn.setBootstrapText(new BootstrapText.Builder(this)
+                .addFontAwesomeIcon(FontAwesome.FA_GLOBE)
+                .addText(" " + mMode + " ")
+                .addFontAwesomeIcon(FontAwesome.FA_CARET_DOWN)
+                .build());
     }
 
     @Subscribe
     public void onEvent(PrivateModeRequest request) {
         mMode = "Private";
-        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_USER, mMode, FontAwesome.FA_CARET_DOWN);
-        mPrivacyBtn.setText(text);
+        mPrivacyBtn.setBootstrapText(new BootstrapText.Builder(this)
+                .addFontAwesomeIcon(FontAwesome.FA_USER)
+                .addText(" " + mMode + " ")
+                .addFontAwesomeIcon(FontAwesome.FA_CARET_DOWN)
+                .build());
     }
 
     @Subscribe
     public void onEvent(FriendModeRequest request) {
         mMode = "Friend";
-        String text = String.format("{%s}  %s  {%s}", FontAwesome.FA_USERS, mMode, FontAwesome.FA_CARET_DOWN);
-        mPrivacyBtn.setText(text);
+        mPrivacyBtn.setBootstrapText(new BootstrapText.Builder(this)
+                .addFontAwesomeIcon(FontAwesome.FA_USERS)
+                .addText(" " + mMode + " ")
+                .addFontAwesomeIcon(FontAwesome.FA_CARET_DOWN)
+                .build());
     }
 
     @Subscribe

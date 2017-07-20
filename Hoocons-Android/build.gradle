@@ -21,7 +21,7 @@ allprojects {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven {
-            url 'https://repo.adobe.com/nexus/content/repositories/releases/'
+            url "https://raw.githubusercontent.com/wangdan/mvn-repo-aiwen/master/repository/"
         }
         maven {
             url 'http://maven.localytics.com/public'
