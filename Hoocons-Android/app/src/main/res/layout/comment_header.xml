@@ -10,6 +10,7 @@
         android:layout_toStartOf="@+id/comment_time"
         android:layout_marginStart="@dimen/comment_layout_start"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:text="Hung Nguyen"
         android:textStyle="bold"
         android:maxLines="1"
