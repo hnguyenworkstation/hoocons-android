@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -30,6 +31,9 @@ public class CommentViewHolder extends ViewHolder {
     TextView mReplyBtn;
     @BindView(R.id.comment_seemore)
     TextView mSeemoreBtn;
+    @Nullable
+    @BindView(R.id.view_replies_action)
+    TextView mViewReplyBtn;
 
     public CommentViewHolder(View itemView) {
         super(itemView);
