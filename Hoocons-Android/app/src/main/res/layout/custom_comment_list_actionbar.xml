@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_12"
+        android:id="@+id/comment_header_stats"
         android:text="1 person like this"
         android:textSize="@dimen/custom_toolbar_small_text_size"
         android:textStyle="bold"

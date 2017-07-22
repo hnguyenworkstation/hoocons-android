@@ -26,6 +26,9 @@ public class CommentResponse {
     @SerializedName("is_liked")
     private boolean isLiked;
 
+    private boolean isUploaded = true;
+    private String commentTag;
+
     public int getId() {
         return id;
     }
@@ -96,5 +99,29 @@ public class CommentResponse {
 
     public void setIsLiked(boolean isLiked) {
         this.isLiked = isLiked;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public boolean isUploaded() {
+        return isUploaded;
+    }
+
+    public void setUploaded(boolean uploaded) {
+        isUploaded = uploaded;
+    }
+
+    public String getCommentTag() {
+        return commentTag;
+    }
+
+    public void setCommentTag(String commentTag) {
+        this.commentTag = commentTag;
     }
 }

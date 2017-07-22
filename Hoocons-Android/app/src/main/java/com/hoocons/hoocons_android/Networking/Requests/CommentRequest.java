@@ -14,6 +14,11 @@ public class CommentRequest {
     @SerializedName("comment_media_url")
     private String commentMediaUrl;
 
+    public CommentRequest(String textContent, String commentType) {
+        this.textContent = textContent;
+        this.commentType = commentType;
+    }
+
     public CommentRequest(String textContent, String commentType, String commentMediaUrl) {
         this.textContent = textContent;
         this.commentType = commentType;

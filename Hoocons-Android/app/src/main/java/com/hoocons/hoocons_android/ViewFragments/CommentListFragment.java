@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -33,17 +34,25 @@ import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Models.Emotion;
+import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
+import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Comment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentListFragment extends Fragment implements View.OnClickListener,
         EmotionFragment.OnEmotionSelectedListener, ObservableScrollViewCallbacks {
+    @BindView(R.id.comment_header_stats)
+    TextView mCommentHeaderStats;
     @BindView(R.id.recycler)
     ObservableRecyclerView mRecycler;
     @BindView(R.id.progressbar)
@@ -71,7 +80,10 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     private int likeCount;
     private int eventId;
 
+    private List<CommentResponse> commentResponseList;
+
     public CommentListFragment() {
+
     }
 
     public static CommentListFragment newInstance(int eventId, int likeCount, boolean isLiked) {
@@ -92,6 +104,8 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
             isLiked = getArguments().getBoolean(ARG_IS_LIKED);
             likeCount = getArguments().getInt(ARG_LIKE_COUNT);
         }
+
+        commentResponseList = new ArrayList<>();
     }
 
     @Override
@@ -105,8 +119,30 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        initEmojiLayout();
+        initLayout();
         initClickListener();
+    }
+
+    private void initLayout() {
+        mRecycler.setScrollViewCallbacks(this);
+
+        initTitle();
+        initRecyclerLayout();
+        initEmojiLayout();
+    }
+
+    private void initRecyclerLayout() {
+
+    }
+
+    private void initTitle() {
+        if (isLiked && likeCount > 1) {
+            mCommentHeaderStats.setText(String.format("You and %s others liked this post", String.valueOf(likeCount-1)));
+        } else if (isLiked && likeCount == 1) {
+            mCommentHeaderStats.setText("You liked this post");
+        } else {
+            mCommentHeaderStats.setText(String.format("%s people liked this post", String.valueOf(likeCount)));
+        }
     }
 
     private void initClickListener() {

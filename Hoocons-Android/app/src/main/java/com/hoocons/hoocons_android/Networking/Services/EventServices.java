@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Requests.CommentRequest;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -57,4 +58,14 @@ public interface EventServices {
      ********************************** */
     @DELETE("/event/like/id={event_id}/")
     Call<Void> unlikeEvent(@Path("event_id") int id);
+
+
+    /**********************************
+     * @Method: POST
+     * @Name: postComment
+     * @Argument: VOID
+     * @Purpose: post new Comment to Event
+     ********************************** */
+    @POST("/comment/create/event_id={event_id}/")
+    Call<Void> postComment(@Path("event_id") int id, @Body CommentRequest request);
 }
