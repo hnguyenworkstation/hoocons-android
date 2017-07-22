@@ -32,15 +32,13 @@ public class FetchCommentsJob extends Job implements Serializable {
     private int eventId;
     private int start;
     private int end;
-    private String commentTag;
 
-    public FetchCommentsJob(int eventId, int start, int end, String commentTag) {
+    public FetchCommentsJob(int eventId, int start, int end) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
 
         this.end = end;
         this.start = start;
         this.eventId = eventId;
-        this.commentTag = commentTag;
     }
 
     @Override

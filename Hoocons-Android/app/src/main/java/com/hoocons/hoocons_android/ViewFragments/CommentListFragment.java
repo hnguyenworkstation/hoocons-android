@@ -17,6 +17,7 @@ import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +45,13 @@ import com.hoocons.hoocons_android.EventBus.PostCommentFailed;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchCommentsJob;
 
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +79,8 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     EditText mCommentTextInput;
     @BindView(R.id.emo_container)
     RelativeLayout mEmoContainer;
+    @BindView(R.id.comment_send)
+    ImageButton mSendBtn;
     @BindView(R.id.root_layout)
     ViewGroup mRootLayout;
     @BindView(R.id.root_container)
@@ -99,6 +104,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     private String gifPath;
 
     private List<CommentResponse> commentResponseList;
+    private final int MAX_LOAD_PACK = 40;
 
     public CommentListFragment() {
 
@@ -123,8 +129,14 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
             likeCount = getArguments().getInt(ARG_LIKE_COUNT);
         }
 
-        EventBus.getDefault().register(this);
         commentResponseList = new ArrayList<>();
+        EventBus.getDefault().register(this);
+
+        if (eventId > 0) {
+            BaseApplication.getInstance().getJobManager()
+                    .addJobInBackground(new FetchCommentsJob(eventId,
+                            commentResponseList.size(), commentResponseList.size() + MAX_LOAD_PACK));
+        }
     }
 
     @Override
@@ -143,6 +155,27 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     }
 
     private void initLayout() {
+        mSendBtn.setEnabled(false);
+        mCommentTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mCommentTextInput.getText().length() > 0) {
+                    mSendBtn.setEnabled(true);
+                } else {
+                    mSendBtn.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mRecycler.setScrollViewCallbacks(this);
 
         initTitle();
@@ -358,6 +391,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     ***************************************************/
     @Subscribe
     public void onEvent(FetchCommentsComplete request) {
+        mProgressBar.setVisibility(View.GONE);
         commentResponseList.addAll(request.getCommentResponseList());
         commentsAdapter.notifyDataSetChanged();
     }

@@ -55,6 +55,7 @@ public class CommentViewHolder extends ViewHolder {
                                final int position, final CommentAdapterListener listener) {
         loadUserProfile(context, response.getCommentBy().getProfileUrl());
         loadTextContent(response.getTextContent());
+        loadCommentStats(response);
     }
 
     private void loadUserProfile(final Context context, final String url) {
@@ -78,5 +79,10 @@ public class CommentViewHolder extends ViewHolder {
 
     private void loadTextContent(final String textContent) {
         mTextContent.setText(textContent);
+    }
+
+    private void loadCommentStats(final CommentResponse response) {
+        mUserName.setText(response.getCommentBy().getDisplayName());
+        mCommentTime.setText(response.getCreatedAt());
     }
 }
