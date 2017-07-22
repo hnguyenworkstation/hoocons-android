@@ -4,6 +4,7 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Requests.CommentRequest;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
+import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 
 import java.util.List;
@@ -68,4 +69,14 @@ public interface EventServices {
      ********************************** */
     @POST("/comment/create/event_id={event_id}/")
     Call<Void> postComment(@Path("event_id") int id, @Body CommentRequest request);
+
+
+    /**********************************
+     * @Method: GET
+     * @Name: postComment
+     * @Argument: eventId, startPosition and endposition
+     * @Purpose: post new Comment to Event
+     ********************************** */
+    @GET("/comment/get/event_id={event_id}/start={start}/end={end}/")
+    Call<List<CommentResponse>> getComments(@Path("event_id") int id, @Path("start") int start, @Path("end") int end);
 }

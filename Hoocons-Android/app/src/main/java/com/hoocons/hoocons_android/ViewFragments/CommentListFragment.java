@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
@@ -30,8 +33,16 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
+import com.hoocons.hoocons_android.Adapters.CommentsAdapter;
+import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
+import com.hoocons.hoocons_android.EventBus.EventDeleted;
+import com.hoocons.hoocons_android.EventBus.FetchCommentsComplete;
+import com.hoocons.hoocons_android.EventBus.FetchCommentsFailed;
+import com.hoocons.hoocons_android.EventBus.PostCommentComplete;
+import com.hoocons.hoocons_android.EventBus.PostCommentFailed;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
+import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
@@ -41,6 +52,7 @@ import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
@@ -50,7 +62,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentListFragment extends Fragment implements View.OnClickListener,
-        EmotionFragment.OnEmotionSelectedListener, ObservableScrollViewCallbacks {
+        EmotionFragment.OnEmotionSelectedListener, ObservableScrollViewCallbacks,
+        CommentAdapterListener{
     @BindView(R.id.comment_header_stats)
     TextView mCommentHeaderStats;
     @BindView(R.id.recycler)
@@ -76,9 +89,14 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     private static final String ARG_LIKE_COUNT = "LikeCount";
     private static final String ARG_IS_LIKED= "IsLiked";
 
+    private CommentsAdapter commentsAdapter;
+
     private boolean isLiked;
     private int likeCount;
     private int eventId;
+
+    private String imagePath;
+    private String gifPath;
 
     private List<CommentResponse> commentResponseList;
 
@@ -105,6 +123,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
             likeCount = getArguments().getInt(ARG_LIKE_COUNT);
         }
 
+        EventBus.getDefault().register(this);
         commentResponseList = new ArrayList<>();
     }
 
@@ -132,7 +151,16 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     }
 
     private void initRecyclerLayout() {
+        commentsAdapter = new CommentsAdapter(getContext(), commentResponseList, this);
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        mRecycler.setLayoutManager(mLayoutManager);
+        mRecycler.setItemAnimator(new DefaultItemAnimator());
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL_LIST);
+        mRecycler.addItemDecoration(dividerItemDecoration);
+        mRecycler.setAdapter(commentsAdapter);
     }
 
     private void initTitle() {
@@ -321,6 +349,66 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+    }
+
+    /* *************************************************
+    *   EVENTBUS EVENTS CATCHING AREA
+    *   AND LISTENER AREA
+    ***************************************************/
+    @Subscribe
+    public void onEvent(FetchCommentsComplete request) {
+        commentResponseList.addAll(request.getCommentResponseList());
+        commentsAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe
+    public void onEvent(FetchCommentsFailed request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(EventDeleted request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(PostCommentComplete request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(PostCommentFailed request) {
+
+    }
+
+    @Override
+    public void onCommentLikeClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentReplyClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentViewClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentProfileClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentNameClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentLongClicked(int position) {
 
     }
 }

@@ -27,6 +27,7 @@ public class CommentResponse {
     private boolean isLiked;
 
     private boolean isUploaded = true;
+    private boolean isUploadFailed = false;
     private String commentTag;
 
     public int getId() {
@@ -123,5 +124,13 @@ public class CommentResponse {
 
     public void setCommentTag(String commentTag) {
         this.commentTag = commentTag;
+    }
+
+    public boolean isUploadFailed() {
+        return isUploadFailed;
+    }
+
+    public void setUploadFailed(boolean uploadFailed) {
+        isUploadFailed = uploadFailed;
     }
 }
