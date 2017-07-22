@@ -156,6 +156,7 @@
     <string name="select_tags">Add tags to the meeting</string>
     <string name="new_meeting">Start a meeting</string>
     <string name="action_delete">Delete</string>
+    <string name="task_failed">Failed! Please check connection</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>

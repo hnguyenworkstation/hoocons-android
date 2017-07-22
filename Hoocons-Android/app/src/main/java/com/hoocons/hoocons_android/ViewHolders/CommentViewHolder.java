@@ -48,7 +48,7 @@ public class CommentViewHolder extends ViewHolder {
 
     public CommentViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(itemView);
+        ButterKnife.bind(this, itemView);
     }
 
     public void initViewHolder(final CommentResponse response, final Context context,

@@ -24,6 +24,12 @@ public class SemiUserInfoResponse {
     @SerializedName("is_friend")
     private boolean isFriend;
 
+    public SemiUserInfoResponse(int user, String displayName, String profileUrl) {
+        this.user = user;
+        this.displayName = displayName;
+        this.profileUrl = profileUrl;
+    }
+
     public int getUser() {
         return user;
     }

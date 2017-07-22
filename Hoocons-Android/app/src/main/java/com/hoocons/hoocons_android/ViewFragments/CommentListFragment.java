@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -42,16 +43,20 @@ import com.hoocons.hoocons_android.EventBus.FetchCommentsComplete;
 import com.hoocons.hoocons_android.EventBus.FetchCommentsFailed;
 import com.hoocons.hoocons_android.EventBus.PostCommentComplete;
 import com.hoocons.hoocons_android.EventBus.PostCommentFailed;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCommentsJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.PostCommentJob;
 
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +64,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -156,6 +162,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
     private void initLayout() {
         mSendBtn.setEnabled(false);
+        mSendBtn.setOnClickListener(this);
         mCommentTextInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -186,7 +193,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     private void initRecyclerLayout() {
         commentsAdapter = new CommentsAdapter(getContext(), commentResponseList, this);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.HORIZONTAL, false);
+                LinearLayoutManager.VERTICAL, false);
         mRecycler.setLayoutManager(mLayoutManager);
         mRecycler.setItemAnimator(new DefaultItemAnimator());
 
@@ -287,6 +294,43 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
         ((LinearLayout.LayoutParams) mRootContainer.getLayoutParams()).weight = 1.0F;
     }
 
+    private void postComment() {
+        String commentType;
+        if (imagePath != null) {
+            commentType = AppConstant.COMMENT_TYPE_IMAGE;
+        } else if (gifPath != null) {
+            commentType = AppConstant.COMMENT_TYPE_GIF;
+        } else {
+            commentType = AppConstant.COMMENT_TYPE_TEXT;
+        }
+
+        String commentTag = String.valueOf(Calendar.getInstance().getTimeInMillis());
+        String textContent = mCommentTextInput.getText().toString();
+
+        // Send new request to server
+        BaseApplication.getInstance().getJobManager()
+                .addJobInBackground(new PostCommentJob(eventId,
+                        textContent, commentType, imagePath, gifPath,
+                        commentTag));
+
+        // Also add another temp data to comment list
+        CommentResponse tempRespond = new CommentResponse(
+                new SemiUserInfoResponse(SharedPreferencesManager.getDefault().getUserId(),
+                        SharedPreferencesManager.getDefault().getUserDisplayName(),
+                        SharedPreferencesManager.getDefault().getUserProfileUrl()),
+                commentTag,
+                textContent,
+                commentType,
+                null, 0, 0, false, false, false, commentTag
+        );
+
+        commentResponseList.add(0, tempRespond);
+        commentsAdapter.notifyItemInserted(0);
+
+        mCommentTextInput.setText("");
+        mSendBtn.setEnabled(false);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -302,6 +346,9 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.comment_emoji:
                 switchEmotionSoftInput();
+                break;
+            case R.id.comment_send:
+                postComment();
                 break;
             default:
                 break;
@@ -398,7 +445,8 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
     @Subscribe
     public void onEvent(FetchCommentsFailed request) {
-
+        mProgressBar.setVisibility(View.GONE);
+        Toast.makeText(getContext(), getContext().getText(R.string.task_failed), Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe

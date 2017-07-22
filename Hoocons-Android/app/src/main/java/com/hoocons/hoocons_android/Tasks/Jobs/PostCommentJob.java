@@ -28,18 +28,20 @@ public class PostCommentJob extends Job {
     private int eventId;
     private String textContent;
     private String commentType;
-    private String commentMediaUrl;
     private String commentTag;
+    private String imagePath;
+    private String gifUrl;
 
-    protected PostCommentJob(int eventId, String textContent, String commentType,
-                             String commentMediaUrl, String commentTag) {
+    public PostCommentJob(int eventId, String textContent, String commentType,
+                             String imagePath, String gifUrl, String commentTag) {
         super(new Params(Priority.MID).requireNetwork().persist().groupBy(JobGroup.event));
 
         this.eventId = eventId;
         this.textContent = textContent;
         this.commentType = commentType;
-        this.commentMediaUrl = commentMediaUrl;
+        this.imagePath = imagePath;
         this.commentTag = commentTag;
+        this.gifUrl = gifUrl;
     }
 
     @Override
@@ -50,6 +52,15 @@ public class PostCommentJob extends Job {
     @Override
     public void onRun() throws Throwable {
         EventServices services = NetContext.instance.create(EventServices.class);
+        String commentMediaUrl = null;
+        if (imagePath != null) {
+
+        } else if (gifUrl != null) {
+            commentMediaUrl = gifUrl;
+        } else {
+            commentMediaUrl = null;
+        }
+
         services.postComment(eventId, new CommentRequest(textContent, commentType, commentMediaUrl))
                 .enqueue(new Callback<Void>() {
                     @Override

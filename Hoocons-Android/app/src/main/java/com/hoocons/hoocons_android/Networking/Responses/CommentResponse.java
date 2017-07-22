@@ -30,6 +30,24 @@ public class CommentResponse {
     private boolean isUploadFailed = false;
     private String commentTag;
 
+    public CommentResponse(SemiUserInfoResponse commentBy,
+                           String createdAt, String textContent,
+                           String commentType, String commentMediaUrl,
+                           int likeCount, int replyCount, boolean isLiked,
+                           boolean isUploaded, boolean isUploadFailed, String commentTag) {
+        this.commentBy = commentBy;
+        this.createdAt = createdAt;
+        this.textContent = textContent;
+        this.commentType = commentType;
+        this.commentMediaUrl = commentMediaUrl;
+        this.likeCount = likeCount;
+        this.replyCount = replyCount;
+        this.isLiked = isLiked;
+        this.isUploaded = isUploaded;
+        this.isUploadFailed = isUploadFailed;
+        this.commentTag = commentTag;
+    }
+
     public int getId() {
         return id;
     }
