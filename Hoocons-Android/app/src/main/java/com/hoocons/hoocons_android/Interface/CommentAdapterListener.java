@@ -5,4 +5,10 @@ package com.hoocons.hoocons_android.Interface;
  */
 
 public interface CommentAdapterListener {
+    void onCommentLikeClicked(final int position);
+    void onCommentReplyClicked(final int position);
+    void onCommentViewClicked(final int position);
+    void onCommentProfileClicked(final int position);
+    void onCommentNameClicked(final int position);
+    void onCommentLongClicked(final int position);
 }

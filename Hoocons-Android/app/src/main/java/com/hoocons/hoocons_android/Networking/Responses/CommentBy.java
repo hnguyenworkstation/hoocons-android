@@ -2,11 +2,7 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by hungnguyen on 7/18/17.
- */
-
-public class SemiUserInfoResponse {
+public class CommentBy {
     @SerializedName("user")
     private int user;
     @SerializedName("display_name")

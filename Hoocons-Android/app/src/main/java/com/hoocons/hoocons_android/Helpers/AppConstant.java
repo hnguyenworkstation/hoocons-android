@@ -24,4 +24,9 @@ public class AppConstant {
     public static final String EVENT_TYPE_SINGLE_VOICE = "Svoi";
     public static final String EVENT_TYPE_SINGLE_GIF = "Sgif";
     public static final String EVENT_TYPE_CHECK_IN = "Chk";
+
+    // CommentType
+    public static final String COMMENT_TYPE_TEXT = "Ctxt";
+    public static final String COMMENT_TYPE_IMAGE = "Cimg";
+    public static final String COMMENT_TYPE_GIF = "Cgif";
 }
