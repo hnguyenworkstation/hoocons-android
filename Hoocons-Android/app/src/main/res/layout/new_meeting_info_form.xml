@@ -68,6 +68,67 @@
             android:layout_width="@dimen/cardview_smallicon_size"
             android:layout_height="@dimen/cardview_smallicon_size"
             android:layout_marginEnd="@dimen/margin_12"
+            android:src="@drawable/meeting_clock_icon"/>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold"
+            android:text="@string/at_what_time"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meeting_add_time"
+            android:textSize="@dimen/text_18"
+            android:text="@string/add_time_frame"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/meeting_time_view"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meeting_date_time"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:text="Sunday, 20/7/2017"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meeting_clock_time"
+                android:textSize="@dimen/text_18"
+                android:text="12:00:00 PM"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/cardview_smallicon_size"
+            android:layout_height="@dimen/cardview_smallicon_size"
+            android:layout_marginEnd="@dimen/margin_12"
             android:src="@drawable/meeting_location_icon"/>
 
         <TextView
@@ -117,6 +178,45 @@
         android:id="@+id/meeting_tags"
         android:textSize="@dimen/text_18"
         android:text="@string/select_tags"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/cardview_smallicon_size"
+            android:layout_height="@dimen/cardview_smallicon_size"
+            android:layout_marginEnd="@dimen/margin_12"
+            android:src="@drawable/meeting_image_icon"/>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold"
+            android:text="@string/add_media_for_meeting"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/sticker_height"
+            android:layout_height="@dimen/sticker_height"
+            android:src="@drawable/image_holder"
+            android:id="@+id/add_image_action"/>
+
+        <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycler"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/submit_new_meeting"

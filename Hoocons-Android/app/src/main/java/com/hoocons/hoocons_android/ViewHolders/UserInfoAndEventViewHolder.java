@@ -395,7 +395,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         assert mSingleMediaView != null;
         Glide.with(context)
                 .load(url)
-                .apply(RequestOptions.fitCenterTransform())
+                .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .listener(new RequestListener<Drawable>() {
                     @Override

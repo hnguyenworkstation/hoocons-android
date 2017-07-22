@@ -26,11 +26,6 @@ import com.lorentzos.flingswipe.R;
 
 import java.util.ArrayList;
 
-/**
- * 支持侧滑的叠加组件
- *
- * @zc
- */
 public class SwipeFlingView extends AdapterView {
 
     protected final static boolean DEBUG = false;
@@ -42,31 +37,22 @@ public class SwipeFlingView extends AdapterView {
     private int mEnterAnimDurationByClick = 300;
     private int mResetChildAnimDuration = 300;
 
-    private int MAX_VISIBLE = 4;//最多可显示的卡片数
+    private int MAX_VISIBLE = 4;
     private int MIN_ADAPTER_STACK = 3;
     private int mMinFlingVelocity;
     private int mMinTouchSlop;
-    private int mCardDeviation;//卡片最大偏移误差值
+    private int mCardDeviation;
     private float MAX_COS;
-    private float ROTATION_DEGREES = 15.f;//卡片在拖拽或动画时 最大旋转角度
-    private float SCALE_STEP = 0.1f;//定义卡片每级缩放的比例
-    private float mCardVerticalOffset = 0;//定义卡片每级偏移值
-    private float[] CHILD_SCALE_BY_INDEX;//存放各级卡片缩放系数集 eg:0.79999995>>0.79999995>>0.9>>1.0>>
-    private float[] CHILD_VERTICAL_OFFSET_BY_INDEX;//存放各级卡片偏移值集 eg:36.0>>36.0>>18.0>>0.0>>
+    private float ROTATION_DEGREES = 15.f;
+    private float SCALE_STEP = 0.1f;
+    private float mCardVerticalOffset = 0;
+    private float[] CHILD_SCALE_BY_INDEX;
+    private float[] CHILD_VERTICAL_OFFSET_BY_INDEX;
 
-    /**
-     * 用于记录当前卡片的索引，非常重要的属性
-     */
     private int mCurPositon;
-    /**
-     * 滑动卡片 起始位置在卡片上半部分还是下半部分
-     *
-     * @see #TOUCH_ABOVE
-     * @see #TOUCH_BELOW
-     */
     private int mTouchPosition;
-    private int mOriginTopViewX = 0;//视图初始X位置
-    private int mOriginTopViewY = 0;//视图初始Y位置
+    private int mOriginTopViewX = 0;
+    private int mOriginTopViewY = 0;
     private int widthMeasureSpec;
     private int heightMeasureSpec;
     private int LAST_OBJECT_IN_STACK = 0;
@@ -202,8 +188,6 @@ public class SwipeFlingView extends AdapterView {
                 if (adapterCount > MAX_VISIBLE) {
                     int curChildCount = getChildCount();
                     while (startingIndex < Math.min(adapterCount, MAX_VISIBLE)) {
-                        //log("curChildCount:"+curChildCount);
-                        //计算要复用view的index
                         int recycleActiveIndex = curChildCount >= MAX_VISIBLE - 1 ?
                                 startingIndex : MAX_VISIBLE - 1 - (curChildCount + startingIndex);
                         if (recycleActiveIndex > -1 && mRecycleBin.getActiveView(recycleActiveIndex) == null) {
@@ -211,7 +195,6 @@ public class SwipeFlingView extends AdapterView {
                             if (position >= adapterCount) {
                                 break;
                             }
-                            //log("RecycleBin startingIndex:" + startingIndex + ";recycleActiveIndex:" + recycleActiveIndex);
                             View recycleView = mRecycleBin.getAndResetRecycleView();
                             View newUnderChild = mAdapter.getView(position, converChildView(recycleView), this);
                             newUnderChild = makeAndAddView(0, newUnderChild);
@@ -221,8 +204,6 @@ public class SwipeFlingView extends AdapterView {
                         startingIndex++;
                     }
                 }
-                /*removeAllViewsInLayout();
-                layoutChildren(0, adapterCount);*/
                 LAST_OBJECT_IN_STACK = getChildCount() - 1;
                 View topCard = getChildAt(LAST_OBJECT_IN_STACK);
                 if (mActiveCard != null && topCard != null && topCard == mActiveCard) {
@@ -403,7 +384,6 @@ public class SwipeFlingView extends AdapterView {
             }
         } else {
             if (mChildRect == null || mChildRect.isEmpty()) {
-                //保存child原始的大小
                 mChildRect = new Rect(childLeft, childTop, childLeft + w, childTop + h);
             }
             child.layout(childLeft, childTop, childLeft + w, childTop + h);
@@ -462,11 +442,6 @@ public class SwipeFlingView extends AdapterView {
         }
     }
 
-    /**
-     * 返回上一个已经划过去的卡片
-     *
-     * @param fromLeft true:从左边返回 反之右边返回
-     */
     public void selectComeBackCard(boolean fromLeft) {
         if (isFirstCard()) {
             return;
@@ -624,7 +599,6 @@ public class SwipeFlingView extends AdapterView {
 
         @Override
         public void onInvalidated() {
-            //TODO zc 这快可以细致处理，不过维护的逻辑比较复杂，以后再看
             resetData();
             removeAllViewsInLayout();
             requestLayout();
@@ -709,9 +683,6 @@ public class SwipeFlingView extends AdapterView {
         updateChildrenOffset(isOffsetUp, scrollProgressPercent);
     }
 
-    /**
-     * 针对广告 广告的点击事件是sdk内部处理的 导致组件内点击回调逻辑不能被执行 所以需要手动调用
-     */
     public void complementClickEndEvent() {
         mViewDragHelper.setDragState(ViewDragHelper.STATE_IDLE);
         if (mFlingListener != null) {
@@ -719,11 +690,6 @@ public class SwipeFlingView extends AdapterView {
         }
     }
 
-    /**
-     * 用来判断是否允许向左滑走
-     *
-     * @return
-     */
     private boolean canLeftCardExit() {
         if (mFlingListener != null) {
             return mFlingListener.canLeftCardExit();
@@ -731,11 +697,6 @@ public class SwipeFlingView extends AdapterView {
         return true;
     }
 
-    /**
-     * 用来判断是否允许向右滑走
-     *
-     * @return
-     */
     private boolean canRightCardExit() {
         if (mFlingListener != null) {
             return mFlingListener.canRightCardExit();
@@ -1343,89 +1304,28 @@ public class SwipeFlingView extends AdapterView {
 
     public interface OnSwipeFlingListener {
 
-        //void onStart(SwipeFlingViewNew swipeFlingView);
-
-        /**
-         * 拖拽开始时调用
-         */
         void onStartDragCard();
 
-        /**
-         * 用来判断是否允许卡片向左离开(fling)
-         *
-         * @return true:允许卡片向左离开(fling)
-         */
         boolean canLeftCardExit();
 
-        /**
-         * 用来判断是否允许卡片向右离开(fling)
-         *
-         * @return true:允许卡片向右离开(fling)
-         */
         boolean canRightCardExit();
 
-        /**
-         * 在卡片即将要离开(fling)前，会回调此函数
-         */
         void onPreCardExit();
 
-        /**
-         * 在卡片向左完全离开时，会回调此函数
-         *
-         * @param view               当前的view
-         * @param dataObject
-         * @param triggerByTouchMove 若true:表示此次卡片离开是来之于手势拖拽 反之则来之于点击按钮触发之类的
-         */
         void onLeftCardExit(View view, Object dataObject, boolean triggerByTouchMove);
 
-        /**
-         * 在卡片向右完全离开时，会回调此函数
-         *
-         * @param view               当前的view
-         * @param dataObject
-         * @param triggerByTouchMove 若true:表示此次卡片离开是来之于手势拖拽 反之则来之于点击按钮触发之类的
-         */
         void onRightCardExit(View view, Object dataObject, boolean triggerByTouchMove);
 
-        /**
-         * 在卡片完全离开时，若来之于superlike，会回调此函数
-         *
-         * @param view               当前的view
-         * @param dataObject
-         * @param triggerByTouchMove 若true:表示此次卡片离开是来之于手势拖拽 反之则来之于点击按钮触发之类的
-         */
         void onSuperLike(View view, Object dataObject, boolean triggerByTouchMove);
 
-        /**
-         * 在顶部卡片划走时，会刷新布局，将设置顶部下面的卡片为顶部卡片，此时会回调此函数
-         */
         void onTopCardViewFinish();
 
-        /**
-         * 当剩余卡片数等于{@link SwipeFlingView#MIN_ADAPTER_STACK}时，会回调此函数
-         * 意味着卡片即将划完了，在这个时机可以做预加载下一批数据的工作
-         *
-         * @param itemsInAdapter
-         */
         void onAdapterAboutToEmpty(int itemsInAdapter);
 
-        /**
-         * 当所有卡片都划完了，就回调此函数
-         */
         void onAdapterEmpty();
 
-        /**
-         * 卡片因拖拽或动画发生位移时，会实时回调此函数
-         *
-         * @param selectedView          发生位移的view
-         * @param scrollProgressPercent 范围[-1,1] 默认是0 向左位移是0->-1,向右位移是0->1.
-         *                              左侧最大值由{@link #leftBorder()}决定，右侧最大值由{@link #rightBorder()} ()}决定，
-         */
         void onScroll(View selectedView, float scrollProgressPercent);
 
-        /**
-         * 拖拽结束时调用
-         */
         void onEndDragCard();
 
         //void onEnd();

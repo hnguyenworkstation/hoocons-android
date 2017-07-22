@@ -196,6 +196,11 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     pDialog.dismiss();
                     // Code 403: this account is banned
                     showWarningDialog();
+                } else if (response.code() == 404) {
+                    // Code  404: Server error
+                    pDialog.dismiss();
+                    Toast.makeText(getContext(), getResources().getString(R.string.server_error)
+                            , Toast.LENGTH_SHORT).show();
                 }
             }
 

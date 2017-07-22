@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -38,6 +41,18 @@ public class NewMeetingActivity extends BaseActivity implements
     TextView mCustomBarText;
     @BindView(R.id.linear)
     View mCustomBarLinear;
+    @BindView(R.id.recycler)
+    ObservableRecyclerView mImageRecycler;
+    @BindView(R.id.add_image_action)
+    ImageView mAddImageBtn;
+    @BindView(R.id.meeting_add_time)
+    TextView mAddTimeFrame;
+    @BindView(R.id.meeting_time_view)
+    LinearLayout mMeetingTimeView;
+    @BindView(R.id.meeting_date_time)
+    TextView mDateTime;
+    @BindView(R.id.meeting_clock_time)
+    TextView mClockTime;
 
     @BindView(R.id.submit_new_meeting)
     Button mSubmitMeeting;

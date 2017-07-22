@@ -152,6 +152,9 @@
     <string name="meeting_desc">Meeting Description</string>
     <string name="meeting_activities">Activities at the meeting</string>
     <string name="at_location">At Location</string>
+    <string name="at_what_time">When it happens</string>
+    <string name="add_time_frame">Add time frame</string>
+    <string name="add_media_for_meeting">Add some medias</string>
     <string name="select_location">Select a location</string>
     <string name="select_tags">Add tags to the meeting</string>
     <string name="new_meeting">Start a meeting</string>
