@@ -20,7 +20,7 @@
             android:layout_width="@dimen/intro_logo_size"
             android:layout_height="@dimen/intro_logo_size"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/icon_image"/>
+            android:src="@drawable/plain_hoocons_image"/>
 
         <TextView
             android:id="@+id/intro1_title"

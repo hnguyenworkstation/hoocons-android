@@ -183,6 +183,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
                 try {
                     spannableString.removeSpan(urlSpan);
                 } catch (Exception e) {
+
                 }
                 spannableString.setSpan(weiboSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

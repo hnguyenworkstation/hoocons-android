@@ -21,7 +21,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_width="@dimen/intro_logo_size"
                 android:layout_height="@dimen/intro_logo_size"
-                android:src="@drawable/icon_image"
+                android:src="@drawable/plain_hoocons_image"
                 android:layout_gravity="center"/>
 
             <TextView

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         card_view:cardCornerRadius="@dimen/activity_card_corner">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -28,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/content_layout"
+                android:background="@drawable/map_background_image"
                 android:layout_below="@+id/custom_toolbar">
 
                 <RelativeLayout
