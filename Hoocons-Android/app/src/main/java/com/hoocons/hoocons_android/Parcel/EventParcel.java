@@ -9,17 +9,15 @@ import org.parceler.Parcel;
 public class EventParcel {
     int id;
     int likeCount;
-    int reportCount;
     boolean isLiked;
 
     public EventParcel() {
 
     }
 
-    public EventParcel(int id, int likeCount, int reportCount, boolean isLiked) {
+    public EventParcel(int id, int likeCount, boolean isLiked) {
         this.id = id;
         this.likeCount = likeCount;
-        this.reportCount = reportCount;
         this.isLiked = isLiked;
     }
 
@@ -37,14 +35,6 @@ public class EventParcel {
 
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
-    }
-
-    public int getReportCount() {
-        return reportCount;
-    }
-
-    public void setReportCount(int reportCount) {
-        this.reportCount = reportCount;
     }
 
     public boolean isLiked() {

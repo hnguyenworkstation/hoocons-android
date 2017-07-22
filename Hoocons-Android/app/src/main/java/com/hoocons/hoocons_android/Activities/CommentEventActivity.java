@@ -10,6 +10,8 @@ import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,6 +29,8 @@ public class CommentEventActivity extends DraggerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_event);
         ButterKnife.bind(this);
+
+        eventParcel = (EventParcel) Parcels.unwrap(getIntent().getParcelableExtra("event"));
 
         mFragManager = getSupportFragmentManager();
         mFragTransition = mFragManager.beginTransaction();
