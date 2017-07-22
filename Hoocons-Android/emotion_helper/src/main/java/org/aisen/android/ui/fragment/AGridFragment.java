@@ -9,9 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.aisen.android.R;
-import org.aisen.android.R.layout;
 import org.aisen.android.support.inject.ViewInject;
-import org.aisen.android.ui.fragment.APagingFragment;
 import org.aisen.android.ui.fragment.adapter.BasicListAdapter;
 import org.aisen.android.ui.fragment.adapter.IPagingAdapter;
 import org.aisen.android.ui.fragment.itemview.AFooterItemView;

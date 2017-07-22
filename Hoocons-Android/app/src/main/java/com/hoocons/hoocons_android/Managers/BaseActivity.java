@@ -2,20 +2,13 @@ package com.hoocons.hoocons_android.Managers;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
-
-import org.aisen.android.common.setting.SettingUtility;
-import org.aisen.android.common.utils.Logger;
 import org.aisen.android.component.bitmaploader.core.BitmapOwner;
 import org.aisen.android.network.task.ITaskManager;
 import org.aisen.android.network.task.TaskManager;
 import org.aisen.android.network.task.WorkTask;
 import org.aisen.android.ui.widget.AsToolbar;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Locale;
 

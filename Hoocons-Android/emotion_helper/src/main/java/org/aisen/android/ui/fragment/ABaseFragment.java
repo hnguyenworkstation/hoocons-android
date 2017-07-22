@@ -6,11 +6,11 @@
 package org.aisen.android.ui.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;

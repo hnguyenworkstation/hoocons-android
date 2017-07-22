@@ -92,7 +92,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
         emotionFragment = new EmotionFragment();
-        getFragmentManager().beginTransaction().add(R.id.emo_container,
+        getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
                 emotionFragment, "EmotionFragment").commit();
 
         initEmotionLayout();
@@ -103,7 +103,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         if (emotionFragment == null) {
             emotionFragment = EmotionFragment.newInstance();
 
-            getFragmentManager().beginTransaction().add(R.id.emo_container,
+            getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
                     emotionFragment, "EmotionFragment").commit();
         }
 

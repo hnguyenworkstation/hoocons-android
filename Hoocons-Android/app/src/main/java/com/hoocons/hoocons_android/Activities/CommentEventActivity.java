@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.ViewFragments.CommentListFragment;
+import com.hoocons.hoocons_android.ViewFragments.NewUserInfoFragment;
 
 import org.parceler.Parcels;
 
@@ -37,5 +39,10 @@ public class CommentEventActivity extends DraggerActivity {
 
         setDraggerLimit(0.8f);
         setSlideEnabled(isDraggable);
+
+        mFragTransition.replace(R.id.frame_container,
+                CommentListFragment.newInstance(eventParcel.getId(),
+                                                    eventParcel.getLikeCount(),
+                                                    eventParcel.isLiked()), "COMMENT_LIST").commit();
     }
 }

@@ -12,24 +12,54 @@
         <include layout="@layout/custom_comment_list_actionbar"/>
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root_layout"
+        android:layout_below="@+id/custom_toolbar"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/root_container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1">
+
+                <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recycler"/>
+            </LinearLayout>
+
+            <include layout="@layout/comment_list_footer"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:id="@+id/comment_list_footer"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/emo_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#343434"
+            android:visibility="gone"/>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/content_layout"
+        android:id="@+id/list_view"
         android:layout_below="@+id/custom_toolbar">
-
-        <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:scrollbars="none"
-            android:id="@+id/recycler"/>
-
         <ProgressBar
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerInParent="true"
             android:id="@+id/progressbar"/>
-
     </RelativeLayout>
 </RelativeLayout>
