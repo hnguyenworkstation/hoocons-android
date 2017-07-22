@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,10 @@ public class CommentViewHolder extends ViewHolder {
     TextView mReplyBtn;
     @BindView(R.id.comment_seemore)
     TextView mSeemoreBtn;
+    @BindView(R.id.comment_like_count_view)
+    LinearLayout mLikeView;
+    @BindView(R.id.comment_like_count)
+    TextView mLikeCount;
 
     @Nullable
     @BindView(R.id.view_replies_action)

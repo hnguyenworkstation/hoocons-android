@@ -34,7 +34,9 @@
                 android:layout_below="@+id/comment_userlogo"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_4"
+                android:id="@+id/comment_like_count_view"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:gravity="center">
 
                 <ImageView
@@ -48,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/comment_like_count"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_8"
+                    android:textSize="@dimen/text_10"
                     android:text="8"/>
             </LinearLayout>
         </RelativeLayout>
