@@ -40,6 +40,7 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
@@ -48,6 +49,8 @@ import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -349,7 +352,13 @@ public class UserProfileActivity extends DraggerActivity
 
     @Override
     public void onCommentClicked(int position) {
+        EventResponse response = eventResponseList.get(position);
+        EventParcel parcel = new EventParcel(response.getEventId(),
+                response.getLikesCount(), response.getReportsCount(), response.getIsLiked());
 
+        Intent commentIntent = new Intent(this, CommentEventActivity.class);
+        commentIntent.putExtra("event", Parcels.wrap(parcel));
+        startActivity(commentIntent);
     }
 
     @Override
