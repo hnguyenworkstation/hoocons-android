@@ -353,8 +353,10 @@ public class UserProfileActivity extends DraggerActivity
     @Override
     public void onCommentClicked(int position) {
         EventResponse response = eventResponseList.get(position);
-        EventParcel parcel = new EventParcel(response.getEventId(),
-                response.getLikesCount(), response.getReportsCount(), response.getIsLiked());
+        EventParcel parcel = new EventParcel();
+        parcel.setId(response.getEventId());
+        parcel.setLikeCount(response.getLikesCount());
+        parcel.setLiked(response.getIsLiked());
 
         Intent commentIntent = new Intent(this, CommentEventActivity.class);
         commentIntent.putExtra("event", Parcels.wrap(parcel));
