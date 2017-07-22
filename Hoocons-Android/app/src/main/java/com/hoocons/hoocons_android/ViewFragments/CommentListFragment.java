@@ -26,7 +26,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
+import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Models.Emotion;
@@ -34,12 +37,13 @@ import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 
 import org.aisen.android.common.utils.BitmapUtil;
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentListFragment extends Fragment implements View.OnClickListener,
-        EmotionFragment.OnEmotionSelectedListener {
+        EmotionFragment.OnEmotionSelectedListener, ObservableScrollViewCallbacks {
     @BindView(R.id.recycler)
     ObservableRecyclerView mRecycler;
     @BindView(R.id.progressbar)
@@ -266,4 +270,21 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
             }
         }
     };
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        if (scrollY == 0) {
+            EventBus.getDefault().post(new AllowSlideDown());
+        }
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+    }
 }

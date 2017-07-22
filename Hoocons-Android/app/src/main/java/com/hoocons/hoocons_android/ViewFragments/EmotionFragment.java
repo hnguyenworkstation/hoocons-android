@@ -2,13 +2,17 @@ package com.hoocons.hoocons_android.ViewFragments;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 
+import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
+import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.Models.Emotions;
 import com.hoocons.hoocons_android.R;
@@ -19,6 +23,7 @@ import org.aisen.android.ui.fragment.AGridFragment;
 import org.aisen.android.ui.fragment.adapter.ARecycleViewItemView;
 import org.aisen.android.ui.fragment.itemview.IITemView;
 import org.aisen.android.ui.fragment.itemview.IItemViewCreator;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,21 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
 
         getRefreshView().setOnItemClickListener(this);
         getRefreshView().setOnItemLongClickListener(this);
+        getRefreshView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    EventBus.getDefault().post(new AllowSlideDown());
+                } else {
+                    EventBus.getDefault().post(new BlockSlideDown());
+                }
+            }
+        });
     }
 
     @Override

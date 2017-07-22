@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.github.ppamorim.dragger.DraggerActivity;
+import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
+import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.CommentListFragment;
 import com.hoocons.hoocons_android.ViewFragments.NewUserInfoFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
@@ -29,6 +33,7 @@ public class CommentEventActivity extends DraggerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_comment_event);
         ButterKnife.bind(this);
 
@@ -44,5 +49,17 @@ public class CommentEventActivity extends DraggerActivity {
                 CommentListFragment.newInstance(eventParcel.getId(),
                                                     eventParcel.getLikeCount(),
                                                     eventParcel.isLiked()), "COMMENT_LIST").commit();
+    }
+
+
+    // OnEvent Catching
+    @Subscribe
+    public void onEvent(AllowSlideDown req) {
+        setSlideEnabled(true);
+    }
+
+    @Subscribe
+    public void onEvent(BlockSlideDown request) {
+        setSlideEnabled(false);
     }
 }
