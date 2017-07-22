@@ -2,6 +2,7 @@ package com.hoocons.hoocons_android.Managers;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
@@ -31,8 +32,11 @@ import com.hoocons.hoocons_android.Tasks.JobServices.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsJobService;
 
 import org.aisen.android.common.context.GlobalContext;
+import org.aisen.android.component.bitmaploader.BitmapLoader;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.io.File;
 
 /**
  * Created by hungnguyen on 6/3/17.
@@ -65,6 +69,9 @@ public class BaseApplication extends GlobalContext {
         // Initializing facebook
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        // Init bitmap
+        BitmapLoader.newInstance(this, getImagePath());
+
         // Override font
         TypefaceProvider.registerDefaultIconSets();
         FontOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
@@ -76,6 +83,11 @@ public class BaseApplication extends GlobalContext {
         }
 
         getJobManager();
+    }
+
+    public static String getImagePath() {
+        return GlobalContext.getInstance()
+                .getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator;
     }
 
     @Override

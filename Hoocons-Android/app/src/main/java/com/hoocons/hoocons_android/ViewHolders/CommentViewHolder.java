@@ -16,6 +16,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
 import com.hoocons.hoocons_android.R;
@@ -31,7 +33,7 @@ public class CommentViewHolder extends ViewHolder {
     @BindView(R.id.comment_userlogo)
     ImageView mUserProfile;
     @BindView(R.id.comment_text_content)
-    TextView mTextContent;
+    CustomTextView mTextContent;
     @BindView(R.id.comment_username)
     TextView mUserName;
     @BindView(R.id.comment_time)
@@ -42,6 +44,7 @@ public class CommentViewHolder extends ViewHolder {
     TextView mReplyBtn;
     @BindView(R.id.comment_seemore)
     TextView mSeemoreBtn;
+
     @Nullable
     @BindView(R.id.view_replies_action)
     TextView mViewReplyBtn;
@@ -78,11 +81,11 @@ public class CommentViewHolder extends ViewHolder {
     }
 
     private void loadTextContent(final String textContent) {
-        mTextContent.setText(textContent);
+        mTextContent.setContent(textContent);
     }
 
     private void loadCommentStats(final CommentResponse response) {
         mUserName.setText(response.getCommentBy().getDisplayName());
-        mCommentTime.setText(response.getCreatedAt());
+        mCommentTime.setText(AppUtils.convDate(response.getCreatedAt()));
     }
 }

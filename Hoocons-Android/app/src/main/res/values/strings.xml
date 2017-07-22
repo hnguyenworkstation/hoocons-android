@@ -158,6 +158,11 @@
     <string name="action_delete">Delete</string>
     <string name="task_failed">Failed! Please check connection</string>
 
+    <string name="msg_now">just now</string>
+    <string name="msg_today">today</string>
+    <string name="msg_yesterday">yesterday</string>
+    <string name="msg_few_minutes_ago">a moment ago</string>
+
     <!-- APIS & Secret Fields -->
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>
     <string name="aws_s3">elasticbeanstalk-ap-southeast-1-845076927108</string>

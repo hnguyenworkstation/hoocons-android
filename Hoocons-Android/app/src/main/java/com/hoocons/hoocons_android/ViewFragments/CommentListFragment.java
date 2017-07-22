@@ -196,10 +196,6 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
                 LinearLayoutManager.VERTICAL, false);
         mRecycler.setLayoutManager(mLayoutManager);
         mRecycler.setItemAnimator(new DefaultItemAnimator());
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL_LIST);
-        mRecycler.addItemDecoration(dividerItemDecoration);
         mRecycler.setAdapter(commentsAdapter);
     }
 
