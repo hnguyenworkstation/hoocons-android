@@ -33,11 +33,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
-
+        holder.initViewHolder(commentResponseList.get(position), context, position, listener);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return commentResponseList.size();
     }
 }
