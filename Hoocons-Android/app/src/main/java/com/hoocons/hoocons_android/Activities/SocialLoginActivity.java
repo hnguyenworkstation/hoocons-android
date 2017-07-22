@@ -67,9 +67,7 @@ public class SocialLoginActivity extends BaseActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
             }
         });
 
@@ -98,9 +96,7 @@ public class SocialLoginActivity extends BaseActivity {
             @Override
             public void onClick(SweetAlertDialog sDialog) {
                 sDialog.dismiss();
-                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                startActivity(new Intent(SocialLoginActivity.this, LoginActivity.class));
             }
         });
 

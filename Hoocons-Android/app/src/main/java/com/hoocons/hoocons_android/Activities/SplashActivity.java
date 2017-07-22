@@ -46,6 +46,10 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
+                    finish();
+                } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
+                    startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+                    finish();
                 } else {
                     reCaptureToken();
                 }
@@ -55,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void reCaptureToken() {
         String[] cred = SharedPreferencesManager.getDefault().getCredentials();
-        if (cred[0] != null && cred[1] != null) {
+        if (cred[0] != null && cred[1] != null && cred[0].length() > 0 && cred[1].length() > 0) {
             SharedPreferencesManager.getDefault().setUserToken(null);
             service.login(new CredentialRequest(cred[0], cred[1])).enqueue(new Callback<TokenResponse>() {
                 @Override
@@ -70,6 +74,7 @@ public class SplashActivity extends AppCompatActivity {
                                 getResources().getString(R.string.no_connection),
                                 Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+                        finish();
                     }
                 }
 
@@ -83,6 +88,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, getResources().getString(R.string.no_connection) , Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+            finish();
         }
     }
 
@@ -139,9 +145,7 @@ public class SplashActivity extends AppCompatActivity {
     private void commitNextStage() {
         if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
             startActivity(new Intent(SplashActivity.this, IntroActivity.class));
-        } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
-            startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
-        } else if (SharedPreferencesManager.getDefault().isNeededToRequestInfo()) {
+        }  else if (SharedPreferencesManager.getDefault().isNeededToRequestInfo()) {
             startActivity(new Intent(SplashActivity.this, LoginActivity.class)
                     .putExtra("REQUEST_INFO", true)
                     .putExtra("SKIP_LOGIN", true));
