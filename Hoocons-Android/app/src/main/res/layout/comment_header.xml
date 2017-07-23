@@ -6,11 +6,11 @@
 
     <TextView
         android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
         android:id="@+id/comment_username"
         android:layout_toStartOf="@+id/comment_time"
         android:layout_marginStart="@dimen/comment_layout_start"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:text="Hung Nguyen"
         android:textStyle="bold"
         android:maxLines="1"
@@ -19,7 +19,6 @@
         android:textSize="@dimen/comment_name_text"/>
 
     <TextView
-        android:layout_marginTop="@dimen/margin_8"
         android:id="@+id/comment_time"
         android:layout_marginEnd="@dimen/margin_4"
         android:layout_width="wrap_content"
@@ -27,7 +26,7 @@
         android:textColor="@color/place_autocomplete_search_text"
         android:textSize="@dimen/comment_time_text"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:maxLines="1"
         android:ellipsize="end"
         android:text="30 mins ago"/>

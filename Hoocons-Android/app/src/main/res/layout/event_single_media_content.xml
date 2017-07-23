@@ -8,11 +8,15 @@
     android:maxHeight="@dimen/postfeed_max_image_height"
     android:background="@color/gray_white">
 
-    <ImageView
-        android:id="@+id/event_single_media_content"
+    <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"/>
+        android:background="@color/gray_alpha"
+        android:adjustViewBounds="true"
+        android:minHeight="248dp"
+        android:minWidth="248dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/event_single_media_content"/>
 
     <ProgressBar
         android:layout_width="@dimen/progress_circle_radius"

@@ -483,10 +483,6 @@ public class NewEventActivity extends BaseActivity
         mSingleContentImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("giphy_url", url);
-                clipboard.setPrimaryClip(clip);
-
                 if (gifDrawable != null) {
                     if (gifDrawable.isRunning()) {
                         gifDrawable.stop();
