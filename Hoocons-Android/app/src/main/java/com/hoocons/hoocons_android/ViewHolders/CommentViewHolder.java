@@ -70,7 +70,7 @@ public class CommentViewHolder extends ViewHolder {
     private void loadUserProfile(final Context context, final String url) {
         Glide.with(context)
                 .load(url)
-                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 4, 4)))
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 12, 0)))
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

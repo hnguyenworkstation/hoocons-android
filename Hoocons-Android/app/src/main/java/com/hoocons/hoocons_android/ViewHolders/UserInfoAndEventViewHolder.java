@@ -411,7 +411,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         Glide.with(context)
                 .load(url)
                 .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model,

@@ -70,7 +70,8 @@
             </RelativeLayout>
 
             <com.hoocons.hoocons_android.CustomUI.CustomTextView
-                android:padding="@dimen/comment_layout_start"
+                android:layout_marginStart="@dimen/margin_4"
+                android:layout_marginEnd="@dimen/margin_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment_text_content"

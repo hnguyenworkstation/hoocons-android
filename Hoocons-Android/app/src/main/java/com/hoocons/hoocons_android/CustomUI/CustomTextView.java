@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.CustomUI;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -44,7 +45,6 @@ import java.util.regex.Pattern;
 /**
  * Created by hungnguyen on 7/22/17.
  */
-
 public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
     static final String TAG = "CustomTextView";
 
@@ -55,7 +55,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
-        public Thread newThread(Runnable r) {
+        public Thread newThread(@NonNull Runnable r) {
             int count = mCount.getAndIncrement();
             Logger.v(TAG, "new Thread " + "AisenTextView #" + count);
             return new Thread(r, "AisenTextView #" + count);
@@ -93,12 +93,12 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
         boolean replace = false;
 
-        if (!replace && TextUtils.isEmpty(text)) {
+        if (TextUtils.isEmpty(text)) {
             super.setText(text);
             return;
         }
 
-        if (!replace && !TextUtils.isEmpty(content) && content.equals(text))
+        if (!TextUtils.isEmpty(content) && content.equals(text))
             return;
 
         content = text;
@@ -109,11 +109,11 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         String key = KeyGenerator.generateMD5(text);
         SpannableString spannableString = stringMemoryCache.get(key);
         if (spannableString != null) {
-            Logger.v(TAG, "从内存中加载spannable数据");
+            Logger.v(TAG, "Spannable is not null");
 
             super.setText(spannableString);
         } else {
-            Logger.v(TAG, "开启线程，开始加载spannable数据");
+            Logger.v(TAG, "Spannable is null");
 
             super.setText(text);
             emotionTask = new EmotionTask(this);
@@ -124,7 +124,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         setOnTouchListener(onTouchListener);
     }
 
-    static class EmotionTask extends WorkTask<Void, SpannableString, Boolean> {
+    private static class EmotionTask extends WorkTask<Void, SpannableString, Boolean> {
         WeakReference<TextView> textViewRef;
 
         EmotionTask(TextView textView) {
@@ -215,13 +215,11 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     }
 
     private OnTouchListener onTouchListener = new OnTouchListener() {
-
         ClickableTextViewMentionLinkOnTouchListener listener = new ClickableTextViewMentionLinkOnTouchListener();
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return listener.onTouch(v, event);
-
         }
     };
 

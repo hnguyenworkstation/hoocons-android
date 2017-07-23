@@ -10,8 +10,8 @@
         android:layout_alignParentStart="true"
         android:background="@drawable/icon_button"
         android:id="@+id/action_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/actionbar_icon_size"
+        android:layout_height="@dimen/actionbar_icon_size"
         android:src="@drawable/ic_arrow_back_colored"
         android:layout_marginStart="@dimen/actionbar_margin"/>
 

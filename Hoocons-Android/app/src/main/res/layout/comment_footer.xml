@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/like"
         android:textColor="@color/black_alpha_30"
-        android:textSize="@dimen/text_14"/>
+        android:textSize="@dimen/text_10"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         android:gravity="center"
         android:text="@string/reply"
         android:textColor="@color/black_alpha_30"
-        android:textSize="@dimen/text_14"/>
+        android:textSize="@dimen/text_10"/>
 
     <TextView
         android:layout_alignParentEnd="true"
@@ -31,8 +31,8 @@
         android:layout_height="@dimen/comment_icon_size"
         android:id="@+id/comment_seemore"
         android:gravity="top"
+        android:visibility="gone"
         android:text="see more..."
         android:textColor="@color/bootstrap_gray"
         android:textSize="@dimen/comment_seemore_textsize"/>
-
 </RelativeLayout>
