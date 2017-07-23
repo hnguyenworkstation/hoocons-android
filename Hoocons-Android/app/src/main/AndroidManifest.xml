@@ -183,10 +183,12 @@
             android:name=".Activities.NewMeetingActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.CommentEventActivity"
+        <activity
+            android:name=".Activities.CommentEventActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"/>
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".Activities.FullEventImagesActivity"></activity>
     </application>
 
 </manifest>

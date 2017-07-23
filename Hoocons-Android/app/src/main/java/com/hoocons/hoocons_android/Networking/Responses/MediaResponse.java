@@ -2,10 +2,12 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by hungnguyen on 7/15/17.
  */
-
+@Parcel
 public class MediaResponse {
     @SerializedName("id")
     private int id;
@@ -15,6 +17,9 @@ public class MediaResponse {
     private String type;
     @SerializedName("thumbnail")
     private String thumbNail;
+
+    public MediaResponse() {
+    }
 
     public int getId() {
         return id;

@@ -39,15 +39,19 @@ import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
+import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
+import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -214,7 +218,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     public void initViewHolder(final Context context, final EventResponse response,
                                final EventAdapterListener listener, final int position) {
         initEventHeader(context, response);
-        initEventContent(context, response);
+        initEventContent(context, response, position);
         initEventFooter(context, response);
         initOnClickListener(listener, position);
     }
@@ -331,7 +335,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         mTimeFrame.setText(eventResponse.getCreateAt());
     }
 
-    private void initEventContent(Context context, final EventResponse eventResponse) {
+    private void initEventContent(Context context, final EventResponse eventResponse, final int eventPosition) {
         assert mTextContent != null;
         if (eventResponse.getTextContent() != null && eventResponse.getTextContent().length() >  1) {
             mTextContent.setContent(eventResponse.getTextContent());
@@ -351,7 +355,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
             loadSingleGif(context, eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
-            loadMultipleImages(eventResponse.getMedias());
+            loadMultipleImages(eventResponse.getMedias(), eventPosition);
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
             loadVideoView(eventResponse.getMedias().get(0));
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
@@ -399,9 +403,15 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .into(mVideoPlayer.thumbImageView);
     }
 
-    private void loadMultipleImages(List<MediaResponse> mediaList) {
+    private void loadMultipleImages(final List<MediaResponse> mediaList, final int eventPosition) {
         assert mMultiMediaRecycler != null;
-        mMultiImageAdapter = new MediaImagesAdapter(mMultiMediaRecycler.getContext(), mediaList);
+        mMultiImageAdapter = new MediaImagesAdapter(mMultiMediaRecycler.getContext(),
+                mediaList, eventPosition, new OnChildImageClickListener() {
+            @Override
+            public void onChildImageClick(int eventPosition, int position) {
+                EventBus.getDefault().post(new StartEventChildImages(eventPosition, position));
+            }
+        });
 
         if (mediaList.size() % 2 == 0 && mediaList.size() <= 4) {
             mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(mMultiMediaRecycler.getContext(), 2,

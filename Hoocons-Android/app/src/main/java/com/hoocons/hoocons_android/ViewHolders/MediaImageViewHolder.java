@@ -26,6 +26,7 @@ import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.SquareImageView;
+import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.R;
 
 
@@ -59,8 +60,9 @@ public class MediaImageViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initImage(Context context, String url, final int position,
-                          final boolean isLast, final int listSize) {
+    public void initImage(final Context context, final String url, final int position,
+                          final boolean isLast, final int listSize, final int eventPosition,
+                          final OnChildImageClickListener listener) {
         this.position = position;
         mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(springListener);
@@ -77,7 +79,14 @@ public class MediaImageViewHolder extends RecyclerView.ViewHolder {
                         mScaleSpring.setEndValue(0);
                         break;
                 }
-                return true;
+                return false;
+            }
+        });
+
+        mImageRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onChildImageClick(eventPosition, position);
             }
         });
 

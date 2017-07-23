@@ -37,6 +37,7 @@ import com.hoocons.hoocons_android.Adapters.UserProfileAndEventAdapter;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
+import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
@@ -44,6 +45,7 @@ import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
+import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
@@ -335,6 +337,22 @@ public class UserProfileActivity extends DraggerActivity
         eventResponseList.addAll(request.getResponseList());
         mEventsAdapter.notifyDataSetChanged();
     }
+
+    @Subscribe
+    public void onEvent(StartEventChildImages request) {
+        MultiImagesEventClickedParcel parcel = new MultiImagesEventClickedParcel();
+
+        parcel.setResponseList(eventResponseList.get(request.getEventPosition()).getMedias());
+        parcel.setClickedPosition( request.getImagePosition());
+        parcel.setTextContent(eventResponseList.get(request.getEventPosition()).getTextContent());
+        parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition()).getUserInfo().getDisplayName());
+
+        Intent listImages = new Intent(UserProfileActivity.this, FullEventImagesActivity.class);
+        listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
+
+        startActivity(listImages);
+    }
+
 
 
     @Override
