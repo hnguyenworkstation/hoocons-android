@@ -25,19 +25,20 @@
                 android:layout_width="match_parent"/>
         </LinearLayout>
 
-        <TextView
+        <com.hoocons.hoocons_android.CustomUI.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_12"
             android:layout_marginEnd="@dimen/margin_8"
             android:textColor="@color/black"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/margin_12"
             android:id="@+id/event_text_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/event_video_media"
-            android:layout_marginTop="@dimen/margin_12"
             android:orientation="vertical">
 
             <include layout="@layout/event_video_view_content"

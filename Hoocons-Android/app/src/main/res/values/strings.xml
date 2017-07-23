@@ -160,6 +160,8 @@
     <string name="new_meeting">Start a meeting</string>
     <string name="action_delete">Delete</string>
     <string name="task_failed">Failed! Please check connection</string>
+    <string name="love">Love</string>
+    <string name="loved">Loved</string>
 
     <string name="msg_now">just now</string>
     <string name="msg_today">today</string>

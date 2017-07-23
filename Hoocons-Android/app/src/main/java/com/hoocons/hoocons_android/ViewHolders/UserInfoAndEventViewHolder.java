@@ -37,6 +37,7 @@ import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
@@ -88,7 +89,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     /* EVENT TEXT CONTENT */
     @Nullable
     @BindView(R.id.event_text_content)
-    TextView mTextContent;
+    CustomTextView mTextContent;
 
     /* EVENT SINGLE MEDIA */
     @Nullable
@@ -142,12 +143,20 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
 
     /* EVENT FOOTER */
     @Nullable
-    @BindView(R.id.event_likebtn)
-    BootstrapButton mLikeBtn;
+    @BindView(R.id.love_event_action)
+    LinearLayout mLoveView;
 
     @Nullable
-    @BindView(R.id.event_commentbtn)
-    BootstrapButton mCommentBtn;
+    @BindView(R.id.love_icon)
+    ImageView mLoveIcon;
+
+    @Nullable
+    @BindView(R.id.love_text)
+    TextView mLoveText;
+
+    @Nullable
+    @BindView(R.id.comment_event_action)
+    LinearLayout mCommentView;
 
     @Nullable
     @BindView(R.id.like_count)
@@ -201,16 +210,16 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void initOnClickListener(final EventAdapterListener listener, final int position) {
-        assert mLikeBtn != null;
-        mLikeBtn.setOnClickListener(new View.OnClickListener() {
+        assert mLoveView != null;
+        mLoveView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onLikeClicked(position);
             }
         });
 
-        assert mCommentBtn != null;
-        mCommentBtn.setOnClickListener(new View.OnClickListener() {
+        assert mCommentView != null;
+        mCommentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onCommentClicked(position);
@@ -227,10 +236,10 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void initEventFooter(Context context, final EventResponse eventResponse) {
-        assert mLikeBtn != null;
+        assert mLoveView != null;
         assert mLikeCount != null;
         assert mCommentCount != null;
-        assert mCommentBtn != null;
+        assert mCommentView != null;
 
         mCommentBtnScaleSpring = mSpringSystem.createSpring();
         mCommentBtnScaleSpring.addListener(new SimpleSpringListener() {
@@ -238,8 +247,8 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             public void onSpringUpdate(Spring spring) {
                 float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
 
-                mCommentBtn.setScaleX(mappedValue);
-                mCommentBtn.setScaleY(mappedValue);
+                mCommentView.setScaleX(mappedValue);
+                mCommentView.setScaleY(mappedValue);
             }
         });
 
@@ -249,17 +258,13 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         mCommentCount.setText(commentCount);
 
         if (eventResponse.getIsLiked()) {
-            mLikeBtn.setBootstrapBrand(DefaultBootstrapBrand.PRIMARY);
-            mLikeBtn.setBootstrapText(new BootstrapText.Builder(context)
-                    .addFontAwesomeIcon(FontAwesome.FA_THUMBS_UP)
-                    .addText(" " + context.getResources().getText(R.string.liked))
-                    .build());
+            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_color));
+            mLoveText.setText(context.getResources().getText(R.string.loved));
+            mLoveText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         } else {
-            mLikeBtn.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
-            mLikeBtn.setBootstrapText(new BootstrapText.Builder(context)
-                    .addFontAwesomeIcon(FontAwesome.FA_THUMBS_O_UP)
-                    .addText(" " + context.getResources().getText(R.string.like))
-                    .build());
+            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_inactive));
+            mLoveText.setText(context.getResources().getText(R.string.love));
+            mLoveText.setTextColor(context.getResources().getColor(R.color.event_timestamp));
         }
 
         // Init Spring
@@ -269,12 +274,12 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             public void onSpringUpdate(Spring spring) {
                 float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
 
-                mLikeBtn.setScaleX(mappedValue);
-                mLikeBtn.setScaleY(mappedValue);
+                mLoveView.setScaleX(mappedValue);
+                mLoveView.setScaleY(mappedValue);
             }
         });
 
-        mLikeBtn.setOnTouchListener(new View.OnTouchListener() {
+        mLoveView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -290,7 +295,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             }
         });
 
-        mCommentBtn.setOnTouchListener(new View.OnTouchListener() {
+        mCommentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -308,14 +313,19 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void initEventHeader(final Context context, final EventResponse eventResponse) {
+        assert mUserDisplayName != null;
+        assert mTimeFrame != null;
+
         loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl());
         mUserDisplayName.setText(eventResponse.getUserInfo().getDisplayName());
         mTimeFrame.setText(eventResponse.getCreateAt());
     }
 
     private void initEventContent(Context context, final EventResponse eventResponse) {
-        if (eventResponse.getTextContent() != null) {
-            mTextContent.setText(eventResponse.getTextContent());
+        assert mTextContent != null;
+        if (eventResponse.getTextContent() != null && eventResponse.getTextContent().length() >  1) {
+            mTextContent.setContent(eventResponse.getTextContent());
+            mTextContent.setVisibility(View.VISIBLE);
 
             if (eventResponse.getTextContent().length() < 50) {
                 mTextContent.setTextSize(20);
@@ -340,6 +350,8 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void loadCheckinMapView(final EventResponse eventResponse) {
+        assert mCheckinName != null;
+        assert mCheckinType != null;
         loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[1]),
                 String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[0])));
 
@@ -348,6 +360,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void loadLocationMapView(String url) {
+        assert mLocationMapView != null;
         Glide.with(mLocationMapView.getContext())
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
@@ -360,6 +373,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        assert mLocMapProgress != null;
                         mLocMapProgress.setVisibility(View.GONE);
                         return false;
                     }
