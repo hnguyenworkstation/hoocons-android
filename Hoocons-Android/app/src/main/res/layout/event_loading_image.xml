@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/event_footer"
-    android:background="@color/gray_alpha">
+    android:background="@color/colorBackground">
 
     <ProgressBar
         android:id="@+id/event_loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="@dimen/margin_8"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

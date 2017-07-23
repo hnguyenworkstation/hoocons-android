@@ -144,6 +144,9 @@
     <string name="location">Location</string>
     <string name="work">Work</string>
     <string name="hobbies">Hobbies</string>
+    <string name="recent_event">Posted events</string>
+    <string name="recently">Recently</string>
+    <string name="event_posted_detail">have posted some events</string>
 
     <string name="new_meeting_title">Start a new meeting around you</string>
     <string name="new_meeting_desc">Connect with new people, learn something, play something and… actually do something</string>

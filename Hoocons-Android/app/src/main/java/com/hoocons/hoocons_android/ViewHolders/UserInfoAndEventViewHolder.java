@@ -191,6 +191,16 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @BindView(R.id.profile_progress_bar)
     ProgressBar mProfileProgress;
 
+    /* USER PROFILE DUMMIES VIEW HOLDER */
+    @Nullable
+    @BindView(R.id.dummies_title)
+    TextView mDummiesTitle;
+
+    @Nullable
+    @BindView(R.id.dummies_detail)
+    TextView mDummiesDetail;
+
+
     private Spring mLikeBtnScaleSpring;
     private Spring mCommentBtnScaleSpring;
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
@@ -491,6 +501,24 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
             assert mNickname != null;
             mNickname.setText(nickname);
         }
+    }
+
+    public void initDummyCardForEvent(final Context context, final boolean isMySelf, final String displayName) {
+        assert mDummiesTitle != null;
+        mDummiesTitle.setText(context.getResources().getText(R.string.recent_event));
+        String details;
+
+        if (isMySelf) {
+            details = String.format("%s, you %s", context.getResources().getString(R.string.recently),
+                    context.getResources().getString(R.string.event_posted_detail));
+        } else {
+            details = String.format("%s, %s %s", context.getResources().getString(R.string.recently),
+                    displayName,
+                    context.getResources().getString(R.string.event_posted_detail));
+        }
+
+        assert mDummiesDetail != null;
+        mDummiesDetail.setText(details);
     }
 
     private void loadProfileImage(Context context, String url) {

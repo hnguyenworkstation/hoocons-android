@@ -30,11 +30,13 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     private final int TYPE_EVENT_WEB = 5;
     private final int TYPE_EVENT_CHECKIN = 6;
 
+    private final int EVENT_DUMMIES_CARD = 10;
+
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
     private EventAdapterListener listener;
 
-    private final int EXTRA_ITEMS = 1;
+    private final int EXTRA_ITEMS = 2;
 
     public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList,
                                       final EventAdapterListener listener, boolean isMyself) {
@@ -49,6 +51,10 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
         View view = null;
 
         switch (viewType) {
+            case EVENT_DUMMIES_CARD:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.user_profile_dummy_viewholder, parent, false);
+                break;
             case USER_INFO_TAG_CARD:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.user_info_profile_viewholder, parent, false);
@@ -80,6 +86,11 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     public void onBindViewHolder(UserInfoAndEventViewHolder holder, int position) {
         if (position == 0) {
             holder.initUserInfo(context, isMyself);
+        } else if (position == 1) {
+            if (responseList.size() > 0) {
+                holder.initDummyCardForEvent(context, isMyself,
+                        responseList.get(0).getUserInfo().getDisplayName());
+            }
         } else {
             holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
                     listener, position - EXTRA_ITEMS);
@@ -90,9 +101,11 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     public int getItemViewType(int position) {
         if (position == 0) {
             return USER_INFO_TAG_CARD;
+        } else if (position == 1) {
+            return EVENT_DUMMIES_CARD;
         }
 
-        EventResponse response = responseList.get(position - 1);
+        EventResponse response = responseList.get(position - EXTRA_ITEMS);
         switch (response.getEventType()) {
             case AppConstant.EVENT_TYPE_TEXT:
                 return TYPE_EVENT_TEXT;

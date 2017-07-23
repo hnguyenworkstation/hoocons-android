@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:id="@+id/event_multi_media_viewholder"
     android:layout_width="match_parent"
-    android:background="@color/gray_alpha"
+    android:background="@color/colorBackground"
     android:layout_height="wrap_content">
 
     <LinearLayout
