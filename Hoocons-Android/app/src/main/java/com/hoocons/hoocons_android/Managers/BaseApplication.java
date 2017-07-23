@@ -18,12 +18,9 @@ import com.birbit.android.jobqueue.log.CustomLogger;
 import com.birbit.android.jobqueue.scheduling.FrameworkJobSchedulerService;
 import com.birbit.android.jobqueue.scheduling.GcmJobSchedulerService;
 import com.facebook.FacebookSdk;
-import com.google.android.gms.appindexing.AppIndex;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.R;
@@ -68,6 +65,7 @@ public class BaseApplication extends GlobalContext {
 
         // Initializing facebook
         FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         // Init bitmap
         BitmapLoader.newInstance(this, getImagePath());

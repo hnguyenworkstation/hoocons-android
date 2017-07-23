@@ -30,7 +30,7 @@
 
     <application
         android:name=".Managers.BaseApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,7 +39,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustResize"
-        tools:replace="android:icon">
+        tools:replace="android:icon, android:allowBackup">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

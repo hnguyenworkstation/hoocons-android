@@ -27,7 +27,6 @@
         android:layout_toEndOf="@+id/action_back"
         android:layout_toStartOf="@+id/action_more"/>
 
-
     <ImageButton
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"

@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
+    private final String TAG = SplashActivity.class.getSimpleName();
     private static final int SPLASH_TIME_OUT = 2000;
 
     final UserServices service = NetContext.instance.create(UserServices.class);
@@ -48,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
                 } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
+                    Log.e(TAG, SharedPreferencesManager.getDefault().getUserToken());
                     startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
                     finish();
                 } else {
@@ -59,6 +62,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void reCaptureToken() {
         String[] cred = SharedPreferencesManager.getDefault().getCredentials();
+        Log.e(TAG, "reCaptureToken: " + cred[0]);
+        Log.e(TAG, "reCaptureToken: " + cred[1]);
         if (cred[0] != null && cred[1] != null && cred[0].length() > 0 && cred[1].length() > 0) {
             SharedPreferencesManager.getDefault().setUserToken(null);
             service.login(new CredentialRequest(cred[0], cred[1])).enqueue(new Callback<TokenResponse>() {

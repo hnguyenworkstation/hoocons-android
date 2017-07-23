@@ -38,6 +38,7 @@ import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Adapters.CommentsAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
+import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.EventBus.EventDeleted;
 import com.hoocons.hoocons_android.EventBus.FetchCommentsComplete;
 import com.hoocons.hoocons_android.EventBus.FetchCommentsFailed;
@@ -415,6 +416,8 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         if (scrollY == 0) {
             EventBus.getDefault().post(new AllowSlideDown());
+        } else {
+            EventBus.getDefault().post(new BlockSlideDown());
         }
     }
 
