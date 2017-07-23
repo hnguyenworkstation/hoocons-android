@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 
 import org.aisen.android.common.utils.DateUtils;
@@ -85,7 +86,7 @@ public class AppUtils {
     @SuppressWarnings("deprecation")
     public static String convDate(String time) {
         try {
-            Context context = GlobalContext.getInstance();
+            Context context = BaseApplication.getInstance().getApplicationContext();
             Resources res = context.getResources();
 
             StringBuffer buffer = new StringBuffer();

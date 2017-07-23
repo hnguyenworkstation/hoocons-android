@@ -4,9 +4,11 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +38,7 @@ import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
+import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -96,6 +99,7 @@ public class UserProfileActivity extends DraggerActivity
     private int mFlexibleSpaceImageHeight;
     private boolean isMySelf;
     private Intent mIntent;
+    private Handler handler;
 
     private final String USERID = "USERID";
     private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
@@ -111,6 +115,7 @@ public class UserProfileActivity extends DraggerActivity
     private PopupMenu eventPopup;
 
     private UserProfileAndEventAdapter mEventsAdapter;
+    private boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +127,8 @@ public class UserProfileActivity extends DraggerActivity
 
         mIntent = getIntent();
         isMySelf = mIntent.getBooleanExtra(MYSELF, false);
+
+        handler = new Handler();
 
         eventResponseList = new ArrayList<>();
         mEventsAdapter = new UserProfileAndEventAdapter(this, eventResponseList, this, isMySelf);
@@ -138,11 +145,48 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void initEventRecyclerView() {
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView.setFocusable(false);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(mEventsAdapter);
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
+
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                loadMoreEvents();
+            }
+
+            @Override
+            public int getTotalItems() {
+                return mEventsAdapter.getItemCount();
+            }
+
+            @Override
+            public boolean isLastItem() {
+                return ((LinearLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition()
+                        == (mEventsAdapter.getItemCount() - 1);
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
+
+    private void loadMoreEvents() {
+        mEventsAdapter.addLoadingFooter();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mEventsAdapter.removeLoadingFooter();
+                isLoading = false;
+            }
+        }, 2000);
     }
 
     private void loadActionBarProfileImage(String url) {

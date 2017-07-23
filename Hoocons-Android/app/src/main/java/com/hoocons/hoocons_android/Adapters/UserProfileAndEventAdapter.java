@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Adapters;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     private List<EventResponse> responseList;
     private Context context;
 
+    private final int EVENT_LOADING_END = 100;
+
     private final int TYPE_EVENT_TEXT = 0;
     private final int TYPE_EVENT_SINGLE_IMAGE = 1;
     private final int TYPE_EVENT_MUL_IMAGES = 2;
@@ -37,6 +40,7 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     private EventAdapterListener listener;
 
     private final int EXTRA_ITEMS = 2;
+    private final Handler handler = new Handler();
 
     public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList,
                                       final EventAdapterListener listener, boolean isMyself) {
@@ -75,6 +79,9 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.event_check_in_viewholder, parent, false);
                 break;
+            case EVENT_LOADING_END:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.event_loading_image, parent, false);
             default:
                 break;
         }
@@ -92,8 +99,10 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
                         responseList.get(0).getUserInfo().getDisplayName());
             }
         } else {
-            holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
-                    listener, position - EXTRA_ITEMS);
+            if (responseList.get(position - EXTRA_ITEMS) != null) {
+                holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
+                        listener, position - EXTRA_ITEMS);
+            }
         }
     }
 
@@ -103,6 +112,10 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
             return USER_INFO_TAG_CARD;
         } else if (position == 1) {
             return EVENT_DUMMIES_CARD;
+        }
+
+        if (responseList.get(position - EXTRA_ITEMS) == null) {
+            return EVENT_LOADING_END;
         }
 
         EventResponse response = responseList.get(position - EXTRA_ITEMS);
@@ -121,6 +134,7 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
 
             case AppConstant.EVENT_TYPE_CHECK_IN:
                 return TYPE_EVENT_CHECKIN;
+
             default:
                 return -1;
         }
@@ -136,12 +150,24 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     }
 
     public void addLoadingFooter() {
-        responseList.add(null);
-        notifyItemInserted(responseList.size() - 1);
+        final Runnable r = new Runnable() {
+            public void run() {
+                responseList.add(null);
+                notifyItemInserted(responseList.size() + EXTRA_ITEMS - 1);
+            }
+        };
+
+        handler.post(r);
     }
 
     public void removeLoadingFooter() {
-        responseList.remove(responseList.size() - 1);
-        notifyItemRemoved(responseList.size());
+        final Runnable r = new Runnable() {
+            public void run() {
+                responseList.remove(responseList.size() - 1);
+                notifyItemRemoved(responseList.size() + EXTRA_ITEMS);
+            }
+        };
+
+        handler.post(r);
     }
 }
