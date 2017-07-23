@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
@@ -69,6 +70,7 @@ public class CommentViewHolder extends ViewHolder {
     private void loadUserProfile(final Context context, final String url) {
         Glide.with(context)
                 .load(url)
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 4, 4)))
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

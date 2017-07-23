@@ -37,6 +37,7 @@ import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
@@ -482,6 +483,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         assert mProfileImage != null;
         Glide.with(context)
                 .load(url)
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 6, 6)))
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.centerCropTransform())
@@ -503,6 +505,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     }
 
     private void loadUserProfileImage(Context context, String url) {
+        assert mUserProfileImage != null;
         Glide.with(context)
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
