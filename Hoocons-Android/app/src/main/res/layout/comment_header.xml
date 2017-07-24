@@ -19,8 +19,9 @@
         android:textSize="@dimen/comment_name_text"/>
 
     <TextView
+        android:layout_marginTop="@dimen/margin_4"
         android:id="@+id/comment_time"
-        android:layout_marginEnd="@dimen/margin_4"
+        android:layout_marginEnd="@dimen/margin_12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/place_autocomplete_search_text"

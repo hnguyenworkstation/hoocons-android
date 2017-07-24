@@ -12,18 +12,18 @@
         android:gravity="center"
         android:text="@string/like"
         android:textColor="@color/black_alpha_30"
-        android:textSize="@dimen/text_10"/>
+        android:textSize="@dimen/text_12"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="@dimen/comment_icon_size"
-        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginStart="@dimen/margin_20"
         android:layout_toEndOf="@+id/comment_like_action"
         android:id="@+id/comment_reply_action"
         android:gravity="center"
         android:text="@string/reply"
         android:textColor="@color/black_alpha_30"
-        android:textSize="@dimen/text_10"/>
+        android:textSize="@dimen/text_12"/>
 
     <TextView
         android:layout_alignParentEnd="true"

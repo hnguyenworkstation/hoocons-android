@@ -142,7 +142,7 @@ public class AppUtils {
             if (currentcal.get(Calendar.MONTH) == createCal.get(Calendar.MONTH)) {
                 if (currentcal.get(Calendar.DAY_OF_MONTH) == createCal.get(Calendar.DAY_OF_MONTH)) {
                     if (diffTime < 3600 && diffTime >= 60) {
-                        buffer.append((diffTime / 60) + res.getString(R.string.msg_few_minutes_ago));
+                        buffer.append(diffTime / 60).append(" ").append(res.getString(R.string.msg_few_minutes_ago));
                     } else if (diffTime < 60) {
                         buffer.append(res.getString(R.string.msg_now));
                     } else {
