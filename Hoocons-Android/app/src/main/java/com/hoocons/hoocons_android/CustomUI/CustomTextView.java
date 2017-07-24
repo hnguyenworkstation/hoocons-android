@@ -122,7 +122,10 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
         setClickable(false);
         setOnTouchListener(onTouchListener);
+
+        // Updating clickable link that exists in the string content
     }
+
 
     private static class EmotionTask extends WorkTask<Void, SpannableString, Boolean> {
         WeakReference<TextView> textViewRef;

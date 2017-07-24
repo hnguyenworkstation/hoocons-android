@@ -55,6 +55,7 @@ dependencies {
     compile project(':photoview')
     compile project(':dialogs-core')
     compile project(':dialogs-commons')
+    compile project(':text-link-builder')
     compile files('libs/rebound-0.3.8.jar')
     compile("com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1") {
         transitive = false
