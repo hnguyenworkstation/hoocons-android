@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/dialogs-commons" />
+            <option value="$PROJECT_DIR$/dialogs-core" />
             <option value="$PROJECT_DIR$/emotion_helper" />
             <option value="$PROJECT_DIR$/giphy_library" />
             <option value="$PROJECT_DIR$/jcvideoplayer-lib" />

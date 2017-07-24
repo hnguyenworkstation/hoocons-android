@@ -3,15 +3,20 @@ package com.hoocons.hoocons_android.Activities;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.Adapters.EventImagesViewpagerAdapter;
 import com.hoocons.hoocons_android.CustomUI.HackyViewPager;
+import com.hoocons.hoocons_android.EventBus.OnImageViewClicked;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.R;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
@@ -24,13 +29,18 @@ public class FullEventImagesActivity extends BaseActivity {
     TextView mEventTextContent;
     @BindView(R.id.tv_indicator)
     TextView mIndicator;
+    @BindView(R.id.title_layout)
+    RelativeLayout mTitleLayout;
 
     private MultiImagesEventClickedParcel parcel;
     private EventImagesViewpagerAdapter eventImagesViewpagerAdapter;
+    private boolean isHiding = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
         setContentView(R.layout.activity_full_event_images);
         ButterKnife.bind(this);
 
@@ -63,5 +73,19 @@ public class FullEventImagesActivity extends BaseActivity {
 
         if (parcel.getTextContent() != null  && parcel.getTextContent().length() > 0)
             mEventTextContent.setText(parcel.getTextContent());
+    }
+
+
+    @Subscribe
+    public void onEvent(OnImageViewClicked request) {
+        if (isHiding) {
+            mTitleLayout.setVisibility(View.VISIBLE);
+            mEventTextContent.setVisibility(View.VISIBLE);
+            isHiding = false;
+        } else {
+            isHiding = true;
+            mTitleLayout.setVisibility(View.GONE);
+            mEventTextContent.setVisibility(View.GONE);
+        }
     }
 }

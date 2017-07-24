@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_marginTop="@dimen/margin_4"
+        android:layout_marginTop="@dimen/margin_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_8"
         android:layout_marginStart="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_16"
         android:textColor="@color/gray_alpha"
         android:textSize="@dimen/text_16"
         android:textAlignment="center"

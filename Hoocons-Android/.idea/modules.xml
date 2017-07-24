@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Hoocons-Android.iml" filepath="$PROJECT_DIR$/Hoocons-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-commons/dialogs-commons.iml" filepath="$PROJECT_DIR$/dialogs-commons/dialogs-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-core/dialogs-core.iml" filepath="$PROJECT_DIR$/dialogs-core/dialogs-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/emotion_helper/emotion_helper.iml" filepath="$PROJECT_DIR$/emotion_helper/emotion_helper.iml" />
       <module fileurl="file://$PROJECT_DIR$/giphy_library/giphy_library.iml" filepath="$PROJECT_DIR$/giphy_library/giphy_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" filepath="$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" />

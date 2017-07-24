@@ -18,8 +18,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.hoocons.hoocons_android.EventBus.OnImageViewClicked;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -49,6 +52,13 @@ public class EventImagesViewpagerAdapter extends PagerAdapter {
 
         PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.full_image_progress);
+
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new OnImageViewClicked());
+            }
+        });
 
         Glide.with(context)
                 .load(mediaResponses.get(position).getUrl())
