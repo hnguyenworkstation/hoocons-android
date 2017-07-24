@@ -6,26 +6,34 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
+import com.klinker.android.link_builder.Link;
+import com.klinker.android.link_builder.LinkBuilder;
 
 import org.aisen.android.common.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import me.iwf.photopicker.PhotoPicker;
 
@@ -87,6 +95,34 @@ public class AppUtils {
         return saltStr;
 
     }
+
+    public static void catchLinksOnTextView(final Context context, CustomTextView textView) {
+        // Add the links and make the links clickable
+        LinkBuilder.on(textView)
+                .addLinks(getAvailableLinks(context))
+                .build();
+    }
+
+    private static List<Link> getAvailableLinks(final Context context) {
+        List<Link> links = new ArrayList<>();
+
+        // create a single click link to the matched twitter profiles
+        Link mentions = new Link(Pattern.compile("@\\w{1,15}"));
+        mentions.setTextColor(Color.parseColor("#00BCD4"));
+        mentions.setHighlightAlpha(.4f);
+        mentions.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
+                Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        links.add(mentions);
+
+        return links;
+    }
+
+
     @SuppressLint("SimpleDateFormat")
     public static String getCurrentUTCTime() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

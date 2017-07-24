@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.CustomUI;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -14,10 +15,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.klinker.android.link_builder.Link;
+import com.klinker.android.link_builder.LinkBuilder;
 
 import org.aisen.android.common.context.GlobalContext;
 import org.aisen.android.common.utils.BitmapUtil;
@@ -32,6 +36,8 @@ import org.aisen.android.support.textspan.ClickableTextViewMentionLinkOnTouchLis
 import org.aisen.android.support.textspan.MyURLSpan;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -122,10 +128,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
         setClickable(false);
         setOnTouchListener(onTouchListener);
-
-        // Updating clickable link that exists in the string content
     }
-
 
     private static class EmotionTask extends WorkTask<Void, SpannableString, Boolean> {
         WeakReference<TextView> textViewRef;

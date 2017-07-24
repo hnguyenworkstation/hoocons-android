@@ -63,7 +63,7 @@ public class CommentViewHolder extends ViewHolder {
     public void initViewHolder(final CommentResponse response, final Context context,
                                final int position, final CommentAdapterListener listener) {
         loadUserProfile(context, response.getCommentBy().getProfileUrl());
-        loadTextContent(response.getTextContent());
+        loadTextContent(context, response.getTextContent());
         loadCommentStats(response);
     }
 
@@ -87,8 +87,9 @@ public class CommentViewHolder extends ViewHolder {
                 }).into(mUserProfile);
     }
 
-    private void loadTextContent(final String textContent) {
+    private void loadTextContent(final Context context, final String textContent) {
         mTextContent.setContent(textContent);
+        AppUtils.catchLinksOnTextView(context, mTextContent);
     }
 
     private void loadCommentStats(final CommentResponse response) {

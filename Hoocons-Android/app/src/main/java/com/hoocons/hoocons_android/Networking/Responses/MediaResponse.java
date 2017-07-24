@@ -10,13 +10,13 @@ import org.parceler.Parcel;
 @Parcel
 public class MediaResponse {
     @SerializedName("id")
-    private int id;
+    int id;
     @SerializedName("url")
-    private String url;
+    String url;
     @SerializedName("type")
-    private String type;
+    String type;
     @SerializedName("thumbnail")
-    private String thumbNail;
+    String thumbNail;
 
     public MediaResponse() {
     }
