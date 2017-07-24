@@ -2,17 +2,22 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by hungnguyen on 7/10/17.
  */
-
+@Parcel
 public class LocationResponse {
     @SerializedName("srid")
     private int srid;
     @SerializedName("coordinates")
     private double[] coordinates;
+
+    public LocationResponse() {
+    }
 
     public int getSrid() {
         return srid;

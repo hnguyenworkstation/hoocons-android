@@ -18,6 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
@@ -168,6 +170,16 @@ public class AppUtils {
         return links;
     }
 
+    public static EventParcel getEventParcel(final EventResponse response) {
+        EventParcel parcel = new EventParcel();
+        parcel.setId(response.getEventId());
+        parcel.setTextContent(response.getTextContent());
+        parcel.setUserInfo(response.getUserInfo());
+        parcel.setEventType(response.getEventType());
+        parcel.setReported(response.isReported());
+        
+        return parcel;
+    }
 
     @SuppressLint("SimpleDateFormat")
     public static String getCurrentUTCTime() {

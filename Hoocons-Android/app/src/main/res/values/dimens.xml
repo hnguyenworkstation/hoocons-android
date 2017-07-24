@@ -93,7 +93,7 @@
     <dimen name="chatroom_message_txtsize">15sp</dimen>
     <dimen name="chatroom_userprofile_size">30dp</dimen>
     <dimen name="chatroom_action_sizebtn">60dp</dimen>
-    <dimen name="message_image_size">100dp</dimen>
+    <dimen name="message_image_size">88dp</dimen>
 
     <!-- Option Fragment dimens-->
     <dimen name="option_icon_size">30dp</dimen>

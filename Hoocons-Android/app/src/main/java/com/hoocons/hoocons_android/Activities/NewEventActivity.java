@@ -58,6 +58,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
@@ -68,12 +69,15 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,6 +152,20 @@ public class NewEventActivity extends BaseActivity
     @BindView(R.id.event_check_in_type)
     TextView mCheckinType;
 
+    //Shared content view
+    @BindView(R.id.new_event_shared_content)
+    RelativeLayout mSharedEventLayout;
+    @BindView(R.id.shared_event_profile)
+    ImageView mSharedEventUserProfile;
+    @BindView(R.id.shared_event_user_name)
+    TextView mSharedEventUserDisplayName;
+    @BindView(R.id.shared_event_type)
+    TextView mSharedEventType;
+    @BindView(R.id.shared_event_text_content)
+    CustomTextView mSharedEventTextContent;
+    @BindView(R.id.shared_event_options)
+    ImageButton mSharedEventOption;
+
     private ArrayList<String> mImagePaths;
     private ImageLoaderAdapter mImagesAdapter;
     private SweetAlertDialog mDialog;
@@ -172,12 +190,16 @@ public class NewEventActivity extends BaseActivity
     private String checkinPlaceId;
     private GifDrawable gifDrawable;
 
+    private EventParcel eventParcel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
+
+        eventParcel = (EventParcel) Parcels.unwrap(getIntent().getParcelableExtra("shared_event"));
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -206,6 +228,10 @@ public class NewEventActivity extends BaseActivity
         mPostBtn.setOnClickListener(this);
         mAddVideoBtn.setOnClickListener(this);
 
+        if (eventParcel != null) {
+            initSharedEventView();
+        }
+
         mTextContentInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -230,7 +256,24 @@ public class NewEventActivity extends BaseActivity
         mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
     }
 
-    private void loadProfileImage(String url) {
+    private  void initSharedEventView() {
+        mSharedEventLayout.setVisibility(View.VISIBLE);
+
+        loadEventSharedUserProfile(eventParcel.getUserInfo().getProfileUrl());
+        mSharedEventUserDisplayName.setText(eventParcel.getUserInfo().getDisplayName());
+        mSharedEventTextContent.setContent(eventParcel.getTextContent());
+    }
+
+    private void loadEventSharedUserProfile(final String url) {
+        Glide.with(this)
+                .load(url)
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .into(mSharedEventUserProfile);
+    }
+
+    private void loadProfileImage(final String url) {
         Glide.with(this)
                 .load(url)
                 .apply(RequestOptions.centerCropTransform())
@@ -324,12 +367,12 @@ public class NewEventActivity extends BaseActivity
         mImagesRecycler.setAdapter(mImagesAdapter);
         mImagesRecycler.setItemAnimator(new DefaultItemAnimator());
         mImagesRecycler.setNestedScrollingEnabled(false);
+        mImagesRecycler.setVisibility(View.VISIBLE);
     }
 
     private void openCustomPlacePicker() {
         startActivity(new Intent(NewEventActivity.this, PlacePickerActivity.class));
     }
-
 
     @Override
     public void onClick(View v) {

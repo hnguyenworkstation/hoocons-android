@@ -38,6 +38,7 @@ import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
@@ -465,6 +466,17 @@ public class UserProfileActivity extends DraggerActivity
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.share_event:
+                        Intent intent = new Intent(UserProfileActivity.this, NewEventActivity.class);
+                        if (eventResponseList.get(position).getContainEvent() != null) {
+                            intent.putExtra("shared_event",
+                                    Parcels.wrap(AppUtils.getEventParcel(eventResponseList
+                                            .get(position).getContainEvent())));
+                        } else {
+                            intent.putExtra("shared_event",
+                                    Parcels.wrap(AppUtils.getEventParcel(eventResponseList
+                                            .get(position))));
+                        }
+                        startActivity(intent);
                         return true;
                     case R.id.delete_event:
                         return true;

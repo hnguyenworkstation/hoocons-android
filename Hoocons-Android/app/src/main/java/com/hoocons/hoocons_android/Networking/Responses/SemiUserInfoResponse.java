@@ -2,10 +2,12 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by hungnguyen on 7/18/17.
  */
-
+@Parcel
 public class SemiUserInfoResponse {
     @SerializedName("user")
     private int user;
@@ -23,6 +25,9 @@ public class SemiUserInfoResponse {
     private boolean isSharingLocation;
     @SerializedName("is_friend")
     private boolean isFriend;
+
+    public SemiUserInfoResponse() {
+    }
 
     public SemiUserInfoResponse(int user, String displayName, String profileUrl) {
         this.user = user;

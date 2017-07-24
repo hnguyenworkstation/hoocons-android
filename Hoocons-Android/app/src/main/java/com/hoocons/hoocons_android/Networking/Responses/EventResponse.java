@@ -1,8 +1,11 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Parcel.MediaListParcel;
+import com.hoocons.hoocons_android.Parcel.MultiTagsParcel;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
 
 import java.util.List;
 
@@ -11,47 +14,53 @@ import java.util.List;
  */
 public class EventResponse {
     @SerializedName("event_id")
-    private int eventId;
+    int eventId;
     @SerializedName("on_profile")
-    private boolean onProfile;
+    boolean onProfile;
     @SerializedName("user_info")
-    private SemiUserInfoResponse userInfo;
+    SemiUserInfoResponse userInfo;
     @SerializedName("text_content")
-    private String textContent;
+    String textContent;
     @SerializedName("event_type")
-    private String eventType;
+    String eventType;
     @SerializedName("privacy")
-    private String privacy;
+    String privacy;
     @SerializedName("is_edited")
-    private boolean isEdited;
+    boolean isEdited;
     @SerializedName("create_at")
-    private String createAt;
+    String createAt;
     @SerializedName("last_action_at")
-    private String lastActionAt;
+    String lastActionAt;
     @SerializedName("medias")
-    private List<MediaResponse> medias;
+    List<MediaResponse> medias;
     @SerializedName("tags")
-    private List<TagResponse> tags;
+    List<TagResponse> tags;
     @SerializedName("contain_event")
-    private String containEvent;
+    EventResponse containEvent;
     @SerializedName("location")
-    private LocationResponse location;
+    LocationResponse location;
     @SerializedName("checkin_location")
-    private LocationResponse checkInLocation;
+    LocationResponse checkInLocation;
     @SerializedName("likes_count")
-    private int likesCount;
+    int likesCount;
     @SerializedName("comments_count")
-    private int commentsCount;
+    int commentsCount;
     @SerializedName("reports_count")
-    private int reportsCount;
+    int reportsCount;
     @SerializedName("is_liked")
-    private boolean isLiked;
+    boolean isLiked;
+    @SerializedName("is_reported")
+    boolean isReported;
     @SerializedName("checkin_name")
-    private String checkinName;
+    String checkinName;
     @SerializedName("checkin_address")
-    private String checkinAddress;
+    String checkinAddress;
     @SerializedName("checkin_place_id")
-    private String checkinPlaceId;
+    String checkinPlaceId;
+
+    public EventResponse() {
+
+    }
 
     public int getEventId() {
         return eventId;
@@ -141,11 +150,11 @@ public class EventResponse {
         this.tags = tags;
     }
 
-    public String getContainEvent() {
+    public EventResponse getContainEvent() {
         return containEvent;
     }
 
-    public void setContainEvent(String containEvent) {
+    public void setContainEvent(EventResponse containEvent) {
         this.containEvent = containEvent;
     }
 
@@ -243,5 +252,13 @@ public class EventResponse {
 
     public void setReportsCount(int reportsCount) {
         this.reportsCount = reportsCount;
+    }
+
+    public boolean isReported() {
+        return isReported;
+    }
+
+    public void setReported(boolean reported) {
+        isReported = reported;
     }
 }
