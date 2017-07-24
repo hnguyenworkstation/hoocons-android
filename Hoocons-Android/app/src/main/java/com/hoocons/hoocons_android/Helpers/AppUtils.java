@@ -40,7 +40,6 @@ import me.iwf.photopicker.PhotoPicker;
 /**
  * Created by hungnguyen on 6/17/17.
  */
-
 public class AppUtils {
     public static void startImagePicker(Activity activity, int maxNum, int code) {
         PhotoPicker.builder()
@@ -110,6 +109,13 @@ public class AppUtils {
         Link mentions = new Link(Pattern.compile("@\\w{1,15}"));
         mentions.setTextColor(Color.parseColor("#00BCD4"));
         mentions.setHighlightAlpha(.4f);
+        mentions.setUnderlined(false);
+        mentions.setOnLongClickListener(new Link.OnLongClickListener() {
+            @Override
+            public void onLongClick(String clickedText) {
+
+            }
+        });
         mentions.setOnClickListener(new Link.OnClickListener() {
             @Override
             public void onClick(String clickedText) {
@@ -117,7 +123,47 @@ public class AppUtils {
             }
         });
 
+        // Getting available tags
+        Link tags = new Link(Pattern.compile("(?<=[\\s>])#(\\d*[A-Za-z0-9]+\\d*)\\b(?!;)"));
+        tags.setTextColor(context.getResources().getColor(R.color.subject));
+        tags.setHighlightAlpha(.4f);
+        tags.setUnderlined(false);
+        tags.setBold(true);
+        tags.setOnLongClickListener(new Link.OnLongClickListener() {
+            @Override
+            public void onLongClick(String clickedText) {
+
+            }
+        });
+        tags.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
+                Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        // Getting available tags
+        Link urls = new Link(Pattern.compile("^(http:/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[\u200C\u200Ba-z]{3}\\.([a-z]+)?$"));
+        urls.setTextColor(context.getResources().getColor(R.color.timestamp));
+        urls.setHighlightAlpha(.4f);
+        urls.setUnderlined(false);
+        urls.setOnLongClickListener(new Link.OnLongClickListener() {
+            @Override
+            public void onLongClick(String clickedText) {
+
+            }
+        });
+        urls.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
+                Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         links.add(mentions);
+        links.add(tags);
+        links.add(urls);
 
         return links;
     }
