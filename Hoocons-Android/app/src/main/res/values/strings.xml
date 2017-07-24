@@ -147,6 +147,7 @@
     <string name="recent_event">Posted events</string>
     <string name="recently">Recently</string>
     <string name="event_posted_detail">have posted some events</string>
+    <string name="in_the_past">in the past</string>
 
     <string name="new_meeting_title">Start a new meeting around you</string>
     <string name="new_meeting_desc">Connect with new people, learn something, play something and… actually do something</string>

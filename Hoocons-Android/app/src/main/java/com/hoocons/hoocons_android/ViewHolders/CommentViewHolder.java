@@ -93,6 +93,6 @@ public class CommentViewHolder extends ViewHolder {
 
     private void loadCommentStats(final CommentResponse response) {
         mUserName.setText(response.getCommentBy().getDisplayName());
-        mCommentTime.setText(AppUtils.convDate(response.getCreatedAt()));
+        mCommentTime.setText(AppUtils.convertDateTimeFromUTC(response.getCreatedAt()));
     }
 }

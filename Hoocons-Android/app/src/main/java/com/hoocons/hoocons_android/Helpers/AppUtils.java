@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Helpers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,9 +19,13 @@ import com.hoocons.hoocons_android.R;
 
 import org.aisen.android.common.utils.DateUtils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
 
 import me.iwf.photopicker.PhotoPicker;
 
@@ -82,9 +87,36 @@ public class AppUtils {
         return saltStr;
 
     }
+    @SuppressLint("SimpleDateFormat")
+    public static String getCurrentUTCTime() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        
+        return df.format(new Date());
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String convertDateTimeFromUTC(String time) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            TimeZone tz = cal.getTimeZone();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            output.setTimeZone(tz);
+
+            Date d = sdf.parse(time);
+
+            return convDate(String.valueOf(d.getTime()));
+        } catch (ParseException e) {
+            return BaseApplication.getInstance().getBaseContext().getResources().getString(R.string.in_the_past);
+        }
+    }
 
     @SuppressWarnings("deprecation")
-    public static String convDate(String time) {
+    private static String convDate(String time) {
         try {
             Context context = BaseApplication.getInstance().getApplicationContext();
             Resources res = context.getResources();

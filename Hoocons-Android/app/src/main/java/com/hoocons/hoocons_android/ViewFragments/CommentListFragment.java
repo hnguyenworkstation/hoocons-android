@@ -45,6 +45,7 @@ import com.hoocons.hoocons_android.EventBus.FetchCommentsFailed;
 import com.hoocons.hoocons_android.EventBus.PostCommentComplete;
 import com.hoocons.hoocons_android.EventBus.PostCommentFailed;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -315,7 +316,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
                 new SemiUserInfoResponse(SharedPreferencesManager.getDefault().getUserId(),
                         SharedPreferencesManager.getDefault().getUserDisplayName(),
                         SharedPreferencesManager.getDefault().getUserProfileUrl()),
-                commentTag,
+                AppUtils.getCurrentUTCTime(),
                 textContent,
                 commentType,
                 null, 0, 0, false, false, false, commentTag
