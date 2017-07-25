@@ -59,6 +59,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
@@ -73,6 +74,7 @@ import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.ShareNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -196,6 +198,7 @@ public class NewEventActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
 
@@ -257,6 +260,7 @@ public class NewEventActivity extends BaseActivity
     }
 
     private  void initSharedEventView() {
+        setActivePostButton(true);
         mSharedEventLayout.setVisibility(View.VISIBLE);
 
         loadEventSharedUserProfile(eventParcel.getUserInfo().getProfileUrl());
@@ -344,7 +348,10 @@ public class NewEventActivity extends BaseActivity
     }
 
     private boolean doesHaveContent() {
-        return mTextContentInput.getText().length() > 0 || mImagePaths.size() > 0 || gifUrl != null;
+        return mTextContentInput.getText().length() > 0
+                || mImagePaths.size() > 0
+                || gifUrl != null
+                || eventParcel != null;
     }
 
     @Override
@@ -431,13 +438,20 @@ public class NewEventActivity extends BaseActivity
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
-        PostNewEventJob job =  new PostNewEventJob (
-                mTextContentInput.getText().toString(), gifUrl,
-                mImagePaths, mMode, eventType, checkinLongitude, checkinLatitude,
-                checkinName, checkinAddress, checkinPlaceId);
-        jobManager.addJobInBackground(job);
+        if (eventParcel != null) {
+            ShareNewEventJob job =  new ShareNewEventJob (mTextContentInput.getText().toString(),
+                    eventParcel.getId(), mMode, eventType, checkinLongitude, checkinLatitude,
+                    checkinName, checkinAddress, checkinPlaceId);
 
-        finish();
+            jobManager.addJobInBackground(job);
+        } else {
+            PostNewEventJob job =  new PostNewEventJob (
+                    mTextContentInput.getText().toString(), gifUrl,
+                    mImagePaths, mMode, eventType, checkinLongitude, checkinLatitude,
+                    checkinName, checkinAddress, checkinPlaceId);
+
+            jobManager.addJobInBackground(job);
+        }
     }
 
     private void setActivePostButton(boolean isActive) {
@@ -718,5 +732,12 @@ public class NewEventActivity extends BaseActivity
         Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
         Toast.makeText(this, "Trying to reconnect to Google", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
+    }
+
+    @Subscribe
+    public void onEvent(EventJobAddedToDisk task) {
+        Toast.makeText(this, getResources().getText(R.string.posting),
+                Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

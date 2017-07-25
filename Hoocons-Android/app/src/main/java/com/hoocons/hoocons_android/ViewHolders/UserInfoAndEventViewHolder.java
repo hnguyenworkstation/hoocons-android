@@ -90,6 +90,31 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @BindView(R.id.header_event_options)
     ImageButton mHeaderMoreButton;
 
+    /* SHARED EVENT HEADER */
+    @Nullable
+    @BindView(R.id.shared_event_user_profile)
+    ImageView mSharedUserProfileImage;
+
+    @Nullable
+    @BindView(R.id.shared_event_user_name)
+    TextView mSharedUserDisplayName;
+
+    @Nullable
+    @BindView(R.id.shared_event_timeframe)
+    TextView mSharedTimeFrame;
+
+    @Nullable
+    @BindView(R.id.shared_event_location_icon)
+    ImageView mSharedHeaderLocationIcon;
+
+    @Nullable
+    @BindView(R.id.shared_event_posted_location)
+    TextView mSharedPostedLocation;
+
+    @Nullable
+    @BindView(R.id.shared_event_text_content)
+    CustomTextView mSharedEventTextContent;
+
     /* EVENT TEXT CONTENT */
     @Nullable
     @BindView(R.id.event_text_content)
@@ -218,9 +243,47 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     public void initViewHolder(final Context context, final EventResponse response,
                                final EventAdapterListener listener, final int position) {
         initEventHeader(context, response);
-        initEventContent(context, response, position);
         initEventFooter(context, response);
+
+        assert mTextContent != null;
+        if (response.getTextContent() != null && response.getTextContent().length() >  1) {
+            mTextContent.setContent(response.getTextContent());
+            mTextContent.setVisibility(View.VISIBLE);
+
+            if (response.getTextContent().length() < 50) {
+                mTextContent.setTextSize(20);
+            } else {
+                mTextContent.setTextSize(16);
+            }
+        }
+
+        if (response.getContainEvent() == null) {
+            initEventContent(context, response, position);
+        } else {
+            assert mSharedEventTextContent != null;
+            initSharedEventHeader(context, response.getContainEvent());
+            mSharedEventTextContent.setVisibility(View.VISIBLE);
+            mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
+            initEventContent(context, response.getContainEvent(), position);
+
+            assert mTextContent != null;
+            if (response.getTextContent() != null && response.getTextContent().length() >  1) {
+                mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
+                mSharedEventTextContent.setVisibility(View.VISIBLE);
+            }
+        }
+
         initOnClickListener(listener, position);
+    }
+
+    private void initSharedEventHeader(final Context context, final EventResponse response) {
+        loadUserProfileImage(context, response.getUserInfo().getProfileUrl(), mSharedUserProfileImage);
+
+        assert mSharedTimeFrame != null;
+        assert mSharedUserDisplayName != null;
+
+        mSharedUserDisplayName.setText(response.getUserInfo().getDisplayName());
+        mSharedTimeFrame.setText(AppUtils.convertDateTimeFromUTC(response.getCreateAt()));
     }
 
     private void initOnClickListener(final EventAdapterListener listener, final int position) {
@@ -330,24 +393,13 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
-        loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl());
+        loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl(), mUserProfileImage);
         mUserDisplayName.setText(eventResponse.getUserInfo().getDisplayName());
-        mTimeFrame.setText(eventResponse.getCreateAt());
+        mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
     }
 
-    private void initEventContent(Context context, final EventResponse eventResponse, final int eventPosition) {
-        assert mTextContent != null;
-        if (eventResponse.getTextContent() != null && eventResponse.getTextContent().length() >  1) {
-            mTextContent.setContent(eventResponse.getTextContent());
-            mTextContent.setVisibility(View.VISIBLE);
-
-            if (eventResponse.getTextContent().length() < 50) {
-                mTextContent.setTextSize(20);
-            } else {
-                mTextContent.setTextSize(16);
-            }
-        }
-
+    private void initEventContent(final Context context, final EventResponse eventResponse,
+                                  final int eventPosition) {
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
 
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
@@ -355,7 +407,7 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
             loadSingleGif(context, eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
-            loadMultipleImages(eventResponse.getMedias(), eventPosition);
+            loadMultipleImages(context, eventResponse.getMedias(), eventPosition);
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
             loadVideoView(eventResponse.getMedias().get(0));
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
@@ -403,10 +455,11 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .into(mVideoPlayer.thumbImageView);
     }
 
-    private void loadMultipleImages(final List<MediaResponse> mediaList, final int eventPosition) {
+    private void loadMultipleImages(final Context context, final List<MediaResponse> mediaList,
+                                    final int eventPosition) {
         assert mMultiMediaRecycler != null;
-        mMultiImageAdapter = new MediaImagesAdapter(mMultiMediaRecycler.getContext(),
-                mediaList, eventPosition, new OnChildImageClickListener() {
+        mMultiImageAdapter = new MediaImagesAdapter(context, mediaList, eventPosition,
+                new OnChildImageClickListener() {
             @Override
             public void onChildImageClick(int eventPosition, int position) {
                 EventBus.getDefault().post(new StartEventChildImages(eventPosition, position));
@@ -414,10 +467,10 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
         });
 
         if (mediaList.size() % 2 == 0 && mediaList.size() <= 4) {
-            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(mMultiMediaRecycler.getContext(), 2,
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 2,
                     LinearLayoutManager.VERTICAL, false));
         } else {
-            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(mMultiMediaRecycler.getContext(), 3,
+            mMultiMediaRecycler.setLayoutManager(new GridLayoutManager(context, 3,
                     LinearLayoutManager.VERTICAL, false));
         }
 
@@ -556,13 +609,12 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .into(mProfileImage);
     }
 
-    private void loadUserProfileImage(Context context, String url) {
-        assert mUserProfileImage != null;
+    private void loadUserProfileImage(final Context context, final String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.circleCropTransform())
-                .into(mUserProfileImage);
+                .into(imageView);
     }
 }

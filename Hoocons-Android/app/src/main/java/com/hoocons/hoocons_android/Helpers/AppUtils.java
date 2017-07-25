@@ -177,7 +177,7 @@ public class AppUtils {
         parcel.setUserInfo(response.getUserInfo());
         parcel.setEventType(response.getEventType());
         parcel.setReported(response.isReported());
-        
+
         return parcel;
     }
 

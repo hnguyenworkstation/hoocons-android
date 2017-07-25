@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/photoview/photoview.iml" filepath="$PROJECT_DIR$/photoview/photoview.iml" />
       <module fileurl="file://$PROJECT_DIR$/swipecard_library/swipecard_library.iml" filepath="$PROJECT_DIR$/swipecard_library/swipecard_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/text-link-builder/text-link-builder.iml" filepath="$PROJECT_DIR$/text-link-builder/text-link-builder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/text-link-builder/text-link-builder.iml" filepath="$PROJECT_DIR$/text-link-builder/text-link-builder.iml" />
       <module fileurl="file://$PROJECT_DIR$/web_agent/web_agent.iml" filepath="$PROJECT_DIR$/web_agent/web_agent.iml" />
     </modules>
   </component>

@@ -18,7 +18,6 @@ import java.util.List;
 /**
  * Created by hungnguyen on 7/15/17.
  */
-
 public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAndEventViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
@@ -29,11 +28,17 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     private final int TYPE_EVENT_SINGLE_IMAGE = 1;
     private final int TYPE_EVENT_MUL_IMAGES = 2;
     private final int TYPE_EVENT_VIDEO= 3;
-    private final int TYPE_EVENT_RELOAD = 4;
-    private final int TYPE_EVENT_WEB = 5;
-    private final int TYPE_EVENT_CHECKIN = 6;
+    private final int TYPE_EVENT_WEB = 4;
+    private final int TYPE_EVENT_CHECKIN = 5;
 
-    private final int EVENT_DUMMIES_CARD = 10;
+    private final int TYPE_SHARED_EVENT_TEXT = 6;
+    private final int TYPE_SHARED_EVENT_SINGLE_IMAGE = 7;
+    private final int TYPE_SHARED_EVENT_MUL_IMAGES = 8;
+    private final int TYPE_SHARED_EVENT_VIDEO= 9;
+    private final int TYPE_SHARED_EVENT_WEB = 10;
+    private final int TYPE_SHARED_EVENT_CHECKIN = 11;
+
+    private final int EVENT_DUMMIES_CARD = 99;
 
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
@@ -82,6 +87,27 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
             case EVENT_LOADING_END:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.event_loading_image, parent, false);
+                break;
+            case TYPE_SHARED_EVENT_TEXT:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shared_event_text_viewholder, parent, false);
+                break;
+            case TYPE_SHARED_EVENT_SINGLE_IMAGE:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shared_event_single_media_viewholder, parent, false);
+                break;
+            case TYPE_SHARED_EVENT_MUL_IMAGES:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shared_event_multi_medias_viewholder, parent, false);
+                break;
+            case TYPE_SHARED_EVENT_VIDEO:
+                break;
+            case TYPE_SHARED_EVENT_WEB:
+                break;
+            case TYPE_SHARED_EVENT_CHECKIN:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shared_event_checkin_viewholder, parent, false);
+                break;
             default:
                 break;
         }
@@ -119,24 +145,46 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
         }
 
         EventResponse response = responseList.get(position - EXTRA_ITEMS);
-        switch (response.getEventType()) {
-            case AppConstant.EVENT_TYPE_TEXT:
-                return TYPE_EVENT_TEXT;
+        if (response.getContainEvent() == null) {
+            switch (response.getEventType()) {
+                case AppConstant.EVENT_TYPE_TEXT:
+                    return TYPE_EVENT_TEXT;
 
-            case AppConstant.EVENT_TYPE_SINGLE_IMAGE:
-                return TYPE_EVENT_SINGLE_IMAGE;
+                case AppConstant.EVENT_TYPE_SINGLE_IMAGE:
+                    return TYPE_EVENT_SINGLE_IMAGE;
 
-            case AppConstant.EVENT_TYPE_SINGLE_GIF:
-                return TYPE_EVENT_SINGLE_IMAGE;
+                case AppConstant.EVENT_TYPE_SINGLE_GIF:
+                    return TYPE_EVENT_SINGLE_IMAGE;
 
-            case AppConstant.EVENT_TYPE_MULT_IMAGE:
-                return TYPE_EVENT_MUL_IMAGES;
+                case AppConstant.EVENT_TYPE_MULT_IMAGE:
+                    return TYPE_EVENT_MUL_IMAGES;
 
-            case AppConstant.EVENT_TYPE_CHECK_IN:
-                return TYPE_EVENT_CHECKIN;
+                case AppConstant.EVENT_TYPE_CHECK_IN:
+                    return TYPE_EVENT_CHECKIN;
 
-            default:
-                return -1;
+                default:
+                    return -1;
+            }
+        } else {
+            switch (response.getContainEvent().getEventType()) {
+                case AppConstant.EVENT_TYPE_TEXT:
+                    return TYPE_SHARED_EVENT_TEXT;
+
+                case AppConstant.EVENT_TYPE_SINGLE_IMAGE:
+                    return TYPE_SHARED_EVENT_SINGLE_IMAGE;
+
+                case AppConstant.EVENT_TYPE_SINGLE_GIF:
+                    return TYPE_SHARED_EVENT_SINGLE_IMAGE;
+
+                case AppConstant.EVENT_TYPE_MULT_IMAGE:
+                    return TYPE_SHARED_EVENT_MUL_IMAGES;
+
+                case AppConstant.EVENT_TYPE_CHECK_IN:
+                    return TYPE_SHARED_EVENT_CHECKIN;
+
+                default:
+                    return -1;
+            }
         }
     }
 

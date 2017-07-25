@@ -343,18 +343,33 @@ public class UserProfileActivity extends DraggerActivity
     public void onEvent(StartEventChildImages request) {
         MultiImagesEventClickedParcel parcel = new MultiImagesEventClickedParcel();
 
-        parcel.setResponseList(eventResponseList.get(request.getEventPosition()).getMedias());
-        parcel.setClickedPosition( request.getImagePosition());
-        parcel.setTextContent(eventResponseList.get(request.getEventPosition()).getTextContent());
-        parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition()).getUserInfo().getDisplayName());
+        if (eventResponseList.get(request.getEventPosition()).getContainEvent() == null) {
+            parcel.setResponseList(eventResponseList
+                    .get(request.getEventPosition())
+                    .getMedias());
+            parcel.setClickedPosition( request.getImagePosition());
+            parcel.setTextContent(eventResponseList
+                    .get(request.getEventPosition())
+                    .getTextContent());
+            parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition())
+                    .getUserInfo()
+                    .getDisplayName());
+        } else {
+            parcel.setResponseList(eventResponseList.get(request.getEventPosition())
+                    .getContainEvent().getMedias());
+            parcel.setClickedPosition(request.getImagePosition());
+            parcel.setTextContent(eventResponseList.get(request.getEventPosition()).getContainEvent().getTextContent());
+            parcel.setUserDisplayName(eventResponseList
+                    .get(request.getEventPosition())
+                    .getContainEvent()
+                    .getUserInfo().getDisplayName());
+        }
 
         Intent listImages = new Intent(UserProfileActivity.this, FullEventImagesActivity.class);
         listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
 
         startActivity(listImages);
     }
-
-
 
     @Override
     protected void onDestroy() {

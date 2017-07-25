@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
@@ -73,7 +74,7 @@ public class PostNewEventJob extends Job implements Serializable {
 
     @Override
     public void onAdded() {
-
+        EventBus.getDefault().post(new EventJobAddedToDisk());
     }
 
     @Override

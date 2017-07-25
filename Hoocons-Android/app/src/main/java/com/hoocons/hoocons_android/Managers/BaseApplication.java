@@ -22,6 +22,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
+import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
@@ -181,5 +182,4 @@ public class BaseApplication extends GlobalContext {
     public void onEvent(PostEventSuccess task) {
         Toast.makeText(mInstance, "Upload event complete", Toast.LENGTH_SHORT).show();
     }
-
 }

@@ -171,6 +171,7 @@
     <string name="msg_today">today</string>
     <string name="msg_yesterday">yesterday</string>
     <string name="msg_few_minutes_ago">minutes ago</string>
+    <string name="posting">Posting…</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>

@@ -52,6 +52,15 @@ public interface EventServices {
     Call<Void> likeEvent(@Path("event_id") int id);
 
     /**********************************
+     * @Method: POST
+     * @Name: shareEvent
+     * @Argument: VOID
+     * @Purpose: share a new event
+     ********************************** */
+    @POST("/event/share/id={event_id}/")
+    Call<Void> shareEvent(@Path("event_id") int id, @Body EventInfoRequest request);
+
+    /**********************************
      * @Method: DELETE
      * @Name: unlikeEvent
      * @Argument: VOID
