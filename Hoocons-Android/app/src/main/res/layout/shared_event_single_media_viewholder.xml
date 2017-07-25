@@ -55,16 +55,16 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray_alpha"
-            android:layout_marginTop="-1dp"
-            android:adjustViewBounds="true"
-            android:minHeight="248dp"
-            android:minWidth="248dp"
-            android:scaleType="fitCenter"
-            android:id="@+id/event_single_media_content"/>
+            android:id="@+id/event_single_media"
+            android:orientation="vertical">
+
+            <include layout="@layout/event_single_media_content"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

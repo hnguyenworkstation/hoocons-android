@@ -411,6 +411,11 @@ public class NewEventActivity extends BaseActivity
                     Toast.makeText(this, "No content", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.delete_single_content:
+                mSingleContentView.setVisibility(View.GONE);
+                mImagePaths.clear();
+                gifUrl = null;
+                break;
             default:
                 break;
         }
@@ -452,6 +457,7 @@ public class NewEventActivity extends BaseActivity
 
             jobManager.addJobInBackground(job);
         }
+        finish();
     }
 
     private void setActivePostButton(boolean isActive) {
