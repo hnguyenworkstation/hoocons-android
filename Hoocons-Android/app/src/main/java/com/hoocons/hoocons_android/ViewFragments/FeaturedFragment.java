@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hoocons.hoocons_android.Activities.AddCombinationActivity;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
@@ -126,8 +127,8 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
                 .into(mImageHeader);
     }
 
-    private void startNewEventActivity() {
-        startActivity(new Intent(getActivity(), NewEventActivity.class)
+    private void startNewCombinationActivity() {
+        startActivity(new Intent(getActivity(), AddCombinationActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -149,7 +150,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_add:
-                startNewEventActivity();
+                startNewCombinationActivity();
                 break;
             case R.id.action_near_me:
                 if (mayNeedLocationPermission()) {

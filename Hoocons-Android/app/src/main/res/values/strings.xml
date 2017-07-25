@@ -104,7 +104,9 @@
     <string name="registered_account_detected">This phone number has been registered</string>
 
     <!-- New Event Activity -->
-    <string name="new_event">New Event</string>
+    <string name="new_event">Event</string>
+    <string name="new_meetout">Meet out</string>
+    <string name="checkin">Check in</string>
     <string name="delete_title">Delete?</string>
     <string name="delete_warning">All your changes will be permanently removed!</string>
     <string name="discard">Discard</string>
@@ -172,6 +174,7 @@
     <string name="msg_yesterday">yesterday</string>
     <string name="msg_few_minutes_ago">minutes ago</string>
     <string name="posting">Posting…</string>
+    <string name="new_activity">Create new activity</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>

@@ -180,7 +180,7 @@
         </service>
 
         <activity
-            android:name=".Activities.NewMeetingActivity"
+            android:name=".Activities.NewMeetOutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -188,7 +188,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".Activities.FullEventImagesActivity"></activity>
+        <activity android:name=".Activities.FullEventImagesActivity" />
+        <activity android:name=".Activities.AddCombinationActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>

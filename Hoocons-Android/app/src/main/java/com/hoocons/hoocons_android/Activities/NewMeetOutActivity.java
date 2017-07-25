@@ -29,7 +29,7 @@ import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewMeetingActivity extends BaseActivity implements
+public class NewMeetOutActivity extends BaseActivity implements
         ObservableScrollViewCallbacks, View.OnClickListener {
     @BindView(R.id.obs_scrollview)
     ObservableScrollView mScrollView;

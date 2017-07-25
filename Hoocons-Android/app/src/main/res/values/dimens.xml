@@ -10,7 +10,7 @@
 
     <dimen name="tab_height">48dp</dimen>
     <dimen name="tab_padding">12dp</dimen>
-    <dimen name="activity_card_corner">12dp</dimen>
+    <dimen name="activity_card_corner">4dp</dimen>
     <dimen name="find_match_card_margin_left_right">12dp</dimen>
     <dimen name="find_match_card_margin_top">65dp</dimen>
 
@@ -235,7 +235,7 @@
     <!-- Post Event Activity-->
     <dimen name="post_event_profile_size">80dp</dimen>
     <dimen name="post_event_name_size">18dp</dimen>
-    <dimen name="post_event_image_holder">100dp</dimen>
+    <dimen name="post_event_image_holder">86dp</dimen>
     <dimen name="post_event_image_icon_size">24dp</dimen>
 
     <!-- Profile Activity-->
