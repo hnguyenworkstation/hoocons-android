@@ -231,6 +231,8 @@ public class NewEventActivity extends BaseActivity
         mPostBtn.setOnClickListener(this);
         mAddVideoBtn.setOnClickListener(this);
 
+        mDeleteSingleContent.setOnClickListener(this);
+
         if (eventParcel != null) {
             initSharedEventView();
         }

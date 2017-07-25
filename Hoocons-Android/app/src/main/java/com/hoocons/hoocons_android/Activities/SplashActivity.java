@@ -50,7 +50,6 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, IntroActivity.class));
                     finish();
                 } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
-                    Log.e(TAG, SharedPreferencesManager.getDefault().getUserToken());
                     startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
                     finish();
                 } else {
