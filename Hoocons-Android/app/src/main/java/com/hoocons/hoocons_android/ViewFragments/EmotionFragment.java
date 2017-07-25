@@ -67,7 +67,7 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem == 0) {
                     EventBus.getDefault().post(new AllowSlideDown());
-                } else {
+                } else if (firstVisibleItem > 0) {
                     EventBus.getDefault().post(new BlockSlideDown());
                 }
             }

@@ -185,6 +185,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
             }
         });
+
         mRecycler.setScrollViewCallbacks(this);
 
         initTitle();
@@ -324,6 +325,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
         commentResponseList.add(0, tempRespond);
         commentsAdapter.notifyItemInserted(0);
+        mRecycler.smoothScrollToPosition(0);
 
         mCommentTextInput.setText("");
         mSendBtn.setEnabled(false);
