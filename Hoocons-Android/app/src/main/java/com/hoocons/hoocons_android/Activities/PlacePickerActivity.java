@@ -19,9 +19,11 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -57,6 +59,11 @@ public class PlacePickerActivity extends BaseActivity implements
     RelativeLayout mCustomToolbar;
     @BindView(R.id.place_search_view)
     MaterialSearchView mSearchView;
+    @BindView(R.id.location_recycler)
+    ObservableRecyclerView mRecyclerView;
+    @BindView(R.id.loading_progress)
+    ProgressBar mProgress;
+
 
     private static final String TAG = "Map";
     private final int REQUEST_CODE_AUTOCOMPLETE = 1;
@@ -98,7 +105,7 @@ public class PlacePickerActivity extends BaseActivity implements
         fetchLocation();
 
         if (isNetworkAvailable()) {
-            
+
         } else {
             Toast.makeText(this, getResources().getText(R.string.no_connection), Toast.LENGTH_SHORT).show();
         }
