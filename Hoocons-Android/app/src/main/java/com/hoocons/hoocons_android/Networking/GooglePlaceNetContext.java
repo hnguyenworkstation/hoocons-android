@@ -2,10 +2,6 @@ package com.hoocons.hoocons_android.Networking;
 
 import android.util.Log;
 
-import com.hoocons.hoocons_android.Managers.BaseApplication;
-import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
-import com.hoocons.hoocons_android.R;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
@@ -27,19 +23,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class GooglePlaceNetContext {
-    private static final String TAG = NetContext.class.getSimpleName();
+    private static final String TAG = GooglePlaceNetContext.class.getSimpleName();
+    public static GooglePlaceNetContext instance = new GooglePlaceNetContext();
+
     private Retrofit retrofit;
     private OkHttpClient client;
 
-    public GooglePlaceNetContext(final String query) {
+    private GooglePlaceNetContext() {
         client = new OkHttpClient
                 .Builder().connectTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(new GooglePlaceNetContext.LoggerInterceptor())
+                .addInterceptor(new LoggerInterceptor())
                 .build();
 
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(query)
+                .baseUrl("https://maps.googleapis.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

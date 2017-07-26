@@ -7,14 +7,13 @@ import java.util.List;
 /**
  * Created by hungnguyen on 7/26/17.
  */
-
 public class GooglePlaceResponse {
     @SerializedName("html_attributions")
     private List<String> htmlAttributions;
     @SerializedName("next_page_token")
     private String nextPageToken;
     @SerializedName("results")
-    private List<Place> places;
+    private List<GooglePlace> places;
     @SerializedName("status")
     private String status;
 
@@ -26,11 +25,11 @@ public class GooglePlaceResponse {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public List<Place> getPlaces() {
+    public List<GooglePlace> getPlaces() {
         return places;
     }
 
-    public void setPlaces(List<Place> places) {
+    public void setPlaces(List<GooglePlace> places) {
         this.places = places;
     }
 
@@ -205,109 +204,6 @@ public class GooglePlaceResponse {
 
         public void setWidth(int width) {
             this.width = width;
-        }
-    }
-
-    private static class Place {
-        @SerializedName("geometry")
-        private Geometry geometry;
-        @SerializedName("icon")
-        private String icon;
-        @SerializedName("id")
-        private String id;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("photos")
-        private List<Photos> photos;
-        @SerializedName("place_id")
-        private String placeId;
-        @SerializedName("reference")
-        private String reference;
-        @SerializedName("scope")
-        private String scope;
-        @SerializedName("types")
-        private List<String> types;
-        @SerializedName("vicinity")
-        private String vicinity;
-
-        public Geometry getGeometry() {
-            return geometry;
-        }
-
-        public void setGeometry(Geometry geometry) {
-            this.geometry = geometry;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public List<Photos> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<Photos> photos) {
-            this.photos = photos;
-        }
-
-        public String getPlaceId() {
-            return placeId;
-        }
-
-        public void setPlaceId(String placeId) {
-            this.placeId = placeId;
-        }
-
-        public String getReference() {
-            return reference;
-        }
-
-        public void setReference(String reference) {
-            this.reference = reference;
-        }
-
-        public String getScope() {
-            return scope;
-        }
-
-        public void setScope(String scope) {
-            this.scope = scope;
-        }
-
-        public List<String> getTypes() {
-            return types;
-        }
-
-        public void setTypes(List<String> types) {
-            this.types = types;
-        }
-
-        public String getVicinity() {
-            return vicinity;
-        }
-
-        public void setVicinity(String vicinity) {
-            this.vicinity = vicinity;
         }
     }
 }
