@@ -121,7 +121,6 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
         public void onBindData(View convertView, Emotion data, int position) {
             imgEmotion.setImageBitmap(BitmapFactory.decodeByteArray(data.getData(), 0, data.getData().length));
         }
-
     }
 
     class EmotionTask extends APagingTask<String, Void, Emotions> {
@@ -152,12 +151,9 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
             es.getEmotions().addAll(emotions.getEmotions());
             emotions = EmotionsDB.getEmotions("w_");
             es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("l_");
-            es.getEmotions().addAll(emotions.getEmotions());
 
             return es;
         }
-
     }
 
     public void setOnEmotionListener(OnEmotionSelectedListener onEmotionSelectedListener) {
