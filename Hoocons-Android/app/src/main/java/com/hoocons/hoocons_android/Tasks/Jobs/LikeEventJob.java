@@ -22,10 +22,12 @@ import retrofit2.Response;
  */
 
 public class LikeEventJob extends Job implements Serializable {
+    private static final int JOB_DELAY = 10000;
     private int eventId;
 
     public LikeEventJob(String tag, int eventId) {
-        super(new Params(Priority.LOW).requireNetwork().persist().groupBy(JobGroup.event).addTags(tag));
+        super(new Params(Priority.LOW).requireNetwork().persist()
+                .groupBy(JobGroup.event).addTags(tag).delayInMs(JOB_DELAY));
         this.eventId = eventId;
     }
 
