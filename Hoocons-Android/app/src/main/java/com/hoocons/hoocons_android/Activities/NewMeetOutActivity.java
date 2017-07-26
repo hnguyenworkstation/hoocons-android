@@ -11,13 +11,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -28,6 +31,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -35,8 +39,10 @@ import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +77,15 @@ public class NewMeetOutActivity extends BaseActivity implements
     @BindView(R.id.submit_new_meeting)
     Button mSubmitMeeting;
 
+    @BindView(R.id.meeting_tags_ed)
+    EditText mAddTopicEdt;
+    @BindView(R.id.add_topic_btn)
+    BootstrapButton mAddTopicBtn;
+    @BindView(R.id.topic_flow_layout)
+    CustomFlowLayout mFlowLayout;
+
+    private List<String> topics;
+
     private View mOverlayView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
@@ -98,6 +113,8 @@ public class NewMeetOutActivity extends BaseActivity implements
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
 
+        topics = new ArrayList<>();
+
         initGeneralView();
         initView();
         initOnClickListener();
@@ -109,6 +126,8 @@ public class NewMeetOutActivity extends BaseActivity implements
 
         mFromDateTime.setOnClickListener(this);
         mToDateTime.setOnClickListener(this);
+
+        mAddTopicBtn.setOnClickListener(this);
     }
 
     private void initGeneralView() {
@@ -245,7 +264,6 @@ public class NewMeetOutActivity extends BaseActivity implements
         mFromTimePicker.show();
     }
 
-
     private void showToTimePicker() {
         Calendar now = Calendar.getInstance();
 
@@ -270,7 +288,6 @@ public class NewMeetOutActivity extends BaseActivity implements
 
         mToTimePicker.show();
     }
-
 
     private void showToDateTimePicker() {
         Calendar now = Calendar.getInstance();
@@ -298,6 +315,51 @@ public class NewMeetOutActivity extends BaseActivity implements
         mToDatePicker.show();
     }
 
+    private void addTopicView() {
+        if (mAddTopicEdt.getText().length() > 0) {
+            String topic = mAddTopicEdt.getText().toString();
+
+            if (topics.contains(topic)) {
+                Toast.makeText(this, getResources().getText(R.string.already_created), Toast.LENGTH_SHORT).show();
+                mAddTopicEdt.setText("");
+            } else {
+                topics.add(topic);
+                initFlowLayoutView();
+            }
+        }
+    }
+
+    private void initFlowLayoutView() {
+        mFlowLayout.removeAllViews();
+
+        for (int i = 0; i < topics.size(); i++) {
+            final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.topic_flow_layout,
+                    mFlowLayout, false);
+            TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
+            final ImageView closeicon =
+                    (ImageView) item.findViewById(R.id.topic_flow_close);
+
+            topic.setText(topics.get(i));
+            item.setTag(i);
+
+            mFlowLayout.addView(item);
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+
+            final int temp = i;
+            closeicon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    item.setVisibility(View.GONE);
+                    topics.remove(topics.get(temp));
+                }
+            });
+        }
+        mFlowLayout.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onDownMotionEvent() {
@@ -343,6 +405,9 @@ public class NewMeetOutActivity extends BaseActivity implements
                 break;
             case R.id.meeting_to_timestamp:
                 showToDateTimePicker();
+                break;
+            case R.id.add_topic_btn:
+                addTopicView();
                 break;
             default:
                 break;

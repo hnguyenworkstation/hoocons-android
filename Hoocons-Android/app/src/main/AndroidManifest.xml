@@ -182,6 +182,7 @@
         <activity
             android:name=".Activities.NewMeetOutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.CommentEventActivity"

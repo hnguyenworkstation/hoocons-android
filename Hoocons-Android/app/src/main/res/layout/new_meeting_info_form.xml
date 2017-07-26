@@ -163,13 +163,45 @@
             android:text="@string/meeting_activities"/>
     </LinearLayout>
 
-    <TextView
-        android:layout_marginTop="@dimen/margin_12"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meeting_tags_ed"
+            android:layout_toStartOf="@+id/add_topic_btn"
+            android:textSize="@dimen/text_18"
+            android:background="@null"
+            android:maxLines="1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:hint="@string/select_topics"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_topic_btn"
+            style="@style/wrapping_button"
+            android:textSize="@dimen/text_14"
+            app:bootstrapText="{fa_plus} Add"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:bootstrapBrand="warning"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            app:bootstrapSize="sm"/>
+    </RelativeLayout>
+
+    <com.hoocons.hoocons_android.CustomUI.CustomFlowLayout
+        android:layout_marginTop="@dimen/margin_8"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/meeting_tags"
-        android:textSize="@dimen/text_18"
-        android:text="@string/select_tags"/>
+        android:id="@+id/topic_flow_layout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
