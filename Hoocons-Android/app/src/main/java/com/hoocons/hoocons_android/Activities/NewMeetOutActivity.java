@@ -1,11 +1,13 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,7 +24,9 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
 
@@ -31,6 +35,10 @@ import butterknife.ButterKnife;
 
 public class NewMeetOutActivity extends BaseActivity implements
         ObservableScrollViewCallbacks, View.OnClickListener {
+    @BindView(R.id.action_back)
+    ImageButton mActionBack;
+    @BindView(R.id.profile_img)
+    ImageView mProfileImage;
     @BindView(R.id.obs_scrollview)
     ObservableScrollView mScrollView;
     @BindView(R.id.custom_toolbar)
@@ -74,11 +82,13 @@ public class NewMeetOutActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         initGeneralView();
+        initView();
         initOnClickListener();
     }
 
     private void initOnClickListener() {
         mSubmitMeeting.setOnClickListener(this);
+        mActionBack.setOnClickListener(this);
     }
 
     private void initGeneralView() {
@@ -114,9 +124,19 @@ public class NewMeetOutActivity extends BaseActivity implements
                         mScaleSpring.setEndValue(0);
                         break;
                 }
-                return true;
+                return false;
             }
         });
+    }
+
+    private void initView() {
+        // Load profile picture
+        AppUtils.loadCircleImage(this, SharedPreferencesManager.getDefault().getUserProfileUrl(),
+                mProfileImage);
+    }
+
+    private boolean doesHaveContent() {
+        return false;
     }
 
     @Override
@@ -164,10 +184,34 @@ public class NewMeetOutActivity extends BaseActivity implements
 
     }
 
+    private void finishActivity() {
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("NewEventActivity", "popping backstack");
+            fm.popBackStack();
+            overridePendingTransition(R.anim.fix_anim, R.anim.slide_down_out);
+        } else {
+            Log.i("NewEventActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (doesHaveContent()) {
+
+        } else {
+            finishActivity();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit_new_meeting:
+                break;
+            case R.id.action_back:
+                onBackPressed();
                 break;
             default:
                 break;

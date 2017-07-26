@@ -10,8 +10,12 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -273,5 +277,14 @@ public class AppUtils {
             cmb.setPrimaryClip(ClipData.newPlainText(null, text.trim()));
         } catch (Exception e) {
         }
+    }
+
+    public static void loadCircleImage(final Context context, final String url, ImageView imageView) {
+        Glide.with(context)
+                .load(url)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions.noAnimation())
+                .into(imageView);
     }
 }

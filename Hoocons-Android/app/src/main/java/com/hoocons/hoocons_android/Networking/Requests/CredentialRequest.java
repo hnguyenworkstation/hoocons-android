@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Requests;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 
@@ -19,6 +20,11 @@ public class CredentialRequest {
         this.userName = userName;
         this.passWord = passWord;
         this.fcmToken = SharedPreferencesManager.getDefault().getFcmToken();
+
+        if (this.fcmToken == null) {
+            this.fcmToken = FirebaseInstanceId.getInstance().getToken();
+            SharedPreferencesManager.getDefault().setFcmToken(fcmToken);
+        }
     }
 
     public CredentialRequest(String userName) {
