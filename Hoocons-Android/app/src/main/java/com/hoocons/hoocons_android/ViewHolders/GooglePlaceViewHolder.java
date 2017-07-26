@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.OnGooglePlaceClickListener;
 import com.hoocons.hoocons_android.Networking.Responses.GooglePlace;
@@ -33,7 +36,14 @@ public class GooglePlaceViewHolder extends RecyclerView.ViewHolder {
 
     public void initView(final Context context, final GooglePlace place,
                          final OnGooglePlaceClickListener listener, final int position) {
-        AppUtils.loadCircleImage(context, place.getIcon(), mPlaceTypeIcon);
+        Glide.with(context)
+                .load(place.getIcon())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions.fitCenterTransform())
+                .apply(RequestOptions.noAnimation())
+                .into(mPlaceTypeIcon);
+
         mPlaceName.setText(place.getName());
         mPlaceAddress.setText(place.getVicinity());
     }

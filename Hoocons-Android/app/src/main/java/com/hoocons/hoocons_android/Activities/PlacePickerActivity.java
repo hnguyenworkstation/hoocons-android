@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -50,6 +51,7 @@ import com.hoocons.hoocons_android.EventBus.FetchLocalPlacesComplete;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnGooglePlaceClickListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
@@ -84,6 +86,8 @@ public class PlacePickerActivity extends BaseActivity implements
     private static final String TAG = "Map";
     private final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private GoogleApiClient mGoogleClient;
+    private boolean canLoadMore = true;
+    private boolean isLoading = false;
 
     private static final int REQUEST_CODE = 1;
     private static final int REQUEST_PLACE_PICKER = 1;
@@ -135,11 +139,6 @@ public class PlacePickerActivity extends BaseActivity implements
                             String.valueOf(lastKnownLocation.getLongitude()),
                             null
                     ));
-                } else {
-                    BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
-                            String.valueOf(lastKnownLocation.getLatitude()),
-                            String.valueOf(lastKnownLocation.getLongitude()),
-                            googlePlaceRespond.getNextPageToken()));
                 }
             }
         } else {
@@ -154,12 +153,44 @@ public class PlacePickerActivity extends BaseActivity implements
 
             }
         });
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mPlacesAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                if (canLoadMore) {
+                    isLoading = true;
+                    loadMorePlaces();
+                }
+            }
+
+            @Override
+            public int getTotalItems() {
+                return mPlacesAdapter.getItemCount();
+            }
+
+            @Override
+            public boolean isLastItem() {
+                return ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition()
+                        == (layoutManager.getItemCount() - 3);
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
+
+    private void loadMorePlaces() {
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
+                String.valueOf(lastKnownLocation.getLatitude()),
+                String.valueOf(lastKnownLocation.getLongitude()),
+                googlePlaceRespond.getNextPageToken()));
     }
 
     private void initSearchToolbar() {
@@ -387,6 +418,8 @@ public class PlacePickerActivity extends BaseActivity implements
             googlePlaces.addAll(googlePlaceRespond.getPlaces());
             mProgress.setVisibility(View.GONE);
             mPlacesAdapter.notifyDataSetChanged();
+
+            canLoadMore = googlePlaceRespond.getNextPageToken() != null;
         }
     }
 }

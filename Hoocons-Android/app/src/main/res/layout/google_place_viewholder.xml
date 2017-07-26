@@ -2,14 +2,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_width"
+        android:layout_width="@dimen/place_logo_size"
+        android:layout_height="@dimen/place_logo_size"
         android:id="@+id/place_type_icon"
-        android:layout_margin="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:layout_marginEnd="@dimen/margin_12"
+        android:layout_marginStart="@dimen/margin_16"
         android:layout_gravity="center_vertical"/>
 
     <LinearLayout
