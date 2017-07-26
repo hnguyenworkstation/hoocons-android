@@ -1,7 +1,5 @@
 package com.hoocons.hoocons_android.Activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,12 +15,10 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -41,19 +37,12 @@ import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +50,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallback,
-        PlaceSelectionListener,
+public class PlacePickerActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks {
-    @BindView(R.id.place_list)
-    RecyclerView mPlaceList;
-    @BindView(R.id.sliding_up_panel)
-    SlidingUpPanelLayout mSlidingUpPanelLayout;
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
     @BindView(R.id.place_search_view)
@@ -82,15 +66,8 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
     private static final int REQUEST_PLACE_PICKER = 1;
     private static final int REQUEST_LOCATION_ACCESS = 0;
 
-
-    private GoogleMap googleMap;
     private LatLng garageLocation;
     private Location lastKnownLocation;
-    private SupportMapFragment mapFragment;
-    private static final int PLACE_PICKER_REQUEST = 1;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
-
 
     private static final String LOG_TAG = "PlacesAPIActivity";
     private static final int GOOGLE_API_CLIENT_ID = 0;
@@ -117,13 +94,14 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
                     .addApi(AppIndex.API).build();
         }
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_container);
-        mapFragment.getMapAsync(this);
-
-        initSlidingPanelView();
         initSearchToolbar();
         fetchLocation();
+
+        if (isNetworkAvailable()) {
+            
+        } else {
+            Toast.makeText(this, getResources().getText(R.string.no_connection), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initSearchToolbar() {
@@ -152,29 +130,6 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
             public void onSearchViewClosed() {
                 setResult(Activity.RESULT_CANCELED);
                 finish();
-            }
-        });
-    }
-
-
-    private void initSlidingPanelView() {
-        mSlidingUpPanelLayout.setAnchorPoint(0.45f);
-        mSlidingUpPanelLayout.setDragView(mPlaceList);
-        mSlidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                slideLayoutOffset = slideOffset;
-                Log.d(TAG, "onPanelSlide: " + slideOffset);
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Log.d(TAG, "onPanelStateChanged: prevoius state : " + previousState + "  new state: " + newState);
-                if(slideLayoutOffset < 0.2 &&
-                        ( previousState == SlidingUpPanelLayout.PanelState.ANCHORED
-                                || previousState == SlidingUpPanelLayout.PanelState.EXPANDED)) {
-                    mSlidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
             }
         });
     }
@@ -242,52 +197,6 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void onPlaceSelected(Place place) {
-
-    }
-
-    @Override
-    public void onError(Status status) {
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        if (mightNeedPermission()){
-            initMap();
-        }
-
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
-    }
-
-    private void initMap() {
-        CameraPosition newPos = new CameraPosition.Builder()
-                .target(new LatLng(lastKnownLocation.getLatitude(),
-                        lastKnownLocation.getLongitude()))
-                .zoom(10)
-                .bearing(300)
-                .build();
-
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(newPos), new GoogleMap.CancelableCallback() {
-            @Override
-            public void onFinish() {
-                googleMap.getUiSettings().setScrollGesturesEnabled(true);
-            }
-
-            @Override
-            public void onCancel() {
-                googleMap.getUiSettings().setAllGesturesEnabled(true);
-            }
-        });
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -306,8 +215,6 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
                 } else {
                     Toast.makeText(this, "", Toast.LENGTH_LONG).show();
                 }
-
-                moveToNewPlace(place.getLatLng());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.e(TAG, "Error: Status = " + status.toString());
@@ -316,27 +223,6 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
         }
     }
 
-    private void moveToNewPlace(LatLng newPlace) {
-        CameraPosition newPos = new CameraPosition.Builder()
-                .target(newPlace)
-                .zoom(12)
-                .bearing(300)
-                .build();
-
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(newPos), new GoogleMap.CancelableCallback() {
-
-            @Override
-            public void onFinish() {
-                googleMap.getUiSettings().setScrollGesturesEnabled(true);
-            }
-
-            @Override
-            public void onCancel() {
-                googleMap.getUiSettings().setAllGesturesEnabled(true);
-            }
-        });
-
-    }
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
@@ -358,7 +244,6 @@ public class PlacePickerActivity extends BaseActivity implements OnMapReadyCallb
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
                     fetchLocation();
-                    initMap();
                 } else {
                     Log.i(TAG, "LOCATION permission was NOT granted.");
                 }

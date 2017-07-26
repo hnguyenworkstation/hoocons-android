@@ -180,6 +180,7 @@
     <string name="new_activity">Create new activity</string>
 
     <!-- APIS & Secret Fields -->
+    <string name="google_web_service">AIzaSyDmiCmSGlRSOLgjouHiR1NginjFjBRrUnU</string>
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>
     <string name="aws_s3">elasticbeanstalk–ap–southeast-1-845076927108</string>
     <string name="aws_key_id">AKIAJUC2KVVEWYYLJKBQ</string>

@@ -154,6 +154,10 @@ public class BaseApplication extends GlobalContext {
         return jobManager;
     }
 
+    public synchronized String getGoogleServiceKey() {
+        return getBaseContext().getResources().getString(R.string.google_web_service);
+    }
+
     public synchronized AmazonS3Client getAwsS3Client() {
         if (s3Client == null) {
             s3Client = new AmazonS3Client( new BasicAWSCredentials(

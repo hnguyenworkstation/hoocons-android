@@ -27,42 +27,24 @@
                 <include layout="@layout/custom_place_picker_actionbar"/>
             </RelativeLayout>
 
-            <com.sothree.slidinguppanel.SlidingUpPanelLayout
-                android:layout_below="@+id/custom_toolbar"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                sothree:umanoPanelHeight="128dp"
-                android:gravity="bottom"
-                android:id="@+id/sliding_up_panel">
+                android:layout_height="match_parent"
+                android:layout_below="@id/custom_toolbar">
 
-                <FrameLayout
-                    android:gravity="top"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:id="@+id/location_recycler"/>
 
-                    <fragment
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:id="@+id/map_container"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"/>
-                </FrameLayout>
+                <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/loading_progress"/>
 
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/place_list"
-                        android:cacheColorHint="@android:color/white"
-                        android:drawSelectorOnTop="true"
-                        android:divider="@android:color/darker_gray"
-                        android:background="@android:color/transparent"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:smoothScrollbar="false"/>
-                </FrameLayout>
-            </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+            </RelativeLayout>
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 </RelativeLayout>
