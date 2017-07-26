@@ -164,6 +164,8 @@
     <string name="select_location">Select a location</string>
     <string name="select_tags">Add tags to the meeting</string>
     <string name="new_meeting">Start a meeting</string>
+    <string name="from_date">From date time</string>
+    <string name="to_date">To date time</string>
     <string name="action_delete">Delete</string>
     <string name="task_failed">Failed! Please check connection</string>
     <string name="love">Love</string>

@@ -1,17 +1,22 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
@@ -29,6 +34,9 @@ import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,14 +61,12 @@ public class NewMeetOutActivity extends BaseActivity implements
     ObservableRecyclerView mImageRecycler;
     @BindView(R.id.add_image_action)
     ImageView mAddImageBtn;
-    @BindView(R.id.meeting_add_time)
-    TextView mAddTimeFrame;
     @BindView(R.id.meeting_time_view)
     LinearLayout mMeetingTimeView;
-    @BindView(R.id.meeting_date_time)
-    TextView mDateTime;
-    @BindView(R.id.meeting_clock_time)
-    TextView mClockTime;
+    @BindView(R.id.meeting_from_timestamp)
+    TextView mFromDateTime;
+    @BindView(R.id.meeting_to_timestamp)
+    TextView mToDateTime;
 
     @BindView(R.id.submit_new_meeting)
     Button mSubmitMeeting;
@@ -74,6 +80,17 @@ public class NewMeetOutActivity extends BaseActivity implements
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
     private final ImageSpringListener springListener = new ImageSpringListener();
     private Spring mScaleSpring;
+
+    private DatePickerDialog mFromDatePicker;
+    private TimePickerDialog mFromTimePicker;
+
+    private DatePickerDialog mToDatePicker;
+    private TimePickerDialog mToTimePicker;
+
+    private int fromYear = 0, fromMonth = 0, fromDate = 0;
+    private int fromHour, fromMin;
+    private int toYear = 0, toMonth = 0, toDate = 0;
+    private int toHour, toMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +106,9 @@ public class NewMeetOutActivity extends BaseActivity implements
     private void initOnClickListener() {
         mSubmitMeeting.setOnClickListener(this);
         mActionBack.setOnClickListener(this);
+
+        mFromDateTime.setOnClickListener(this);
+        mToDateTime.setOnClickListener(this);
     }
 
     private void initGeneralView() {
@@ -174,6 +194,111 @@ public class NewMeetOutActivity extends BaseActivity implements
         mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.white));
     }
 
+    private void showFromDateTimePicker() {
+        Calendar now = Calendar.getInstance();
+        final OnDateSetListener listener = new OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                fromYear = year;
+                fromMonth = month;
+                fromDate = dayOfMonth;
+                mFromDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(fromYear,
+                        fromMonth, fromDate, fromHour, fromMin));
+
+                showFromTimePicker();
+            }
+        };
+
+        if (fromYear == 0) {
+            mFromDatePicker = new DatePickerDialog(this, listener, now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        } else {
+            mFromDatePicker = new DatePickerDialog(this, listener, fromYear,
+                    fromMonth, fromDate);
+        }
+
+        mFromDatePicker.show();
+    }
+
+    private void showFromTimePicker() {
+        Calendar now = Calendar.getInstance();
+
+        final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                fromHour = hourOfDay;
+                fromMin = minute;
+
+                mFromDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(fromYear,
+                        fromMonth, fromDate, fromHour, fromMin));
+            }
+        };
+
+        if (fromHour == 0 && fromMin == 0) {
+            mFromTimePicker = new TimePickerDialog(this, listener, now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE), true);
+        } else {
+            mFromTimePicker = new TimePickerDialog(this, listener, fromHour,
+                    fromMin, true);
+        }
+
+        mFromTimePicker.show();
+    }
+
+
+    private void showToTimePicker() {
+        Calendar now = Calendar.getInstance();
+
+        final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                toHour = hourOfDay;
+                toMin = minute;
+
+                mToDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(toYear,
+                        toMonth, toDate, toHour, toMin));
+            }
+        };
+
+        if (toHour == 0 && toMin == 0) {
+            mToTimePicker = new TimePickerDialog(this, listener, now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE), true);
+        } else {
+            mToTimePicker = new TimePickerDialog(this, listener, toHour,
+                    toMin, true);
+        }
+
+        mToTimePicker.show();
+    }
+
+
+    private void showToDateTimePicker() {
+        Calendar now = Calendar.getInstance();
+        final OnDateSetListener listener = new OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                toYear = year;
+                toMonth = month;
+                toDate = dayOfMonth;
+                mToDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(toYear,
+                        toMonth, toDate, toHour, toMin));
+
+                showToTimePicker();
+            }
+        };
+
+        if (toYear == 0) {
+            mToDatePicker = new DatePickerDialog(this, listener, now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        } else {
+            mToDatePicker = new DatePickerDialog(this, listener, toYear,
+                    toMonth, toDate);
+        }
+
+        mToDatePicker.show();
+    }
+
+
     @Override
     public void onDownMotionEvent() {
 
@@ -212,6 +337,12 @@ public class NewMeetOutActivity extends BaseActivity implements
                 break;
             case R.id.action_back:
                 onBackPressed();
+                break;
+            case R.id.meeting_from_timestamp:
+                showFromDateTimePicker();
+                break;
+            case R.id.meeting_to_timestamp:
+                showToDateTimePicker();
                 break;
             default:
                 break;

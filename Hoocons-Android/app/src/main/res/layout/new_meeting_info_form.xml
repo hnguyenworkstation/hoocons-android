@@ -20,7 +20,7 @@
             android:src="@drawable/meeting_title_icon"/>
 
         <TextView
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -77,25 +77,16 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_18"
             android:textStyle="bold"
-            android:text="@string/at_what_time"/>
+            android:text="@string/add_time_frame"/>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_marginTop="@dimen/margin_12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/meeting_add_time"
-            android:textSize="@dimen/text_18"
-            android:text="@string/add_time_frame"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:id="@+id/meeting_time_view"
             android:orientation="vertical">
 
@@ -103,18 +94,19 @@
                 android:layout_marginTop="@dimen/margin_12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/meeting_date_time"
+                android:id="@+id/meeting_from_timestamp"
                 android:textSize="@dimen/text_18"
                 android:textStyle="bold"
-                android:text="Sunday, 20/7/2017"/>
+                android:text="@string/from_date"/>
 
             <TextView
                 android:layout_marginTop="@dimen/margin_12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/meeting_clock_time"
+                android:id="@+id/meeting_to_timestamp"
                 android:textSize="@dimen/text_18"
-                android:text="12:00:00 PM"/>
+                android:textStyle="bold"
+                android:text="@string/to_date"/>
         </LinearLayout>
 
     </RelativeLayout>

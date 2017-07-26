@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -287,4 +288,28 @@ public class AppUtils {
                 .apply(RequestOptions.noAnimation())
                 .into(imageView);
     }
+
+    public static String getCurrentTimeStringFromDateTime(final int year, final int month, final int date,
+                                                          final int hour, final int minutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, date, hour, minutes);
+        Date date1 = cal.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH);
+        dateFormat.setTimeZone(TimeZone.getDefault());
+
+        return dateFormat.format(date1);
+    }
+
+    public static String getUTCTimeStringFromDateTime(final int year, final int month, final int date,
+                                                      final int hour, final int minutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, date, hour, minutes);
+        Date date1 = cal.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("gmt"));
+
+        return dateFormat.format(date1);
+    };
 }
