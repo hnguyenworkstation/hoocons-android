@@ -1,11 +1,16 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +36,9 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
@@ -46,6 +54,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.iwf.photopicker.PhotoPicker;
+import xyz.klinker.giphy.Giphy;
+import xyz.klinker.giphy.GiphyActivity;
 
 public class NewMeetOutActivity extends BaseActivity implements
         ObservableScrollViewCallbacks, View.OnClickListener {
@@ -84,7 +95,9 @@ public class NewMeetOutActivity extends BaseActivity implements
     @BindView(R.id.topic_flow_layout)
     CustomFlowLayout mFlowLayout;
 
+    private final int PHOTO_PICKER = 1;
     private List<String> topics;
+    private ArrayList<String> mImagePaths;
 
     private View mOverlayView;
     private int mActionBarSize;
@@ -101,6 +114,7 @@ public class NewMeetOutActivity extends BaseActivity implements
 
     private DatePickerDialog mToDatePicker;
     private TimePickerDialog mToTimePicker;
+    private ImageLoaderAdapter mImagesAdapter;
 
     private int fromYear = 0, fromMonth = 0, fromDate = 0;
     private int fromHour, fromMin;
@@ -114,6 +128,7 @@ public class NewMeetOutActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         topics = new ArrayList<>();
+        mImagePaths = new ArrayList<>();
 
         initGeneralView();
         initView();
@@ -128,6 +143,7 @@ public class NewMeetOutActivity extends BaseActivity implements
         mToDateTime.setOnClickListener(this);
 
         mAddTopicBtn.setOnClickListener(this);
+        mAddImageBtn.setOnClickListener(this);
     }
 
     private void initGeneralView() {
@@ -320,12 +336,14 @@ public class NewMeetOutActivity extends BaseActivity implements
             String topic = mAddTopicEdt.getText().toString();
 
             if (topics.contains(topic)) {
-                Toast.makeText(this, getResources().getText(R.string.already_created), Toast.LENGTH_SHORT).show();
-                mAddTopicEdt.setText("");
+                Toast.makeText(this, getResources().getText(R.string.already_created),
+                        Toast.LENGTH_SHORT).show();
             } else {
                 topics.add(topic);
                 initFlowLayoutView();
             }
+
+            mAddTopicEdt.setText("");
         }
     }
 
@@ -335,7 +353,7 @@ public class NewMeetOutActivity extends BaseActivity implements
         for (int i = 0; i < topics.size(); i++) {
             final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.topic_flow_layout,
                     mFlowLayout, false);
-            TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
+            final TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
             final ImageView closeicon =
                     (ImageView) item.findViewById(R.id.topic_flow_close);
 
@@ -346,19 +364,22 @@ public class NewMeetOutActivity extends BaseActivity implements
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                }
-            });
-
-            final int temp = i;
-            closeicon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                    int i = (int) v.getTag();
                     item.setVisibility(View.GONE);
-                    topics.remove(topics.get(temp));
+                    updateTags(i);
+                    topics.remove(i);
                 }
             });
         }
         mFlowLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void updateTags(int i) {
+        for (i = i + 1; i < topics.size(); i++) {
+            RelativeLayout flowChild = (RelativeLayout) mFlowLayout.getChildAt(i);
+            int temp = (int) flowChild.getTag();
+            flowChild.setTag(temp - 1);
+        }
     }
 
     @Override
@@ -393,6 +414,36 @@ public class NewMeetOutActivity extends BaseActivity implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PHOTO_PICKER) {
+                if (data != null){
+                    final ArrayList<String> images =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+                    if (images.size() > 0) {
+                        loadPickedImages(images);
+                    }
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+    }
+
+    private void loadPickedImages(final ArrayList<String> imageList) {
+        mImagePaths.clear();
+        mImagePaths.addAll(imageList);
+        mImagesAdapter = new ImageLoaderAdapter(this, imageList);
+
+        mImageRecycler.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false));
+        mImageRecycler.setAdapter(mImagesAdapter);
+        mImageRecycler.setItemAnimator(new DefaultItemAnimator());
+        mImageRecycler.setNestedScrollingEnabled(false);
+        mImageRecycler.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit_new_meeting:
@@ -409,6 +460,8 @@ public class NewMeetOutActivity extends BaseActivity implements
             case R.id.add_topic_btn:
                 addTopicView();
                 break;
+            case R.id.add_image_action:
+                AppUtils.startImagePicker(this, 8, PHOTO_PICKER);
             default:
                 break;
         }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHolder> {
     private ArrayList<String> imageList;
     private Context context;
-    private final int MAX_ITEMS = 6;
+    private final int MAX_ITEMS = 9;
 
     public ImageLoaderAdapter(Context context, ArrayList<String> imageList) {
         this.imageList = imageList;

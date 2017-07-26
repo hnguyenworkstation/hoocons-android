@@ -372,7 +372,7 @@ public class NewEventActivity extends BaseActivity
         mImagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
 
-        mImagesRecycler.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
+        mImagesRecycler.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
         mImagesRecycler.setAdapter(mImagesAdapter);
         mImagesRecycler.setItemAnimator(new DefaultItemAnimator());
         mImagesRecycler.setNestedScrollingEnabled(false);
