@@ -349,6 +349,7 @@ public class NewMeetOutActivity extends BaseActivity implements
 
     private void initFlowLayoutView() {
         mFlowLayout.removeAllViews();
+        mFlowLayout.setVisibility(View.VISIBLE);
 
         for (int i = 0; i < topics.size(); i++) {
             final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.topic_flow_layout,
@@ -368,10 +369,13 @@ public class NewMeetOutActivity extends BaseActivity implements
                     item.setVisibility(View.GONE);
                     updateTags(i);
                     topics.remove(i);
+
+                    if (topics.size() == 0) {
+                        mFlowLayout.setVisibility(View.GONE);
+                    }
                 }
             });
         }
-        mFlowLayout.setVisibility(View.VISIBLE);
     }
 
     private void updateTags(int i) {
@@ -441,6 +445,10 @@ public class NewMeetOutActivity extends BaseActivity implements
         mImageRecycler.setItemAnimator(new DefaultItemAnimator());
         mImageRecycler.setNestedScrollingEnabled(false);
         mImageRecycler.setVisibility(View.VISIBLE);
+
+        if (imageList.size() > 0) {
+            mAddImageBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override
