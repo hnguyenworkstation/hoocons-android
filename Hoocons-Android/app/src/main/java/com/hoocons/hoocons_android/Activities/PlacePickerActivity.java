@@ -59,6 +59,7 @@ import com.hoocons.hoocons_android.Networking.Responses.GooglePlace;
 import com.hoocons.hoocons_android.Networking.Responses.GooglePlaceResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchNearByPlacesJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchNextPageNearbyPlacesJob;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -136,8 +137,7 @@ public class PlacePickerActivity extends BaseActivity implements
                 if (googlePlaceRespond == null) {
                     BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
                             String.valueOf(lastKnownLocation.getLatitude()),
-                            String.valueOf(lastKnownLocation.getLongitude()),
-                            null
+                            String.valueOf(lastKnownLocation.getLongitude())
                     ));
                 }
             }
@@ -187,10 +187,9 @@ public class PlacePickerActivity extends BaseActivity implements
     }
 
     private void loadMorePlaces() {
-        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
-                String.valueOf(lastKnownLocation.getLatitude()),
-                String.valueOf(lastKnownLocation.getLongitude()),
-                googlePlaceRespond.getNextPageToken()));
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNextPageNearbyPlacesJob(
+                googlePlaceRespond.getNextPageToken())
+        );
     }
 
     private void initSearchToolbar() {

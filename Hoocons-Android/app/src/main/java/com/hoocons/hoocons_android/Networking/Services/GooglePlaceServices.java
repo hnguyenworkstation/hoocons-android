@@ -17,6 +17,10 @@ public interface GooglePlaceServices {
     @GET("/maps/api/place/nearbysearch/json")
     Call<GooglePlaceResponse> getAroundPlaces(@Query("location") String location,
                                               @Query("radius") String radius,
-                                              @Query("key") String keyApi,
-                                              @Query("placeholder") String placeHolder);
+                                              @Query("type") String type,
+                                              @Query("key") String keyApi);
+
+    @GET("/maps/api/place/nearbysearch/json")
+    Call<GooglePlaceResponse> getNextAroundPlaces(@Query("key") String keyApi,
+                                              @Query("pagetoken") String placeHolder);
 }

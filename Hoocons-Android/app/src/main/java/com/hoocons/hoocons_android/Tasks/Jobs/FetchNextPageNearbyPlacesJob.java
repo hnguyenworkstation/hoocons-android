@@ -7,7 +7,6 @@ import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.hoocons.hoocons_android.EventBus.FetchLocalPlacesComplete;
-import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.GooglePlaceNetContext;
 import com.hoocons.hoocons_android.Networking.Responses.GooglePlaceResponse;
@@ -27,14 +26,12 @@ import retrofit2.Response;
  * Created by hungnguyen on 7/26/17.
  */
 
-public class FetchNearByPlacesJob extends Job implements Serializable {
-    private String latitude;
-    private String longitude;
+public class FetchNextPageNearbyPlacesJob extends Job implements Serializable {
+    private String placeHolder;
 
-    public FetchNearByPlacesJob(String latitude, String longitude) {
+    public FetchNextPageNearbyPlacesJob(String placeHolder) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.publicApi));
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.placeHolder = placeHolder;
     }
 
     @Override
@@ -45,24 +42,21 @@ public class FetchNearByPlacesJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         GooglePlaceServices services = GooglePlaceNetContext.instance.create(GooglePlaceServices.class);
-        String location = latitude + "," + longitude;
-        services.getAroundPlaces(location, "5000", MapUtils.getPlaceTypeQuery(),
-                BaseApplication.getInstance().getGoogleServiceKey())
+        services.getNextAroundPlaces(BaseApplication.getInstance().getGoogleServiceKey(), placeHolder)
                 .enqueue(new Callback<GooglePlaceResponse>() {
-            @Override
-            public void onResponse(Call<GooglePlaceResponse> call,
-                                   Response<GooglePlaceResponse> response) {
-                if (response.code() == 200) {
-                    // 200 is complete
-                    EventBus.getDefault().post(new FetchLocalPlacesComplete(response.body()));
-                }
-            }
+                    @Override
+                    public void onResponse(Call<GooglePlaceResponse> call, Response<GooglePlaceResponse> response) {
+                        if (response.code() == 200) {
+                            // 200 is complete
+                            EventBus.getDefault().post(new FetchLocalPlacesComplete(response.body()));
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<GooglePlaceResponse> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<GooglePlaceResponse> call, Throwable t) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override

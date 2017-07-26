@@ -30,4 +30,10 @@ public class MapUtils {
                "json?location=%s,%s&radius=50000&key=%s", latitude, longitude,
                BaseApplication.getInstance().getGoogleServiceKey());
     }
+
+    public static String getPlaceTypeQuery() {
+        return "liquor_store, bar, beauty_salon, bus_station, dentist, department_store, restaurant, rv_park, " +
+                "hair_care, university, taxi_stand, shopping_mall, shoe_store, school, courthouse, pharmacy, night_club, " +
+                "cafe, meal_delivery, liquor_store, library";
+    }
 }
