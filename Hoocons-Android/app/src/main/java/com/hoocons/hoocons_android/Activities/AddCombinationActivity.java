@@ -42,6 +42,11 @@ public class AddCombinationActivity extends DraggerActivity
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+    private void startCustomPlacePicker() {
+        startActivity(new Intent(AddCombinationActivity.this, PlacePickerActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -53,6 +58,7 @@ public class AddCombinationActivity extends DraggerActivity
                 startNewMeetOutActivity();
                 break;
             case R.id.new_checkin_btn_view:
+                startCustomPlacePicker();
                 break;
             default:
                 break;

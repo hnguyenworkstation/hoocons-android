@@ -7,12 +7,16 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by hungnguyen on 7/26/17.
  */
 
 public interface GooglePlaceServices {
-    @GET("/placeholder={placeholder}/")
-    Call<GooglePlaceResponse> getAroundPlaces(@Path("placeholder") String placeHolder);
+    @GET("/maps/api/place/nearbysearch/json")
+    Call<GooglePlaceResponse> getAroundPlaces(@Query("location") String location,
+                                              @Query("radius") String radius,
+                                              @Query("key") String keyApi,
+                                              @Query("placeholder") String placeHolder);
 }

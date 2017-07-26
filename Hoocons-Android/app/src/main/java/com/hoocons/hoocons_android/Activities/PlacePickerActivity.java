@@ -15,10 +15,14 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -41,10 +45,22 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.hoocons.hoocons_android.Adapters.GooglePlacesAdapter;
+import com.hoocons.hoocons_android.EventBus.FetchLocalPlacesComplete;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.Interface.OnGooglePlaceClickListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Responses.GooglePlace;
+import com.hoocons.hoocons_android.Networking.Responses.GooglePlaceResponse;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchNearByPlacesJob;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,16 +97,23 @@ public class PlacePickerActivity extends BaseActivity implements
     private GoogleApiClient mGoogleApiClient;
     private static final int PERMISSION_REQUEST_CODE = 100;
     private float slideLayoutOffset = -1;
-
     private boolean isToolbarHiding = false;
+
+    private List<GooglePlace> googlePlaces;
+    private GooglePlaceResponse googlePlaceRespond;
+    private GooglePlacesAdapter mPlacesAdapter;
 
     @Override
     @RequiresPermission(anyOf = {android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
         setContentView(R.layout.activity_place_picker);
         ButterKnife.bind(this);
+
+        googlePlaces = new ArrayList<>();
 
         if (mGoogleClient == null) {
             mGoogleClient = new GoogleApiClient.Builder(this)
@@ -102,13 +125,41 @@ public class PlacePickerActivity extends BaseActivity implements
         }
 
         initSearchToolbar();
-        fetchLocation();
+        initRecycler();
 
         if (isNetworkAvailable()) {
-
+            if (fetchLocation()) {
+                if (googlePlaceRespond == null) {
+                    BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
+                            String.valueOf(lastKnownLocation.getLatitude()),
+                            String.valueOf(lastKnownLocation.getLongitude()),
+                            null
+                    ));
+                } else {
+                    BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchNearByPlacesJob(
+                            String.valueOf(lastKnownLocation.getLatitude()),
+                            String.valueOf(lastKnownLocation.getLongitude()),
+                            googlePlaceRespond.getNextPageToken()));
+                }
+            }
         } else {
             Toast.makeText(this, getResources().getText(R.string.no_connection), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void initRecycler() {
+        mPlacesAdapter = new GooglePlacesAdapter(this, googlePlaces, new OnGooglePlaceClickListener() {
+            @Override
+            public void onPlaceClickListener(int position) {
+
+            }
+        });
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setAdapter(mPlacesAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void initSearchToolbar() {
@@ -326,5 +377,16 @@ public class PlacePickerActivity extends BaseActivity implements
         super.onStop();
         AppIndex.AppIndexApi.end(mGoogleClient, getIndexApiAction());
         mGoogleClient.disconnect();
+    }
+
+
+    @Subscribe
+    public void onEvent(FetchLocalPlacesComplete request) {
+        googlePlaceRespond = request.getResponse();
+        if (googlePlaceRespond != null) {
+            googlePlaces.addAll(googlePlaceRespond.getPlaces());
+            mProgress.setVisibility(View.GONE);
+            mPlacesAdapter.notifyDataSetChanged();
+        }
     }
 }
