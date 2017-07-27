@@ -26,6 +26,7 @@ import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.hoocons.hoocons_android.SQLite.StickerDB;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsJobService;
 
@@ -63,6 +64,9 @@ public class BaseApplication extends GlobalContext {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             builder.detectFileUriExposure();
         }
+
+        // Initialize Stickers object list
+        StickerDB.initMonkeyStickerHashMap();
 
         // Initializing facebook
         FacebookSdk.sdkInitialize(getApplicationContext());

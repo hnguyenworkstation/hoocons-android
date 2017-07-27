@@ -21,7 +21,6 @@ import java.util.Set;
 /**
  * Created by hungnguyen on 7/27/17.
  */
-
 public class StickerDB {
     private static List<Sticker> monkeyStickerSet;
 
@@ -37,7 +36,7 @@ public class StickerDB {
             public Void workInBackground(Void... params) throws TaskException {
                 InputStream in;
                 try {
-                    in = BaseApplication.getInstance().getAssets().open("emotions.properties");
+                    in = BaseApplication.getInstance().getAssets().open("monkey_emo.properties");
                     Properties properties = new Properties();
                     properties.load(new InputStreamReader(in, "utf-8"));
                     Set<Object> keySet = properties.keySet();
