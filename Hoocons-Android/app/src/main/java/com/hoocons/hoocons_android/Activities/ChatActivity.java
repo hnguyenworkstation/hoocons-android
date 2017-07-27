@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -24,11 +25,11 @@ import android.widget.LinearLayout;
 
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
+import com.hoocons.hoocons_android.Interface.OnStickerPagerFragmentInteractionListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.ViewFragments.EmotionFragment;
 import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 
 import org.aisen.android.common.utils.BitmapUtil;
@@ -38,7 +39,8 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChatActivity extends BaseActivity implements View.OnClickListener {
+public class ChatActivity extends BaseActivity implements View.OnClickListener,
+        OnStickerPagerFragmentInteractionListener {
     @BindView(R.id.chatroom_send)
     ImageButton mSendButton;
     @BindView(R.id.chatroom_emoji)
@@ -55,7 +57,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private StickerCombinationFragment stickerCombinationFragment;
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
-
 
     private final TextWatcher editContentWatcher = new TextWatcher() {
         @Override
@@ -295,5 +296,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     @Subscribe
     public void onEvent(SmallEmotionClicked request) {
         insertToTextInput(request.getEmotion());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

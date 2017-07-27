@@ -1,11 +1,15 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -34,35 +38,39 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * 表情窗口
- *
- * @author wangdan
- *
- */
-public class EmotionFragment extends AGridFragment<Emotion, Emotions>
+public class PopoStickerFragment extends AGridFragment<Emotion, Emotions>
         implements OnItemClickListener, OnItemLongClickListener {
 
+    private OnPoPoEmotionSelectedListener onPoPoEmotionSelectedListener;
     private boolean isGridViewScrolling = false;
     private OnStickerPagerFragmentInteractionListener mListener;
     private OnStickerChildInteractionListener mChildListener;
     private int myLastVisiblePos;
 
-    public static EmotionFragment newInstance() {
-        return new EmotionFragment();
+    public PopoStickerFragment() {
+        // Required empty public constructor
     }
 
-    private OnEmotionSelectedListener onEmotionSelectedListener;
+    public static PopoStickerFragment newInstance() {
+        PopoStickerFragment fragment = new PopoStickerFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public int inflateContentView() {
-        return R.layout.emotion_layout;
+        return R.layout.popo_gridview_layout;
     }
 
     @Override
     protected void layoutInit(LayoutInflater inflater, Bundle savedInstanceSate) {
         super.layoutInit(inflater, savedInstanceSate);
-
         myLastVisiblePos = getRefreshView().getFirstVisiblePosition();
 
         getRefreshView().setOnItemClickListener(this);
@@ -112,12 +120,38 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
                 myLastVisiblePos = currentFirstVisPos;
             }
         });
+
+        refreshGridView();
+    }
+
+    private void refreshGridView() {
+        int gridViewEntrySize = getResources().getDimensionPixelSize(R.dimen.popo_image_size);
+        int gridViewSpacing = getResources().getDimensionPixelSize(R.dimen.popo_image_padding);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        int numColumns = (display.getWidth() - gridViewSpacing) / (gridViewEntrySize + gridViewSpacing);
+
+        getRefreshView().setNumColumns(numColumns);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (onEmotionSelectedListener != null)
-            onEmotionSelectedListener.onEmotionSelected(getAdapterItems().get(position));
+    public IItemViewCreator<Emotion> configItemViewCreator() {
+        return new IItemViewCreator<Emotion>() {
+            @Override
+            public View newContentView(LayoutInflater inflater, ViewGroup parent, int viewType) {
+                return inflater.inflate(R.layout.popo_sticker_viewholder, parent, false);
+            }
+
+            @Override
+            public IITemView<Emotion> newItemView(View convertView, int viewType) {
+                return new PoPoStickerItemView(convertView);
+            }
+        };
+    }
+
+    @Override
+    public void requestData(RefreshMode var1) {
+        new PoPoEmotionTask(var1).execute("d_");
     }
 
     @Override
@@ -127,44 +161,28 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
     }
 
     @Override
-    public IItemViewCreator<Emotion> configItemViewCreator() {
-        return new IItemViewCreator<Emotion>() {
-
-            @Override
-            public View newContentView(LayoutInflater inflater, ViewGroup parent, int viewType) {
-                return inflater.inflate(R.layout.emotion_item, parent, false);
-            }
-
-            @Override
-            public IITemView<Emotion> newItemView(View convertView, int viewType) {
-                return new EmotionItemView(convertView);
-            }
-
-        };
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (onPoPoEmotionSelectedListener != null)
+            onPoPoEmotionSelectedListener.onPoPoEmotionSelected(getAdapterItems().get(position));
     }
 
-    @Override
-    public void requestData(RefreshMode mode) {
-        new EmotionTask(mode).execute("d_");
-    }
+    public class PoPoStickerItemView extends ARecycleViewItemView<Emotion> {
+        @BindView(R.id.popoEmotion)
+        ImageView popoEmotion;
 
-    public class EmotionItemView extends ARecycleViewItemView<Emotion> {
-        @BindView(R.id.imgEmotion)
-        ImageView imgEmotion;
-
-        public EmotionItemView(View itemView) {
+        public PoPoStickerItemView(View itemView) {
             super(getActivity(), itemView);
             ButterKnife.bind(this, itemView);
         }
 
         @Override
         public void onBindData(View convertView, Emotion data, int position) {
-            imgEmotion.setImageBitmap(BitmapFactory.decodeByteArray(data.getData(), 0, data.getData().length));
+            popoEmotion.setImageBitmap(BitmapFactory.decodeByteArray(data.getData(), 0, data.getData().length));
         }
     }
 
-    public class EmotionTask extends APagingTask<String, Void, Emotions> {
-        public EmotionTask(RefreshMode mode) {
+    public class PoPoEmotionTask extends APagingTask<String, Void, Emotions> {
+        PoPoEmotionTask(RefreshMode mode) {
             super(mode);
         }
 
@@ -174,34 +192,25 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
         }
 
         @Override
-        protected Emotions workInBackground(RefreshMode mode, String previousPage, String nextPage, String... params)
+        protected Emotions workInBackground(RefreshMode mode, String previousPage,
+                                            String nextPage, String... params)
                 throws TaskException {
             Emotions es = new Emotions();
             es.setEmotions(new ArrayList<Emotion>());
 
-            Emotions emotions = EmotionsDB.getEmotions("d_");
-            es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("hs_");
-            es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("h_");
-            es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("f_");
-            es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("o_");
-            es.getEmotions().addAll(emotions.getEmotions());
-            emotions = EmotionsDB.getEmotions("w_");
+            Emotions emotions = EmotionsDB.getEmotions("popo_");
             es.getEmotions().addAll(emotions.getEmotions());
 
             return es;
         }
     }
 
-    public void setOnEmotionListener(OnEmotionSelectedListener onEmotionSelectedListener) {
-        this.onEmotionSelectedListener = onEmotionSelectedListener;
+    public void setOnEmotionListener(OnPoPoEmotionSelectedListener onPoPoEmotionSelectedListener) {
+        this.onPoPoEmotionSelectedListener = onPoPoEmotionSelectedListener;
     }
 
-    public interface OnEmotionSelectedListener {
-        void onEmotionSelected(Emotion emotion);
+    public interface OnPoPoEmotionSelectedListener {
+        void onPoPoEmotionSelected(Emotion emotion);
     }
 
     @Override
@@ -221,4 +230,17 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
                     + " must implement OnChildInteractionListener");
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshGridView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshGridView();
+    }
+
 }

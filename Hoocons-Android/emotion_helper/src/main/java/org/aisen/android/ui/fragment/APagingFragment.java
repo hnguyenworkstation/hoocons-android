@@ -33,7 +33,10 @@ import org.aisen.android.ui.fragment.itemview.OnFooterViewListener;
 import org.aisen.android.ui.fragment.itemview.AFooterItemView.OnFooterViewCallback;
 import org.aisen.android.ui.widget.AsToolbar.OnToolbarDoubleClick;
 
-public abstract class APagingFragment<T extends Serializable, Ts extends Serializable, V extends ViewGroup> extends ABaseFragment implements OnToolbarDoubleClick, OnFooterViewListener, OnFooterViewCallback {
+public abstract class APagingFragment<T extends Serializable,
+        Ts extends Serializable, V extends ViewGroup>
+        extends ABaseFragment implements OnToolbarDoubleClick,
+        OnFooterViewListener, OnFooterViewCallback {
     private static final String TAG = "AFragment-Paging";
     public static final String PAGING_TASK_ID = "org.aisen.android.PAGING_TASK";
     private static final String SAVED_DATAS = "org.aisen.android.ui.Datas";

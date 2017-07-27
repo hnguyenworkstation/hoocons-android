@@ -44,6 +44,7 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
     private static final long TIMER_DELAY = 0;
 
     private EmotionFragment emotionFragment;
+    private PopoStickerFragment popoStickerFragment;
 
     public static StickerCombinationFragment newInstance() {
         StickerCombinationFragment fragment = new StickerCombinationFragment();
@@ -76,6 +77,7 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
         StickerCombinationViewPagerAdapter pageAdapter =
                 new StickerCombinationViewPagerAdapter(getChildFragmentManager());
 
+        // Init Emotion fragment
         emotionFragment = EmotionFragment.newInstance();
         emotionFragment.setOnEmotionListener(new EmotionFragment.OnEmotionSelectedListener() {
             @Override
@@ -83,8 +85,17 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
                 EventBus.getDefault().post(new SmallEmotionClicked(emotion));
             }
         });
-
         pageAdapter.addFragment(emotionFragment);
+
+        // Init Popo Sticker Fragment
+        popoStickerFragment = PopoStickerFragment.newInstance();
+        popoStickerFragment.setOnEmotionListener(new PopoStickerFragment.OnPoPoEmotionSelectedListener() {
+            @Override
+            public void onPoPoEmotionSelected(Emotion emotion) {
+
+            }
+        });
+        pageAdapter.addFragment(popoStickerFragment);
         mViewPager.setAdapter(pageAdapter);
 
         // BEGIN_INCLUDE (setup_slidingtablayout)
