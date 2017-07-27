@@ -45,6 +45,7 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
 
     private EmotionFragment emotionFragment;
     private PopoStickerFragment popoStickerFragment;
+    private MonkeyStickerFragment monkeyStickerFragment;
 
     public static StickerCombinationFragment newInstance() {
         StickerCombinationFragment fragment = new StickerCombinationFragment();
@@ -96,7 +97,15 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
             }
         });
         pageAdapter.addFragment(popoStickerFragment);
+
+
+        // Init Monkey sticker fragment
+        monkeyStickerFragment = MonkeyStickerFragment.newInstance();
+        pageAdapter.addFragment(monkeyStickerFragment);
+
         mViewPager.setAdapter(pageAdapter);
+
+
 
         // BEGIN_INCLUDE (setup_slidingtablayout)
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
