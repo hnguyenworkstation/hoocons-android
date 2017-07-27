@@ -32,7 +32,6 @@ public class EmotionsDB {
     }
 
     static class SqliteDbHelper extends SQLiteOpenHelper {
-
         SqliteDbHelper(Context context, String dbName, int dbVersion) {
             super(context, dbName, null, dbVersion);
         }
@@ -148,7 +147,8 @@ public class EmotionsDB {
     }
 
     public static byte[] getEmotion(String key) {
-        Cursor cursor = emotionsDb.rawQuery(" SELECT " + EmotionTable.value + " FROM " + EmotionTable.table + " WHERE " + EmotionTable.key + " = ? ",
+        Cursor cursor = emotionsDb.rawQuery(" SELECT " + EmotionTable.value + " FROM " +
+                        EmotionTable.table + " WHERE " + EmotionTable.key + " = ? ",
                 new String[] { key });
         try {
             if (cursor.moveToFirst()) {
@@ -169,8 +169,10 @@ public class EmotionsDB {
 
         String query = type.indexOf("lxh_") == -1 ? "unlike" : "like";
         query = "like";
-        Cursor cursor = emotionsDb.rawQuery(" SELECT * FROM " + EmotionTable.table + " WHERE " + EmotionTable.file + " " + query + " '" + type
-                + "%' order by org_aisen_weibo_sina_file", null);
+        Cursor cursor = emotionsDb.rawQuery(" SELECT * FROM " +
+                EmotionTable.table + " WHERE " +
+                EmotionTable.file + " " + query + " '" + type
+                + "%' order by hoocons_emotions_file", null);
 
         try {
             if (cursor.moveToFirst()) {
@@ -195,11 +197,11 @@ public class EmotionsDB {
     }
 
     static class EmotionTable {
-        static final String table = "org_aisen_weibo_sina_emotions";
-        static final String id = "org_aisen_weibo_sina_id";
-        static final String key = "org_aisen_weibo_sina_key";
-        static final String file = "org_aisen_weibo_sina_file";
-        static final String value = "org_aisen_weibo_sina_value";
+        static final String table = "hoocons_emotions";
+        static final String id = "hoocons_emotions_id";
+        static final String key = "hoocons_emotions_key";
+        static final String file = "hoocons_emotions_file";
+        static final String value = "hoocons_emotions_value";
     }
 
 }

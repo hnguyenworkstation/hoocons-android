@@ -13,6 +13,8 @@
     <dimen name="activity_card_corner">4dp</dimen>
     <dimen name="find_match_card_margin_left_right">12dp</dimen>
     <dimen name="find_match_card_margin_top">65dp</dimen>
+    <dimen name="popo_image_size">64dp</dimen>
+    <dimen name="popo_image_padding">10dp</dimen>
 
     <!-- Text Dimen -->
     <dimen name="text_4">4sp</dimen>

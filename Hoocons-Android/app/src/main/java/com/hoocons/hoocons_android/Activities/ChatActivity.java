@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -22,20 +23,24 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
+import com.hoocons.hoocons_android.Interface.OnStickerPagerFragmentInteractionListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.ViewFragments.EmotionFragment;
+import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 
 import org.aisen.android.common.utils.BitmapUtil;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener,
-        EmotionFragment.OnEmotionSelectedListener {
+        OnStickerPagerFragmentInteractionListener {
     @BindView(R.id.chatroom_send)
     ImageButton mSendButton;
     @BindView(R.id.chatroom_emoji)
@@ -49,10 +54,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     @BindView(R.id.root_container)
     View mRootContainer;
 
-    private EmotionFragment emotionFragment;
+    private StickerCombinationFragment stickerCombinationFragment;
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
-
 
     private final TextWatcher editContentWatcher = new TextWatcher() {
         @Override
@@ -89,25 +93,24 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
-        emotionFragment = new EmotionFragment();
+        stickerCombinationFragment = new StickerCombinationFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                emotionFragment, "EmotionFragment").commit();
+                stickerCombinationFragment, "EmotionFragment").commit();
 
         initEmotionLayout();
         initOnListener();
     }
 
     private void initEmotionLayout() {
-        if (emotionFragment == null) {
-            emotionFragment = EmotionFragment.newInstance();
+        if (stickerCombinationFragment == null) {
+            stickerCombinationFragment = StickerCombinationFragment.newInstance();
 
             getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                    emotionFragment, "EmotionFragment").commit();
+                    stickerCombinationFragment, "EmotionFragment").commit();
         }
-
-        emotionFragment.setOnEmotionListener(this);
 
         ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "translationY",
                 SystemUtils.getScreenHeight(this), emotionHeight).
@@ -218,16 +221,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onEmotionSelected(Emotion emotion) {
-        Editable editAble = mTextInput.getEditableText();
-        int start = mTextInput.getSelectionStart();
-        if ("[最右]".equals(emotion.getKey()))
-            editAble.insert(start, "→_→");
-        else
-            editAble.insert(start, emotion.getKey());
-    }
-
     private InputFilter emotionFilter = new InputFilter() {
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -251,6 +244,17 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
             }
         }
     };
+
+    private void insertToTextInput(Emotion emotion) {
+        Editable editAble = mTextInput.getEditableText();
+        int start = mTextInput.getSelectionStart();
+        if ("[最右]".equals(emotion.getKey()))
+            editAble.insert(start, "→_→");
+        else
+            editAble.insert(start, emotion.getKey());
+
+        // now set click listener when add new fragment -> push event bus
+    }
 
     private void shouldRemoveLastIcon() {
         String text = mTextInput.getText().toString();
@@ -286,5 +290,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         }
 
         super.onBackPressed();
+    }
+
+
+    @Subscribe
+    public void onEvent(SmallEmotionClicked request) {
+        insertToTextInput(request.getEmotion());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
