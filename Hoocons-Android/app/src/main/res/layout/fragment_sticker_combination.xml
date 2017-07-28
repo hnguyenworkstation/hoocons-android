@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vpPager"
@@ -15,13 +16,18 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:id="@+id/scroll"
-        android:background="@drawable/smalll_border"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:background="@drawable/inactive_button"
         android:paddingTop="1dp">
 
         <com.hoocons.hoocons_android.CustomUI.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="32dp"
+            app:tabMode="scrollable"
+            app:tabGravity="center"
             android:measureAllChildren="false" />
     </RelativeLayout>
 </RelativeLayout>

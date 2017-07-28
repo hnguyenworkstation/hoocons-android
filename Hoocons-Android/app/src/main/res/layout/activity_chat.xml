@@ -51,9 +51,10 @@
 
                     </LinearLayout>
 
-                    <include layout="@layout/chatroom_footer"
+                    <include
+                        layout="@layout/chatroom_footer"
                         android:layout_width="match_parent"
-                        android:layout_height="50dip"
+                        android:layout_height="wrap_content"
                         android:id="@+id/chatroom_footer"/>
                 </LinearLayout>
 

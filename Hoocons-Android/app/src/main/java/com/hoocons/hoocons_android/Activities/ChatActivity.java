@@ -82,11 +82,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     private final View.OnKeyListener keyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_DEL) {
+            if (keyCode == KeyEvent.KEYCODE_DEL)
+            {
                 Log.e(TAG, "onKey: DELETE");
                 shouldRemoveLastIcon();
+                return true;
+            } else if (keyCode==KeyEvent.KEYCODE_ENTER)
+            {
+                // Just ignore the [Enter] key
+                return true;
             }
-            return false;
+
+            return  false;
         }
     };
 

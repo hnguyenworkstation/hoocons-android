@@ -21,6 +21,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.FirebaseApp;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
@@ -71,6 +72,8 @@ public class BaseApplication extends GlobalContext {
         // Initializing facebook
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+
+        FirebaseApp.initializeApp(this);
 
         // Init bitmap
         BitmapLoader.newInstance(this, getImagePath());

@@ -97,7 +97,7 @@ public class StickerCombinationFragment extends Fragment implements OnStickerChi
             }
         });
         pageAdapter.addFragment(popoStickerFragment);
-        
+
 //        // Init Monkey sticker fragment
 //        monkeyStickerFragment = MonkeyStickerFragment.newInstance();
 //        pageAdapter.addFragment(monkeyStickerFragment);
