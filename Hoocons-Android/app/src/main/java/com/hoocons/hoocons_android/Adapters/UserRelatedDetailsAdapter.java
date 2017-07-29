@@ -10,16 +10,18 @@ import android.view.ViewGroup;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.ViewHolders.UserInfoAndEventViewHolder;
+import com.hoocons.hoocons_android.ViewHolders.UserRelatedDetailsViewHolder;
 
 import java.util.List;
 
 /**
  * Created by hungnguyen on 7/15/17.
  */
-public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAndEventViewHolder> {
+public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
     private List<EventResponse> responseList;
+    private List<MeetOutResponse> meetOutResponses;
     private Context context;
 
     private final int EVENT_LOADING_END = 100;
@@ -39,16 +41,17 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     private final int TYPE_SHARED_EVENT_CHECKIN = 11;
 
     private final int EVENT_DUMMIES_CARD = 99;
+    private final int USER_OTHER_INFO = 98;
 
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
     private EventAdapterListener listener;
 
-    private final int EXTRA_ITEMS = 2;
+    private final int EXTRA_ITEMS = 4;
     private final Handler handler = new Handler();
 
-    public UserProfileAndEventAdapter(Context context, List<EventResponse> responsesList,
-                                      final EventAdapterListener listener, boolean isMyself) {
+    public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
+                                     final EventAdapterListener listener, boolean isMyself) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
@@ -56,13 +59,17 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
     }
 
     @Override
-    public UserInfoAndEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserRelatedDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
         switch (viewType) {
             case EVENT_DUMMIES_CARD:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.user_profile_dummy_viewholder, parent, false);
+                break;
+            case USER_OTHER_INFO:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.empty_recycler_viewholder, parent, false);
                 break;
             case USER_INFO_TAG_CARD:
                 view = LayoutInflater.from(parent.getContext())
@@ -112,14 +119,21 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
                 break;
         }
 
-        return new UserInfoAndEventViewHolder(view);
+        return new UserRelatedDetailsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(UserInfoAndEventViewHolder holder, int position) {
+    public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
             holder.initUserInfo(context, isMyself);
         } else if (position == 1) {
+            if (responseList.size() > 0) {
+                holder.initDummyCardForEvent(context, isMyself,
+                        responseList.get(0).getUserInfo().getDisplayName());
+            }
+        } else if (position == 2) {
+            holder.initCreatedMeetOutList(context, meetOutResponses);
+        } else if (position == 3) {
             if (responseList.size() > 0) {
                 holder.initDummyCardForEvent(context, isMyself,
                         responseList.get(0).getUserInfo().getDisplayName());
@@ -137,6 +151,10 @@ public class UserProfileAndEventAdapter extends RecyclerView.Adapter<UserInfoAnd
         if (position == 0) {
             return USER_INFO_TAG_CARD;
         } else if (position == 1) {
+            return EVENT_DUMMIES_CARD;
+        } else if (position == 2) {
+            return USER_OTHER_INFO;
+        } else if (position == 3) {
             return EVENT_DUMMIES_CARD;
         }
 

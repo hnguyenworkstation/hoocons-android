@@ -9,7 +9,7 @@ import java.util.List;
  * Created by hungnguyen on 7/29/17.
  */
 
-public class MeetUpResponse {
+public class MeetOutResponse {
     @SerializedName("id")
     private int id;
     @SerializedName("created_by")
@@ -53,15 +53,14 @@ public class MeetUpResponse {
     @SerializedName("is_reported")
     private boolean isReported;
 
-
-    public MeetUpResponse(int id, UserInfoResponse createdBy,
-                          String createAt, String name, String description,
-                          List<MediaResponse> promotedMedias, String fromDateTime,
-                          String toDateTime, String city, String country, String privacy,
-                          boolean isPromoted, LocationResponse postedAtLocation,
-                          LocationResponse meetupLocation, String meetupLocationName,
-                          String meetupLocationAddress, List<TagResponse> tags, List<Topic> topics,
-                          int likeCount, int reportCount, boolean isReported) {
+    public MeetOutResponse(int id, UserInfoResponse createdBy,
+                           String createAt, String name, String description,
+                           List<MediaResponse> promotedMedias, String fromDateTime,
+                           String toDateTime, String city, String country, String privacy,
+                           boolean isPromoted, LocationResponse postedAtLocation,
+                           LocationResponse meetupLocation, String meetupLocationName,
+                           String meetupLocationAddress, List<TagResponse> tags, List<Topic> topics,
+                           int likeCount, int reportCount, boolean isReported) {
         this.id = id;
         this.createdBy = createdBy;
         this.createAt = createAt;

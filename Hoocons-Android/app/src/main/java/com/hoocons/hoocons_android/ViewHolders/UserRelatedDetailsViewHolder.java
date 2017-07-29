@@ -35,6 +35,7 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
@@ -48,6 +49,7 @@ import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
+import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 
@@ -64,7 +66,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class UserInfoAndEventViewHolder extends ViewHolder {
+public class UserRelatedDetailsViewHolder extends ViewHolder {
     /* EVENT HEADER */
     @Nullable
     @BindView(R.id.event_user_profile)
@@ -229,13 +231,18 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
     @BindView(R.id.dummies_detail)
     TextView mDummiesDetail;
 
+    /* USER OTHER LIST VIEWs */
+    @Nullable
+    @BindView(R.id.empty_recycler)
+    ObservableRecyclerView mEmptyRecycler;
+
 
     private Spring mLikeBtnScaleSpring;
     private Spring mCommentBtnScaleSpring;
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
     private GifDrawable gifDrawable;
 
-    public UserInfoAndEventViewHolder(View itemView) {
+    public UserRelatedDetailsViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
@@ -616,5 +623,9 @@ public class UserInfoAndEventViewHolder extends ViewHolder {
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
+    }
+
+    public void initCreatedMeetOutList(final Context context, final List<MeetOutResponse> responses) {
+
     }
 }

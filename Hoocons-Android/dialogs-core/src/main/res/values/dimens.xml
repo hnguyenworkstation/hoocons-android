@@ -68,10 +68,10 @@
   <dimen name="md_icon_margin">16dp</dimen>
   <dimen name="md_icon_max_size">48dp</dimen>
   <dimen name="md_listitem_margin_left">24dp</dimen>
-  <dimen name="md_action_corner_radius">2dp</dimen>
+  <dimen name="md_action_corner_radius">8dp</dimen>
   <dimen name="md_divider_height">1dp</dimen>
 
-  <dimen name="md_bg_corner_radius">2dp</dimen>
+  <dimen name="md_bg_corner_radius">8dp</dimen>
   <dimen name="circular_progress_border">4dp</dimen>
   <dimen name="md_listitem_vertical_margin">12dp</dimen>
   <dimen name="md_listitem_vertical_margin_choice">8dp</dimen>

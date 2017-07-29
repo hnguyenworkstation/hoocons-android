@@ -33,7 +33,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.UserProfileAndEventAdapter;
+import com.hoocons.hoocons_android.Adapters.UserRelatedDetailsAdapter;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
@@ -55,7 +55,6 @@ import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -117,7 +116,7 @@ public class UserProfileActivity extends DraggerActivity
     private boolean canLoadMore = true;
     private PopupMenu eventPopup;
 
-    private UserProfileAndEventAdapter mEventsAdapter;
+    private UserRelatedDetailsAdapter mEventsAdapter;
     private boolean isLoading = false;
 
     @Override
@@ -134,7 +133,7 @@ public class UserProfileActivity extends DraggerActivity
         handler = new Handler();
 
         eventResponseList = new ArrayList<>();
-        mEventsAdapter = new UserProfileAndEventAdapter(this, eventResponseList, this, isMySelf);
+        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf);
 
         initGeneralView();
 

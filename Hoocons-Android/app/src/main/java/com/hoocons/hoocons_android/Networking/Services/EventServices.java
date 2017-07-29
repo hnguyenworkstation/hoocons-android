@@ -34,9 +34,9 @@ public interface EventServices {
 
     /**********************************
      * @Method: GET
-     * @Name: postEvent
-     * @Argument: EventInfoRequest
-     * @Purpose: post a new event
+     * @Name: getCreatedEvent
+     * @Argument: start and end (limit of the list)
+     * @Purpose: get all posted event
      ********************************** */
     @GET("/event/get/created/start={start}/end={end}/")
     Call<List<EventResponse>> getCreatedEvent(@Path("start") int start, @Path("end") int end);
