@@ -207,18 +207,5 @@ public class EmotionFragment extends AGridFragment<Emotion, Emotions>
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        try {
-            mListener = (OnStickerPagerFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-        try {
-            mChildListener = (OnStickerChildInteractionListener) getParentFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnChildInteractionListener");
-        }
     }
 }

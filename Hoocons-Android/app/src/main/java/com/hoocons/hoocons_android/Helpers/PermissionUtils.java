@@ -59,7 +59,6 @@ public class PermissionUtils {
         }
     }
 
-
     public static boolean requestPermissions(Activity activity, int requestCode, List<String> mListPermissions) {
         if (mListPermissions == null || mListPermissions.size() == 0) {
             return true;

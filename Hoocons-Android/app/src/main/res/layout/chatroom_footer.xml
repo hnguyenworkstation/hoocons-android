@@ -19,7 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#EFF0F7"
+                android:background="@color/colorBackground"
                 android:orientation="horizontal"
                 android:id="@+id/action_buttons"
                 android:layout_alignParentTop="true">
@@ -76,8 +76,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:visibility="gone"
                 android:layout_below="@+id/action_buttons"
-                android:layout_above="@+id/controllers"
                 android:id="@+id/input_frame_holder"/>
 
             <RelativeLayout

@@ -1,18 +1,22 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -50,12 +54,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
@@ -67,6 +73,7 @@ import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
@@ -83,6 +90,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -174,9 +182,11 @@ public class NewEventActivity extends BaseActivity
 
     private String mMode = "Public";
     private boolean isWarningContent = false;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     private final int PHOTO_PICKER = 1;
     private final int PLACE_PICKER_REQUEST = 2;
+    private final int REQUEST_LOCATION_PERMISSION = 3;
     private final int VIDEO_LIBRARY_REQUEST = 5;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
@@ -184,6 +194,7 @@ public class NewEventActivity extends BaseActivity
     private String gifUrl;
     private String selectedVideoPath;
     private GoogleApiClient mGoogleApiClient;
+    private Location lastKnownLocation;
 
     private double checkinLongitude = 0;
     private double checkinLatitude = 0;
@@ -202,6 +213,9 @@ public class NewEventActivity extends BaseActivity
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
 
+        // init google location client
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         eventParcel = (EventParcel) Parcels.unwrap(getIntent().getParcelableExtra("shared_event"));
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -214,6 +228,10 @@ public class NewEventActivity extends BaseActivity
         Toast.makeText(this, "connected", Toast.LENGTH_SHORT).show();
 
         mImagePaths = new ArrayList<>();
+
+        if (mightNeedLocationPermission()) {
+            initLocationTracker();
+        }
 
         initView();
     }
@@ -259,6 +277,40 @@ public class NewEventActivity extends BaseActivity
         });
 
         mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
+    }
+
+    private void initLocationTracker()  {
+        if (mightNeedLocationPermission()) {
+            try {
+                mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        lastKnownLocation = location;
+                    }
+                });
+            } catch (SecurityException e) {
+
+            }
+        }
+    }
+
+    private boolean mightNeedLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            List<String> permissions = new ArrayList<>();
+            permissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+            permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+            PermissionUtils.requestPermissions(this,
+                    REQUEST_LOCATION_PERMISSION, permissions);
+            return false;
+        }
+
+        return true;
     }
 
     private  void initSharedEventView() {
@@ -340,7 +392,7 @@ public class NewEventActivity extends BaseActivity
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
-            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+            intentBuilder.setLatLngBounds(MapUtils.getCurrentLatLngBound(lastKnownLocation));
             Intent intent = intentBuilder.build(NewEventActivity.this);
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException
@@ -635,6 +687,29 @@ public class NewEventActivity extends BaseActivity
                 initCheckinPlace(place);
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            boolean allGranted = false;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    allGranted = true;
+                } else {
+                    allGranted = false;
+                    break;
+                }
+            }
+
+            if(allGranted){
+                initLocationTracker();
+            } else {
+                // Todo show dialog
             }
         }
     }

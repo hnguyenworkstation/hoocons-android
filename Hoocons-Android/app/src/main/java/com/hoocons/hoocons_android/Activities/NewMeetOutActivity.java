@@ -1,11 +1,16 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -36,12 +41,19 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
@@ -60,6 +72,11 @@ import xyz.klinker.giphy.GiphyActivity;
 
 public class NewMeetOutActivity extends BaseActivity implements
         ObservableScrollViewCallbacks, View.OnClickListener {
+    @BindView(R.id.meeting_name)
+    EditText mMeetingNameInput;
+    @BindView(R.id.meeting_desc)
+    EditText mMeetingDescInput;
+
     @BindView(R.id.action_back)
     ImageButton mActionBack;
     @BindView(R.id.profile_img)
@@ -95,7 +112,25 @@ public class NewMeetOutActivity extends BaseActivity implements
     @BindView(R.id.topic_flow_layout)
     CustomFlowLayout mFlowLayout;
 
+    @BindView(R.id.meeting_location)
+    TextView mMeetingLocation;
+    @BindView(R.id.meeting_location_name)
+    TextView mMeetingLocationName;
+    @BindView(R.id.meeting_location_address)
+    TextView mMeetingLocationAddress;
+    @BindView(R.id.meeting_loc_details)
+    LinearLayout mMeetingLocDetails;
+
+    // Meeting Location
+    private double meetingLong;
+    private double meetingLat;
+    private String meetingLocationName;
+    private String meetingLocationAddress;
+
     private final int PHOTO_PICKER = 1;
+    private final int PLACE_PICKER_REQUEST = 2;
+    private final int REQUEST_LOCATION_PERMISSION = 3;
+
     private List<String> topics;
     private ArrayList<String> mImagePaths;
 
@@ -109,12 +144,15 @@ public class NewMeetOutActivity extends BaseActivity implements
     private final ImageSpringListener springListener = new ImageSpringListener();
     private Spring mScaleSpring;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+
     private DatePickerDialog mFromDatePicker;
     private TimePickerDialog mFromTimePicker;
 
     private DatePickerDialog mToDatePicker;
     private TimePickerDialog mToTimePicker;
     private ImageLoaderAdapter mImagesAdapter;
+    private Location lastKnownLocation;
 
     private int fromYear = 0, fromMonth = 0, fromDate = 0;
     private int fromHour, fromMin;
@@ -127,12 +165,52 @@ public class NewMeetOutActivity extends BaseActivity implements
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
 
+        // init google location client
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         topics = new ArrayList<>();
         mImagePaths = new ArrayList<>();
 
         initGeneralView();
         initView();
         initOnClickListener();
+
+        if (mightNeedLocationPermission()) {
+            initLocationTracker();
+        }
+    }
+
+    private boolean mightNeedLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            List<String> permissions = new ArrayList<>();
+            permissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+            permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+            PermissionUtils.requestPermissions(this,
+                    REQUEST_LOCATION_PERMISSION, permissions);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void initLocationTracker()  {
+        if (mightNeedLocationPermission()) {
+            try {
+                mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                lastKnownLocation = location;
+                            }
+                        });
+            } catch (SecurityException e) {
+
+            }
+        }
     }
 
     private void initOnClickListener() {
@@ -144,6 +222,9 @@ public class NewMeetOutActivity extends BaseActivity implements
 
         mAddTopicBtn.setOnClickListener(this);
         mAddImageBtn.setOnClickListener(this);
+
+        mMeetingLocation.setOnClickListener(this);
+        mMeetingLocDetails.setOnClickListener(this);
     }
 
     private void initGeneralView() {
@@ -347,6 +428,21 @@ public class NewMeetOutActivity extends BaseActivity implements
         }
     }
 
+    private void startGooglePlacePicker() {
+        try {
+            if (mightNeedLocationPermission()) {
+                PlacePicker.IntentBuilder intentBuilder =
+                        new PlacePicker.IntentBuilder();
+                intentBuilder.setLatLngBounds(MapUtils.getCurrentLatLngBound(lastKnownLocation));
+                Intent intent = intentBuilder.build(NewMeetOutActivity.this);
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            }
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initFlowLayoutView() {
         mFlowLayout.removeAllViews();
         mFlowLayout.setVisibility(View.VISIBLE);
@@ -429,8 +525,48 @@ public class NewMeetOutActivity extends BaseActivity implements
                         loadPickedImages(images);
                     }
                 }
+            } else if (requestCode == PLACE_PICKER_REQUEST) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+
+                meetingLat = place.getLatLng().latitude;
+                meetingLong = place.getLatLng().longitude;
+                meetingLocationName = place.getName().toString();
+                meetingLocationAddress = place.getAddress().toString();
+
+                // modify view details
+                mMeetingLocDetails.setVisibility(View.VISIBLE);
+                mMeetingLocation.setVisibility(View.GONE);
+
+                mMeetingLocationName.setText(place.getName());
+                mMeetingLocationAddress.setText(place.getAddress());
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            boolean allGranted = false;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    allGranted = true;
+                } else {
+                    allGranted = false;
+                    break;
+                }
+            }
+
+            if(allGranted){
+                initLocationTracker();
+            } else {
+                // Todo show dialog
             }
         }
     }
@@ -470,6 +606,11 @@ public class NewMeetOutActivity extends BaseActivity implements
                 break;
             case R.id.add_image_action:
                 AppUtils.startImagePicker(this, 8, PHOTO_PICKER);
+                break;
+            case R.id.meeting_loc_details:
+            case R.id.meeting_location:
+                startGooglePlacePicker();
+                break;
             default:
                 break;
         }

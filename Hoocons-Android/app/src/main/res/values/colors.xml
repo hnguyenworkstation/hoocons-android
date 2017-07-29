@@ -3,7 +3,7 @@
     <color name="colorPrimary">#E84545</color>
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">#2B2E4A</color>
-    <color name="colorBackground">#e0e0e0</color>
+    <color name="colorBackground">#F5F5F5</color>
 
     <color name="blue_accent500">#03A9F4</color>
     <color name="black_alpha_12">#1F000000</color>
