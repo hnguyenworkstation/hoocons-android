@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -39,7 +40,8 @@ import org.aisen.android.ui.activity.basic.BaseActivityHelper;
 import org.aisen.android.ui.fragment.ABaseFragment;
 import org.aisen.android.ui.widget.AsToolbar.OnToolbarDoubleClick;
 
-public class BaseActivity extends ActionBarActivity implements BitmapOwner, ITaskManager, OnToolbarDoubleClick {
+public class BaseActivity extends AppCompatActivity
+        implements BitmapOwner, ITaskManager, OnToolbarDoubleClick {
     static final String TAG = "Activity-Base";
     private BaseActivityHelper mHelper;
     private int theme = 0;

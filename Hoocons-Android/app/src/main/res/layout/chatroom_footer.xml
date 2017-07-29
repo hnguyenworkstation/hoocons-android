@@ -8,13 +8,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:background="@color/white"
         app:cardCornerRadius="@dimen/margin_16"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="false"
-        app:cardElevation="4dp">
+        style="@style/CardViewStyle">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,7 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/snow_primary"
+                android:background="#EFF0F7"
                 android:orientation="horizontal"
                 android:id="@+id/action_buttons"
                 android:layout_alignParentTop="true">
@@ -31,54 +27,61 @@
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_camera_gray"
+                    android:src="@drawable/ic_camera_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/chatroom.opencamera"/>
+                    android:id="@+id/camera_btn"/>
 
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_media_gray"
+                    android:src="@drawable/ic_image_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/chatroom.opengallery"/>
+                    android:id="@+id/gallery_btn"/>
 
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_attach_file_gray"
+                    android:src="@drawable/ic_file_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/chatroom.attachfile"/>
+                    android:id="@+id/attachfile_btn"/>
 
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_gif_gray"
+                    android:src="@drawable/ic_gif_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/search_gif_action"/>
+                    android:id="@+id/gif_btn"/>
 
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_location_gray"
+                    android:src="@drawable/ic_location_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/chatroom.sendlocation"/>
+                    android:id="@+id/location_btn"/>
 
                 <ImageButton
                     android:layout_width="0dip"
                     android:layout_height="@dimen/chat_input"
-                    android:src="@drawable/ic_voice_gray"
+                    android:src="@drawable/ic_voice_input"
                     android:background="@drawable/icon_button"
                     android:layout_weight="1"
-                    android:id="@+id/chatroom.sendvoicerecord"/>
+                    android:id="@+id/voice_btn"/>
             </LinearLayout>
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:layout_below="@+id/action_buttons"
+                android:layout_above="@+id/controllers"
+                android:id="@+id/input_frame_holder"/>
+
+            <RelativeLayout
+                android:layout_below="@+id/input_frame_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/controllers">

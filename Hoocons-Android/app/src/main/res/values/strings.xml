@@ -182,7 +182,7 @@
     <!-- APIS & Secret Fields -->
     <string name="google_web_service">AIzaSyDmiCmSGlRSOLgjouHiR1NginjFjBRrUnU</string>
     <string name="google_map_key">AIzaSyBZmoJOONuX2RuXo86WGrqOqBxU_Xx_j_U</string>
-    <string name="aws_s3">elasticbeanstalk–ap–southeast-1-845076927108</string>
+    <string name="aws_s3">elasticbeanstalk-ap-southeast-1-845076927108</string>
     <string name="aws_key_id">AKIAJUC2KVVEWYYLJKBQ</string>
     <string name="aws_secret">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</string>
     <string name="base_url">http://hconsdev.ap-southeast-1.elasticbeanstalk.com/</string>

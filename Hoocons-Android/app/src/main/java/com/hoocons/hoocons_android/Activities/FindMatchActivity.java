@@ -1,8 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +12,10 @@ import com.hoocons.hoocons_android.CustomUI.swipe_cards.CardEntity;
 import com.hoocons.hoocons_android.CustomUI.swipe_cards.SwipeFlingBottomLayout;
 import com.hoocons.hoocons_android.DumbData.TestUserData;
 import com.hoocons.hoocons_android.Helpers.RetrofitHelper;
+import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.king.view.flutteringlayout.FlutteringLayout;
 import com.zc.swiple.SwipeFlingView;
-
-import org.aisen.android.ui.activity.basic.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -98,7 +95,7 @@ public class FindMatchActivity extends BaseActivity implements SwipeFlingView.On
             @Override
             public void onLoadFail(int statusCode) {
                 mIsRequestGirlList = false;
-                Toast.makeText(getApplicationContext(), "API Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "API Failed", Toast.LENGTH_LONG).show();
                 addTestData();
             }
 
@@ -110,7 +107,7 @@ public class FindMatchActivity extends BaseActivity implements SwipeFlingView.On
     }
 
     private void addTestData() {
-        updateListView(TestUserData.getApiData(this));
+        updateListView(TestUserData.getApiData(getBaseContext()));
     }
 
     @Override

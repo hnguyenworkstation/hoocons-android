@@ -66,6 +66,7 @@
 
     <dimen name="small_profile_round_radius">12dp</dimen>
     <dimen name="large_profile_round_raidus">20dp</dimen>
+    <dimen name="input_button_size">20dp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_4">4dp</dimen>

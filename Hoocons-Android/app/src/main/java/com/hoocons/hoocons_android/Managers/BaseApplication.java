@@ -18,6 +18,7 @@ import com.birbit.android.jobqueue.log.CustomLogger;
 import com.birbit.android.jobqueue.scheduling.FrameworkJobSchedulerService;
 import com.birbit.android.jobqueue.scheduling.GcmJobSchedulerService;
 import com.facebook.FacebookSdk;
+import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -72,7 +73,6 @@ public class BaseApplication extends GlobalContext {
         // Initializing facebook
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
         FirebaseApp.initializeApp(this);
 
         // Init bitmap

@@ -12,9 +12,9 @@ import java.util.List;
 @Parcel
 public class LocationResponse {
     @SerializedName("srid")
-    private int srid;
+    int srid;
     @SerializedName("coordinates")
-    private double[] coordinates;
+    double[] coordinates;
 
     public LocationResponse() {
     }
