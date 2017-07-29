@@ -11,10 +11,26 @@ public class Media {
     private String url;
     @SerializedName("type")
     private String type;
+    @SerializedName("thumbnail")
+    String thumbNail;
 
     public Media(String url, String type) {
         this.url = url;
         this.type = type;
+    }
+
+    public Media(String url, String type, String thumbNail) {
+        this.url = url;
+        this.type = type;
+        this.thumbNail = thumbNail;
+    }
+
+    public String getThumbNail() {
+        return thumbNail;
+    }
+
+    public void setThumbNail(String thumbNail) {
+        this.thumbNail = thumbNail;
     }
 
     public String getUrl() {

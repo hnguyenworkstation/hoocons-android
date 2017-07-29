@@ -27,9 +27,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.FirebaseApp;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
-import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
-import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.SQLite.StickerDB;
@@ -198,5 +197,10 @@ public class BaseApplication extends GlobalContext {
     @Subscribe
     public void onEvent(PostEventSuccess task) {
         Toast.makeText(mInstance, "Upload event complete", Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(PostingJobAddedToDisk task) {
+        Toast.makeText(mInstance, getResources().getString(R.string.posting), Toast.LENGTH_SHORT).show();
     }
 }

@@ -4,16 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
+import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Media;
@@ -74,7 +71,7 @@ public class PostNewEventJob extends Job implements Serializable {
 
     @Override
     public void onAdded() {
-        EventBus.getDefault().post(new EventJobAddedToDisk());
+        EventBus.getDefault().post(new PostingJobAddedToDisk());
     }
 
     @Override
@@ -85,7 +82,7 @@ public class PostNewEventJob extends Job implements Serializable {
             if (eventType.equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
                 medias.add(new Media(gifUrl, AppConstant.MEDIA_TYPE_GIF));
             } else {
-                medias = uploadAllImage();
+                medias = AppUtils.uploadAllEventImage(imagePaths);
             }
 
             final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
@@ -119,47 +116,6 @@ public class PostNewEventJob extends Job implements Serializable {
     @Override
     protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable, int runCount,
                                                      int maxRunCount) {
-        return null;
-    }
-
-    @Nullable
-    private ArrayList<Media> uploadAllImage() {
-        try {
-            String s3 = BaseApplication.getInstance().getS3AWS();
-            String timeStamp = String.valueOf(new Date().getTime());
-
-            final ArrayList<Media> _uploadedImages = new ArrayList<>();
-            final CountDownLatch uploadDone = new CountDownLatch(imagePaths.size());
-            AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
-
-            for (int i = 0; i < imagePaths.size(); i++) {
-                String fileName = timeStamp + "_" + i + ".png";
-
-                byte[] encodedImage = ImageEncoder.encodeImage(imagePaths.get(i));
-                InputStream inputStream = new ByteArrayInputStream(encodedImage);
-
-                ObjectMetadata meta = new ObjectMetadata();
-                meta.setContentLength(encodedImage.length);
-                meta.setContentType("image/png");
-
-                PutObjectRequest por = new PutObjectRequest(s3 + "/medias",
-                        fileName, inputStream, meta);
-                por.setCannedAcl(CannedAccessControlList.PublicRead);
-
-                s3Client.putObject(por);
-                String _finalUrl = "https://s3-ap-southeast-1.amazonaws.com/"
-                        + s3 + "/medias/" + fileName;
-
-                uploadDone.countDown();
-                _uploadedImages.add(new Media(_finalUrl, AppConstant.MEDIA_TYPE_IMAGE));
-            }
-            uploadDone.await();
-
-            return _uploadedImages;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         return null;
     }
 }

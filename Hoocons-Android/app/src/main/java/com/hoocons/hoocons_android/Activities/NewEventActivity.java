@@ -65,7 +65,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
-import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
@@ -815,12 +814,5 @@ public class NewEventActivity extends BaseActivity
         Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
         Toast.makeText(this, "Trying to reconnect to Google", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
-    }
-
-    @Subscribe
-    public void onEvent(EventJobAddedToDisk task) {
-        Toast.makeText(this, getResources().getText(R.string.posting),
-                Toast.LENGTH_SHORT).show();
-        finish();
     }
 }

@@ -56,8 +56,10 @@ import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.NewMeetoutJob;
 import com.hoocons.hoocons_android.ViewHolders.SquaredImageViewHolder;
 
 import java.util.ArrayList;
@@ -159,6 +161,9 @@ public class NewMeetOutActivity extends BaseActivity implements
     private int fromHour, fromMin;
     private int toYear = 0, toMonth = 0, toDate = 0;
     private int toHour, toMin;
+
+    private String fromDateTime;
+    private String toDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,8 +307,68 @@ public class NewMeetOutActivity extends BaseActivity implements
         }
     }
 
+    private boolean isValidDescription() {
+        if (mMeetingDescInput.getText().length() < 20) {
+            mMeetingDescInput.setError(getResources().getString(R.string.meetout_desc_empty_error));
+            Toast.makeText(this, getResources().getString(R.string.meetout_desc_empty_error), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void showInvalidTimeFrameError() {
+        Toast.makeText(this, getResources().getString(R.string.invalid_time_frame) ,Toast.LENGTH_SHORT).show();
+        mToDateTime.setError(getResources().getString(R.string.invalid_time_frame));
+    }
+
+    private boolean isValidTime() {
+        if (toYear < fromYear) {
+            showInvalidTimeFrameError();
+            return false;
+        } else if (toYear == fromYear && toMonth < fromMonth) {
+            showInvalidTimeFrameError();
+            return false;
+        } else if (toYear == fromYear && toMonth == fromMonth && toDate < fromDate) {
+            showInvalidTimeFrameError();
+            return false;
+        } else if (toYear == fromYear && toMonth == fromMonth && toDate == fromDate && toHour < fromHour) {
+            showInvalidTimeFrameError();
+            return false;
+        } else if (toYear == fromYear && toMonth == fromMonth && toDate == fromDate && toHour == fromHour && toMin <= fromMin) {
+            showInvalidTimeFrameError();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void showMeetoutLocationRequest() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.meetout_location_request)
+                .positiveText(R.string.dialog_ok)
+                .show();
+    }
+
+    private boolean isValidMeetoutAddress() {
+        if (meetingLocationName == null || meetingLocationAddress == null) {
+            showMeetoutLocationRequest();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isContainEnoughTopics() {
+        if (topics.size() <= 2) {
+            mAddTopicEdt.setError(getResources().getString(R.string.meetout_topics_error));
+            Toast.makeText(this, getResources().getString(R.string.invalid_content), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean isValidInformation() {
-        return isValidName();
+        return isValidName() && isValidDescription() && isValidTime() && isValidMeetoutAddress() && isContainEnoughTopics();
     }
 
     @Override
@@ -376,8 +441,9 @@ public class NewMeetOutActivity extends BaseActivity implements
                 fromHour = hourOfDay;
                 fromMin = minute;
 
-                mFromDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(fromYear,
-                        fromMonth, fromDate, fromHour, fromMin));
+                fromDateTime = AppUtils.getCurrentTimeStringFromDateTime(fromYear,
+                        fromMonth, fromDate, fromHour, fromMin);
+                mFromDateTime.setText(fromDateTime);
             }
         };
 
@@ -401,8 +467,9 @@ public class NewMeetOutActivity extends BaseActivity implements
                 toHour = hourOfDay;
                 toMin = minute;
 
-                mToDateTime.setText(AppUtils.getCurrentTimeStringFromDateTime(toYear,
-                        toMonth, toDate, toHour, toMin));
+                toDateTime = AppUtils.getCurrentTimeStringFromDateTime(toYear,
+                        toMonth, toDate, toHour, toMin);
+                mToDateTime.setText(toDateTime);
             }
         };
 
@@ -511,6 +578,21 @@ public class NewMeetOutActivity extends BaseActivity implements
             int temp = (int) flowChild.getTag();
             flowChild.setTag(temp - 1);
         }
+    }
+
+    private void createNewMeetoutJob() {
+        NewMeetoutJob job = new NewMeetoutJob(
+                mMeetingNameInput.getText().toString(),
+                mMeetingDescInput.getText().toString(),
+                meetingLong, meetingLat,
+                lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude(),
+                meetingLocationName, meetingLocationAddress,
+                fromDateTime, toDateTime,
+                mImagePaths, topics
+        );
+
+        BaseApplication.getInstance().getJobManager().addJobInBackground(job);
+        finish();
     }
 
     @Override
@@ -623,7 +705,7 @@ public class NewMeetOutActivity extends BaseActivity implements
         switch (v.getId()) {
             case R.id.submit_new_meeting:
                 if (isValidInformation()) {
-
+                    createNewMeetoutJob();
                 }
                 break;
             case R.id.action_back:

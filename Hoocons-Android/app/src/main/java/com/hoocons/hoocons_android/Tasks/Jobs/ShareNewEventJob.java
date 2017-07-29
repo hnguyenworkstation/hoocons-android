@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.hoocons.hoocons_android.EventBus.EventJobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
+import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
@@ -58,7 +58,7 @@ public class ShareNewEventJob extends Job implements Serializable {
 
     @Override
     public void onAdded() {
-        EventBus.getDefault().post(new EventJobAddedToDisk());
+        EventBus.getDefault().post(new PostingJobAddedToDisk());
     }
 
     @Override

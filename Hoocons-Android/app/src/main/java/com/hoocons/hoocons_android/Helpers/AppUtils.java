@@ -8,11 +8,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,6 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
@@ -30,6 +36,8 @@ import com.klinker.android.link_builder.LinkBuilder;
 
 import org.aisen.android.common.utils.DateUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +48,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
 import me.iwf.photopicker.PhotoPicker;
@@ -312,4 +321,88 @@ public class AppUtils {
 
         return dateFormat.format(date1);
     };
+
+
+    @Nullable
+    public static ArrayList<Media> uploadAllEventImage(final List<String> imagePaths) {
+        try {
+            String s3 = BaseApplication.getInstance().getS3AWS();
+            String timeStamp = String.valueOf(new Date().getTime());
+
+            final ArrayList<Media> _uploadedImages = new ArrayList<>();
+            final CountDownLatch uploadDone = new CountDownLatch(imagePaths.size());
+            AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
+
+            for (int i = 0; i < imagePaths.size(); i++) {
+                String fileName = timeStamp + "_" + i + ".png";
+
+                byte[] encodedImage = ImageEncoder.encodeImage(imagePaths.get(i));
+                InputStream inputStream = new ByteArrayInputStream(encodedImage);
+
+                ObjectMetadata meta = new ObjectMetadata();
+                meta.setContentLength(encodedImage.length);
+                meta.setContentType("image/png");
+
+                PutObjectRequest por = new PutObjectRequest(s3 + "/medias",
+                        fileName, inputStream, meta);
+                por.setCannedAcl(CannedAccessControlList.PublicRead);
+
+                s3Client.putObject(por);
+                String _finalUrl = "https://s3-ap-southeast-1.amazonaws.com/"
+                        + s3 + "/medias/" + fileName;
+
+                uploadDone.countDown();
+                _uploadedImages.add(new Media(_finalUrl, AppConstant.MEDIA_TYPE_IMAGE));
+            }
+            uploadDone.await();
+
+            return _uploadedImages;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    @Nullable
+    public static ArrayList<Media> uploadAllMeetOutImages(final List<String> imagePaths) {
+        try {
+            String s3 = BaseApplication.getInstance().getS3AWS();
+            String timeStamp = String.valueOf(new Date().getTime());
+
+            final ArrayList<Media> _uploadedImages = new ArrayList<>();
+            final CountDownLatch uploadDone = new CountDownLatch(imagePaths.size());
+            AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
+
+            for (int i = 0; i < imagePaths.size(); i++) {
+                String fileName = timeStamp + "_" + i + ".png";
+
+                byte[] encodedImage = ImageEncoder.encodeImage(imagePaths.get(i));
+                InputStream inputStream = new ByteArrayInputStream(encodedImage);
+
+                ObjectMetadata meta = new ObjectMetadata();
+                meta.setContentLength(encodedImage.length);
+                meta.setContentType("image/png");
+
+                PutObjectRequest por = new PutObjectRequest(s3 + "/meetouts",
+                        fileName, inputStream, meta);
+                por.setCannedAcl(CannedAccessControlList.PublicRead);
+
+                s3Client.putObject(por);
+                String _finalUrl = "https://s3-ap-southeast-1.amazonaws.com/"
+                        + s3 + "/meetouts/" + fileName;
+
+                uploadDone.countDown();
+                _uploadedImages.add(new Media(_finalUrl, AppConstant.MEDIA_TYPE_IMAGE));
+            }
+            uploadDone.await();
+
+            return _uploadedImages;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
