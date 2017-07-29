@@ -44,6 +44,8 @@ public class MeetOutCardViewHolder extends RecyclerView.ViewHolder {
     TextView mMeetOutOwner;
     @BindView(R.id.meetout_location_name)
     TextView mMeetOutLocName;
+    @BindView(R.id.meetout_location_address)
+    TextView mMeetOutLocAddress;
     @BindView(R.id.meetout_time)
     TextView mMeetOutTimeFrame;
 
@@ -90,5 +92,6 @@ public class MeetOutCardViewHolder extends RecyclerView.ViewHolder {
         mMeetOutName.setText(response.getName());
         mMeetOutDesc.setContent(response.getDescription());
         mMeetOutLocName.setText(response.getMeetupLocationName());
+        mMeetOutLocAddress.setText(response.getMeetupLocationAddress());
     }
 }

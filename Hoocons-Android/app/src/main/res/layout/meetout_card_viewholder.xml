@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="@dimen/meetout_card_width"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/meetout_header">
 
-                <include layout="@layout/meetup_header_layout"
+                <include layout="@layout/meetout_header_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -31,16 +31,27 @@
                 android:id="@+id/meetout_body"
                 android:layout_below="@+id/meetout_header">
 
-                <include layout="@layout/meetup_card_details_layout"
+                <include layout="@layout/meetout_card_details_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+            </RelativeLayout>
 
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meetout_flow_view"
+                android:layout_below="@+id/meetout_body">
+
+                <include layout="@layout/meetout_flow_layout_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/meetout_body">
+                android:layout_below="@+id/meetout_flow_view">
 
                 <include layout="@layout/meetout_card_footer_layout"
                     android:layout_width="match_parent"

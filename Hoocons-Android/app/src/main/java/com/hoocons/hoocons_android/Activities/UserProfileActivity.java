@@ -133,11 +133,12 @@ public class UserProfileActivity extends DraggerActivity
         handler = new Handler();
 
         eventResponseList = new ArrayList<>();
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf);
-
         initGeneralView();
 
         if (isMySelf) {
+            mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf,
+                    SharedPreferencesManager.getDefault().getUserKeyInfo());
+
             jobManager.addJobInBackground(new GetSelfInfoJob());
             jobManager.addJobInBackground(new FetchCreatedEventJob(eventResponseList.size(),
                     eventResponseList.size() + EVENT_PACK));

@@ -11,6 +11,7 @@ import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
+import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.UserRelatedDetailsViewHolder;
 
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
     private List<EventResponse> responseList;
-    private List<MeetOutResponse> meetOutResponses;
+    private UserInfoResponse userInfoResponse;
     private Context context;
 
     private final int EVENT_LOADING_END = 100;
@@ -47,15 +48,17 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     private boolean isMyself;
     private EventAdapterListener listener;
 
-    private final int EXTRA_ITEMS = 4;
+    private final int EXTRA_ITEMS = 2;
     private final Handler handler = new Handler();
 
     public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
-                                     final EventAdapterListener listener, boolean isMyself) {
+                                     final EventAdapterListener listener, boolean isMyself,
+                                     UserInfoResponse userInfoResponse) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
         this.listener = listener;
+        this.userInfoResponse = userInfoResponse;
     }
 
     @Override
@@ -125,15 +128,8 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     @Override
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
-            holder.initUserInfo(context, isMyself);
+            holder.initUserInfo(context, userInfoResponse);
         } else if (position == 1) {
-            if (responseList.size() > 0) {
-                holder.initDummyCardForEvent(context, isMyself,
-                        responseList.get(0).getUserInfo().getDisplayName());
-            }
-        } else if (position == 2) {
-            holder.initCreatedMeetOutList(context, meetOutResponses);
-        } else if (position == 3) {
             if (responseList.size() > 0) {
                 holder.initDummyCardForEvent(context, isMyself,
                         responseList.get(0).getUserInfo().getDisplayName());
@@ -151,10 +147,6 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
         if (position == 0) {
             return USER_INFO_TAG_CARD;
         } else if (position == 1) {
-            return EVENT_DUMMIES_CARD;
-        } else if (position == 2) {
-            return USER_OTHER_INFO;
-        } else if (position == 3) {
             return EVENT_DUMMIES_CARD;
         }
 

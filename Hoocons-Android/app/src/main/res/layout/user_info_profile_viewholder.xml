@@ -28,6 +28,13 @@
             android:layout_height="wrap_content">
             <include layout="@layout/profile_info_details"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/profile_meetout_created"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

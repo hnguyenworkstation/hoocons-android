@@ -197,7 +197,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     @BindView(R.id.comment_count)
     TextView mCommentCount;
 
-    /* */
+    /* USER PROFILE CARDS */
     @Nullable
     @BindView(R.id.profile_header)
     ImageView mProfileImage;
@@ -557,10 +557,8 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                 .into(mSingleMediaView);
     }
 
-    public void initUserInfo(Context context, boolean isMySelf) {
-        if (isMySelf) {
-            UserInfoResponse response = SharedPreferencesManager.getDefault().getUserKeyInfo();
-
+    public void initUserInfo(final Context context, final UserInfoResponse response) {
+        if (response.getUserPK() == SharedPreferencesManager.getDefault().getUserId()) {
             // Load profile to both side
             loadProfileImage(context, response.getProfileUrl());
 
@@ -568,6 +566,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
             assert mDisplayName != null;
             mDisplayName.setText(response.getDisplayName());
+
             assert mNickname != null;
             mNickname.setText(nickname);
         }
@@ -623,9 +622,5 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
-    }
-
-    public void initCreatedMeetOutList(final Context context, final List<MeetOutResponse> responses) {
-
     }
 }
