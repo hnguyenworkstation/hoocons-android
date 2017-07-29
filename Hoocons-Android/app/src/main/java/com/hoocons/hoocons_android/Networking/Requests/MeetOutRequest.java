@@ -28,10 +28,33 @@ public class MeetOutRequest {
     private int meetupLongitude;
     @SerializedName("meetup_latitude")
     private int meetupLatitude;
+    @SerializedName("meetup_location_name")
+    private String meetupLocationName;
     @SerializedName("meetup_location_address")
     private String meetupLocationAddress;
     @SerializedName("medias")
     private List<Media> medias;
+
+    public MeetOutRequest(String name, String description,
+                          String fromDateTime, String toDateTime,
+                          List<Topic> meetupTopics,
+                          int longitude, int latitude,
+                          int meetupLongitude, int meetupLatitude,
+                          String meetupLocationName, String meetupLocationAddress,
+                          List<Media> medias) {
+        this.name = name;
+        this.description = description;
+        this.fromDateTime = fromDateTime;
+        this.toDateTime = toDateTime;
+        this.meetupTopics = meetupTopics;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.meetupLongitude = meetupLongitude;
+        this.meetupLatitude = meetupLatitude;
+        this.meetupLocationName = meetupLocationName;
+        this.meetupLocationAddress = meetupLocationAddress;
+        this.medias = medias;
+    }
 
     public String getName() {
         return name;
@@ -119,5 +142,13 @@ public class MeetOutRequest {
 
     public void setMedias(List<Media> medias) {
         this.medias = medias;
+    }
+
+    public String getMeetupLocationName() {
+        return meetupLocationName;
+    }
+
+    public void setMeetupLocationName(String meetupLocationName) {
+        this.meetupLocationName = meetupLocationName;
     }
 }

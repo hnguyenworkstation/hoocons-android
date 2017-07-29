@@ -178,6 +178,13 @@
     <string name="msg_few_minutes_ago">minutes ago</string>
     <string name="posting">Posting…</string>
     <string name="new_activity">Create new activity</string>
+    
+    <!-- MeetOut Strings -->
+    <string name="invalid_content">Invalid content…</string>
+    <string name="meetout_name_empty_error">please provide meetout name</string>
+    <string name="meetout_name_invalid_title">Invalid meetout name</string>
+    <string name="meetout_name_invalid_error">Name must contains more than 10 alphanumeric characters (no special characters)</string>
+    <string name="meetout_desc_empty_error">please provide meetout descriptions</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_web_service">AIzaSyDmiCmSGlRSOLgjouHiR1NginjFjBRrUnU</string>

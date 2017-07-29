@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
@@ -273,6 +274,36 @@ public class NewMeetOutActivity extends BaseActivity implements
 
     private boolean doesHaveContent() {
         return false;
+    }
+
+    private void showMeetoutNameAlertDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.meetout_name_invalid_title)
+                .content(R.string.meetout_name_invalid_error)
+                .positiveText(R.string.dialog_ok)
+                .icon(getResources().getDrawable(R.drawable.warning_circle))
+                .show();
+    }
+
+    private boolean isValidName() {
+        if (mMeetingNameInput.getText().length() == 0) {
+            mMeetingNameInput.setError(getResources().getString(R.string.meetout_name_empty_error));
+            Toast.makeText(this, R.string.invalid_content, Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            String text = mMeetingNameInput.getText().toString();
+
+            if (text.length() > 10 && text.matches("^[\\p{Alnum}]*$")) {
+                return true;
+            } else {
+                showMeetoutNameAlertDialog();
+                return false;
+            }
+        }
+    }
+
+    private boolean isValidInformation() {
+        return isValidName();
     }
 
     @Override
@@ -591,6 +622,9 @@ public class NewMeetOutActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit_new_meeting:
+                if (isValidInformation()) {
+
+                }
                 break;
             case R.id.action_back:
                 onBackPressed();
