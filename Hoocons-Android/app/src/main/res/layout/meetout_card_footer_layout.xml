@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/meetup_love"
+                android:id="@+id/meetout_love"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/meetup_view"
+                android:id="@+id/meetout_details"
                 android:layout_marginStart="@dimen/margin_16"
                 android:gravity="center_vertical">
 
@@ -84,7 +84,7 @@
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/action_send_message"
+            android:id="@+id/action_join"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             style="@style/wrapping_button"

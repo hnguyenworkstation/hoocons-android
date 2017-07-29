@@ -4,7 +4,7 @@
     android:layout_width="@dimen/meetout_card_width"
     android:layout_height="wrap_content">
 
-    <TextView
+    <com.hoocons.hoocons_android.CustomUI.CustomTextView
         android:layout_margin="@dimen/margin_4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:textSize="@dimen/text_16"
         android:textColor="@color/black"
         android:text="Hosted by Hung Nguyen"
-        android:id="@+id/meetup_desc"/>
+        android:id="@+id/meetout_desc"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:textSize="@dimen/text_16"
             android:textColor="@color/black"
             android:text="Hosted by Hung Nguyen"
-            android:id="@+id/meetup_owner"/>
+            android:id="@+id/meetout_owner"/>
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +61,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_16"
             android:text="Tra Sua Tran Chau Cang"
-            android:id="@+id/meetup_location_name"/>
+            android:id="@+id/meetout_location_name"/>
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +84,7 @@
             android:ellipsize="end"
             android:textSize="@dimen/text_14"
             android:text="Hosted by Hung Nguyen"
-            android:id="@+id/meetup_time"/>
+            android:id="@+id/meetout_time"/>
     </LinearLayout>
 
 </LinearLayout>

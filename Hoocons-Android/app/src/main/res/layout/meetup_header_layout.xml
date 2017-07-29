@@ -7,6 +7,25 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/meetout_image_height"
+            android:background="@color/colorBackground"
+            android:id="@+id/meetout_image"/>
+
+        <ProgressBar
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:id="@+id/image_progress"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="48dp">
 
         <View
@@ -24,15 +43,7 @@
             android:textSize="@dimen/text_16"
             android:maxLines="2"
             android:ellipsize="middle"
-            android:id="@+id/meetup_name"/>
+            android:id="@+id/meetout_name"/>
 
     </RelativeLayout>
-
-    <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_height="@dimen/meetout_image_height"
-        android:id="@+id/meetout_image"/>
-
-
 </RelativeLayout>
