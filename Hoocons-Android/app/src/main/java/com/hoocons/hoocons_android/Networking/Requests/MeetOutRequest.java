@@ -21,13 +21,13 @@ public class MeetOutRequest {
     @SerializedName("meetup_topics")
     private List<Topic> meetupTopics;
     @SerializedName("longitude")
-    private int longitude;
+    private double longitude;
     @SerializedName("latitude")
-    private int latitude;
+    private double latitude;
     @SerializedName("meetup_longitude")
-    private int meetupLongitude;
+    private double meetupLongitude;
     @SerializedName("meetup_latitude")
-    private int meetupLatitude;
+    private double meetupLatitude;
     @SerializedName("meetup_location_name")
     private String meetupLocationName;
     @SerializedName("meetup_location_address")
@@ -38,8 +38,8 @@ public class MeetOutRequest {
     public MeetOutRequest(String name, String description,
                           String fromDateTime, String toDateTime,
                           List<Topic> meetupTopics,
-                          int longitude, int latitude,
-                          int meetupLongitude, int meetupLatitude,
+                          double longitude, double latitude,
+                          double meetupLongitude, double meetupLatitude,
                           String meetupLocationName, String meetupLocationAddress,
                           List<Media> medias) {
         this.name = name;
@@ -96,35 +96,35 @@ public class MeetOutRequest {
         this.meetupTopics = meetupTopics;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public int getMeetupLongitude() {
+    public double getMeetupLongitude() {
         return meetupLongitude;
     }
 
-    public void setMeetupLongitude(int meetupLongitude) {
+    public void setMeetupLongitude(double meetupLongitude) {
         this.meetupLongitude = meetupLongitude;
     }
 
-    public int getMeetupLatitude() {
+    public double getMeetupLatitude() {
         return meetupLatitude;
     }
 
-    public void setMeetupLatitude(int meetupLatitude) {
+    public void setMeetupLatitude(double meetupLatitude) {
         this.meetupLatitude = meetupLatitude;
     }
 

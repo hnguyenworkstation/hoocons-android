@@ -180,6 +180,8 @@
     <string name="new_activity">Create new activity</string>
     
     <!-- MeetOut Strings -->
+    <string name="post_meetout_success">Posted meetout successfully</string>
+    <string name="post_meetout_failed">Post meetout failed</string>
     <string name="meetout_topics_error">Please provides more than two activities at the meetout</string>
     <string name="invalid_time_frame">Invalid time frame…</string>
     <string name="invalid_content">Invalid content…</string>

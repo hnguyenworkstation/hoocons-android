@@ -27,6 +27,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.FirebaseApp;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
+import com.hoocons.hoocons_android.EventBus.MeetOutPostFailed;
+import com.hoocons.hoocons_android.EventBus.MeetOutPostedSuccess;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
 import com.hoocons.hoocons_android.R;
@@ -202,5 +204,18 @@ public class BaseApplication extends GlobalContext {
     @Subscribe
     public void onEvent(PostingJobAddedToDisk task) {
         Toast.makeText(mInstance, getResources().getString(R.string.posting), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(MeetOutPostedSuccess request) {
+        Toast.makeText(mInstance, getResources().getString(R.string.post_meetout_success), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(MeetOutPostFailed request) {
+        Toast.makeText(mInstance, getResources().getString(R.string.post_meetout_failed),
+                Toast.LENGTH_SHORT).show();
+
+        // Todo: Handle data in MeetOutPostFailed to allow user to modify and post again
     }
 }
