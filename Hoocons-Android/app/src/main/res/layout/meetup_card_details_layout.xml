@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/meetout_card_width"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_margin="@dimen/margin_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="@dimen/text_16"
+        android:textColor="@color/black"
+        android:text="Hosted by Hung Nguyen"
+        android:id="@+id/meetup_desc"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_4"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_width="@dimen/meetout_card_icon_size"
+            android:layout_height="@dimen/meetout_card_icon_size"
+            android:src="@drawable/meeting_owner_icon"/>
+
+        <TextView
+            android:layout_marginStart="@dimen/margin_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/text_16"
+            android:textColor="@color/black"
+            android:text="Hosted by Hung Nguyen"
+            android:id="@+id/meetup_owner"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_4"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_width="@dimen/meetout_card_icon_size"
+            android:layout_height="@dimen/meetout_card_icon_size"
+            android:src="@drawable/meeting_location_icon"/>
+
+        <TextView
+            android:layout_marginStart="@dimen/margin_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_16"
+            android:text="Tra Sua Tran Chau Cang"
+            android:id="@+id/meetup_location_name"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_4"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_width="@dimen/meetout_card_icon_size"
+            android:layout_height="@dimen/meetout_card_icon_size"
+            android:src="@drawable/meeting_clock_icon"/>
+
+        <TextView
+            android:layout_marginStart="@dimen/margin_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/text_14"
+            android:text="Hosted by Hung Nguyen"
+            android:id="@+id/meetup_time"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -302,4 +302,10 @@
     <dimen name="flexible_space_image_height">240dp</dimen>
     <dimen name="flexible_space_show_fab_offset">120dp</dimen>
     <dimen name="decorator_line_height">0.6dp</dimen>
+
+    <!-- Meetout card dimens -->
+    <dimen name="meetout_card_icon_size">16dp</dimen>
+    <dimen name="meetout_card_width">300dp</dimen>
+    <dimen name="meetout_image_height">200dp</dimen>
+    <dimen name="meetout_card_height">400dp</dimen>
 </resources>

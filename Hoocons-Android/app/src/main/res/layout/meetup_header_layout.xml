@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/meetout_card_width"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/scrim_view_topdown"/>
+
+        <TextView
+            android:layout_margin="@dimen/margin_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello My name is Hung"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_16"
+            android:maxLines="2"
+            android:ellipsize="middle"
+            android:id="@+id/meetup_name"/>
+
+    </RelativeLayout>
+
+    <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="@dimen/meetout_image_height"
+        android:id="@+id/meetout_image"/>
+
+
+</RelativeLayout>

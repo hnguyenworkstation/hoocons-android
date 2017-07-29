@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_width="@dimen/meetout_card_width"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginEnd="@dimen/margin_12"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:id="@+id/linear"
+        android:background="@color/gray_alpha"/>
+
+    <RelativeLayout
+        android:id="@+id/buttons_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/linear"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:id="@+id/buttons"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:padding="@dimen/margin_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/meetup_love"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/action_icon_size"
+                    android:layout_height="@dimen/action_icon_size"
+                    android:id="@+id/love_icon"
+                    android:src="@drawable/ic_favorite_inactive"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/love_text"
+                    android:layout_marginStart="@dimen/margin_4"
+                    android:textSize="@dimen/text_14"
+                    android:textColor="@color/event_timestamp"
+                    android:text="@string/love"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/meetup_view"
+                android:layout_marginStart="@dimen/margin_16"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/action_icon_size"
+                    android:layout_height="@dimen/action_icon_size"
+                    android:id="@+id/comment_icon"
+                    android:src="@drawable/ic_comment_inactive"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_4"
+                    android:textSize="@dimen/text_14"
+                    android:textColor="@color/event_timestamp"
+                    android:text="@string/view_details"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/action_send_message"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            style="@style/wrapping_button"
+            android:textSize="@dimen/text_14"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:bootstrapText="{fa_plus} Join"
+            app:bootstrapBrand="regular"
+            app:buttonMode="regular"
+            app:showOutline="true"
+            app:roundedCorners="true"
+            app:bootstrapSize="md"/>
+    </RelativeLayout>
+</RelativeLayout>
