@@ -18,6 +18,6 @@ public interface MeetOutServices {
      * @Argument: MeetOutRequest
      * @Purpose: post a new meetout
      ********************************** */
-    @POST("/meetout/create/")
+    @POST("/meetup/create/")
     Call<Void> postNewMeetOut(@Body MeetOutRequest request);
 }

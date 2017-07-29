@@ -13,7 +13,7 @@ import java.util.List;
  * Created by hungnguyen on 7/15/17.
  */
 public class EventResponse {
-    @SerializedName("event_id")
+    @SerializedName("id")
     int eventId;
     @SerializedName("on_profile")
     boolean onProfile;
