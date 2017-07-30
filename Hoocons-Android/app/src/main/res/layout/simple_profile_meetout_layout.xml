@@ -4,14 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
     app:cardCornerRadius="@dimen/margin_4"
+    android:duplicateParentState="true"
+    android:clickable="false"
     app:cardElevation="2dp"
-    android:layout_marginStart="@dimen/margin_4"
-    android:layout_marginEnd="@dimen/margin_4"
-    android:layout_marginTop="@dimen/margin_10"
-    android:layout_marginBottom="@dimen/margin_4">
+    android:id="@+id/rootview"
+    android:layout_margin="@dimen/margin_4">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textSize="@dimen/text_18"
+                    android:textSize="@dimen/text_16"
                     android:text="This is meetout name"
                     android:textStyle="bold"
                     android:id="@+id/small_meetout_name"
@@ -46,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
-                    android:textSize="@dimen/text_16"
+                    android:textSize="@dimen/text_14"
                     android:id="@+id/small_meetout_desc"
                     android:text="This is meetout name"/>
 
@@ -67,10 +65,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="2"
-                        android:textSize="@dimen/text_14"
+                        android:textSize="@dimen/text_12"
                         android:id="@+id/small_meetout_location"
                         android:text="This is meetout name"/>
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -92,7 +89,7 @@
                             android:layout_width="@dimen/meetout_image_small_size"
                             android:layout_height="@dimen/meetout_image_small_size"
                             android:id="@+id/meetout_small_image"
-                            android:src="@drawable/logo_image"/>
+                            android:background="@color/black_alpha_12"/>
                     </com.hoocons.hoocons_android.CustomUI.SquareImageView>
 
                     <ProgressBar
@@ -139,5 +136,4 @@
                 android:layout_gravity="end"/>
         </RelativeLayout>
     </LinearLayout>
-
 </android.support.v7.widget.CardView>

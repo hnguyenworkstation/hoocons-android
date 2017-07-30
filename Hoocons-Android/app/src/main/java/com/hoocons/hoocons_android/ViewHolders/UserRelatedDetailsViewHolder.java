@@ -6,11 +6,13 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,12 +44,14 @@ import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
+import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
+import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -577,7 +581,8 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                 .into(mSingleMediaView);
     }
 
-    public void initUserInfo(final Context context, final UserInfoResponse response) {
+    public void initUserInfo(final Context context, final UserInfoResponse response,
+                             final OnUserInfoClickListener infoListener) {
         if (response.isSelf()) {
             // Load profile to both side
             loadProfileImage(context, response.getProfileUrl());
@@ -590,18 +595,19 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
             assert mNickname != null;
             mNickname.setText(nickname);
 
-            drawListCreatedMeetOut(context, response.getMeetoutCreatedList());
+            drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
         }
     }
 
-    private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts) {
+    private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts,
+                                        final OnUserInfoClickListener infoListener) {
         assert mMeetOutList != null;
         mMeetOutList.removeAllViews();
 
         if (meetouts == null || meetouts.size() == 0) {
             mMeetOutList.setVisibility(View.GONE);
         } else {
-            for (SimpleMeetout meetout: meetouts) {
+            for (final SimpleMeetout meetout: meetouts) {
                 View view = LayoutInflater.from(context).inflate(R.layout.simple_profile_meetout_layout,
                         mMeetOutList, false);
 
@@ -628,6 +634,15 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                             meetout.getToDateTime()));
 
                     mMeetoutLocName.setText(meetout.getMeetupLocationName());
+
+                    CardView mRootView = (CardView) view.findViewById(R.id.rootview);
+                    mRootView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.e("infoListener", "onClick: Clicked");
+                            infoListener.onMeetOutViewClicked(meetout.getId());
+                        }
+                    });
 
                     mMeetOutList.addView(view);
                 }

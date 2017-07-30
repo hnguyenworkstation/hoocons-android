@@ -306,7 +306,7 @@
     <!-- Meetout card dimens -->
     <dimen name="meetout_card_icon_size">16dp</dimen>
     <dimen name="meetout_card_width">300dp</dimen>
-    <dimen name="meetout_image_small_size">68dp</dimen>
+    <dimen name="meetout_image_small_size">48dp</dimen>
     <dimen name="meetout_image_height">200dp</dimen>
     <dimen name="meetout_card_height">400dp</dimen>
 </resources>

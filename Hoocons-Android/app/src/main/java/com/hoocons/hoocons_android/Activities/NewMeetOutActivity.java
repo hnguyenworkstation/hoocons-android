@@ -531,6 +531,9 @@ public class NewMeetOutActivity extends BaseActivity implements
             if (mightNeedLocationPermission()) {
                 PlacePicker.IntentBuilder intentBuilder =
                         new PlacePicker.IntentBuilder();
+                if (lastKnownLocation == null) {
+                    lastKnownLocation = MapUtils.getGpsLocation(this);
+                }
                 intentBuilder.setLatLngBounds(MapUtils.getCurrentLatLngBound(lastKnownLocation));
                 Intent intent = intentBuilder.build(NewMeetOutActivity.this);
                 startActivityForResult(intent, PLACE_PICKER_REQUEST);

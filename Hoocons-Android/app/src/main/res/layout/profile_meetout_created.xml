@@ -12,7 +12,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground">
 
             <LinearLayout
                 android:layout_marginStart="@dimen/margin_4"
@@ -35,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_16"
+                    android:textSize="@dimen/text_14"
                     android:text="@string/meetout_created"/>
             </LinearLayout>
 
@@ -69,7 +70,7 @@
                         android:textAllCaps="true"
                         android:textStyle="bold"
                         android:textAlignment="center"
-                        android:textSize="@dimen/text_16"
+                        android:textSize="@dimen/text_14"
                         android:textColor="@color/profile2"/>
                 </LinearLayout>
 

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.TagConstraint;
@@ -37,10 +38,12 @@ import com.hoocons.hoocons_android.Adapters.UserRelatedDetailsAdapter;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
+import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
+import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -65,7 +68,7 @@ import butterknife.ButterKnife;
 
 public class UserProfileActivity extends DraggerActivity
         implements ObservableScrollViewCallbacks, View.OnClickListener,
-        EventAdapterListener {
+        EventAdapterListener, OnUserInfoClickListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
     @BindView(R.id.small_profile)
@@ -258,7 +261,7 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(info.getProfileUrl());
 
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf, userInfoResponse);
+        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf, userInfoResponse, this);
 
         initEventRecyclerView();
     }
@@ -370,6 +373,12 @@ public class UserProfileActivity extends DraggerActivity
         listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
 
         startActivity(listImages);
+    }
+
+    @Subscribe
+    public void onEvent(OnMeetOutViewClicked request) {
+        Toast.makeText(this, String.valueOf(request.getMeetOutId()), Toast.LENGTH_SHORT).show();
+        // Todo: Trigger full meetout from here
     }
 
     @Override
@@ -503,5 +512,27 @@ public class UserProfileActivity extends DraggerActivity
         });
 
         eventPopup.show();
+    }
+
+
+    @Override
+    public void onUserProfileClicked() {
+
+    }
+
+    @Override
+    public void onMeetOutViewClicked(final int meetoutId) {
+        Log.e(TAG, "onMeetOutViewClicked: infoListener");
+        Toast.makeText(this, String.valueOf(meetoutId), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewMoreMeetOutClicked() {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

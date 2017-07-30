@@ -65,4 +65,22 @@ public class MapUtils {
                 "hair_care, university, taxi_stand, shopping_mall, shoe_store, school, courthouse, pharmacy, night_club, " +
                 "cafe, meal_delivery, liquor_store, library";
     }
+
+    public static Location getGpsLocation(Activity activity) {
+        LocationManager lm = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = lm.getProviders(true);
+
+        Location l = null;
+
+        for (int i=providers.size()-1; i >= 0; i--) {
+            try {
+                l = lm.getLastKnownLocation(providers.get(i));
+                if (l != null) break;
+            } catch (SecurityException e) {
+                return null;
+            }
+        }
+
+        return l;
+    }
 }

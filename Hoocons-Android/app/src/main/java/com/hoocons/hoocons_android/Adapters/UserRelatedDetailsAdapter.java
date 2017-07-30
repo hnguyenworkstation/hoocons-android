@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
+import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
@@ -47,18 +48,20 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     private final int USER_INFO_TAG_CARD = -1;
     private boolean isMyself;
     private EventAdapterListener listener;
+    private OnUserInfoClickListener userProfileListener;
 
     private final int EXTRA_ITEMS = 2;
     private final Handler handler = new Handler();
 
     public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
                                      final EventAdapterListener listener, boolean isMyself,
-                                     UserInfoResponse userInfoResponse) {
+                                     UserInfoResponse userInfoResponse, OnUserInfoClickListener userProfileListener) {
         this.context = context;
         this.responseList = responsesList;
         this.isMyself = isMyself;
         this.listener = listener;
         this.userInfoResponse = userInfoResponse;
+        this.userProfileListener = userProfileListener;
     }
 
     @Override
@@ -128,7 +131,7 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     @Override
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
-            holder.initUserInfo(context, userInfoResponse);
+            holder.initUserInfo(context, userInfoResponse, userProfileListener);
         } else if (position == 1) {
             if (responseList.size() > 0) {
                 holder.initDummyCardForEvent(context, isMyself,
