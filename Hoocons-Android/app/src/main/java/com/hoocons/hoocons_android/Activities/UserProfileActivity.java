@@ -116,6 +116,7 @@ public class UserProfileActivity extends DraggerActivity
     private boolean canLoadMore = true;
     private PopupMenu eventPopup;
 
+    private UserInfoResponse userInfoResponse;
     private UserRelatedDetailsAdapter mEventsAdapter;
     private boolean isLoading = false;
 
@@ -128,23 +129,14 @@ public class UserProfileActivity extends DraggerActivity
         ButterKnife.bind(this);
 
         mIntent = getIntent();
-        isMySelf = mIntent.getBooleanExtra(MYSELF, false);
-
-        handler = new Handler();
 
         eventResponseList = new ArrayList<>();
+        isMySelf = mIntent.getBooleanExtra(MYSELF, false);
+
+        jobManager.addJobInBackground(new GetSelfInfoJob());
+
+        handler = new Handler();
         initGeneralView();
-
-        if (isMySelf) {
-            mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf,
-                    SharedPreferencesManager.getDefault().getUserKeyInfo());
-
-            jobManager.addJobInBackground(new GetSelfInfoJob());
-            jobManager.addJobInBackground(new FetchCreatedEventJob(eventResponseList.size(),
-                    eventResponseList.size() + EVENT_PACK));
-        }
-
-        initEventRecyclerView();
     }
 
     private void initEventRecyclerView() {
@@ -257,12 +249,18 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void initViewWithCompleteInfo(UserInfoResponse info) {
+        userInfoResponse = info;
+
         loadWallPaperImage("https://c1.staticflickr.com/1/256/19767218293_aa4a9248d3.jpg");
 
         assert mActionBarDisplayName != null;
         mActionBarDisplayName.setText(info.getDisplayName());
 
         loadActionBarProfileImage(info.getProfileUrl());
+
+        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf, userInfoResponse);
+
+        initEventRecyclerView();
     }
 
     @Override
@@ -327,6 +325,9 @@ public class UserProfileActivity extends DraggerActivity
     @Subscribe
     public void onEvent(FetchUserInfoCompleteEvBusRequest request) {
         initViewWithCompleteInfo(request.getmResponse());
+
+        jobManager.addJobInBackground(new FetchCreatedEventJob(eventResponseList.size(),
+                eventResponseList.size() + EVENT_PACK));
     }
 
     @Subscribe
@@ -425,7 +426,7 @@ public class UserProfileActivity extends DraggerActivity
         }
 
         // mEventsAdapter.notifyItemChanged(position + mEventsAdapter.getEXTRA_ITEMS());
-        mEventsAdapter.notifyDataSetChanged();
+        mEventsAdapter.notifyItemChanged(position + mEventsAdapter.getEXTRA_ITEMS());
     }
 
     @Override

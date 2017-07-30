@@ -20,7 +20,7 @@ public class SemiUserInfoResponse {
     @SerializedName("last_action_at")
     private String lastActionAt;
     @SerializedName("location")
-    private String location;
+    private LocationResponse location;
     @SerializedName("is_sharing_location")
     private boolean isSharingLocation;
     @SerializedName("is_friend")
@@ -75,11 +75,11 @@ public class SemiUserInfoResponse {
         this.lastActionAt = lastActionAt;
     }
 
-    public String getLocation() {
+    public LocationResponse getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LocationResponse location) {
         this.location = location;
     }
 

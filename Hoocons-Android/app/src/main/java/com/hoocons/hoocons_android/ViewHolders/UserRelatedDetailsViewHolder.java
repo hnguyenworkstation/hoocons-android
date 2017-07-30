@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -230,6 +231,22 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.dummies_detail)
     TextView mDummiesDetail;
+
+    @Nullable
+    @BindView(R.id.meetout_list)
+    LinearLayout mMeetOutList;
+
+    @Nullable
+    @BindView(R.id.view_more_meetout_action)
+    LinearLayout mMeetOutAction;
+
+    @Nullable
+    @BindView(R.id.meetout_small_image)
+    ImageView mMeetOutSmallImage;
+
+    @Nullable
+    @BindView(R.id.meetout_small_progress)
+    ProgressBar mMeetOutSmallProgress;
 
     /* USER OTHER LIST VIEWs */
     @Nullable
@@ -569,6 +586,13 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
             assert mNickname != null;
             mNickname.setText(nickname);
+
+            View view = LayoutInflater.from(context).inflate(R.layout.simple_profile_meetout_layout,
+                    mMeetOutList, false);
+
+            assert mMeetOutList != null;
+            mMeetOutList.removeAllViews();
+            mMeetOutList.addView(view);
         }
     }
 

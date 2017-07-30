@@ -150,7 +150,7 @@
     <dimen name="cardview_smallicon_size">20dp</dimen>
     <dimen name="cardview_medicon_width">42dp</dimen>
     <dimen name="cardview_medicon_height">28dp</dimen>
-    <dimen name="cardview_medicon_size">24dp</dimen>
+    <dimen name="cardview_medicon_size">20dp</dimen>
 
     <!-- Intro Activity Dimen -->
     <dimen name="intro_logo_size">148dp</dimen>
@@ -306,6 +306,7 @@
     <!-- Meetout card dimens -->
     <dimen name="meetout_card_icon_size">16dp</dimen>
     <dimen name="meetout_card_width">300dp</dimen>
+    <dimen name="meetout_image_small_size">68dp</dimen>
     <dimen name="meetout_image_height">200dp</dimen>
     <dimen name="meetout_card_height">400dp</dimen>
 </resources>
