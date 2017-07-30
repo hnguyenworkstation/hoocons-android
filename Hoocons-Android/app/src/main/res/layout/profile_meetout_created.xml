@@ -4,27 +4,24 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:layout_marginStart="@dimen/margin_4"
-            android:layout_marginEnd="@dimen/margin_4"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:background="@color/white"
+                android:layout_marginStart="@dimen/margin_4"
+                android:layout_marginEnd="@dimen/margin_4"
+                android:layout_marginBottom="@dimen/margin_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8"
+                android:layout_alignParentTop="true"
                 android:id="@+id/profile_meetout_list">
 
                 <ImageView
@@ -38,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_18"
+                    android:textSize="@dimen/text_16"
                     android:text="@string/meetout_created"/>
             </LinearLayout>
 
@@ -47,27 +44,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/meetout_list"/>
+                android:background="@color/white">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/meetout_list"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:id="@+id/view_more_meetout_action"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_margin="@dimen/margin_12"
+                <LinearLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/view_more"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/text_16"
-                    android:textColor="@color/profile2"/>
+                    android:orientation="vertical"
+                    android:id="@+id/meetout_list"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/view_more_meetout_action"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_more"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_16"
+                        android:textColor="@color/profile2"/>
+                </LinearLayout>
 
             </LinearLayout>
         </RelativeLayout>

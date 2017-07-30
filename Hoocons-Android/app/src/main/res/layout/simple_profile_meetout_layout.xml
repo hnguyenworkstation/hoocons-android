@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
     app:cardCornerRadius="@dimen/margin_4"
     app:cardElevation="2dp"
     android:layout_marginStart="@dimen/margin_4"
@@ -40,7 +42,7 @@
                     android:id="@+id/small_meetout_name"
                     android:textColor="@color/black"/>
 
-                <TextView
+                <com.hoocons.hoocons_android.CustomUI.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"

@@ -46,6 +46,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
                             android:orientation="vertical">
 
                             <TextView
@@ -69,6 +71,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
                             android:orientation="vertical">
 
                             <TextView
@@ -90,6 +94,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
                             android:gravity="center"
                             android:orientation="vertical">
 

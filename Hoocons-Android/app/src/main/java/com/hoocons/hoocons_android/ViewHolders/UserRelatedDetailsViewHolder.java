@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -48,6 +49,7 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
@@ -55,6 +57,7 @@ import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -575,7 +578,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     }
 
     public void initUserInfo(final Context context, final UserInfoResponse response) {
-        if (response.getUserPK() == SharedPreferencesManager.getDefault().getUserId()) {
+        if (response.isSelf()) {
             // Load profile to both side
             loadProfileImage(context, response.getProfileUrl());
 
@@ -587,12 +590,53 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
             assert mNickname != null;
             mNickname.setText(nickname);
 
-            View view = LayoutInflater.from(context).inflate(R.layout.simple_profile_meetout_layout,
-                    mMeetOutList, false);
+            drawListCreatedMeetOut(context, response.getMeetoutCreatedList());
+        }
+    }
 
-            assert mMeetOutList != null;
-            mMeetOutList.removeAllViews();
-            mMeetOutList.addView(view);
+    private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts) {
+        assert mMeetOutList != null;
+        mMeetOutList.removeAllViews();
+
+        if (meetouts == null || meetouts.size() == 0) {
+            mMeetOutList.setVisibility(View.GONE);
+        } else {
+            for (SimpleMeetout meetout: meetouts) {
+                View view = LayoutInflater.from(context).inflate(R.layout.simple_profile_meetout_layout,
+                        mMeetOutList, false);
+
+                if (view != null) {
+                    TextView mMeetoutName= (TextView) view.findViewById(R.id.small_meetout_name);
+                    CustomTextView mMeetoutDesc = (CustomTextView) view.findViewById(R.id.small_meetout_desc);
+                    TextView mSimpleMeetoutTime = (TextView) view.findViewById(R.id.small_meetout_time);
+                    TextView mMeetoutLocName = (TextView) view.findViewById(R.id.small_meetout_location);
+                    ImageButton mSimpleMeetoutJoinBtn = (ImageButton) view.findViewById(R.id.join_meetout_action);
+
+                    ImageView meetoutImage = (ImageView) view.findViewById(R.id.meetout_small_image);
+                    ProgressBar mProgressBar = (ProgressBar) view.findViewById(R.id.meetout_small_progress);
+
+                    // Load Image
+                    if (meetout.getPromotedMedias() != null && meetout.getPromotedMedias().size() > 0) {
+                        AppUtils.loadCropImageWithProgressBar(context,
+                                meetout.getPromotedMedias().get(0).getUrl(), meetoutImage, mProgressBar);
+                    }
+
+                    // Now initview
+                    mMeetoutName.setText(meetout.getName());
+                    mMeetoutDesc.setContent(meetout.getDescription());
+                    mSimpleMeetoutTime.setText(AppUtils.getSimpleMeetOutTimeFrame(meetout.getFromDateTime(),
+                            meetout.getToDateTime()));
+
+                    mMeetoutLocName.setText(meetout.getMeetupLocationName());
+
+                    mMeetOutList.addView(view);
+                }
+            }
+
+            // After all == no views added
+            if (mMeetOutList.getChildCount() == 0) {
+                mMeetOutList.setVisibility(View.GONE);
+            }
         }
     }
 
