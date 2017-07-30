@@ -24,10 +24,9 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/flexible_space_image_height"
+                    android:layout_height="@dimen/meetout_header_image"
                     android:layout_gravity="top"
-                    android:id="@+id/header_area"
-                    android:background="@color/colorBackground">
+                    android:id="@+id/meetout_header_area">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -42,7 +41,7 @@
                 <View
                     android:id="@+id/overlay"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/flexible_space_image_height"
+                    android:layout_height="@dimen/meetout_header_image"
                     android:background="@color/white_transparent"/>
 
                 <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
@@ -59,7 +58,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/flexible_space_image_height"
+                            android:layout_height="@dimen/meetout_header_image"
                             android:background="@android:color/transparent" />
 
                         <LinearLayout
@@ -74,7 +73,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/flexible_space_image_height"
+                    android:layout_height="@dimen/meetout_header_image"
                     android:background="@android:color/transparent" />
             </FrameLayout>
 
@@ -86,6 +85,5 @@
                 <include layout="@layout/custom_meetup_activity_actionbar"/>
             </RelativeLayout>
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 </RelativeLayout>

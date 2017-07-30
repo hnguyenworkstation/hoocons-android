@@ -49,6 +49,7 @@ import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
+import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
@@ -521,9 +522,11 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
-    public void onMeetOutViewClicked(final int meetoutId) {
-        Log.e(TAG, "onMeetOutViewClicked: infoListener");
-        Toast.makeText(this, String.valueOf(meetoutId), Toast.LENGTH_SHORT).show();
+    public void onMeetOutViewClicked(final MeetOutParcel meetOutParcel) {
+        Intent intent = new Intent(UserProfileActivity.this, MeetOutActivity.class);
+        intent.putExtra("meetout",
+                Parcels.wrap(meetOutParcel));
+        startActivity(intent);
     }
 
     @Override

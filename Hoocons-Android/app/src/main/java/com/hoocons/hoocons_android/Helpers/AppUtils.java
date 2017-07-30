@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.CustomUI.GlideBlurTransformation;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
@@ -434,7 +435,33 @@ public class AppUtils {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                }).into(image);
+    }
+
+    public static void loadCropBlurImageWithProgressBar(final Context context, final String url,
+                                                    final ImageView image, final ProgressBar progressBar) {
+        Glide.with(context)
+                .load(url)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.bitmapTransform(new GlideBlurTransformation(context, 48)))
+                .apply(RequestOptions.noAnimation())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
                         return false;
                     }
                 }).into(image);

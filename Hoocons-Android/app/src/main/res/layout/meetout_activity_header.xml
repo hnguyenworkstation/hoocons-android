@@ -5,7 +5,7 @@
     android:layout_height="@dimen/meetout_header_image">
     
     <ImageView
-        android:id="@+id/meetup_background_image"
+        android:id="@+id/meetout_background_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/meetout_header_image" />
     
@@ -57,9 +57,11 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:layout_margin="@dimen/margin_12"
             android:id="@+id/meetup_header_name"
-            android:textSize="@dimen/text_22"/>
+            android:maxLines="2"
+            android:ellipsize="middle"
+            android:textSize="@dimen/text_18"/>
     </LinearLayout>
 </RelativeLayout>

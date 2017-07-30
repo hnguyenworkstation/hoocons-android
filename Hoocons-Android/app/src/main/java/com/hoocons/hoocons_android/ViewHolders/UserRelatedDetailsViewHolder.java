@@ -58,6 +58,7 @@ import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
+import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -639,8 +640,15 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                     mRootView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e("infoListener", "onClick: Clicked");
-                            infoListener.onMeetOutViewClicked(meetout.getId());
+                            MeetOutParcel parcel = new MeetOutParcel();
+                            parcel.setId(meetout.getId());
+
+                            if (meetout.getPromotedMedias() != null && meetout.getPromotedMedias().size() > 0) {
+                                parcel.setMeetOutMediaUrl(meetout.getPromotedMedias().get(0).getUrl());
+                            }
+                            parcel.setMeetOutName(meetout.getName());
+
+                            infoListener.onMeetOutViewClicked(parcel);
                         }
                     });
 

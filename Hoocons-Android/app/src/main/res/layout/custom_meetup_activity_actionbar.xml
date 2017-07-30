@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:id="@+id/meetout_actionbar"
     android:layout_height="?attr/actionBarSize">
 
     <ImageButton
@@ -20,9 +21,12 @@
         android:layout_height="wrap_content"
         android:text="@string/new_event"
         android:visibility="gone"
+        android:id="@+id/meetout_actionbar_name"
         android:layout_marginStart="@dimen/margin_16"
         android:textStyle="bold"
         android:textSize="@dimen/custom_toolbar_text_size"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/black"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
@@ -40,6 +44,7 @@
         android:layout_marginEnd="@dimen/actionbar_margin"/>
 
     <View
+        android:id="@+id/bar_linear"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

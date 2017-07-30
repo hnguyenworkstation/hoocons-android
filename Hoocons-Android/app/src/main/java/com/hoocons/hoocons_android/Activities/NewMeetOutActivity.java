@@ -387,7 +387,7 @@ public class NewMeetOutActivity extends BaseActivity implements
 
         Log.i(TAG, String.format("onScrollChanged: %s", String.valueOf(scrollY)));
 
-        if (scrollY >= 480) {
+        if (scrollY >= (flexibleRange * 2)) {
             showCustomBar();
         } else {
             hideCustomBar();
