@@ -1,6 +1,8 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Models.SimpleMeetout;
+import com.hoocons.hoocons_android.Models.Topic;
 
 import org.parceler.Parcel;
 
@@ -34,6 +36,14 @@ public class UserInfoResponse {
     private String lastActionAt;
     @SerializedName("is_sharing_location")
     private boolean isSharingLocation;
+    @SerializedName("meetout_created")
+    private List<SimpleMeetout> meetoutCreatedList;
+    @SerializedName("is_self")
+    private boolean isSelf;
+    @SerializedName("is_friend")
+    private boolean isFriend;
+    @SerializedName("hobbies")
+    private List<Topic> hobbies;
 
     public UserInfoResponse(String displayName, String nickname, String profileUrl) {
         this.displayName = displayName;
@@ -143,5 +153,37 @@ public class UserInfoResponse {
 
     public void setSharingLocation(boolean sharingLocation) {
         isSharingLocation = sharingLocation;
+    }
+
+    public List<SimpleMeetout> getMeetoutCreatedList() {
+        return meetoutCreatedList;
+    }
+
+    public void setMeetoutCreatedList(List<SimpleMeetout> meetoutCreatedList) {
+        this.meetoutCreatedList = meetoutCreatedList;
+    }
+
+    public boolean isSelf() {
+        return isSelf;
+    }
+
+    public void setSelf(boolean self) {
+        isSelf = self;
+    }
+
+    public boolean isFriend() {
+        return isFriend;
+    }
+
+    public void setFriend(boolean friend) {
+        isFriend = friend;
+    }
+
+    public List<Topic> getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(List<Topic> hobbies) {
+        this.hobbies = hobbies;
     }
 }
