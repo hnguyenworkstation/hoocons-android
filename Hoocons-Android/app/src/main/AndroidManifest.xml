@@ -43,10 +43,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" />
@@ -177,18 +179,20 @@
         <activity
             android:name=".Activities.NewMeetOutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".Activities.CommentEventActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity android:name=".Activities.FullEventImagesActivity" />
-        <activity android:name=".Activities.AddCombinationActivity"
+        <activity
+            android:name=".Activities.AddCombinationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"/>
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".Activities.MeetOutActivity"></activity>
     </application>
 
 </manifest>

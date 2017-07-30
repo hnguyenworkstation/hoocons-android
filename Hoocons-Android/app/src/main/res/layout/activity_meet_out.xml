@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context="com.hoocons.hoocons_android.Activities.MeetOutActivity"
     android:background="@color/colorPrimaryDark"
-    tools:context="com.hoocons.hoocons_android.Activities.NewMeetOutActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
-        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root_view"
         app:cardCornerRadius="@dimen/activity_card_corner">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/custom_toolbar"
-                android:layout_alignParentTop="true">
-                <include layout="@layout/custom_new_meeting_actionbar"/>
-            </RelativeLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -39,7 +33,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true">
-                        <include layout="@layout/new_meeting_header"
+                        <include layout="@layout/meetout_activity_header"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"/>
                     </RelativeLayout>
@@ -74,15 +68,6 @@
                             android:background="@color/white"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin_12">
-
-                                <include layout="@layout/new_meeting_info_form"
-                                    android:layout_height="wrap_content"
-                                    android:layout_width="match_parent"/>
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
@@ -92,6 +77,15 @@
                     android:layout_height="@dimen/flexible_space_image_height"
                     android:background="@android:color/transparent" />
             </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/custom_toolbar"
+                android:layout_alignParentTop="true">
+                <include layout="@layout/custom_meetup_activity_actionbar"/>
+            </RelativeLayout>
         </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 </RelativeLayout>

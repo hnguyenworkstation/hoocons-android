@@ -309,4 +309,5 @@
     <dimen name="meetout_image_small_size">48dp</dimen>
     <dimen name="meetout_image_height">200dp</dimen>
     <dimen name="meetout_card_height">400dp</dimen>
+    <dimen name="meetout_header_image">248dp</dimen>
 </resources>
