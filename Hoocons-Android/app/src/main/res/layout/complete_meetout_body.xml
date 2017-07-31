@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_8">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meetup_name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_20"
+            android:textStyle="bold"/>
+
+        <com.hoocons.hoocons_android.CustomUI.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meetup_desc"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_16"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_24"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/cardview_smallicon_size"
+                android:layout_height="@dimen/cardview_smallicon_size"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:src="@drawable/meeting_clock_icon"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meeting_time_view"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/meeting_from_timestamp"
+                    android:textSize="@dimen/text_18"
+                    android:text="@string/from_date"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/meeting_to_timestamp"
+                    android:textSize="@dimen/text_18"
+                    android:text="@string/to_date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_24"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/cardview_smallicon_size"
+                android:layout_height="@dimen/cardview_smallicon_size"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:src="@drawable/meeting_location_icon"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meeting_loc_details"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/meeting_location_name"
+                    android:textSize="@dimen/text_18"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/select_location"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/margin_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/meeting_location_address"
+                    android:textSize="@dimen/text_16"
+                    android:text="@string/select_location"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackground">
+
+                <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/meetup_location_img"/>
+
+                <ProgressBar
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/meetup_loc_prog"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</LinearLayout>

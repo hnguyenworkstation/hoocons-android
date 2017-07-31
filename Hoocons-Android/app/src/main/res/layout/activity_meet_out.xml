@@ -67,6 +67,9 @@
                             android:background="@color/white"
                             android:orientation="vertical">
 
+                            <include layout="@layout/complete_meetout_body"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"/>
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>

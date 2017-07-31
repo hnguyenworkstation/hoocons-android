@@ -14,13 +14,22 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
+import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.FetchCompleteMeetOutFailure;
+import com.hoocons.hoocons_android.EventBus.FetchCompleteMeetOutSuccess;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchCompleteMeetOutById;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
@@ -53,6 +62,24 @@ public class MeetOutActivity extends BaseActivity implements
     @BindView(R.id.obs_scrollview)
     ObservableScrollView mScrollView;
 
+    // Meetout content body
+    @BindView(R.id.meetup_name)
+    TextView mMeetOutName;
+    @BindView(R.id.meetup_desc)
+    CustomTextView mMeetOutDesc;
+    @BindView(R.id.meeting_from_timestamp)
+    TextView mFromDateTime;
+    @BindView(R.id.meeting_to_timestamp)
+    TextView mToDateTime;
+    @BindView(R.id.meeting_location_name)
+    TextView mMeetOutLocationName;
+    @BindView(R.id.meeting_location_address)
+    TextView mMeetOutLocationAddress;
+    @BindView(R.id.meetup_location_img)
+    AdjustableImageView mLocationImage;
+    @BindView(R.id.meetup_loc_prog)
+    ProgressBar mMeetOutMapViewProgress;
+
     private MeetOutParcel parcel;
 
     // General View Layout
@@ -64,10 +91,15 @@ public class MeetOutActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_meet_out);
         ButterKnife.bind(this);
 
         parcel = (MeetOutParcel) Parcels.unwrap(getIntent().getParcelableExtra("meetout"));
+        if (parcel != null) {
+            BaseApplication.getInstance().getJobManager()
+                    .addJobInBackground(new FetchCompleteMeetOutById(parcel.getId()));
+        }
 
         initGeneralView();
         initFirstView();
@@ -147,6 +179,25 @@ public class MeetOutActivity extends BaseActivity implements
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+    }
+
+    /**********************************************
+     * EVENTBUS CATCHING FIELDS
+     *  +
+     ***********************************************/
+    @Subscribe
+    public void onEvent(FetchCompleteMeetOutSuccess request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(FetchCompleteMeetOutFailure request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(BadRequest request) {
 
     }
 }

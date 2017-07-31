@@ -1,8 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
-import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.MeetOutRequest;
-import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.CompleteMeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 
 import java.util.List;
@@ -34,6 +33,16 @@ public interface MeetOutServices {
      * @Argument: start and end (limits)
      * @Purpose: get all created meetout
      ********************************** */
-    @GET("/meetout/get/created/start={start}/end={end}/")
+    @GET("/meetup/get/created/start={start}/end={end}/")
     Call<List<MeetOutResponse>> getCreatedMeetOut(@Path("start") int start, @Path("end") int end);
+
+
+    /**********************************
+     * @Method: GET
+     * @Name: getMeetOutById
+     * @Argument: meetup's id
+     * @Purpose: get complete meetup information
+     ********************************** */
+    @GET("/meetup/get/id={id}/")
+    Call<CompleteMeetOutResponse> getMeetOutById(@Path("id") int id);
 }

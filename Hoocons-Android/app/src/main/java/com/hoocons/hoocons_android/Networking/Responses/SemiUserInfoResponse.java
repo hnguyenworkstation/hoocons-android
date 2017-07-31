@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 /**
  * Created by hungnguyen on 7/18/17.
  */
@@ -25,6 +27,8 @@ public class SemiUserInfoResponse {
     private boolean isSharingLocation;
     @SerializedName("is_friend")
     private boolean isFriend;
+    @SerializedName("hobbies")
+    private List<String> hobbies;
 
     public SemiUserInfoResponse() {
     }
@@ -97,5 +101,29 @@ public class SemiUserInfoResponse {
 
     public void setIsFriend(boolean isFriend) {
         this.isFriend = isFriend;
+    }
+
+    public boolean isSharingLocation() {
+        return isSharingLocation;
+    }
+
+    public void setSharingLocation(boolean sharingLocation) {
+        isSharingLocation = sharingLocation;
+    }
+
+    public boolean isFriend() {
+        return isFriend;
+    }
+
+    public void setFriend(boolean friend) {
+        isFriend = friend;
+    }
+
+    public List<String> getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(List<String> hobbies) {
+        this.hobbies = hobbies;
     }
 }
