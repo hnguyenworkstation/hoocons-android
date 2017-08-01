@@ -117,7 +117,7 @@ public class NewMeetoutJob extends Job implements Serializable {
     }
 
     private void notifyTaskFailed() {
-        MeetOutPostFailed request = new MeetOutPostFailed(
+        MeetOutPostFailed request = new MeetOutPostFailed (
                 meetoutName, meetoutDesc,
                 meetingLong, meetingLat,
                 locationName, locationAddress,

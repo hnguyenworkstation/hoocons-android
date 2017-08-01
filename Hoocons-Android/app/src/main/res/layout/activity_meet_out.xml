@@ -47,31 +47,42 @@
                 <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
                     android:id="@+id/obs_scrollview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:overScrollMode="never"
                     android:scrollbars="none">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <View
+                            android:id="@+id/blank_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/meetout_header_image"
                             android:background="@android:color/transparent" />
 
                         <LinearLayout
+                            android:id="@+id/content_view"
+                            android:layout_below="@+id/blank_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
+                            android:visibility="invisible"
                             android:orientation="vertical">
 
                             <include layout="@layout/complete_meetout_body"
                                 android:layout_height="wrap_content"
                                 android:layout_width="match_parent"/>
                         </LinearLayout>
-                    </LinearLayout>
+
+                        <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginTop="@dimen/margin_24"
+                            android:id="@+id/content_loading_prog"
+                            android:layout_centerInParent="true"/>
+                    </RelativeLayout>
                 </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
                 <View

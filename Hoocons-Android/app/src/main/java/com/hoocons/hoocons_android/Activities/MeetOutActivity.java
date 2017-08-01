@@ -1,28 +1,42 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.FetchCompleteMeetOutFailure;
 import com.hoocons.hoocons_android.EventBus.FetchCompleteMeetOutSuccess;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Models.Topic;
+import com.hoocons.hoocons_android.Networking.Responses.CompleteMeetOutResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
@@ -31,6 +45,8 @@ import com.hoocons.hoocons_android.Tasks.Jobs.FetchCompleteMeetOutById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +79,10 @@ public class MeetOutActivity extends BaseActivity implements
     ObservableScrollView mScrollView;
 
     // Meetout content body
+    @BindView(R.id.content_view)
+    LinearLayout mContentView;
+    @BindView(R.id.content_loading_prog)
+    ProgressBar mContentLoadingProgress;
     @BindView(R.id.meetup_name)
     TextView mMeetOutName;
     @BindView(R.id.meetup_desc)
@@ -79,6 +99,9 @@ public class MeetOutActivity extends BaseActivity implements
     AdjustableImageView mLocationImage;
     @BindView(R.id.meetup_loc_prog)
     ProgressBar mMeetOutMapViewProgress;
+
+    @BindView(R.id.topic_flow_layout)
+    CustomFlowLayout mFlowLayout;
 
     private MeetOutParcel parcel;
 
@@ -103,6 +126,78 @@ public class MeetOutActivity extends BaseActivity implements
 
         initGeneralView();
         initFirstView();
+    }
+
+    private void initViewWithMeetOutData(CompleteMeetOutResponse response) {
+        loadOwnerImage(response.getCreatedBy().getProfileUrl());
+
+        // Show data
+        mContentLoadingProgress.setVisibility(View.GONE);
+        mContentView.setVisibility(View.VISIBLE);
+
+        mMeetOutName.setText(response.getName());
+        mMeetOutDesc.setContent(response.getDescription());
+
+        mFromDateTime.setText(AppUtils.convertDateTimeFromUTC(response.getFromDateTime()));
+        mToDateTime.setText(AppUtils.convertDateTimeFromUTC(response.getToDateTime()));
+
+        mMeetOutLocationName.setText(response.getMeetupLocationName());
+        mMeetOutLocationAddress.setText(response.getMeetupLocationAddress());
+
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(response.getMeetupLocation().getCoordinates()[1]),
+                String.valueOf(response.getMeetupLocation().getCoordinates()[0])));
+
+        initFlowLayoutView(response.getTopics());
+    }
+
+    private void loadOwnerImage(final String url) {
+        AppUtils.loadCircleImage(this, url, mMeetOutOwnerImage, mOwnerProgressBar);
+    }
+
+    private void initFlowLayoutView(final List<Topic> topicList) {
+        mFlowLayout.removeAllViews();
+        mFlowLayout.setVisibility(View.VISIBLE);
+
+        for (int i = 0; i < topicList.size(); i++) {
+            final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.topic_flow_layout,
+                    mFlowLayout, false);
+            final TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
+            final ImageView closeicon =
+                    (ImageView) item.findViewById(R.id.topic_flow_close);
+            closeicon.setVisibility(View.GONE);
+
+            topic.setText(topicList.get(i).getTopicName());
+            item.setTag(topicList.get(i).getId());
+
+            mFlowLayout.addView(item);
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int tag = (int) v.getTag();
+                }
+            });
+        }
+    }
+
+    private void loadLocationMapView(String url) {
+        Glide.with(this)
+                .load(url)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        mMeetOutMapViewProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mLocationImage);
     }
 
     private void initFirstView() {
@@ -152,8 +247,9 @@ public class MeetOutActivity extends BaseActivity implements
 
         // Scale title text
         float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
+        Log.d(TAG, "onScrollChanged: " + String.valueOf(scrollY));
 
-        if (scrollY >= (flexibleRange * 2)) {
+        if (scrollY >= 500) {
             showCustomBar();
         } else {
             hideCustomBar();
@@ -188,7 +284,7 @@ public class MeetOutActivity extends BaseActivity implements
      ***********************************************/
     @Subscribe
     public void onEvent(FetchCompleteMeetOutSuccess request) {
-
+        initViewWithMeetOutData(request.getResponse());
     }
 
     @Subscribe

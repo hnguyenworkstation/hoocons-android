@@ -193,6 +193,8 @@
     <string name="meetout_name_invalid_error">Name must contains more than 10 alphanumeric characters (no special characters)</string>
     <string name="meetout_desc_empty_error">Description must contains more than 20 characters</string>
     <string name="meetout_location_request">Need to provide location for this meetout</string>
+    <string name="meetout_medias_missing">Missing Medias</string>
+    <string name="meetout_medias_missing_desc">Please add some pictures so people might be interested</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_web_service">AIzaSyDmiCmSGlRSOLgjouHiR1NginjFjBRrUnU</string>

@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -23,8 +24,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -298,12 +301,26 @@ public class AppUtils {
         }
     }
 
-    public static void loadCircleImage(final Context context, final String url, ImageView imageView) {
+    public static void loadCircleImage(final Context context, final String url, ImageView imageView, final ProgressBar progressBar) {
         Glide.with(context)
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.circleCropTransform())
                 .apply(RequestOptions.noAnimation())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                })
                 .into(imageView);
     }
 
@@ -448,8 +465,8 @@ public class AppUtils {
         Glide.with(context)
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.bitmapTransform(new GlideBlurTransformation(context, 48)))
+                .apply(RequestOptions.bitmapTransform(new MultiTransformation<Bitmap>(new CenterCrop(),
+                        new GlideBlurTransformation(context, 248))))
                 .apply(RequestOptions.noAnimation())
                 .listener(new RequestListener<Drawable>() {
                     @Override

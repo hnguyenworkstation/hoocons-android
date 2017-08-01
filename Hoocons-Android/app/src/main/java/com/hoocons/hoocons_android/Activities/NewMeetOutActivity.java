@@ -274,7 +274,7 @@ public class NewMeetOutActivity extends BaseActivity implements
     private void initView() {
         // Load profile picture
         AppUtils.loadCircleImage(this, SharedPreferencesManager.getDefault().getUserProfileUrl(),
-                mProfileImage);
+                mProfileImage, null);
     }
 
     private boolean doesHaveContent() {
@@ -286,7 +286,7 @@ public class NewMeetOutActivity extends BaseActivity implements
                 .title(R.string.meetout_name_invalid_title)
                 .content(R.string.meetout_name_invalid_error)
                 .positiveText(R.string.dialog_ok)
-                .icon(getResources().getDrawable(R.drawable.warning_circle))
+                .icon(getResources().getDrawable(R.drawable.dialogs_warning))
                 .show();
     }
 
@@ -367,8 +367,28 @@ public class NewMeetOutActivity extends BaseActivity implements
         return true;
     }
 
+    private void showMeetOutMediaRequestDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.meetout_medias_missing)
+                .content(R.string.meetout_medias_missing_desc)
+                .positiveText(R.string.dialog_ok)
+                .icon(getResources().getDrawable(R.drawable.dialogs_warning))
+                .show();
+    }
+
+    private boolean isContainEnoughMedias() {
+        if (mImagePaths.size() <= 2) {
+            showMeetOutMediaRequestDialog();
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean isValidInformation() {
-        return isValidName() && isValidDescription() && isValidTime() && isValidMeetoutAddress() && isContainEnoughTopics();
+        return isValidName() && isValidDescription() && isValidTime()
+                && isValidMeetoutAddress() && isContainEnoughTopics()
+                && isContainEnoughMedias();
     }
 
     @Override
@@ -387,7 +407,7 @@ public class NewMeetOutActivity extends BaseActivity implements
 
         Log.i(TAG, String.format("onScrollChanged: %s", String.valueOf(scrollY)));
 
-        if (scrollY >= (flexibleRange * 2)) {
+        if (scrollY >= 482) {
             showCustomBar();
         } else {
             hideCustomBar();

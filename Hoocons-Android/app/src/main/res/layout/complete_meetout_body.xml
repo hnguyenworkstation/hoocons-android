@@ -121,5 +121,32 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_24"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/cardview_smallicon_size"
+                android:layout_height="@dimen/cardview_smallicon_size"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:src="@drawable/meeting_tags_icon"/>
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:text="@string/meeting_activities"/>
+        </LinearLayout>
+
+        <com.hoocons.hoocons_android.CustomUI.CustomFlowLayout
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/topic_flow_layout"/>
     </LinearLayout>
 </LinearLayout>
