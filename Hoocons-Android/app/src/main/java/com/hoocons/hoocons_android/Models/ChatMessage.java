@@ -2,11 +2,13 @@ package com.hoocons.hoocons_android.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by hungnguyen on 8/6/17.
  */
 
-public class ChatMessage {
+public class ChatMessage implements Serializable {
     @SerializedName("user_id")
     private int userId;
     @SerializedName("message_type")

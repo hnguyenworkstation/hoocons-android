@@ -39,4 +39,7 @@ public class AppConstant {
     public static final String MESSAGE_TYPE_FILE = "MFILE";
     public static final String MESSAGE_TYPE_LOCATION = "MLOCATION";
     public static final String MESSAGE_TYPE_CONTACT = "MCONTACT";
+
+    public static final String CHATROOM_TYPE_SINGLE = "ROOM_SINGLE";
+    public static final String CHATROOM_TYPE_MULTI = "ROOM_MULTI";
 }
