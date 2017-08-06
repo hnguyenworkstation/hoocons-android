@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
@@ -22,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
@@ -41,6 +43,13 @@ import butterknife.ButterKnife;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener,
         OnStickerPagerFragmentInteractionListener {
+    @BindView(R.id.user_state)
+    TextView mUserState;
+    @BindView(R.id.user_name)
+    TextView mUserName;
+    @BindView(R.id.message_list)
+    RecyclerView mRecyclerView;
+
     @BindView(R.id.chatroom_send)
     ImageButton mSendButton;
     @BindView(R.id.chatroom_emoji)
@@ -62,9 +71,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (mTextInput.getText().toString().length() > 0) {
-                mSendButton.setSelected(true);
+                mSendButton.setEnabled(true);
             } else {
-                mSendButton.setSelected(false);
+                mSendButton.setEnabled(false);
             }
         }
 
@@ -107,6 +116,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
                 stickerCombinationFragment, "EmotionFragment").commit();
 
+        mSendButton.setEnabled(false);
         initEmotionLayout();
         initOnListener();
     }
@@ -222,6 +232,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.chatroom_emoji:
                 switchEmotionSoftInput();
+                break;
+            case R.id.chatroom_send:
                 break;
             default:
                 break;

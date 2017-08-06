@@ -15,20 +15,36 @@
         android:src="@drawable/ic_arrow_back_colored"
         android:layout_marginStart="@dimen/actionbar_margin"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:layout_toStartOf="@+id/action_call"
-        android:id="@+id/user_name"
-        android:text="Hung Nguyen"
-        android:textSize="@dimen/custom_toolbar_text_size"
-        android:textColor="@color/black"
+        android:layout_toEndOf="@+id/action_back"
         android:layout_marginStart="@dimen/margin_8"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textAlignment="textStart"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/action_back"/>
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_name"
+            android:text="Hung Nguyen"
+            android:textSize="@dimen/custom_toolbar_text_size"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAlignment="textStart"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_state"
+            android:text="/@hnguyen"
+            android:textSize="@dimen/custom_toolbar_small_text_size"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAlignment="textStart"/>
+    </LinearLayout>
 
     <ImageButton
         android:layout_centerVertical="true"

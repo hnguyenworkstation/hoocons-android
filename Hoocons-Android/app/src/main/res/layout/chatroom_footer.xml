@@ -126,7 +126,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/margin_4"
                     android:layout_marginEnd="@dimen/margin_8"
-                    android:src="@drawable/chat_send_button"/>
+                    android:src="@drawable/send_btn"/>
             </RelativeLayout>
         </RelativeLayout>
 
