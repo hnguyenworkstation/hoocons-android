@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/time_frame_title"
+        android:visibility="gone">
+        <include layout="@layout/chat_message_time_header"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/message_header_layout"
+        android:layout_marginBottom="@dimen/margin_4">
+        <include layout="@layout/chat_message_from_friend_header"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/margin_10">
+
+        <View
+            android:layout_width="4dp"
+            android:layout_height="fill_parent"
+            android:background="@color/colorAccent"/>
+
+        <CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_4"
+            android:textColor="@color/black"
+            android:id="@+id/message_text_content"
+            android:text="hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:id="@+id/message_footer"
+        android:layout_marginTop="@dimen/margin_4">
+
+        <include layout="@layout/chat_message_footer"/>
+    </LinearLayout>
+</LinearLayout>

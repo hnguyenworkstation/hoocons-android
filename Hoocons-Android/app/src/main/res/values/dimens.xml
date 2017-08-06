@@ -53,13 +53,14 @@
     <dimen name="message_width">270dp</dimen>
     <item name="message_spacing" format="float" type="dimen">1.1</item>
     <dimen name="text_size_16">16sp</dimen>
-    <dimen name="chat_avatar_width">48dp</dimen>
+    <dimen name="chat_avatar_width">24dp</dimen>
     <dimen name="chat_avatar_corner">4dp</dimen>
     <dimen name="chat_avatar_marginright">30dp</dimen>
     <dimen name="chat_footer_dimen">30dp</dimen>
     <dimen name="custom_toolbar_height">48dp</dimen>
     <dimen name="custom_toolbar_text_size">20sp</dimen>
     <dimen name="custom_toolbar_small_text_size">14sp</dimen>
+    <dimen name="chat_title_text_size">14sp</dimen>
 
     <dimen name="action_icon_size">12dp</dimen>
     <dimen name="actionbar_icon_size">24dp</dimen>
@@ -310,4 +311,6 @@
     <dimen name="meetout_image_height">200dp</dimen>
     <dimen name="meetout_card_height">400dp</dimen>
     <dimen name="meetout_header_image">248dp</dimen>
+
+
 </resources>
