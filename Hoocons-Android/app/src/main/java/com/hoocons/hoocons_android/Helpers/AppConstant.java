@@ -29,4 +29,14 @@ public class AppConstant {
     public static final String COMMENT_TYPE_TEXT = "Ctxt";
     public static final String COMMENT_TYPE_IMAGE = "Cimg";
     public static final String COMMENT_TYPE_GIF = "Cgif";
+
+    // Chat Message Type
+    public static final String MESSAGE_TYPE_TEXT = "MTEXT";
+    public static final String MESSAGE_TYPE_IMAGE = "MIMAGE";
+    public static final String MESSAGE_TYPE_STICKER= "MSTICKER";
+    public static final String MESSAGE_TYPE_GIF = "MGIF";
+    public static final String MESSAGE_TYPE_VIDEO = "MVIDEO";
+    public static final String MESSAGE_TYPE_FILE = "MFILE";
+    public static final String MESSAGE_TYPE_LOCATION = "MLOCATION";
+    public static final String MESSAGE_TYPE_CONTACT = "MCONTACT";
 }
