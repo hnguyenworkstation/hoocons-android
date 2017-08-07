@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 
 public class ChatMessage implements Serializable {
+    @SerializedName("id")
+    private String id;
     @SerializedName("user_id")
     private int userId;
     @SerializedName("message_type")
@@ -62,6 +64,14 @@ public class ChatMessage implements Serializable {
         this.messageType = messageType;
         this.createdTime = createdTime;
         this.textContent = textContent;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getUserId() {

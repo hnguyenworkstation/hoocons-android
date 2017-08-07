@@ -10,22 +10,29 @@ import java.util.List;
  */
 
 public class ChatRoom implements Serializable {
-    @SerializedName("users")
-    private List<ChatUser> users;
+    @SerializedName("room_id")
+    private String roomId;
     @SerializedName("room_type")
     private String roomType;
 
-    public ChatRoom(List<ChatUser> users, String roomType) {
-        this.users = users;
+    public ChatRoom() {
+    }
+
+    public ChatRoom(String roomType) {
         this.roomType = roomType;
     }
 
-    public List<ChatUser> getUsers() {
-        return users;
+    public ChatRoom(String roomId, String roomType, String firstUserId, String secondUserId) {
+        this.roomId = roomId;
+        this.roomType = roomType;
     }
 
-    public void setUsers(List<ChatUser> users) {
-        this.users = users;
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
     public String getRoomType() {

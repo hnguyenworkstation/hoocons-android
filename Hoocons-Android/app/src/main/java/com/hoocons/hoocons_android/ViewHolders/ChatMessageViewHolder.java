@@ -14,6 +14,7 @@ import com.hoocons.hoocons_android.R;
 import org.w3c.dom.Text;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by hungnguyen on 8/6/17.
@@ -74,5 +75,6 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
     public ChatMessageViewHolder(View itemView) {
         super(itemView);
+        ButterKnife.bind(this, itemView);
     }
 }

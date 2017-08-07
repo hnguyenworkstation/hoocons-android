@@ -11,6 +11,8 @@ import java.io.Serializable;
 public class ChatUser implements Serializable {
     @SerializedName("user_id")
     private int userId;
+    @SerializedName("is_typing")
+    private boolean isTyping;
 
     public ChatUser(int userId) {
         this.userId = userId;
@@ -22,5 +24,13 @@ public class ChatUser implements Serializable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public boolean isTyping() {
+        return isTyping;
+    }
+
+    public void setTyping(boolean typing) {
+        isTyping = typing;
     }
 }
