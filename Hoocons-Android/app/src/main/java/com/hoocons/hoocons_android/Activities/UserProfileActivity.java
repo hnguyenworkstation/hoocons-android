@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -117,7 +118,7 @@ public class UserProfileActivity extends DraggerActivity
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private List<EventResponse> eventResponseList;
     private final int EVENT_PACK = 15;
-    private boolean canLoadMore = true;
+    private boolean canLoadMore = false;
     private PopupMenu eventPopup;
 
     private UserInfoResponse userInfoResponse;
@@ -156,7 +157,8 @@ public class UserProfileActivity extends DraggerActivity
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                loadMoreEvents();
+                if (canLoadMore)
+                    loadMoreEvents();
             }
 
             @Override
@@ -336,9 +338,7 @@ public class UserProfileActivity extends DraggerActivity
 
     @Subscribe
     public void onEvent(FetchEventListSuccessEvBusRequest request) {
-        if (request.getResponseList().size() < EVENT_PACK) {
-            canLoadMore = false;
-        }
+        canLoadMore = request.getResponseList().size() >= EVENT_PACK;
 
         eventResponseList.addAll(request.getResponseList());
         mEventsAdapter.notifyDataSetChanged();

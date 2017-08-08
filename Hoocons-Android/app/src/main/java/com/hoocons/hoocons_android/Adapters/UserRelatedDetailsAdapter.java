@@ -132,17 +132,15 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
             holder.initUserInfo(context, userInfoResponse, userProfileListener);
-        } else if (responseList != null && responseList.size() > 0) {
-            if (position == 1) {
-                if (responseList.size() > 0 && responseList.get(0) != null) {
-                    holder.initDummyCardForEvent(context, isMyself,
-                            responseList.get(0).getUserInfo().getDisplayName());
-                }
-            } else {
-                if (responseList.get(position - EXTRA_ITEMS) != null) {
-                    holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
-                            listener, position - EXTRA_ITEMS);
-                }
+        } else if (position == 1) {
+            if (responseList != null && responseList.size() > 0) {
+                holder.initDummyCardForEvent(context, isMyself,
+                        responseList.get(0).getUserInfo().getDisplayName());
+            }
+        } else {
+            if (responseList.get(position - EXTRA_ITEMS) != null) {
+                holder.initViewHolder(context, responseList.get(position - EXTRA_ITEMS),
+                        listener, position - EXTRA_ITEMS);
             }
         }
     }
@@ -155,11 +153,11 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
             return EVENT_DUMMIES_CARD;
         }
 
-        if (responseList.get(position - EXTRA_ITEMS) == null) {
+        EventResponse response = responseList.get(position - EXTRA_ITEMS);
+        if (response == null && responseList.size() > 0) {
             return EVENT_LOADING_END;
         }
 
-        EventResponse response = responseList.get(position - EXTRA_ITEMS);
         if (response.getContainEvent() == null) {
             switch (response.getEventType()) {
                 case AppConstant.EVENT_TYPE_TEXT:
