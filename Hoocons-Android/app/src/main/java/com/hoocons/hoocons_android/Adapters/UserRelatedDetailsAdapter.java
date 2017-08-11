@@ -11,7 +11,6 @@ import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
-import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.UserRelatedDetailsViewHolder;
@@ -135,7 +134,7 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
         } else if (position == 1) {
             if (responseList != null && responseList.size() > 0) {
                 holder.initDummyCardForEvent(context, isMyself,
-                        responseList.get(0).getUserInfo().getDisplayName());
+                        responseList.get(0).getAuthor().getDisplayName());
             }
         } else {
             if (responseList.get(position - EXTRA_ITEMS) != null) {

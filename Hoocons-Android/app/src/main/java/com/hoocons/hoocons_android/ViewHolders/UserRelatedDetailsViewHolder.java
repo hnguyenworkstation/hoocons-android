@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,9 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.beardedhen.androidbootstrap.BootstrapText;
-import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
-import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -44,7 +39,6 @@ import com.hoocons.hoocons_android.Adapters.MediaImagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
-import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
@@ -52,17 +46,14 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
-import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
-import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -309,12 +300,12 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response) {
-        loadUserProfileImage(context, response.getUserInfo().getProfileUrl(), mSharedUserProfileImage);
+        loadUserProfileImage(context, response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
 
         assert mSharedTimeFrame != null;
         assert mSharedUserDisplayName != null;
 
-        mSharedUserDisplayName.setText(response.getUserInfo().getDisplayName());
+        mSharedUserDisplayName.setText(response.getAuthor().getDisplayName());
         mSharedTimeFrame.setText(AppUtils.convertDateTimeFromUTC(response.getCreateAt()));
     }
 
@@ -425,8 +416,8 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
-        loadUserProfileImage(context, eventResponse.getUserInfo().getProfileUrl(), mUserProfileImage);
-        mUserDisplayName.setText(eventResponse.getUserInfo().getDisplayName());
+        loadUserProfileImage(context, eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
+        mUserDisplayName.setText(eventResponse.getAuthor().getDisplayName());
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
     }
 

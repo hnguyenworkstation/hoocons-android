@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -357,7 +356,7 @@ public class UserProfileActivity extends DraggerActivity
                     .get(request.getEventPosition())
                     .getTextContent());
             parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition())
-                    .getUserInfo()
+                    .getAuthor()
                     .getDisplayName());
         } else {
             parcel.setResponseList(eventResponseList.get(request.getEventPosition())
@@ -367,7 +366,7 @@ public class UserProfileActivity extends DraggerActivity
             parcel.setUserDisplayName(eventResponseList
                     .get(request.getEventPosition())
                     .getContainEvent()
-                    .getUserInfo().getDisplayName());
+                    .getAuthor().getDisplayName());
         }
 
         Intent listImages = new Intent(UserProfileActivity.this, FullEventImagesActivity.class);
@@ -482,7 +481,7 @@ public class UserProfileActivity extends DraggerActivity
         EventResponse response = eventResponseList.get(position);
         eventPopup = new PopupMenu(UserProfileActivity.this, view);
 
-        if (response.getUserInfo().getUser() == SharedPreferencesManager.getDefault().getUserId()) {
+        if (response.getAuthor().getUser() == SharedPreferencesManager.getDefault().getUserId()) {
             // This event belong to me
             eventPopup.inflate(R.menu.own_event_action);
         }

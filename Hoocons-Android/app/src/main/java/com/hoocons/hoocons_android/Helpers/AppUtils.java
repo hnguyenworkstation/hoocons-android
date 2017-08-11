@@ -39,7 +39,6 @@ import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.GlideBlurTransformation;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Media;
-import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
@@ -200,7 +199,7 @@ public class AppUtils {
         EventParcel parcel = new EventParcel();
         parcel.setId(response.getEventId());
         parcel.setTextContent(response.getTextContent());
-        parcel.setUserInfo(response.getUserInfo());
+        parcel.setUserInfo(response.getAuthor());
         parcel.setEventType(response.getEventType());
         parcel.setReported(response.isReported());
 

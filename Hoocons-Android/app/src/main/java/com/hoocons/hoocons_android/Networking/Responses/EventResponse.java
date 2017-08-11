@@ -1,11 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.hoocons.hoocons_android.Parcel.MediaListParcel;
-import com.hoocons.hoocons_android.Parcel.MultiTagsParcel;
-
-import org.parceler.Parcel;
-import org.parceler.ParcelPropertyConverter;
 
 import java.util.List;
 
@@ -17,8 +12,8 @@ public class EventResponse {
     int eventId;
     @SerializedName("on_profile")
     boolean onProfile;
-    @SerializedName("user_info")
-    SemiUserInfoResponse userInfo;
+    @SerializedName("author")
+    SemiUserInfoResponse author;
     @SerializedName("text_content")
     String textContent;
     @SerializedName("event_type")
@@ -78,12 +73,12 @@ public class EventResponse {
         this.onProfile = onProfile;
     }
 
-    public SemiUserInfoResponse getUserInfo() {
-        return userInfo;
+    public SemiUserInfoResponse getAuthor() {
+        return author;
     }
 
-    public void setUserInfo(SemiUserInfoResponse userInfo) {
-        this.userInfo = userInfo;
+    public void setAuthor(SemiUserInfoResponse author) {
+        this.author = author;
     }
 
     public String getTextContent() {

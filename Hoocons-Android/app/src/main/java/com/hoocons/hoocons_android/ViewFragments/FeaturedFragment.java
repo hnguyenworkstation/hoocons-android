@@ -23,9 +23,13 @@ import com.hoocons.hoocons_android.Activities.AddCombinationActivity;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.EventBus.FetchFeaturedActivitySuccess;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +75,10 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
         if (getArguments() != null) {
+
         }
     }
 
@@ -165,5 +172,11 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    
+    @Subscribe
+    public void onEvent(FetchFeaturedActivitySuccess ev) {
+
     }
 }
