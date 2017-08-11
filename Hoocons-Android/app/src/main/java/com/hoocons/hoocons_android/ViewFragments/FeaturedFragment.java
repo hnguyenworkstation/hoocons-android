@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,23 +49,13 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.action_add)
     ImageButton mAddBtn;
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.featured_recycler)
+    RecyclerView mRecycler;
 
     private final int LOCATION_PERMISSION_REQUEST = 1;
     private final String TAG = FeaturedFragment.class.getSimpleName();
 
-
-    private final String USERID = "USERID";
-    private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
-    private final String USER_NICKNAME = "USER_NICKNAME";
-    private final String IS_FRIEND = "IS_FRIEND";
-    private final String USER_PROFILE_URL = "USER_PROFILE_URL";
     private final String MYSELF = "IS_MY_SELF";
-
-    private String mParam1;
-    private String mParam2;
-
 
     public FeaturedFragment() {
         // Required empty public constructor
@@ -73,8 +64,6 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     public static FeaturedFragment newInstance(String param1, String param2) {
         FeaturedFragment fragment = new FeaturedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,8 +72,6 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -122,7 +109,6 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.circleCropTransform())
-                .apply(RequestOptions.placeholderOf(R.drawable.ab_progress))
                 .apply(RequestOptions.errorOf(R.drawable.image_holder))
                 .into(mImageHeader);
     }
@@ -178,7 +164,6 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
                 return;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                return;
         }
     }
 }

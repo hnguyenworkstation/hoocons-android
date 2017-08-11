@@ -104,4 +104,14 @@ public class MainActivity extends BaseActivity {
         }
         invalidateOptionsMenu(); //or respectively its support method.
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 }
