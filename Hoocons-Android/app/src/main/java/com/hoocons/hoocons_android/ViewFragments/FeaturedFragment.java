@@ -174,7 +174,7 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    
+
     @Subscribe
     public void onEvent(FetchFeaturedActivitySuccess ev) {
 
