@@ -205,4 +205,22 @@
     <string name="aws_key_id">AKIAJUC2KVVEWYYLJKBQ</string>
     <string name="aws_secret">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</string>
     <string name="base_url">http://hconsdev.ap-southeast-1.elasticbeanstalk.com/</string>
+
+    <!-- Create new channel strings -->
+    <string name="create_channel">Create New Channel</string>
+    <string name="question_channel_name">What is your channel name?</string>
+    <string name="hint_channel_name">Let users visualize what your channel is about</string>
+    <string name="question_channel_id">Tell us the id of your channel</string>
+    <string name="hint_channel_id">Let users know a shortcut to your channel</string>
+    <string name="pass_require">Password must be more than 8 characters long and no special chars</string>
+    <string name="pass_not_same">Phonenumber or password doesn\'t match</string>
+    <string name="question_channel_desc">Let us know a little about what your channel is about.</string>
+    <string name="desc_error">Please write something about your channel</string>
+    <string name="upload_channel_profile">Upload channel profile</string>
+    <string name="channel_mode_title">Choose mode for the channel</string>
+    <string name="channel_mode_subtitle">Let us know who can join your channel</string>
+    <string name="channel_public_mode_explain">Public Mode: everyone can be your channel member and participating in any activity of your channels </string>
+    <string name="channel_private_mode_explain">Private Mode: Only Admin and Mods decide who will be the members and only members can participate in your channel activities</string>
+    <string name="public_text">Public</string>
+    <string name="private_text">Private</string>
 </resources>

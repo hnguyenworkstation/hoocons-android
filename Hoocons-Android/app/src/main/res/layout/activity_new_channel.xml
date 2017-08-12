@@ -14,9 +14,38 @@
         <include layout="@layout/custom_new_channel_actionbar"/>
     </RelativeLayout>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/custom_toolbar"
-        android:id="@+id/create_channel_container"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/wallpaper"
+                    android:scaleType="centerCrop"
+                    />
+
+                <ProgressBar
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/progress_bar"/>
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/create_channel_container"/>
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
