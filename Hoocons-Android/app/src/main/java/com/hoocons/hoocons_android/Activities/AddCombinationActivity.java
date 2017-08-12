@@ -20,6 +20,8 @@ public class AddCombinationActivity extends DraggerActivity
     LinearLayout mNewMeetupBtn;
     @BindView(R.id.new_checkin_btn_view)
     LinearLayout mCheckinBtn;
+    @BindView(R.id.new_channel_btn_view)
+    LinearLayout mNewChannelBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +32,23 @@ public class AddCombinationActivity extends DraggerActivity
         mNewEventBtn.setOnClickListener(this);
         mNewMeetupBtn.setOnClickListener(this);
         mCheckinBtn.setOnClickListener(this);
+        mNewChannelBtn.setOnClickListener(this);
     }
 
     private void startNewEventActivity() {
-        startActivity(new Intent(AddCombinationActivity.this, NewEventActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(AddCombinationActivity.this, NewEventActivity.class));
     }
 
     private void startNewMeetOutActivity() {
-        startActivity(new Intent(AddCombinationActivity.this, NewMeetOutActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(AddCombinationActivity.this, NewMeetOutActivity.class));
     }
 
     private void startCustomPlacePicker() {
-        startActivity(new Intent(AddCombinationActivity.this, PlacePickerActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(AddCombinationActivity.this, PlacePickerActivity.class));
+    }
+
+    private void startNewChannelActivity() {
+        startActivity(new Intent(AddCombinationActivity.this, NewChannelActivity.class));
     }
 
 
@@ -59,6 +63,9 @@ public class AddCombinationActivity extends DraggerActivity
                 break;
             case R.id.new_checkin_btn_view:
                 startCustomPlacePicker();
+                break;
+            case R.id.new_channel_btn_view:
+                startNewChannelActivity();
                 break;
             default:
                 break;

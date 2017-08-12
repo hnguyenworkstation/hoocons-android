@@ -192,7 +192,8 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".Activities.MeetOutActivity"></activity>
+        <activity android:name=".Activities.MeetOutActivity" />
+        <activity android:name=".Activities.NewChannelActivity"></activity>
     </application>
 
 </manifest>

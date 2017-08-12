@@ -105,6 +105,8 @@
 
     <!-- New Event Activity -->
     <string name="new_event">Event</string>
+    <string name="new_channel">New Channel</string>
+    <string name="skip">Skip</string>
     <string name="new_meetout">Meet out</string>
     <string name="checkin">Check in</string>
     <string name="delete_title">Delete?</string>
