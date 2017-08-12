@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,9 +33,7 @@ import android.widget.Toast;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Adapters.CommentsAdapter;
-import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.EventBus.EventDeleted;
@@ -53,7 +50,6 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
-import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
@@ -63,7 +59,6 @@ import com.hoocons.hoocons_android.Tasks.Jobs.PostCommentJob;
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,7 +107,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
     private String gifPath;
 
     private List<CommentResponse> commentResponseList;
-    private final int MAX_LOAD_PACK = 40;
+    private final int MAX_COMMENTS_PER_PAGE = 40;
 
     public CommentListFragment() {
 
@@ -143,7 +138,7 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
         if (eventId > 0) {
             BaseApplication.getInstance().getJobManager()
                     .addJobInBackground(new FetchCommentsJob(eventId,
-                            commentResponseList.size(), commentResponseList.size() + MAX_LOAD_PACK));
+                            commentResponseList.size(), MAX_COMMENTS_PER_PAGE));
         }
     }
 

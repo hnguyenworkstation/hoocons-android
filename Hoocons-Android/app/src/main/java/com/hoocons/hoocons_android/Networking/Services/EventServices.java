@@ -86,6 +86,7 @@ public interface EventServices {
      * @Argument: eventId, startPosition and endposition
      * @Purpose: post new Comment to Event
      ********************************** */
-    @GET("/comment/get/event_id={event_id}/start={start}/end={end}/")
-    Call<List<CommentResponse>> getComments(@Path("event_id") int id, @Path("start") int start, @Path("end") int end);
+    @GET("/comment/get/event_id={event_id}/offset={offset}/limit={limit}/")
+    Call<List<CommentResponse>> getComments(@Path("event_id") int id, @Path("offset") int offset,
+                                            @Path("limit") int limit);
 }

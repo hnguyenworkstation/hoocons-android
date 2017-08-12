@@ -30,14 +30,14 @@ import retrofit2.Response;
 
 public class FetchCommentsJob extends Job implements Serializable {
     private int eventId;
-    private int start;
-    private int end;
+    private int offset;
+    private int limit;
 
-    public FetchCommentsJob(int eventId, int start, int end) {
+    public FetchCommentsJob(int eventId, int offset, int limit) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
 
-        this.end = end;
-        this.start = start;
+        this.offset = offset;
+        this.limit = limit;
         this.eventId = eventId;
     }
 
@@ -49,7 +49,7 @@ public class FetchCommentsJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         EventServices services = NetContext.instance.create(EventServices.class);
-        services.getComments(eventId, start, end).enqueue(new Callback<List<CommentResponse>>() {
+        services.getComments(eventId, offset, limit).enqueue(new Callback<List<CommentResponse>>() {
             @Override
             public void onResponse(Call<List<CommentResponse>> call,
                                    Response<List<CommentResponse>> response) {
