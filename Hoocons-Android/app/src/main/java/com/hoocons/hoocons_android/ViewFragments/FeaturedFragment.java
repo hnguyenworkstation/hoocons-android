@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +26,18 @@ import com.hoocons.hoocons_android.Activities.AddCombinationActivity;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.Adapters.FeaturedEventsAdapter;
+import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.FetchFeaturedActivitySuccess;
+import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.Interface.EventAdapterListener;
+import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchFeaturedActivityJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,7 +48,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeaturedFragment extends Fragment implements View.OnClickListener{
+public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        View.OnClickListener, EventAdapterListener {
     @BindView(R.id.screen_no_connection_error)
     RelativeLayout mErrorScreen;
     @BindView(R.id.screen_featured_fragment)
@@ -56,8 +68,11 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.featured_recycler)
     RecyclerView mRecycler;
 
+    private List<ActivityResponse> activityResponses;
     private final int LOCATION_PERMISSION_REQUEST = 1;
     private final String TAG = FeaturedFragment.class.getSimpleName();
+    private boolean isLoading = false;
+    private FeaturedEventsAdapter mAdapter;
 
     private final String MYSELF = "IS_MY_SELF";
 
@@ -80,6 +95,8 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         if (getArguments() != null) {
 
         }
+
+        activityResponses = new ArrayList<>();
     }
 
     @Override
@@ -89,8 +106,15 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.fragment_featured, container, false);
         ButterKnife.bind(this, rootView);
 
-        initView();
+        mAdapter = new FeaturedEventsAdapter(getContext(), activityResponses, this);
 
+        initView();
+        initOnClickListener();
+
+        return rootView;
+    }
+
+    private void initOnClickListener() {
         mImageHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,11 +126,11 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
 
         mAddBtn.setOnClickListener(this);
         mNearMeBtn.setOnClickListener(this);
-
-        return rootView;
     }
 
     private void initView() {
+        mSwipeRefLayout.setOnRefreshListener(this);
+
         loadImageHeader();
     }
 
@@ -174,9 +198,117 @@ public class FeaturedFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    private void initRecyclerView() {
+        activityResponses.clear();
+
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false);
+        mRecycler.setLayoutManager(mLayoutManager);
+        mRecycler.setItemAnimator(new DefaultItemAnimator());
+        mRecycler.setNestedScrollingEnabled(false);
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
+
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                // Load more activity here
+            }
+
+            @Override
+            public int getTotalItems() {
+                return activityResponses.size();
+            }
+
+            @Override
+            public boolean isLastItem() {
+                return ((LinearLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition()
+                        == (activityResponses.size() -1);
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
 
     @Subscribe
     public void onEvent(FetchFeaturedActivitySuccess ev) {
+        activityResponses.addAll(ev.getActivityResponses());
+        mSwipeRefLayout.setRefreshing(false);
+        mAdapter.notifyDataSetChanged();
+    }
 
+    @Subscribe
+    public void onEvent(BadRequest ev) {
+        mSwipeRefLayout.setRefreshing(false);
+    }
+
+    @Subscribe
+    public void onEvent(ServerErrorRequest ev) {
+        mSwipeRefLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onLikeClicked(int position) {
+
+    }
+
+    @Override
+    public void onCommentClicked(int position) {
+
+    }
+
+    @Override
+    public void onShareClicked(View view, int position) {
+
+    }
+
+    @Override
+    public void onPhotoClicked(int position) {
+
+    }
+
+    @Override
+    public void onVideoClicked(int position) {
+
+    }
+
+    @Override
+    public void onWebThumbClicked(int position) {
+
+    }
+
+    @Override
+    public void onEventImageClicked(int eventPos, int imagePos) {
+
+    }
+
+    @Override
+    public void onOptionClicked(View view, int position) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchFeaturedActivityJob());
+        initRecyclerView();
+    }
+
+    @Override
+    public void onStart() {
+        mSwipeRefLayout.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        BaseApplication.getInstance().getJobManager()
+                                .addJobInBackground(new FetchFeaturedActivityJob());
+                        initRecyclerView();
+                    }
+                }
+        );
+        super.onStart();
     }
 }

@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 public class FetchFeaturedActivityJob extends Job {
 
-    protected FetchFeaturedActivityJob() {
+    public FetchFeaturedActivityJob() {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
     }
 

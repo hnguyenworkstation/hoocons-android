@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -20,6 +21,6 @@ public interface ActivityServices {
      * @Argument: List<ActivityResponse>
      * @Purpose: getting list of activities from who we follow
      ********************************** */
-    @POST("/activity/get/")
+    @GET("/activity/get/")
     Call<List<ActivityResponse>> getActivities();
 }

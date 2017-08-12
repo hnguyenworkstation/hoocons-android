@@ -46,6 +46,12 @@ public class FeaturedEventsAdapter extends RecyclerView.Adapter<FeaturedEventVie
 
     private final Handler handler = new Handler();
 
+    public FeaturedEventsAdapter(Context context, List<ActivityResponse> activityResponseList, EventAdapterListener listener) {
+        this.context = context;
+        this.activityResponseList = activityResponseList;
+        this.listener = listener;
+    }
+
     @Override
     public FeaturedEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
