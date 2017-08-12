@@ -4,43 +4,59 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.TagConstraint;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Activities.AddCombinationActivity;
 import com.hoocons.hoocons_android.Activities.AroundActivity;
+import com.hoocons.hoocons_android.Activities.CommentEventActivity;
+import com.hoocons.hoocons_android.Activities.FullEventImagesActivity;
 import com.hoocons.hoocons_android.Activities.NewEventActivity;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
 import com.hoocons.hoocons_android.Adapters.FeaturedEventsAdapter;
+import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.FetchFeaturedActivitySuccess;
 import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
+import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
+import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Parcel.EventParcel;
+import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchFeaturedActivityJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +85,14 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     RecyclerView mRecycler;
 
     private List<ActivityResponse> activityResponses;
+    private final int MAX_ACTIVITIES_PER_PAGE = 20;
     private final int LOCATION_PERMISSION_REQUEST = 1;
     private final String TAG = FeaturedFragment.class.getSimpleName();
     private boolean isLoading = false;
+    private boolean canLoadMore = false;
     private FeaturedEventsAdapter mAdapter;
+    private PopupMenu eventPopup;
+    private Handler handler;
 
     private final String MYSELF = "IS_MY_SELF";
 
@@ -95,7 +115,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (getArguments() != null) {
 
         }
-
+        handler = new Handler();
         activityResponses = new ArrayList<>();
     }
 
@@ -203,17 +223,24 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
+        RecyclerView.ItemAnimator animator = mRecycler.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
         mRecycler.setLayoutManager(mLayoutManager);
-        mRecycler.setItemAnimator(new DefaultItemAnimator());
         mRecycler.setNestedScrollingEnabled(false);
+        mRecycler.setFocusable(false);
         mRecycler.setAdapter(mAdapter);
-        mRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecycler.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL_LIST));
         mRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
 
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
                 // Load more activity here
+                if (canLoadMore) {
+                    loadMoreActivities();
+                }
             }
 
             @Override
@@ -234,9 +261,21 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
+    private void loadMoreActivities() {
+        mAdapter.addLoadingFooter();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.removeLoadingFooter();
+                isLoading = false;
+            }
+        }, 2000);
+    }
+
     @Subscribe
     public void onEvent(FetchFeaturedActivitySuccess ev) {
         activityResponses.addAll(ev.getActivityResponses());
+        canLoadMore = ev.getActivityResponses().size() >= MAX_ACTIVITIES_PER_PAGE;
         mSwipeRefLayout.setRefreshing(false);
         mAdapter.notifyDataSetChanged();
     }
@@ -251,14 +290,87 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         mSwipeRefLayout.setRefreshing(false);
     }
 
+    @Subscribe
+    public void onEvent(StartEventChildImages request) {
+        MultiImagesEventClickedParcel parcel = new MultiImagesEventClickedParcel();
+
+        if (activityResponses.get(request.getEventPosition()).getTarget().getContainEvent() == null) {
+            parcel.setResponseList(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getMedias());
+            parcel.setClickedPosition( request.getImagePosition());
+            parcel.setTextContent(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getTextContent());
+            parcel.setUserDisplayName(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getAuthor()
+                    .getDisplayName());
+        } else {
+            parcel.setResponseList(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getContainEvent().getMedias());
+            parcel.setClickedPosition(request.getImagePosition());
+            parcel.setTextContent(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getContainEvent()
+                    .getTextContent());
+            parcel.setUserDisplayName(activityResponses
+                    .get(request.getEventPosition())
+                    .getTarget()
+                    .getContainEvent()
+                    .getAuthor().getDisplayName());
+        }
+
+        Intent listImages = new Intent(getActivity(), FullEventImagesActivity.class);
+        listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
+
+        startActivity(listImages);
+    }
+
     @Override
     public void onLikeClicked(int position) {
+        JobManager jobManager = BaseApplication.getInstance().getJobManager();
+        EventResponse response = activityResponses.get(position).getTarget();
+        String likeTag = "LIKE-" + String.valueOf(response.getEventId());
+        String unlikeTag = "UNLIKE-" + String.valueOf(response.getEventId());
 
+        if (response.getIsLiked()) {
+            response.setIsLiked(false);
+            response.setLikesCount(response.getLikesCount() - 1);
+            try {
+                jobManager.cancelJobsInBackground(null, TagConstraint.ANY, likeTag);
+            } catch (Exception e) {
+                Log.e(TAG, "onLikeClicked: " + e.toString());
+            } finally {
+                jobManager.addJobInBackground(new UnLikeEventJob(unlikeTag, response.getEventId()));
+            }
+        } else {
+            response.setIsLiked(true);
+            response.setLikesCount(response.getLikesCount() + 1);
+            jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getEventId()));
+        }
+
+        // mEventsAdapter.notifyItemChanged(position + mEventsAdapter.getEXTRA_ITEMS());
+        mAdapter.notifyItemChanged(position);
     }
 
     @Override
     public void onCommentClicked(int position) {
+        EventResponse response = activityResponses.get(position).getTarget();
+        EventParcel parcel = new EventParcel();
+        parcel.setId(response.getEventId());
+        parcel.setLikeCount(response.getLikesCount());
+        parcel.setLiked(response.getIsLiked());
 
+        Intent commentIntent = new Intent(getActivity(), CommentEventActivity.class);
+        commentIntent.putExtra("event", Parcels.wrap(parcel));
+        startActivity(commentIntent);
     }
 
     @Override
@@ -287,8 +399,41 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onOptionClicked(View view, int position) {
+    public void onOptionClicked(View view, final int position) {
+        EventResponse response = activityResponses.get(position).getTarget();
+        eventPopup = new PopupMenu(getActivity(), view);
 
+        if (response.getAuthor().getUser() == SharedPreferencesManager.getDefault().getUserId()) {
+            // This event belong to me
+            eventPopup.inflate(R.menu.own_event_action);
+        }
+
+        eventPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.share_event:
+                        Intent intent = new Intent(getActivity(), NewEventActivity.class);
+                        if (activityResponses.get(position).getTarget().getContainEvent() != null) {
+                            intent.putExtra("shared_event",
+                                    Parcels.wrap(AppUtils.getEventParcel(activityResponses
+                                            .get(position).getTarget().getContainEvent())));
+                        } else {
+                            intent.putExtra("shared_event",
+                                    Parcels.wrap(AppUtils.getEventParcel(activityResponses
+                                            .get(position).getTarget())));
+                        }
+                        startActivity(intent);
+                        return true;
+                    case R.id.delete_event:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        eventPopup.show();
     }
 
     @Override
