@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
+import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelNameFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +47,7 @@ public class NewChannelActivity extends BaseActivity {
     private FragmentTransaction mFragTransition;
     private GetChannelNameFragment getChannelNameFragment;
     private GetChannelAboutFragment getChannelAboutFragment;
+    private GetChannelCategoryFragment getChannelCategoryFragment;
     private final String TAG = NewChannelActivity.class.getSimpleName();
 
     @Override
@@ -56,6 +59,7 @@ public class NewChannelActivity extends BaseActivity {
 
         getChannelNameFragment = new GetChannelNameFragment();
         getChannelAboutFragment = new GetChannelAboutFragment();
+        getChannelCategoryFragment = new GetChannelCategoryFragment();
 
         initGeneralView();
         initGetNameView();
@@ -85,7 +89,17 @@ public class NewChannelActivity extends BaseActivity {
     private void initGetChannelAboutView() {
         mFragTransition = mFragManager.beginTransaction();
         mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
-        mFragTransition.replace(R.id.create_channel_container, getChannelAboutFragment, "get_channel_id");
+        mFragTransition.replace(R.id.create_channel_container, getChannelAboutFragment, "get_channel_about");
+        mFragTransition.commit();
+
+        mActionSkip.setVisibility(View.GONE);
+        mActionBack.setImageResource(R.drawable.ic_arrow_back_colored);
+    }
+
+    private void initGetCategoryView() {
+        mFragTransition = mFragManager.beginTransaction();
+        mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
+        mFragTransition.replace(R.id.create_channel_container, getChannelCategoryFragment, "get_channel_category");
         mFragTransition.commit();
 
         mActionSkip.setVisibility(View.GONE);
@@ -94,15 +108,15 @@ public class NewChannelActivity extends BaseActivity {
 
     @Override
     public void onBackPressed(){
-        if (mFragManager.findFragmentByTag("get_channel_id") != null) {
+        if (mFragManager.findFragmentByTag("get_channel_about") != null) {
             mFragTransition = mFragManager.beginTransaction();
             mFragTransition.setCustomAnimations(R.anim.fade_out_to_right, R.anim.fade_in_from_left);
             mFragTransition.replace(R.id.create_channel_container, getChannelNameFragment, "get_channel_name");
             mFragTransition.commit();
-        } else if (mFragManager.findFragmentByTag("get_channel_topic") != null) {
+        } else if (mFragManager.findFragmentByTag("get_channel_category") != null) {
             mFragTransition = mFragManager.beginTransaction();
             mFragTransition.setCustomAnimations(R.anim.fade_out_to_right, R.anim.fade_in_from_left);
-            mFragTransition.replace(R.id.create_channel_container, null, "get_channel_id");
+            mFragTransition.replace(R.id.create_channel_container, getChannelAboutFragment, "get_channel_about");
             mFragTransition.commit();
         } else if (mFragManager.getBackStackEntryCount() > 0) {
             Log.i(TAG, "popping backstack");
@@ -118,5 +132,10 @@ public class NewChannelActivity extends BaseActivity {
     @Subscribe
     public void onEvent(ChannelNameCollected event) {
         initGetChannelAboutView();
+    }
+
+    @Subscribe
+    public void onEvent(ChannelDescCollected desc) {
+        initGetCategoryView();
     }
 }

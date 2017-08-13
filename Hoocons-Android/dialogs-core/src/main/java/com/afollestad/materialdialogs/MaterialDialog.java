@@ -1014,7 +1014,6 @@ public class MaterialDialog extends DialogBase
 
   /** A callback used for regular list dialogs. */
   public interface ListCallback {
-
     void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text);
   }
 

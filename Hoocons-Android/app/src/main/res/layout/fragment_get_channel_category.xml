@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment">
+    tools:context="com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_gravity="center"
         android:orientation="vertical">
 
         <TextView
@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/question_channel_desc"
+            android:text="@string/channel_category_asking"
             android:textColor="@color/black"
             android:textSize="@dimen/text_24"/>
 
@@ -28,32 +28,46 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/semi_question_channel_desc"
+            android:text="@string/channel_category_ask_info"
             android:layout_marginTop="@dimen/margin_12"
             android:layout_marginBottom="10dp"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14"/>
 
-        <android.support.design.widget.TextInputLayout
+        <TextView
+            android:id="@+id/input"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/InputLayout"
-            >
-            <EditText
-                android:id="@+id/input"
-                android:textColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=""
-                android:inputType="textAutoComplete"
-                android:maxLines="100" />
-        </android.support.design.widget.TextInputLayout>
+            android:hint="@string/category"
+            android:layout_margin="@dimen/margin_4"
+            android:inputType="none"
+            android:maxLines="100" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/suggested_category"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_12" />
+
+        <com.hoocons.hoocons_android.CustomUI.CustomFlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/suggested_cat"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/big_button_height"
             android:theme="@style/Hoocons.Button"
-            android:id="@+id/next"
+            android:id="@+id/gcn_next"
             android:textAllCaps="false"
             android:text="@string/continue_text"
             android:layout_gravity="center_horizontal"/>

@@ -2,18 +2,31 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.R;
 
+import org.greenrobot.eventbus.EventBus;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class GetChannelAboutFragment extends Fragment {
+    @BindView(R.id.input)
+    EditText mInput;
+    @BindView(R.id.next)
+    Button mNextBtn;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -47,4 +60,16 @@ public class GetChannelAboutFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_get_channel_about, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+
+        mNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(new ChannelDescCollected(""));
+            }
+        });
+    }
 }
