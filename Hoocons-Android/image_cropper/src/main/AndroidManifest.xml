@@ -1,4 +1,2 @@
-<manifest
-    package="com.theartofdev.edmodo.cropper">
-
-</manifest>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.yalantis.ucrop"/>

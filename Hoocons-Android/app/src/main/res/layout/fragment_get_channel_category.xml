@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/category"
             android:layout_margin="@dimen/margin_4"
+            android:textSize="@dimen/text_16"
             android:inputType="none"
             android:maxLines="100" />
 
@@ -67,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/big_button_height"
             android:theme="@style/Hoocons.Button"
-            android:id="@+id/gcn_next"
+            android:id="@+id/next"
             android:textAllCaps="false"
             android:text="@string/continue_text"
             android:layout_gravity="center_horizontal"/>

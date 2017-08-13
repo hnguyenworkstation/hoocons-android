@@ -1,0 +1,93 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hoocons.hoocons_android.ViewFragments.GetChannelProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_channel_profile"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_24"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_8"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="@dimen/profile_avatar_height"
+                android:layout_height="@dimen/profile_avatar_height"
+                android:id="@+id/profile_root">
+
+                <com.hoocons.hoocons_android.CustomUI.SquareImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="@dimen/profile_avatar_height"
+                        android:layout_height="@dimen/profile_avatar_height"
+                        android:id="@+id/profile_view"/>
+
+                </com.hoocons.hoocons_android.CustomUI.SquareImageView>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_small_edit"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:id="@+id/channel_name"
+                android:textSize="@dimen/text_18"
+                android:maxLines="2"
+                android:ellipsize="middle"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:id="@+id/pick_image"
+            android:layout_margin="@dimen/margin_12"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold"
+            android:text="@string/click_to_pick_image"
+            android:textColor="@color/colorAccent"
+            android:textAlignment="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_gravity="center_vertical"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/big_button_height"
+            android:theme="@style/Hoocons.Button"
+            android:id="@+id/gcn_next"
+            android:textAllCaps="false"
+            android:text="@string/continue_text"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+</FrameLayout>

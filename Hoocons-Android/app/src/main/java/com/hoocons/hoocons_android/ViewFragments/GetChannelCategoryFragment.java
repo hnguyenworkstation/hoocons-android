@@ -8,15 +8,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
+import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -30,6 +34,8 @@ public class GetChannelCategoryFragment extends Fragment {
     CustomFlowLayout mFlowLayout;
     @BindView(R.id.input)
     TextView mInput;
+    @BindView(R.id.next)
+    Button mNextButton;
 
     private String category;
 
@@ -93,6 +99,19 @@ public class GetChannelCategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showLongList();
+            }
+        });
+
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (category == null) {
+                    Toast.makeText(getContext(), getContext().getResources()
+                                    .getString(R.string.please_choose_a_category)
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    EventBus.getDefault().post(new ChannelCategoryCollected(category));
+                }
             }
         });
     }

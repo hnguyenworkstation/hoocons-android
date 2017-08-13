@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
 import com.hoocons.hoocons_android.R;
@@ -69,7 +70,13 @@ public class GetChannelNameFragment extends Fragment {
         mNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new ChannelNameCollected(""));
+                if (mChannelInputName.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), getContext().getResources()
+                                    .getString(R.string.please_pick_a_name),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    EventBus.getDefault().post(new ChannelNameCollected(mChannelInputName.getText().toString()));
+                }
             }
         });
     }

@@ -1,22 +1,21 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-
-ext {
-    PUBLISH_GROUP_ID = 'com.theartofdev.edmodo'
-    PUBLISH_ARTIFACT_ID = 'android-image-cropper'
-    PUBLISH_VERSION = '2.4.7'
-    // gradlew clean build generateRelease
-}
-
 android {
-
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
+
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1
-        versionName PUBLISH_VERSION
+        versionCode 22
+        versionName "2.2.0-native"
+
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -25,25 +24,16 @@ android {
     lintOptions {
         abortOnError false
     }
-}
 
-// This configuration is used to publish the library to a local repo while a being forked and modified.
-// It should really be set up so that the version are all in line, and set to be a SNAPSHOT.
-// The version listed here is a temp hack to allow me to keep working.
-android.libraryVariants
-publishing {
-    publications {
-        maven(MavenPublication) {
+    resourcePrefix 'ucrop_'
 
-            groupId PUBLISH_GROUP_ID
-            artifactId PUBLISH_ARTIFACT_ID
-            version PUBLISH_VERSION + '-SNAPSHOT'
-        }
+    sourceSets.main {
+        jni.srcDirs = [];
     }
+
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile "com.android.support:exifinterface:25.3.1"
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
-
