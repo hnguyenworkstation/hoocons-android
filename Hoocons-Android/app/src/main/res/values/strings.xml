@@ -214,7 +214,8 @@
     <string name="hint_channel_id">Let users know a shortcut to your channel</string>
     <string name="pass_require">Password must be more than 8 characters long and no special chars</string>
     <string name="pass_not_same">Phonenumber or password doesn\'t match</string>
-    <string name="question_channel_desc">Let us know a little about what your channel is about.</string>
+    <string name="question_channel_desc">What is your channel about?</string>
+    <string name="semi_question_channel_desc">Let us know a little about what your channel is about in maximum of 200 characters</string>
     <string name="desc_error">Please write something about your channel</string>
     <string name="upload_channel_profile">Upload channel profile</string>
     <string name="channel_mode_title">Choose mode for the channel</string>
@@ -223,4 +224,5 @@
     <string name="channel_private_mode_explain">Private Mode: Only Admin and Mods decide who will be the members and only members can participate in your channel activities</string>
     <string name="public_text">Public</string>
     <string name="private_text">Private</string>
+    <string name="max_length_description">maximum 200 characters</string>
 </resources>

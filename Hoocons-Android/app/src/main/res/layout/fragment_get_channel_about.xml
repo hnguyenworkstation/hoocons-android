@@ -1,44 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.Transparent"
-    tools:context=".ViewFragments.GetChannelNameFragment">
+    tools:context="com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
             <TextView
                 android:gravity="center"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/question_channel_name"
+                android:text="@string/question_channel_desc"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_24"/>
 
             <TextView
                 android:gravity="center"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_channel_name"
-                android:textColor="@color/black"
+                android:text="@string/semi_question_channel_desc"
                 android:layout_marginTop="@dimen/margin_12"
                 android:layout_marginBottom="10dp"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_14"/>
 
             <android.support.design.widget.TextInputLayout
@@ -47,13 +45,13 @@
                 android:theme="@style/InputLayout"
                 >
                 <EditText
-                    android:id="@+id/gcn_put_name"
+                    android:id="@+id/gcd_text"
                     android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint=""
                     android:inputType="textAutoComplete"
-                    android:maxLines="1" />
+                    android:maxLines="100" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -65,5 +63,6 @@
                 android:text="@string/continue_text"
                 android:layout_gravity="center_horizontal"/>
         </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>

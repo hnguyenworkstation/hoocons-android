@@ -58,7 +58,7 @@
     <dimen name="chat_avatar_marginright">30dp</dimen>
     <dimen name="chat_footer_dimen">30dp</dimen>
     <dimen name="custom_toolbar_height">48dp</dimen>
-    <dimen name="custom_toolbar_text_size">20sp</dimen>
+    <dimen name="custom_toolbar_text_size">16sp</dimen>
     <dimen name="custom_toolbar_small_text_size">14sp</dimen>
     <dimen name="chat_title_text_size">14sp</dimen>
 
@@ -227,7 +227,8 @@
     <dimen name="channel_scrim_viewheight">28dp</dimen>
     <dimen name="channel_smcard_titletxt">14sp</dimen>
     <dimen name="channel_profile_picker_size">200dp</dimen>
-    <dimen name="channel_wallpaper_height">170dp</dimen>
+    <dimen name="channel_wallpaper_height">180dp</dimen>
+    <dimen name="big_button_height">48dp</dimen>
 
     <!-- Moment CardView -->
     <dimen name="moment_card_width">80dp</dimen>
