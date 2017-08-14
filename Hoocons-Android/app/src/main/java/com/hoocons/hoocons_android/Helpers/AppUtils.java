@@ -82,11 +82,8 @@ public class AppUtils {
     }
 
     public static void startCropActivity(@NonNull Activity activity, @NonNull Uri uri, String resultFileName) {
-        String destinationFileName = resultFileName;
-        destinationFileName += ".png";
-
+        String destinationFileName = resultFileName + ".png";
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(activity.getCacheDir(), destinationFileName)));
-
         uCrop.withAspectRatio(1, 1);
 
         // Init options
@@ -504,7 +501,7 @@ public class AppUtils {
     public static void loadCropSquareImageFromUri(final Context context, final Uri uri,
                                                   final ImageView imageView, final ProgressBar progressBar) {
         Glide.with(context)
-                .load(new File(uri.getPath()))
+                .load(uri)
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .listener(new RequestListener<Drawable>() {

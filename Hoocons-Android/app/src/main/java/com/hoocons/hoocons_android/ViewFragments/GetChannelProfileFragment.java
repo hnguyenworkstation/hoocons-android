@@ -138,7 +138,7 @@ public class GetChannelProfileFragment extends Fragment {
         } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == UCrop.RESULT_ERROR) {
                 handleCropError(data);
-            } else if (resultCode == Activity.RESULT_OK) {
+            } else {
                 handleCropResult(data);
             }
         }
@@ -149,7 +149,7 @@ public class GetChannelProfileFragment extends Fragment {
         if (resultUri != null) {
             // Load uri from here
             profileCroppedUri = resultUri;
-            AppUtils.loadCropSquareImageFromUri(getContext(), profileCroppedUri, mProfileImage, null);
+            AppUtils.loadCropSquareImageFromUri(getContext(), resultUri, mProfileImage, null);
         } else {
             Toast.makeText(getContext(), R.string.toast_cannot_retrieve_cropped_image,
                     Toast.LENGTH_SHORT).show();
