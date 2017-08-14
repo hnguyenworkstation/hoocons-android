@@ -2,7 +2,6 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,15 +37,19 @@ public class GetChannelProfileFragment extends Fragment {
     RelativeLayout mProfileRoot;
     @BindView(R.id.channel_name)
     TextView mChannelName;
+    @BindView(R.id.channel_category)
+    TextView mCategory;
     @BindView(R.id.gcn_next)
     Button mNextBtn;
 
     private static final String CHANNEL_NAME = "name";
+    private static final String CHANNEL_CATEGORY = "category";
     public static final int PHOTO_PICKER = 5;
-    private static final String CROPPED_IMAGE_NAME = "CroppedImage";
+    private static final String CROPPED_IMAGE_NAME = "ProfileCroppedImage";
     private final String TAG = GetChannelProfileFragment.class.getSimpleName();
 
     private String mName;
+    private String mCat;
     private Uri profileCroppedUri;
     private String profileImagePath;
 
@@ -55,10 +58,11 @@ public class GetChannelProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GetChannelProfileFragment newInstance(String channelName) {
+    public static GetChannelProfileFragment newInstance(String channelName, String channelCat) {
         GetChannelProfileFragment fragment = new GetChannelProfileFragment();
         Bundle args = new Bundle();
         args.putString(CHANNEL_NAME, channelName);
+        args.putString(CHANNEL_CATEGORY, channelCat);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,6 +72,7 @@ public class GetChannelProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mName = getArguments().getString(CHANNEL_NAME);
+            mCat = getArguments().getString(CHANNEL_CATEGORY);
         }
     }
 
@@ -89,6 +94,8 @@ public class GetChannelProfileFragment extends Fragment {
 
     private void initView() {
         mChannelName.setText(mName);
+        mCategory.setText(mCat);
+
         AppUtils.loadCropImageWithProgressBar(getContext(),
                 "http://www.stanleychowillustration.com/uploads/images/MANCHESTER_LANDSCAPE_30x12.jpg",
                 mProfileImage, null);
@@ -119,20 +126,20 @@ public class GetChannelProfileFragment extends Fragment {
         });
     }
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PHOTO_PICKER) {
-            if (data != null){
-                final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null){
+                    final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
-                if (images.size() >= 1) {
-                    profileImagePath = images.get(0);
-                    AppUtils.startCropActivity(getActivity(), Uri.fromFile(new File(images.get(0)))
-                            , CROPPED_IMAGE_NAME);
+                    if (images.size() >= 1) {
+                        profileImagePath = images.get(0);
+                        AppUtils.startProfileImageCropActivityFromFragment(getContext(), GetChannelProfileFragment.this,
+                                Uri.fromFile(new File(images.get(0))), CROPPED_IMAGE_NAME);
+                    }
                 }
             }
         } else if (requestCode == UCrop.REQUEST_CROP) {
@@ -145,7 +152,7 @@ public class GetChannelProfileFragment extends Fragment {
     }
 
     private void handleCropResult(@NonNull Intent result) {
-        final Uri resultUri = UCrop.getOutput(result);
+        Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             // Load uri from here
             profileCroppedUri = resultUri;

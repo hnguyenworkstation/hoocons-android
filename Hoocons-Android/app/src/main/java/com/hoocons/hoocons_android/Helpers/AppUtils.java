@@ -81,10 +81,27 @@ public class AppUtils {
                 .start(activity, code);
     }
 
-    public static void startCropActivity(@NonNull Activity activity, @NonNull Uri uri, String resultFileName) {
-        String destinationFileName = resultFileName + ".png";
-        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(activity.getCacheDir(), destinationFileName)));
+    public static void startProfileImageCropActivityFromFragment(@NonNull Context context, @NonNull Fragment fragment,
+                                                     @NonNull Uri uri, String resultFileName) {
+        String destinationFileName = String.valueOf(Calendar.getInstance().getTimeInMillis()) + resultFileName + ".png";
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(context.getCacheDir(), destinationFileName)));
         uCrop.withAspectRatio(1, 1);
+
+        // Init options
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setHideBottomControls(true);
+
+        uCrop.withOptions(options);
+
+        uCrop.start(context, fragment, UCrop.REQUEST_CROP);
+    }
+
+    public static void startWallpaperImageCropActivity(@NonNull Activity activity,
+                                                       @NonNull Uri uri, String resultFileName) {
+        String destinationFileName = String.valueOf(Calendar.getInstance().getTimeInMillis()) + resultFileName + ".png";
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(activity.getCacheDir(), destinationFileName)));
+        uCrop.withAspectRatio(16, 9);
 
         // Init options
         UCrop.Options options = new UCrop.Options();

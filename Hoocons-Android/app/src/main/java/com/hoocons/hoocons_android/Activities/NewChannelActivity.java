@@ -1,18 +1,23 @@
 package com.hoocons.hoocons_android.Activities;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
@@ -24,12 +29,17 @@ import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelNameFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelProfileFragment;
+import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.iwf.photopicker.PhotoPicker;
 
 public class NewChannelActivity extends BaseActivity {
     @BindView(R.id.create_channel_container)
@@ -44,6 +54,10 @@ public class NewChannelActivity extends BaseActivity {
     ImageView mWallpaper;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    @BindView(R.id.edit_wallpaper)
+    ImageView mEditWallpaper;
+    @BindView(R.id.wallpaper_root)
+    RelativeLayout mWallpaperRoot;
 
     private FragmentManager mFragManager;
     private FragmentTransaction mFragTransition;
@@ -52,6 +66,14 @@ public class NewChannelActivity extends BaseActivity {
     private GetChannelCategoryFragment getChannelCategoryFragment;
     private GetChannelProfileFragment getChannelProfileFragment;
     private final String TAG = NewChannelActivity.class.getSimpleName();
+
+    private final int WALLPAPER_IMG_PICKER = 10;
+    private static final String WALLPAPER_CROPPED_IMAGE_NAME = "ProfileCroppedImage";
+    private String wallpaperImagePath;
+    private Uri wallpaperCroppedUri;
+
+    private String channelName;
+    private String channelCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +108,7 @@ public class NewChannelActivity extends BaseActivity {
         mFragTransition.commit();
 
         mActionSkip.setVisibility(View.GONE);
+        mEditWallpaper.setVisibility(View.GONE);
         mActionBack.setImageResource(R.drawable.ic_close_colored);
     }
 
@@ -96,6 +119,7 @@ public class NewChannelActivity extends BaseActivity {
         mFragTransition.commit();
 
         mActionSkip.setVisibility(View.GONE);
+        mEditWallpaper.setVisibility(View.GONE);
         mActionBack.setImageResource(R.drawable.ic_arrow_back_colored);
     }
 
@@ -104,6 +128,7 @@ public class NewChannelActivity extends BaseActivity {
         mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
         mFragTransition.replace(R.id.create_channel_container, getChannelCategoryFragment, "get_channel_category");
         mFragTransition.commit();
+        mEditWallpaper.setVisibility(View.GONE);
     }
 
     private void initGetProfileView() {
@@ -111,6 +136,28 @@ public class NewChannelActivity extends BaseActivity {
         mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
         mFragTransition.replace(R.id.create_channel_container, getChannelProfileFragment, "get_channel_profile");
         mFragTransition.commit();
+
+        mWallpaperRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFragManager.findFragmentByTag("get_channel_profile") != null) {
+                    AppUtils.startImagePicker(NewChannelActivity.this, 1, WALLPAPER_IMG_PICKER);
+                }
+            }
+        });
+
+        mEditWallpaper.setVisibility(View.VISIBLE);
+    }
+
+    private void hideKeyboard(final Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -141,19 +188,72 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == WALLPAPER_IMG_PICKER) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null){
+                    final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+                    if (images.size() >= 1) {
+                        wallpaperImagePath = images.get(0);
+                        AppUtils.startWallpaperImageCropActivity(NewChannelActivity.this, Uri.fromFile(new File(images.get(0)))
+                                , WALLPAPER_CROPPED_IMAGE_NAME);
+                    }
+                }
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == UCrop.RESULT_ERROR) {
+                handleCropError(data);
+            } else {
+                handleCropResult(data);
+            }
+        }
+    }
+
+    private void handleCropResult(@NonNull Intent result) {
+        final Uri resultUri = UCrop.getOutput(result);
+        if (resultUri != null) {
+            // Load uri from here
+            wallpaperCroppedUri = resultUri;
+            AppUtils.loadCropSquareImageFromUri(this, resultUri, mWallpaper, null);
+        } else {
+            Toast.makeText(this, R.string.toast_cannot_retrieve_cropped_image,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+    private void handleCropError(@NonNull Intent result) {
+        final Throwable cropError = UCrop.getError(result);
+        if (cropError != null) {
+            Log.e(TAG, "handleCropError: ", cropError);
+            Toast.makeText(this, cropError.getMessage(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, R.string.toast_unexpected_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Subscribe
     public void onEvent(ChannelNameCollected event) {
-        getChannelProfileFragment = GetChannelProfileFragment.newInstance(event.getName());
+        channelName = event.getName();
         initGetChannelAboutView();
+        hideKeyboard(this);
     }
 
     @Subscribe
     public void onEvent(ChannelDescCollected desc) {
         initGetCategoryView();
+        hideKeyboard(this);
     }
 
     @Subscribe
     public void onEvent(ChannelCategoryCollected cat) {
+        channelCat = cat.getCategory();
+        getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat);
         initGetProfileView();
+        hideKeyboard(this);
     }
 }

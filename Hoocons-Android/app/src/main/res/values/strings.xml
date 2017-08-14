@@ -221,7 +221,7 @@
     <string name="suggested_category">Our suggested categories</string>
     <string name="semi_question_channel_desc">Let us know a little about what your channel is about in maximum of 200 characters</string>
     <string name="desc_error">Please write something about your channel</string>
-    <string name="pick_channel_profile">Pick channel profile channel</string>
+    <string name="pick_channel_profile">Pick channel profile and wallpaper</string>
     <string name="click_to_pick_image">Click to pick an image</string>
     <string name="please_choose_a_category">Please pick a category for your channel</string>
     <string name="please_pick_a_name">Please enter your channel name</string>
