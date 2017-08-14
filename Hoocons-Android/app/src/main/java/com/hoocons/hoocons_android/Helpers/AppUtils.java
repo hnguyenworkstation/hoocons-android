@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,10 +45,12 @@ import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
+import com.yalantis.ucrop.UCrop;
 
 import org.aisen.android.common.utils.DateUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -76,6 +79,24 @@ public class AppUtils {
                 .setShowCamera(true)
                 .setShowGif(true)
                 .start(activity, code);
+    }
+
+    public static void startCropActivity(@NonNull Activity activity, @NonNull Uri uri, String resultFileName) {
+        String destinationFileName = resultFileName;
+        destinationFileName += ".png";
+
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(activity.getCacheDir(), destinationFileName)));
+
+        uCrop.withAspectRatio(1, 1);
+
+        // Init options
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setHideBottomControls(true);
+
+        uCrop.withOptions(options);
+
+        uCrop.start(activity);
     }
 
     public static void startImagePickerFromFragment(Context context, Fragment fragment, int maxNum, int code) {
@@ -347,7 +368,6 @@ public class AppUtils {
         return dateFormat.format(date1);
     };
 
-
     @Nullable
     public static ArrayList<Media> uploadAllEventImage(final List<String> imagePaths) {
         try {
@@ -389,7 +409,6 @@ public class AppUtils {
         return null;
     }
 
-
     @Nullable
     public static ArrayList<Media> uploadAllMeetOutImages(final List<String> imagePaths) {
         try {
@@ -430,7 +449,6 @@ public class AppUtils {
 
         return null;
     }
-
 
     public static String getSimpleMeetOutTimeFrame(final String fromDateTime, final String toDateTime) {
         return fromDateTime;
@@ -481,5 +499,28 @@ public class AppUtils {
                         return false;
                     }
                 }).into(image);
+    }
+
+    public static void loadCropSquareImageFromUri(final Context context, final Uri uri,
+                                                  final ImageView imageView, final ProgressBar progressBar) {
+        Glide.with(context)
+                .load(new File(uri.getPath()))
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                })
+                .into(imageView);
     }
 }

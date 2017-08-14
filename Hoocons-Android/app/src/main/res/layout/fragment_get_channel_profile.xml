@@ -51,7 +51,6 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_small_edit"/>
-
             </RelativeLayout>
 
             <TextView
@@ -59,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_10"
                 android:id="@+id/channel_name"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_18"
                 android:maxLines="2"
                 android:ellipsize="middle"

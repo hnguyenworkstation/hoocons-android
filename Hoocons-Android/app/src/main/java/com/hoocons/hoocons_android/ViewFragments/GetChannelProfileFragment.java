@@ -1,12 +1,14 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
-
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
-import com.theartofdev.edmodo.cropper.CropImage;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -39,8 +43,12 @@ public class GetChannelProfileFragment extends Fragment {
 
     private static final String CHANNEL_NAME = "name";
     public static final int PHOTO_PICKER = 5;
+    private static final String CROPPED_IMAGE_NAME = "CroppedImage";
+    private final String TAG = GetChannelProfileFragment.class.getSimpleName();
 
     private String mName;
+    private Uri profileCroppedUri;
+    private String profileImagePath;
 
 
     public GetChannelProfileFragment() {
@@ -117,21 +125,46 @@ public class GetChannelProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == Activity.RESULT_OK) {
-                Uri resultUri = result.getUri();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        } else if (requestCode == PHOTO_PICKER) {
+        if (requestCode == PHOTO_PICKER) {
             if (data != null){
                 final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
 
                 if (images.size() >= 1) {
-
+                    profileImagePath = images.get(0);
+                    AppUtils.startCropActivity(getActivity(), Uri.fromFile(new File(images.get(0)))
+                            , CROPPED_IMAGE_NAME);
                 }
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == UCrop.RESULT_ERROR) {
+                handleCropError(data);
+            } else if (resultCode == Activity.RESULT_OK) {
+                handleCropResult(data);
             }
         }
     }
+
+    private void handleCropResult(@NonNull Intent result) {
+        final Uri resultUri = UCrop.getOutput(result);
+        if (resultUri != null) {
+            // Load uri from here
+            profileCroppedUri = resultUri;
+            AppUtils.loadCropSquareImageFromUri(getContext(), profileCroppedUri, mProfileImage, null);
+        } else {
+            Toast.makeText(getContext(), R.string.toast_cannot_retrieve_cropped_image,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+    private void handleCropError(@NonNull Intent result) {
+        final Throwable cropError = UCrop.getError(result);
+        if (cropError != null) {
+            Log.e(TAG, "handleCropError: ", cropError);
+            Toast.makeText(getContext(), cropError.getMessage(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(), R.string.toast_unexpected_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

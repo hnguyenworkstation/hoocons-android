@@ -105,7 +105,7 @@
 
     <!-- New Event Activity -->
     <string name="new_event">Event</string>
-    <string name="new_channel">New Channel</string>
+    <string name="new_channel">Create New Channel</string>
     <string name="skip">Skip</string>
     <string name="new_meetout">Meet out</string>
     <string name="checkin">Check in</string>
@@ -233,6 +233,11 @@
     <string name="public_text">Public</string>
     <string name="private_text">Private</string>
     <string name="max_length_description">maximum 200 characters</string>
+
+    <string name="toast_cannot_retrieve_selected_image">Cannot retrieve selected image</string>
+    <string name="toast_cannot_retrieve_cropped_image">Cannot retrieve cropped image</string>
+    <string name="toast_unexpected_error">Unexpected error</string>
+    <string name="file_provider_authorities">com.yalantis.ucrop.provider</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>
