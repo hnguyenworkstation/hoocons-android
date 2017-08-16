@@ -464,6 +464,39 @@ public class AppUtils {
         return null;
     }
 
+    @Nullable
+    public static String uploadPNGImageByUri(final Uri uri, final String toFolder) {
+        try {
+            String s3 = BaseApplication.getInstance().getS3AWS();
+            String timeStamp = String.valueOf(new Date().getTime());
+
+            final ArrayList<Media> _uploadedImages = new ArrayList<>();
+            AmazonS3Client s3Client = BaseApplication.getInstance().getAwsS3Client();
+
+            String fileName = timeStamp + getRandomSaltString() + ".png";
+
+            byte[] encodedImage = ImageEncoder.encodeImage(uri.getPath());
+            InputStream inputStream = new ByteArrayInputStream(encodedImage);
+
+            ObjectMetadata meta = new ObjectMetadata();
+            meta.setContentLength(encodedImage.length);
+            meta.setContentType("image/png");
+
+            PutObjectRequest por = new PutObjectRequest(s3 + "/" + toFolder,
+                    fileName, inputStream, meta);
+            por.setCannedAcl(CannedAccessControlList.PublicRead);
+
+            s3Client.putObject(por);
+
+            return "https://s3-ap-southeast-1.amazonaws.com/"
+                    + s3 + "/" + toFolder + "/" + fileName;
+        } catch (Exception e) {
+            Log.e("AWS", e.toString());
+        }
+
+        return null;
+    }
+
     public static String getSimpleMeetOutTimeFrame(final String fromDateTime, final String toDateTime) {
         return fromDateTime;
     }

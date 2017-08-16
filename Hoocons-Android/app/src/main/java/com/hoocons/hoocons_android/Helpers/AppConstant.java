@@ -5,6 +5,9 @@ package com.hoocons.hoocons_android.Helpers;
  */
 
 public class AppConstant {
+    // AWS S3 Path constants
+    public static final String CHANNEL_PATH = "channels";
+
     public static final String GENDER_MALE = "Male";
     public static final String GENDER_FEMALE = "Female";
 

@@ -21,11 +21,16 @@ import android.widget.Toast;
 
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
+import com.hoocons.hoocons_android.EventBus.ChannelImageCropCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
+import com.hoocons.hoocons_android.EventBus.UploadImageSuccess;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelNameFragment;
@@ -75,10 +80,16 @@ public class NewChannelActivity extends BaseActivity {
     private static final String WALLPAPER_CROPPED_IMAGE_NAME = "ProfileCroppedImage";
     private String wallpaperImagePath;
     private Uri wallpaperCroppedUri;
+    private Uri profileCroppedUri;
+    private String profileUrl;
+    private String wallpaperUrl;
 
     private String channelName;
     private String channelCat;
     private List<String> topics;
+
+    private final String UPLOAD_PROFILE_TAG = "upload_profile";
+    private final String UPLOAD_WALLPAPER_TAG = "upload_wallpaper";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +267,22 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
+    private void startUploadingChannelProfile() {
+        if (profileCroppedUri != null && profileUrl == null) {
+            BaseApplication.getInstance().getJobManager()
+                    .addJobInBackground(new UploadSingleUriImageJob(profileCroppedUri,
+                            UPLOAD_PROFILE_TAG, AppConstant.CHANNEL_PATH));
+        } else if (wallpaperCroppedUri != null && wallpaperUrl == null) {
+            BaseApplication.getInstance().getJobManager()
+                    .addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri,
+                            UPLOAD_WALLPAPER_TAG, AppConstant.CHANNEL_PATH));
+        }
+    }
+
+    private void submitNewChannel() {
+        
+    }
+
     @Subscribe
     public void onEvent(ChannelNameCollected event) {
         channelName = event.getName();
@@ -282,5 +309,40 @@ public class NewChannelActivity extends BaseActivity {
         getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat,
                 (ArrayList<String>) ev.getTags());
         initGetProfileView();
+    }
+
+    @Subscribe
+    public void onEvent(ChannelImageCropCollected ev) {
+        profileCroppedUri = ev.getUri();
+
+        startUploadingChannelProfile();
+    }
+
+    @Subscribe
+    public void onEvent(UploadImageSuccess job) {
+        /*
+        * Scenarios:
+        * 1. If uploaded channel profile => check if channel wallpaper need to uploaded or not
+        *  => upload wallpaper if needed
+        *
+        * 2. If wallpaper is uploaded (means that profile already uploaded or null)
+        *  => submit new channel to server
+        * */
+
+        if (job.getTag().equals(UPLOAD_PROFILE_TAG)) {
+            profileUrl = job.getUrl();
+
+            if (wallpaperCroppedUri != null && wallpaperUrl == null) {
+                BaseApplication.getInstance().getJobManager()
+                        .addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri,
+                                UPLOAD_WALLPAPER_TAG, AppConstant.CHANNEL_PATH));
+            } else {
+                submitNewChannel();
+            }
+        } else if (job.getTag().equals(UPLOAD_WALLPAPER_TAG)) {
+            wallpaperUrl = job.getUrl();
+
+            submitNewChannel();
+        }
     }
 }
