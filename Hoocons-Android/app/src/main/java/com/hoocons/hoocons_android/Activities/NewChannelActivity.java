@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
+import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
@@ -29,6 +30,7 @@ import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelNameFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelProfileFragment;
+import com.hoocons.hoocons_android.ViewFragments.GetChannelTagsFragment;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +67,7 @@ public class NewChannelActivity extends BaseActivity {
     private GetChannelNameFragment getChannelNameFragment;
     private GetChannelAboutFragment getChannelAboutFragment;
     private GetChannelCategoryFragment getChannelCategoryFragment;
+    private GetChannelTagsFragment getChannelTagsFragment;
     private GetChannelProfileFragment getChannelProfileFragment;
     private final String TAG = NewChannelActivity.class.getSimpleName();
 
@@ -74,6 +78,7 @@ public class NewChannelActivity extends BaseActivity {
 
     private String channelName;
     private String channelCat;
+    private List<String> topics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,8 @@ public class NewChannelActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_new_channel);
         ButterKnife.bind(this);
+
+        topics = new ArrayList<>();
 
         getChannelNameFragment = new GetChannelNameFragment();
         getChannelAboutFragment = new GetChannelAboutFragment();
@@ -149,6 +156,14 @@ public class NewChannelActivity extends BaseActivity {
         mEditWallpaper.setVisibility(View.VISIBLE);
     }
 
+    private void initGetTagsView() {
+        mFragTransition = mFragManager.beginTransaction();
+        mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
+        mFragTransition.replace(R.id.create_channel_container, getChannelTagsFragment, "get_channel_tags");
+        mFragTransition.commit();
+        mEditWallpaper.setVisibility(View.GONE);
+    }
+
     private void hideKeyboard(final Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -173,6 +188,11 @@ public class NewChannelActivity extends BaseActivity {
             mFragTransition.replace(R.id.create_channel_container, getChannelAboutFragment, "get_channel_about");
             mFragTransition.commit();
         } else if (mFragManager.findFragmentByTag("get_channel_profile") != null) {
+            mFragTransition = mFragManager.beginTransaction();
+            mFragTransition.setCustomAnimations(R.anim.fade_out_to_right, R.anim.fade_in_from_left);
+            mFragTransition.replace(R.id.create_channel_container, getChannelTagsFragment, "get_channel_tags");
+            mFragTransition.commit();
+        } else if (mFragManager.findFragmentByTag("get_channel_tags") != null) {
             mFragTransition = mFragManager.beginTransaction();
             mFragTransition.setCustomAnimations(R.anim.fade_out_to_right, R.anim.fade_in_from_left);
             mFragTransition.replace(R.id.create_channel_container, getChannelCategoryFragment, "get_channel_category");
@@ -253,7 +273,13 @@ public class NewChannelActivity extends BaseActivity {
     public void onEvent(ChannelCategoryCollected cat) {
         channelCat = cat.getCategory();
         getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat);
-        initGetProfileView();
+        getChannelTagsFragment = GetChannelTagsFragment.newInstance(channelCat);
+        initGetTagsView();
         hideKeyboard(this);
+    }
+
+    @Subscribe
+    public void onEvent(TagsCollected ev) {
+        initGetProfileView();
     }
 }
