@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    
     <item
-        android:id="@+id/featured"
+        android:id="@+id/channel_feeds"
         android:icon="@drawable/ic_home_white_24dp"
         android:enabled="true"
-        android:title="@string/tabbar_featured"
+        android:title="@string/feeds"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/nearme"
-        android:icon="@drawable/ic_near_me_white_24dp"
-        android:title="@string/tabbar_nearme"
+        android:id="@+id/channel_threads"
+        android:icon="@drawable/ic_forum_white_24dp"
+        android:title="@string/threads"
         android:enabled="true"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/chat_list"
-        android:icon="@drawable/ic_chat_white_24dp"
-        android:title="@string/tabbar_chatroom"
+        android:id="@+id/channel_meetouts"
+        android:icon="@drawable/ic_event_white_24dp"
+        android:title="@string/meetouts"
         android:enabled="true"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/notification"
-        android:icon="@drawable/ic_notifications_white_24dp"
-        android:title="@string/tabbar_notif"
+        android:id="@+id/channel_content"
+        android:icon="@drawable/ic_art_track_white_24dp"
+        android:title="@string/content"
         android:enabled="true"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_more"
+        android:id="@+id/channel_more"
         android:icon="@drawable/ic_more_horiz_white_24dp"
         android:title="@string/tabbar_more"
         android:enabled="true"

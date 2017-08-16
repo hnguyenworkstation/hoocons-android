@@ -8,9 +8,6 @@ import android.view.MenuItem;
 
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelViewPagerAdapter;
-import com.hoocons.hoocons_android.Adapters.MainViewPagerAdapter;
-import com.hoocons.hoocons_android.CustomUI.BottomNavigationViewHelper;
-import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -85,19 +82,19 @@ public class ChannelActivity extends DraggerActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()){
-                        case R.id.featured:
+                        case R.id.channel_feeds:
                             mViewPager.setCurrentItem(0);
                             break;
-                        case R.id.nearme:
+                        case R.id.channel_threads:
                             mViewPager.setCurrentItem(1);
                             break;
-                        case R.id.chat_list:
+                        case R.id.channel_meetouts:
                             mViewPager.setCurrentItem(2);
                             break;
-                        case R.id.notification:
+                        case R.id.channel_content:
                             mViewPager.setCurrentItem(3);
                             break;
-                        case R.id.action_more:
+                        case R.id.channel_more:
                             mViewPager.setCurrentItem(4);
                             break;
                         default:

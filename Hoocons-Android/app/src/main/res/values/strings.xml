@@ -4,6 +4,8 @@
     <string name="tabbar_chatroom">Messages</string>
     <string name="tabbar_notif">Notification</string>
     <string name="tabbar_more">More</string>
+    <string name="threads">Threads</string>
+    <string name="feeds">Feeds</string>
 
     <!-- Facebook Data-->
     <string name="facebook_app_id">252946771849973</string>
@@ -102,6 +104,9 @@
     <string name="login">Login</string>
     <string name="return_user_question">Return user?</string>
     <string name="registered_account_detected">This phone number has been registered</string>
+
+    <string name="meetouts">Meetout</string>
+    <string name="content">Content</string>
 
     <!-- New Event Activity -->
     <string name="new_event">Event</string>
