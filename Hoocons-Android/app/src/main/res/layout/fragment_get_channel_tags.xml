@@ -15,10 +15,21 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/pick_channel_profile"
+        android:text="@string/pick_channel_tags"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="@dimen/text_24" />
+
+    <TextView
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/channel_tags_desc"
+        android:layout_marginTop="@dimen/margin_12"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_14"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,14 +55,14 @@
             android:id="@+id/add_topic_btn"
             style="@style/wrapping_button"
             android:textSize="@dimen/text_14"
+            android:layout_marginTop="@dimen/margin_8"
             app:bootstrapText="{fa_plus} Add"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             app:bootstrapBrand="warning"
             app:buttonMode="regular"
             app:showOutline="false"
             app:roundedCorners="true"
-            app:bootstrapSize="sm"/>
+            app:bootstrapSize="md"/>
     </RelativeLayout>
 
     <com.hoocons.hoocons_android.CustomUI.CustomFlowLayout

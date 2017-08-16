@@ -98,6 +98,12 @@
             android:textSize="@dimen/text_16"
             android:textStyle="bold" />
 
+        <com.hoocons.hoocons_android.CustomUI.CustomFlowLayout
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/topic_flow_layout"/>
+
         <Button
             android:id="@+id/gcn_next"
             android:layout_width="match_parent"

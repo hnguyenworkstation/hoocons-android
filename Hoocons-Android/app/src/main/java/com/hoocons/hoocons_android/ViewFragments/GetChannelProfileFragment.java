@@ -17,12 +17,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,15 +43,19 @@ public class GetChannelProfileFragment extends Fragment {
     TextView mCategory;
     @BindView(R.id.gcn_next)
     Button mNextBtn;
+    @BindView(R.id.topic_flow_layout)
+    CustomFlowLayout mFlowLayout;
 
     private static final String CHANNEL_NAME = "name";
     private static final String CHANNEL_CATEGORY = "category";
+    private static final String CHANNEL_TOPICS = "topics";
     public static final int PHOTO_PICKER = 5;
     private static final String CROPPED_IMAGE_NAME = "ProfileCroppedImage";
     private final String TAG = GetChannelProfileFragment.class.getSimpleName();
 
     private String mName;
     private String mCat;
+    private ArrayList<String> topics;
     private Uri profileCroppedUri;
     private String profileImagePath;
 
@@ -58,11 +64,13 @@ public class GetChannelProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GetChannelProfileFragment newInstance(String channelName, String channelCat) {
+    public static GetChannelProfileFragment newInstance(String channelName, String channelCat,
+                                                        ArrayList<String> topics) {
         GetChannelProfileFragment fragment = new GetChannelProfileFragment();
         Bundle args = new Bundle();
         args.putString(CHANNEL_NAME, channelName);
         args.putString(CHANNEL_CATEGORY, channelCat);
+        args.putStringArrayList(CHANNEL_TOPICS, topics);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,9 +78,11 @@ public class GetChannelProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        topics = new ArrayList<>();
         if (getArguments() != null) {
             mName = getArguments().getString(CHANNEL_NAME);
             mCat = getArguments().getString(CHANNEL_CATEGORY);
+            topics = getArguments().getStringArrayList(CHANNEL_TOPICS);
         }
     }
 
@@ -99,6 +109,23 @@ public class GetChannelProfileFragment extends Fragment {
         AppUtils.loadCropImageWithProgressBar(getContext(),
                 "http://www.stanleychowillustration.com/uploads/images/MANCHESTER_LANDSCAPE_30x12.jpg",
                 mProfileImage, null);
+
+        initFlowLayoutView();
+    }
+
+    private void initFlowLayoutView() {
+        mFlowLayout.removeAllViews();
+
+        for (int i = 0; i < topics.size(); i++) {
+            final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.category_flow_item_layout,
+                    mFlowLayout, false);
+            TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
+
+            topic.setText(topics.get(i));
+            item.setTag(i);
+
+            mFlowLayout.addView(item);
+        }
     }
 
     private void initClickListener() {

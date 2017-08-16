@@ -272,7 +272,6 @@ public class NewChannelActivity extends BaseActivity {
     @Subscribe
     public void onEvent(ChannelCategoryCollected cat) {
         channelCat = cat.getCategory();
-        getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat);
         getChannelTagsFragment = GetChannelTagsFragment.newInstance(channelCat);
         initGetTagsView();
         hideKeyboard(this);
@@ -280,6 +279,8 @@ public class NewChannelActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(TagsCollected ev) {
+        getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat,
+                (ArrayList<String>) ev.getTags());
         initGetProfileView();
     }
 }
