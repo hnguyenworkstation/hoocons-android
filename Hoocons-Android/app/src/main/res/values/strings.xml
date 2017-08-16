@@ -246,6 +246,12 @@
     <string name="toast_unexpected_error">Unexpected error</string>
     <string name="file_provider_authorities">com.yalantis.ucrop.provider</string>
 
+    <string name="creating_channel">Creating new channel</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="created_channel">Successfully created new channel</string>
+    <string name="invalid_desc">Invalid description</string>
+    <string name="please_tell_channel_desc">Please tell us a little bit about your channel…</string>
+
     <string-array name="channel_category">
         <item>Local Businesses</item>
         <item>Websites &amp; Blogs</item>

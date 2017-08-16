@@ -19,17 +19,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelImageCropCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
 import com.hoocons.hoocons_android.EventBus.UploadImageSuccess;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
@@ -86,10 +92,12 @@ public class NewChannelActivity extends BaseActivity {
 
     private String channelName;
     private String channelCat;
+    private String channelAbout;
     private List<String> topics;
 
     private final String UPLOAD_PROFILE_TAG = "upload_profile";
     private final String UPLOAD_WALLPAPER_TAG = "upload_wallpaper";
+    private MaterialDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,7 +275,19 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
+    private void showUploadingDialog() {
+        loadingDialog = new MaterialDialog.Builder(this)
+                .title(R.string.creating_channel)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .cancelable(false)
+                .show();
+    }
+
     private void startUploadingChannelProfile() {
+        showUploadingDialog();
+
         if (profileCroppedUri != null && profileUrl == null) {
             BaseApplication.getInstance().getJobManager()
                     .addJobInBackground(new UploadSingleUriImageJob(profileCroppedUri,
@@ -279,8 +299,16 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
+    private void cancelDialog() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+    }
+
     private void submitNewChannel() {
-        
+        ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
+                profileUrl, topics, "Public", wallpaperUrl);
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new NewChannelJob(request));
     }
 
     @Subscribe
@@ -292,6 +320,7 @@ public class NewChannelActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(ChannelDescCollected desc) {
+        channelAbout = desc.getDesc();
         initGetCategoryView();
         hideKeyboard(this);
     }
@@ -344,5 +373,25 @@ public class NewChannelActivity extends BaseActivity {
 
             submitNewChannel();
         }
+    }
+
+    @Subscribe
+    public void onEvent(UploadImageFailed job) {
+        cancelDialog();
+        Toast.makeText(this, getResources().getString(R.string.task_failed), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(TaskCompleteRequest task) {
+        if (task.getTag().equals(AppConstant.CREATE_NEW_CHANNEL)) {
+            cancelDialog();
+            Toast.makeText(this, getResources().getString(R.string.created_channel), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void onEvent(BadRequest request) {
+        cancelDialog();
+        Toast.makeText(this, getResources().getString(R.string.task_failed), Toast.LENGTH_SHORT).show();
     }
 }

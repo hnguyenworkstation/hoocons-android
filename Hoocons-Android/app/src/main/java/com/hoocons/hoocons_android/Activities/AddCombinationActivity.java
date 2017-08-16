@@ -48,7 +48,7 @@ public class AddCombinationActivity extends DraggerActivity
     }
 
     private void startNewChannelActivity() {
-        startActivity(new Intent(AddCombinationActivity.this, ChannelActivity.class));
+        startActivity(new Intent(AddCombinationActivity.this, NewChannelActivity.class));
     }
 
 

@@ -46,4 +46,7 @@ public class AppConstant {
 
     public static final String CHATROOM_TYPE_SINGLE = "ROOM_SINGLE";
     public static final String CHATROOM_TYPE_MULTI = "ROOM_MULTI";
+
+    // Constant TAGs for JOBS
+    public static final String CREATE_NEW_CHANNEL = "create_new_channel";
 }

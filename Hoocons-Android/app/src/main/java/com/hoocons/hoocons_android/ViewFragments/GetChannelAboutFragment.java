@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.R;
@@ -68,7 +69,12 @@ public class GetChannelAboutFragment extends Fragment {
         mNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new ChannelDescCollected(""));
+                if (mInput.getText().length() > 0) {
+                    EventBus.getDefault().post(new ChannelDescCollected(""));
+                } else {
+                    mInput.setError(getResources().getText(R.string.invalid_desc));
+                    Toast.makeText(getContext(), getResources().getString(R.string.please_tell_channel_desc), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
