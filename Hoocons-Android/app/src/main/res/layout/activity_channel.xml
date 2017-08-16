@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    xmlns:dragger_layout="http://schemas.android.com/apk/res-auto"
+    dragger_layout:drag_view_id="@+id/drag_view"
+    dragger_layout:shadow_view_id="@+id/shadow_view"
+    dragger_layout:drag_position="top"
+    tools:context="com.hoocons.hoocons_android.Activities.ChannelActivity">
+
+    <android.support.v7.widget.CardView
+        style="@style/CardViewStyle"
+        android:id="@+id/drag_view"
+        app:cardCornerRadius="@dimen/activity_card_corner">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/channel_viewpager"
+                android:layout_above="@+id/bottom_navigation"/>
+
+            <android.support.design.widget.BottomNavigationView
+                android:layout_alignParentBottom="true"
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                app:elevation="1dp"
+                app:itemIconTint="@drawable/tabbar_state_change"
+                app:itemTextColor="@drawable/tabbar_state_change"
+                app:menu="@menu/channel_bottom_navigation_main"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <FrameLayout
+        android:id="@+id/shadow_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"/>
+</RelativeLayout>
