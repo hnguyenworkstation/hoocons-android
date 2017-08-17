@@ -389,7 +389,8 @@ public class NewChannelActivity extends BaseActivity {
     public void onEvent(TaskCompleteRequest task) {
         if (task.getTag().equals(AppConstant.CREATE_NEW_CHANNEL)) {
             cancelDialog();
-            Toast.makeText(this, getResources().getString(R.string.created_channel), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.created_channel) + String.valueOf(task.getId()),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

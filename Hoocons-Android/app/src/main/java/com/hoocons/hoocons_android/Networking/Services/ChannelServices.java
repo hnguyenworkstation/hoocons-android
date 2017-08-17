@@ -2,6 +2,7 @@ package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
+import com.hoocons.hoocons_android.Networking.Responses.IdResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,5 +20,5 @@ public interface ChannelServices {
      * @Purpose: post a new channel
      ********************************** */
     @POST("/channel/create/")
-    Call<Void> postNewChannel(@Body ChannelRequest request);
+    Call<IdResponse> postNewChannel(@Body ChannelRequest request);
 }

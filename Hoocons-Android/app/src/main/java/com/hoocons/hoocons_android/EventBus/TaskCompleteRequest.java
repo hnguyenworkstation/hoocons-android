@@ -5,7 +5,8 @@ package com.hoocons.hoocons_android.EventBus;
  */
 
 public class TaskCompleteRequest {
-    public String tag;
+    private String tag;
+    private int id;
 
     public TaskCompleteRequest() {
     }
@@ -14,11 +15,24 @@ public class TaskCompleteRequest {
         this.tag = tag;
     }
 
+    public TaskCompleteRequest(String tag, int id) {
+        this.tag = tag;
+        this.id = id;
+    }
+
     public String getTag() {
         return tag;
     }
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

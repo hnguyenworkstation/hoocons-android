@@ -11,6 +11,7 @@ import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
+import com.hoocons.hoocons_android.Networking.Responses.IdResponse;
 import com.hoocons.hoocons_android.Networking.Services.ChannelServices;
 import com.hoocons.hoocons_android.Tasks.JobProperties.JobGroup;
 import com.hoocons.hoocons_android.Tasks.JobProperties.Priority;
@@ -56,20 +57,21 @@ public class NewChannelJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
+        final ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
                 profileUrl, topics, "Public", wallpaperUrl);
 
         ChannelServices services = NetContext.instance.create(ChannelServices.class);
-        services.postNewChannel(request).enqueue(new Callback<Void>() {
+        services.postNewChannel(request).enqueue(new Callback<IdResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<IdResponse> call, Response<IdResponse> response) {
                 if (response.code() == 200) {
-                    EventBus.getDefault().post(new TaskCompleteRequest(AppConstant.CREATE_NEW_CHANNEL));
+                    EventBus.getDefault().post(new TaskCompleteRequest(AppConstant.CREATE_NEW_CHANNEL,
+                            response.body().getId()));
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<IdResponse> call, Throwable t) {
                 EventBus.getDefault().post(new JobFailureEvBusRequest());
             }
         });
