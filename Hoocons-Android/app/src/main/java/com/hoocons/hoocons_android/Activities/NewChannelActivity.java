@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.birbit.android.jobqueue.JobManager;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
@@ -53,6 +54,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.iwf.photopicker.PhotoPicker;
 
 public class NewChannelActivity extends BaseActivity {
@@ -81,6 +83,7 @@ public class NewChannelActivity extends BaseActivity {
     private GetChannelTagsFragment getChannelTagsFragment;
     private GetChannelProfileFragment getChannelProfileFragment;
     private final String TAG = NewChannelActivity.class.getSimpleName();
+    private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
 
     private final int WALLPAPER_IMG_PICKER = 10;
     private static final String WALLPAPER_CROPPED_IMAGE_NAME = "ProfileCroppedImage";
@@ -275,27 +278,17 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
-    private void showUploadingDialog() {
-        loadingDialog = new MaterialDialog.Builder(this)
-                .title(R.string.creating_channel)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .progressIndeterminateStyle(false)
-                .cancelable(false)
-                .show();
-    }
-
     private void startUploadingChannelProfile() {
         showUploadingDialog();
 
         if (profileCroppedUri != null && profileUrl == null) {
-            BaseApplication.getInstance().getJobManager()
-                    .addJobInBackground(new UploadSingleUriImageJob(profileCroppedUri,
+            jobManager.addJobInBackground(new UploadSingleUriImageJob(profileCroppedUri.getPath(),
                             UPLOAD_PROFILE_TAG, AppConstant.CHANNEL_PATH));
         } else if (wallpaperCroppedUri != null && wallpaperUrl == null) {
-            BaseApplication.getInstance().getJobManager()
-                    .addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri,
+            jobManager.addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri.getPath(),
                             UPLOAD_WALLPAPER_TAG, AppConstant.CHANNEL_PATH));
+        } else {
+            submitNewChannel();
         }
     }
 
@@ -305,10 +298,23 @@ public class NewChannelActivity extends BaseActivity {
         }
     }
 
+    private void showUploadingDialog() {
+        System.out.print("Get here");
+        loadingDialog = new MaterialDialog.Builder(this)
+                .title(R.string.creating_channel)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .cancelable(false)
+                .build();
+
+        loadingDialog.show();
+    }
+
+
     private void submitNewChannel() {
-        ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
-                profileUrl, topics, "Public", wallpaperUrl);
-        BaseApplication.getInstance().getJobManager().addJobInBackground(new NewChannelJob(request));
+        jobManager.addJobInBackground(new NewChannelJob(channelName, "subname", channelAbout,
+                profileUrl, topics, "Public", wallpaperUrl));
     }
 
     @Subscribe
@@ -343,7 +349,6 @@ public class NewChannelActivity extends BaseActivity {
     @Subscribe
     public void onEvent(ChannelImageCropCollected ev) {
         profileCroppedUri = ev.getUri();
-
         startUploadingChannelProfile();
     }
 
@@ -362,8 +367,7 @@ public class NewChannelActivity extends BaseActivity {
             profileUrl = job.getUrl();
 
             if (wallpaperCroppedUri != null && wallpaperUrl == null) {
-                BaseApplication.getInstance().getJobManager()
-                        .addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri,
+                jobManager.addJobInBackground(new UploadSingleUriImageJob(wallpaperCroppedUri.getPath(),
                                 UPLOAD_WALLPAPER_TAG, AppConstant.CHANNEL_PATH));
             } else {
                 submitNewChannel();

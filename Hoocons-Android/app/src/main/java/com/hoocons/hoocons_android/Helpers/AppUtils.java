@@ -465,7 +465,7 @@ public class AppUtils {
     }
 
     @Nullable
-    public static String uploadPNGImageByUri(final Uri uri, final String toFolder) {
+    public static String uploadPNGImageByPath(final String path, final String toFolder) {
         try {
             String s3 = BaseApplication.getInstance().getS3AWS();
             String timeStamp = String.valueOf(new Date().getTime());
@@ -475,7 +475,7 @@ public class AppUtils {
 
             String fileName = timeStamp + getRandomSaltString() + ".png";
 
-            byte[] encodedImage = ImageEncoder.encodeImage(uri.getPath());
+            byte[] encodedImage = ImageEncoder.encodeImage(path);
             InputStream inputStream = new ByteArrayInputStream(encodedImage);
 
             ObjectMetadata meta = new ObjectMetadata();

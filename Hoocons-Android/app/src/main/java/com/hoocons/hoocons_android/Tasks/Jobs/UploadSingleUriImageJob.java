@@ -21,13 +21,13 @@ import org.greenrobot.eventbus.EventBus;
  */
 
 public class UploadSingleUriImageJob extends Job {
-    private Uri uri;
+    private String imagePath;
     private String tag;
     private String toFolder;
 
-    public UploadSingleUriImageJob(final Uri uri, final String tag, final String toFolder) {
+    public UploadSingleUriImageJob(final String imagePath, final String tag, final String toFolder) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.channel));
-        this.uri = uri;
+        this.imagePath = imagePath;
         this.tag = tag;
         this.toFolder = toFolder;
     }
@@ -39,7 +39,7 @@ public class UploadSingleUriImageJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        String url = AppUtils.uploadPNGImageByUri(uri, toFolder);
+        String url = AppUtils.uploadPNGImageByPath(imagePath, toFolder);
 
         if (url != null) {
             EventBus.getDefault().post(new UploadImageSuccess(url, tag));

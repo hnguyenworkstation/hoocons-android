@@ -17,10 +17,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.hoocons.hoocons_android.Activities.NewChannelActivity;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
+import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.ChannelImageCropCollected;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.R;
 import com.yalantis.ucrop.UCrop;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,6 +68,7 @@ public class GetChannelProfileFragment extends Fragment {
     private ArrayList<String> topics;
     private Uri profileCroppedUri;
     private String profileImagePath;
+    private MaterialDialog loadingDialog;
 
 
     public GetChannelProfileFragment() {
@@ -148,7 +159,7 @@ public class GetChannelProfileFragment extends Fragment {
         mNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                EventBus.getDefault().post(new ChannelImageCropCollected(profileCroppedUri));
             }
         });
     }
@@ -172,6 +183,9 @@ public class GetChannelProfileFragment extends Fragment {
         } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == UCrop.RESULT_ERROR) {
                 handleCropError(data);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(getContext(), R.string.toast_cannot_retrieve_cropped_image,
+                        Toast.LENGTH_SHORT).show();
             } else {
                 handleCropResult(data);
             }

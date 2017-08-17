@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.JobFailureEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
@@ -18,6 +17,8 @@ import com.hoocons.hoocons_android.Tasks.JobProperties.Priority;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,12 +28,25 @@ import retrofit2.Response;
  */
 
 public class NewChannelJob extends Job {
-    private ChannelRequest request;
+    private String channelName;
+    private String channelSubName;
+    private String channelAbout;
+    private String profileUrl;
+    private List<String> topics;
+    private String privacy;
+    private String wallpaperUrl;
 
-    public NewChannelJob(ChannelRequest request) {
+    public NewChannelJob(String channelName, String channelSubName,
+                         String channelAbout, String profileUrl, List<String> topics,
+                         String privacy, String wallpaperUrl) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.channel));
-
-        this.request = request;
+        this.channelName = channelName;
+        this.channelSubName = channelSubName;
+        this.channelAbout = channelAbout;
+        this.profileUrl = profileUrl;
+        this.topics = topics;
+        this.privacy = privacy;
+        this.wallpaperUrl = wallpaperUrl;
     }
 
     @Override
@@ -42,6 +56,9 @@ public class NewChannelJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
+        ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
+                profileUrl, topics, "Public", wallpaperUrl);
+
         ChannelServices services = NetContext.instance.create(ChannelServices.class);
         services.postNewChannel(request).enqueue(new Callback<Void>() {
             @Override
@@ -53,7 +70,7 @@ public class NewChannelJob extends Job {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                EventBus.getDefault().post(new BadRequest());
+                EventBus.getDefault().post(new JobFailureEvBusRequest());
             }
         });
     }
@@ -64,7 +81,8 @@ public class NewChannelJob extends Job {
     }
 
     @Override
-    protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable, int runCount, int maxRunCount) {
+    protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable,
+                                                     int runCount, int maxRunCount) {
         return null;
     }
 }
