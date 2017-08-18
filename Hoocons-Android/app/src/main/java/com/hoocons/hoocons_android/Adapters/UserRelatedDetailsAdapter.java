@@ -157,6 +157,7 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
             return EVENT_LOADING_END;
         }
 
+        assert response != null;
         if (response.getContainEvent() == null) {
             switch (response.getEventType()) {
                 case AppConstant.EVENT_TYPE_TEXT:
