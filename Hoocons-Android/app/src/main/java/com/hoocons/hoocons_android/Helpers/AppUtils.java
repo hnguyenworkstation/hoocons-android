@@ -40,7 +40,9 @@ import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.GlideBlurTransformation;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Media;
+import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.klinker.android.link_builder.Link;
@@ -569,5 +571,19 @@ public class AppUtils {
                     }
                 })
                 .into(imageView);
+    }
+
+    public static ChannelProfileParcel getChannelProfileParcelFromResponse(ChannelProfileResponse response) {
+        ChannelProfileParcel parcel = new ChannelProfileParcel();
+
+        parcel.setName(response.getName());
+        parcel.setSubname(response.getSubname());
+        parcel.setAbout(response.getAbout());
+        parcel.setProfileUrl(response.getProfileUrl());
+        parcel.setWallpaperUrl(response.getWallpaperUrl());
+        parcel.setPromotedMedias(response.getPromotedMedias());
+        parcel.setTopics(response.getTopics());
+
+        return parcel;
     }
 }
