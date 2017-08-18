@@ -9,6 +9,7 @@
         android:paddingStart="@dimen/margin_16"
         android:paddingTop="@dimen/margin_16"
         android:paddingBottom="@dimen/margin_16"
+        android:id="@+id/app_info_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"

@@ -22,6 +22,8 @@ public class ChannelProfileParcel {
     String profileUrl;
     String wallpaperUrl;
     String privacy;
+
+    @ParcelPropertyConverter(MultiTopicsParcel.class)
     List<Topic> topics;
 
     @ParcelPropertyConverter(MediaListParcel.class)

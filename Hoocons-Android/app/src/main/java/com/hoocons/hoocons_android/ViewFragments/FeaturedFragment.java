@@ -94,6 +94,8 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     private PopupMenu eventPopup;
     private Handler handler;
 
+    private DividerItemDecoration spaceDecoration;
+
     private final String MYSELF = "IS_MY_SELF";
 
     public FeaturedFragment() {
@@ -231,8 +233,15 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecycler.setNestedScrollingEnabled(false);
         mRecycler.setFocusable(false);
         mRecycler.setAdapter(mAdapter);
-        mRecycler.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL_LIST));
+
+        if (spaceDecoration != null) {
+            mRecycler.removeItemDecoration(spaceDecoration);
+        }
+
+        spaceDecoration = new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL_LIST);
+
+        mRecycler.addItemDecoration(spaceDecoration);
         mRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
 
             @Override

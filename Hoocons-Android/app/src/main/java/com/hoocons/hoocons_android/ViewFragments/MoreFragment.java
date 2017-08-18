@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hoocons.hoocons_android.Activities.ChannelActivity;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Activities.FindMatchActivity;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
@@ -27,6 +28,8 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     ImageView mUserProfile;
     @BindView(R.id.find_love)
     TextView mFindLove;
+    @BindView(R.id.help_center)
+    TextView mHelpCenter;
     @BindView(R.id.display_name)
     TextView mDisplayName;
     @BindView(R.id.nick_name)
@@ -74,6 +77,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
         mUserProfile.setOnClickListener(this);
         mFindLove.setOnClickListener(this);
+        mHelpCenter.setOnClickListener(this);
     }
 
     private void initView() {
@@ -108,8 +112,6 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
     private void startFindMatchActivity() {
         Intent findMatchIntent = new Intent(getActivity(), FindMatchActivity.class);
-        findMatchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         startActivity(findMatchIntent);
     }
 
@@ -121,6 +123,9 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.find_love:
                 startFindMatchActivity();
+                break;
+            case R.id.help_center:
+                startActivity(new Intent(getActivity(), ChannelActivity.class));
                 break;
             default:
                 break;
