@@ -35,6 +35,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Adapters.UserRelatedDetailsAdapter;
+import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
@@ -106,6 +107,7 @@ public class UserProfileActivity extends DraggerActivity
     private boolean isMySelf;
     private Intent mIntent;
     private Handler handler;
+    private DividerItemDecoration spaceDecoration;
 
     private final String USERID = "USERID";
     private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
@@ -147,6 +149,13 @@ public class UserProfileActivity extends DraggerActivity
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        if (spaceDecoration != null) {
+            mRecyclerView.removeItemDecoration(spaceDecoration);
+        }
+        spaceDecoration = new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST);
+
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(false);

@@ -32,6 +32,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
@@ -90,6 +91,8 @@ public class ChannelAboutFragment extends Fragment implements
     private boolean isMySelf;
     private Intent mIntent;
     private Handler handler;
+
+    private DividerItemDecoration spaceDecoration;
 
     public ChannelAboutFragment() {
 
@@ -159,12 +162,19 @@ public class ChannelAboutFragment extends Fragment implements
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        if (spaceDecoration != null) {
+            mRecyclerView.removeItemDecoration(spaceDecoration);
+        }
+        spaceDecoration = new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL_LIST);
+
+        mRecyclerView.addItemDecoration(spaceDecoration);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(null);
         mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
-
             @Override
             protected void loadMoreItems() {
                 isLoading = true;

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -134,6 +135,23 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         initOnClickListener();
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        // Run first init when created
+        mSwipeRefLayout.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        BaseApplication.getInstance().getJobManager()
+                                .addJobInBackground(new FetchFeaturedActivityJob());
+                        initRecyclerView();
+                    }
+                }
+        );
     }
 
     private void initOnClickListener() {
@@ -449,20 +467,5 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onRefresh() {
         BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchFeaturedActivityJob());
         initRecyclerView();
-    }
-
-    @Override
-    public void onStart() {
-        mSwipeRefLayout.post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        BaseApplication.getInstance().getJobManager()
-                                .addJobInBackground(new FetchFeaturedActivityJob());
-                        initRecyclerView();
-                    }
-                }
-        );
-        super.onStart();
     }
 }
