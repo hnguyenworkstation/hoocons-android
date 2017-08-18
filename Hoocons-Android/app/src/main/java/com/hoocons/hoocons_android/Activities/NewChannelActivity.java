@@ -34,7 +34,9 @@ import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Models.Topic;
 import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
+import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
@@ -47,6 +49,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -311,6 +314,13 @@ public class NewChannelActivity extends BaseActivity {
         loadingDialog.show();
     }
 
+    private void transferToNewChannelActivity(ChannelProfileResponse response) {
+        Intent intent = new Intent(NewChannelActivity.this, ChannelActivity.class);
+        intent.putExtra("channel",
+                Parcels.wrap(AppUtils.getChannelProfileParcelFromResponse(response)));
+        startActivity(intent);
+    }
+
 
     private void submitNewChannel() {
         jobManager.addJobInBackground(new NewChannelJob(channelName, "subname", channelAbout,
@@ -391,6 +401,17 @@ public class NewChannelActivity extends BaseActivity {
             cancelDialog();
             Toast.makeText(this, getResources().getString(R.string.created_channel) + String.valueOf(task.getId()),
                     Toast.LENGTH_SHORT).show();
+
+            List<Topic> listTopics = new ArrayList<>();
+            for (String topName: topics) {
+                listTopics.add(new Topic(topName));
+            }
+
+            ChannelProfileResponse response = new ChannelProfileResponse(task.getId(), channelName, "subname",
+                    channelAbout, profileUrl, wallpaperUrl, "Public", listTopics, null, 0, 0, 0, true, true,
+                    true, 0, false, true);
+
+            transferToNewChannelActivity(response);
         }
     }
 

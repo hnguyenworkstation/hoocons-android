@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by hungnguyen on 7/28/17.
  */
-
 public class Topic {
     @SerializedName("id")
     private int id;
