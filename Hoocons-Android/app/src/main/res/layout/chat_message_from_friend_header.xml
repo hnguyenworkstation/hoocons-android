@@ -40,7 +40,7 @@
             android:textAllCaps="true"
             android:text="Hung Nguyen"
             android:id="@+id/friend_name"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/margin_10"
             android:textStyle="bold"
             android:textColor="@color/black"/>

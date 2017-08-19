@@ -22,6 +22,9 @@ public class ChatUtils {
         DatabaseReference messageRef = BaseApplication.getInstance()
                 .getDatabase().child("messages");
 
-        messageRef.child(chatRoomId).setValue(chatMessage);
+        String simpleId = messageRef.child(chatRoomId).push().getKey();
+        messageRef.child(chatRoomId).child(simpleId).setValue(chatMessage);
+
+        chatMessage.setId(simpleId);
     }
 }

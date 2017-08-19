@@ -30,12 +30,18 @@ public class ChatMessage implements Serializable {
     private String contactName;
     @SerializedName("contact_profile_url")
     private String contactProfileUrl;
+    @SerializedName("is_updated")
+    private boolean isUpdated;
 
-    private String tag;
+    private boolean isPosted;
+
+    public ChatMessage() {
+    }
 
     public ChatMessage(int userId, String messageType, String createdTime,
                        String textContent, String contentUrl, boolean isSeen,
-                       String phoneNumber, String contactName, String contactProfileUrl) {
+                       String phoneNumber, String contactName,
+                       String contactProfileUrl, boolean isUpdated) {
         this.userId = userId;
         this.messageType = messageType;
         this.createdTime = createdTime;
@@ -45,36 +51,31 @@ public class ChatMessage implements Serializable {
         this.phoneNumber = phoneNumber;
         this.contactName = contactName;
         this.contactProfileUrl = contactProfileUrl;
+        this.isUpdated = isUpdated;
     }
 
-    public ChatMessage(int userId, String messageType, String createdTime,
-                       String textContent, String contentUrl) {
-        this.userId = userId;
-        this.messageType = messageType;
-        this.createdTime = createdTime;
-        this.textContent = textContent;
-        this.contentUrl = contentUrl;
+    public boolean isUpdated() {
+        return isUpdated;
     }
 
-    public ChatMessage(int userId, String messageType, String createdTime) {
-        this.userId = userId;
-        this.messageType = messageType;
-        this.createdTime = createdTime;
+    public void setUpdated(boolean updated) {
+        isUpdated = updated;
     }
 
-    public ChatMessage(int userId, String messageType, String createdTime, String textContent) {
-        this.userId = userId;
-        this.messageType = messageType;
-        this.createdTime = createdTime;
-        this.textContent = textContent;
+    public boolean isSeen() {
+        return isSeen;
     }
 
-    public String getTag() {
-        return tag;
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public boolean isPosted() {
+        return isPosted;
+    }
+
+    public void setPosted(boolean posted) {
+        isPosted = posted;
     }
 
     public String getId() {

@@ -33,7 +33,7 @@
             android:layout_height="fill_parent"
             android:background="@color/colorAccent"/>
 
-        <CustomTextView
+        <com.hoocons.hoocons_android.CustomUI.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_4"

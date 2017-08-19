@@ -65,7 +65,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
     @Nullable
     @BindView(R.id.message_footer)
-    TextView mMessageFooterLayout;
+    LinearLayout mMessageFooterLayout;
 
     /* MESSAGE BODY CONTENT */
     @Nullable
@@ -76,5 +76,9 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     public ChatMessageViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+    }
+
+    public void initMessage() {
+
     }
 }
