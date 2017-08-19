@@ -63,8 +63,8 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
         public Thread newThread(@NonNull Runnable r) {
             int count = mCount.getAndIncrement();
-            Logger.v(TAG, "new Thread " + "AisenTextView #" + count);
-            return new Thread(r, "AisenTextView #" + count);
+            Logger.v(TAG, "new Thread " + "CustomTextView #" + count);
+            return new Thread(r, "CustomTextView #" + count);
         }
     };
 

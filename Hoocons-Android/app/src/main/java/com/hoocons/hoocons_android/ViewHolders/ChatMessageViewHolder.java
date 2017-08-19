@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Interface.OnChatMessageClickListener;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.R;
 
 import org.w3c.dom.Text;
@@ -26,7 +31,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     TextView mTimeTitle;
 
     @Nullable
-    @BindView(R.id.time_frame_title)
+    @BindView(R.id.time_header)
     LinearLayout mTimeFrameLayout;
 
     /* MESSAGE HEADER LAYOUT */
@@ -72,13 +77,25 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_text_content)
     CustomTextView mMessageTextContent;
 
-
     public ChatMessageViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void initMessage() {
+    public void initMessage(final Context context, ChatMessage message,
+                            OnChatMessageClickListener listener, final int position) {
+        if (message.getUserId() == SharedPreferencesManager.getDefault().getUserId()) {
+            if (message.isPosted()) {
 
+            }
+        } else {
+
+        }
+
+        assert mMessageTextContent != null;
+        mMessageTextContent.setContent(message.getTextContent());
+
+        assert mMessageTimeFrame != null;
+        mMessageTimeFrame.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()));
     }
 }

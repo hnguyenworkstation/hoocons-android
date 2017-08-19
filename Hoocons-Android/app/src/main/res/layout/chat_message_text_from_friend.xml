@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/message_layout">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/time_frame_title"
-        android:visibility="gone">
+        android:id="@+id/time_header">
         <include layout="@layout/chat_message_time_header"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:paddingTop="@dimen/margin_4"
+        android:layout_below="@id/time_header"
+        android:id="@+id/message_bubble"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/message_header_layout"
-        android:layout_marginBottom="@dimen/margin_4">
-        <include layout="@layout/chat_message_from_friend_header"/>
-    </LinearLayout>
+        android:layout_marginStart="8dp"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/margin_10">
-
-        <View
-            android:layout_width="4dp"
-            android:layout_height="fill_parent"
-            android:background="@color/colorAccent"/>
-
-        <com.hoocons.hoocons_android.CustomUI.CustomTextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_4"
-            android:layout_marginEnd="@dimen/margin_4"
-            android:textColor="@color/black"
-            android:id="@+id/message_text_content"
-            android:text="hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message hello this is a very long message"/>
-    </LinearLayout>
+            android:id="@+id/message_header_layout">
+            <include layout="@layout/chat_message_from_friend_header"/>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_10"
-        android:id="@+id/message_footer"
-        android:layout_marginTop="@dimen/margin_4">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_24"
+            android:background="@drawable/message_from_friend_bubble"
+            android:layout_marginTop="@dimen/margin_4"
+            android:orientation="vertical">
 
-        <include layout="@layout/chat_message_footer"/>
+            <com.hoocons.hoocons_android.CustomUI.CustomTextView
+                android:id="@+id/message_text_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginBottom="@dimen/margin_8"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_16"
+                android:textColor="@color/black"
+                android:textSize="@dimen/chatroom_message_txtsize" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:id="@+id/message_footer"
+            android:orientation="horizontal">
+            <include layout="@layout/chat_message_footer"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
