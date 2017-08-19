@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Activities.ChannelActivity;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Activities.FindMatchActivity;
+import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 
@@ -119,6 +120,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_header:
+                ChatUtils.initNewChatRoom();
                 startActivity(new Intent(getActivity(), ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.find_love:

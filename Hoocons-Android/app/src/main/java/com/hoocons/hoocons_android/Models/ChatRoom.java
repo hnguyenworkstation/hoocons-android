@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,10 +9,10 @@ import java.util.List;
 /**
  * Created by hungnguyen on 8/6/17.
  */
-
+@IgnoreExtraProperties
 public class ChatRoom implements Serializable {
-    @SerializedName("room_id")
-    private String roomId;
+    @SerializedName("room_name")
+    private String roomName;
     @SerializedName("room_type")
     private String roomType;
 
@@ -22,17 +23,17 @@ public class ChatRoom implements Serializable {
         this.roomType = roomType;
     }
 
-    public ChatRoom(String roomId, String roomType, String firstUserId, String secondUserId) {
-        this.roomId = roomId;
+    public ChatRoom(String roomName, String roomType) {
+        this.roomName = roomName;
         this.roomType = roomType;
     }
 
-    public String getRoomId() {
-        return roomId;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public String getRoomType() {

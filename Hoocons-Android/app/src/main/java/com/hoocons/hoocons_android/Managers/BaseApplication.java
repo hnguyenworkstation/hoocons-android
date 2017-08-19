@@ -26,6 +26,8 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hoocons.hoocons_android.CustomUI.FontOverride;
 import com.hoocons.hoocons_android.EventBus.MeetOutPostFailed;
 import com.hoocons.hoocons_android.EventBus.MeetOutPostedSuccess;
@@ -56,6 +58,7 @@ public class BaseApplication extends GlobalContext {
     private static Context context;
     private JobManager jobManager;
     private AmazonS3Client s3Client;
+    private DatabaseReference mDatabase;
 
     @Override
     public void onCreate() {
@@ -166,6 +169,14 @@ public class BaseApplication extends GlobalContext {
             configureJobManager();
         }
         return jobManager;
+    }
+
+    public synchronized DatabaseReference getDatabase() {
+        if (mDatabase == null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+        }
+
+        return mDatabase;
     }
 
     public synchronized String getGoogleServiceKey() {

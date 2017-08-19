@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by hungnguyen on 8/6/17.
  */
-
+@IgnoreExtraProperties
 public class ChatMessage implements Serializable {
     @SerializedName("id")
     private String id;
@@ -22,7 +23,7 @@ public class ChatMessage implements Serializable {
     @SerializedName("content_url")
     private String contentUrl;
     @SerializedName("is_seen")
-    private String isSeen;
+    private boolean isSeen;
     @SerializedName("contact_number")
     private String phoneNumber;
     @SerializedName("contact_name")
@@ -30,8 +31,10 @@ public class ChatMessage implements Serializable {
     @SerializedName("contact_profile_url")
     private String contactProfileUrl;
 
+    private String tag;
+
     public ChatMessage(int userId, String messageType, String createdTime,
-                       String textContent, String contentUrl, String isSeen,
+                       String textContent, String contentUrl, boolean isSeen,
                        String phoneNumber, String contactName, String contactProfileUrl) {
         this.userId = userId;
         this.messageType = messageType;
@@ -64,6 +67,14 @@ public class ChatMessage implements Serializable {
         this.messageType = messageType;
         this.createdTime = createdTime;
         this.textContent = textContent;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getId() {
@@ -114,11 +125,11 @@ public class ChatMessage implements Serializable {
         this.contentUrl = contentUrl;
     }
 
-    public String getIsSeen() {
+    public boolean getIsSeen() {
         return isSeen;
     }
 
-    public void setIsSeen(String isSeen) {
+    public void setIsSeen(boolean isSeen) {
         this.isSeen = isSeen;
     }
 

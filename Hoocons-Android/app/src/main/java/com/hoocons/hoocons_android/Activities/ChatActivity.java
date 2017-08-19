@@ -26,9 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.OnStickerPagerFragmentInteractionListener;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
@@ -37,6 +41,8 @@ import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +72,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     private StickerCombinationFragment stickerCombinationFragment;
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
+    private String chatRoomId;
 
     private final TextWatcher editContentWatcher = new TextWatcher() {
         @Override
@@ -112,9 +119,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
+
         stickerCombinationFragment = new StickerCombinationFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
                 stickerCombinationFragment, "EmotionFragment").commit();
+
+        chatRoomId = "-Krv7hghcmGczIcdjQCt";
 
         mSendButton.setEnabled(false);
         initEmotionLayout();
@@ -234,6 +244,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                 switchEmotionSoftInput();
                 break;
             case R.id.chatroom_send:
+                if (mTextInput.getText().length() > 0) {
+                    ChatMessage message = new ChatMessage(
+                            SharedPreferencesManager.getDefault().getUserId(),
+                            AppConstant.MESSAGE_TYPE_TEXT,
+                            String.valueOf(Calendar.getInstance().getTimeInMillis()),
+                            mTextInput.getText().toString(),
+                            null, false, null, null, null);
+
+                    ChatUtils.pushMessage(chatRoomId, message);
+                }
                 break;
             default:
                 break;
