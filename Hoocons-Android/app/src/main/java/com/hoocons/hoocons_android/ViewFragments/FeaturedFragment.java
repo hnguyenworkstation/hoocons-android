@@ -140,7 +140,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         // Run first init when created
         mSwipeRefLayout.post(
                 new Runnable() {

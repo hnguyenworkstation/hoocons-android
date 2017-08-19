@@ -251,6 +251,8 @@
     <string name="created_channel">Successfully created new channel</string>
     <string name="invalid_desc">Invalid description</string>
     <string name="please_tell_channel_desc">Please tell us a little bit about your channel…</string>
+    <string name="favorites">Favorites</string>
+    <string name="followers">Followers</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>

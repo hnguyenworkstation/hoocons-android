@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:id="@+id/channel_actionbar"
+    android:background="@color/transparent"
+    android:layout_height="?attr/actionBarSize">
+
+    <ImageButton
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/icon_button"
+        android:id="@+id/action_close"
+        android:layout_width="@dimen/actionbar_icon_size"
+        android:layout_height="@dimen/actionbar_icon_size"
+        android:src="@drawable/ic_close_colored"
+        android:layout_marginStart="@dimen/actionbar_margin"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:id="@+id/channel_info"
+        android:layout_toEndOf="@+id/action_close"
+        android:layout_toStartOf="@+id/action_more"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/around_me"
+            android:id="@+id/channel_name"
+            android:textSize="@dimen/custom_channel_toolbar_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/around_me"
+            android:id="@+id/channel_subname"
+            android:textSize="@dimen/custom_toolbar_small_text_size"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/icon_button"
+        android:id="@+id/action_more"
+        android:layout_width="@dimen/actionbar_icon_size"
+        android:layout_height="@dimen/actionbar_icon_size"
+        android:src="@drawable/ic_more_vert_colored"
+        android:layout_marginEnd="@dimen/actionbar_margin"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:id="@+id/linear"
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginEnd="@dimen/margin_12"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray_alpha"/>
+
+</RelativeLayout>

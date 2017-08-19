@@ -10,7 +10,7 @@
         android:id="@+id/custom_toolbar"
         android:background="@color/transparent"
         android:layout_alignParentTop="true">
-        <include layout="@layout/custom_profile_actionbar"/>
+        <include layout="@layout/custom_channel_actionbar"/>
     </RelativeLayout>
 
     <RelativeLayout
