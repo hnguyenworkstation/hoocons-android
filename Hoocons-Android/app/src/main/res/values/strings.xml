@@ -256,6 +256,8 @@
     <string name="messaging">Messaging</string>
     <string name="inbox">Inbox</string>
     <string name="connection">Connection</string>
+    <string name="unread_messages">Unread Messages</string>
+    <string name="recent_convs">Recent Conversations</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>
