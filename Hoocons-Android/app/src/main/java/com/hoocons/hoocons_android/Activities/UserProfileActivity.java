@@ -156,6 +156,7 @@ public class UserProfileActivity extends DraggerActivity
         spaceDecoration = new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST);
 
+        mRecyclerView.addItemDecoration(spaceDecoration);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(false);

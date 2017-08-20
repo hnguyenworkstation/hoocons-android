@@ -48,30 +48,21 @@ public class ChannelAboutFragment extends Fragment implements
         ObservableScrollViewCallbacks, View.OnClickListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
-    @BindView(R.id.small_profile)
-    RelativeLayout mSmallProfile;
     @BindView(R.id.obs_scrollview)
     ObservableRecyclerView mRecyclerView;
 
-    @BindView(R.id.small_profile_header)
-    ImageView mSmallProfileImage;
     @BindView(R.id.wallpaper_image)
     ImageView mWallpaperImage;
 
-    @BindView(R.id.action_back)
+    @BindView(R.id.action_close)
     ImageButton mActionBack;
     @BindView(R.id.action_more)
     ImageButton mActionMore;
 
     @BindView(R.id.wallpaper_progress_bar)
     ProgressBar mWallpaperProgress;
-    @BindView(R.id.small_profile_progress_bar)
-    ProgressBar mSmallProfileProgress;
-
     @BindView(R.id.linear)
     View mLinear;
-    @BindView(R.id.user_display_name)
-    TextView mActionBarDisplayName;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -252,14 +243,10 @@ public class ChannelAboutFragment extends Fragment implements
 
         if (scrollY >= 480) {
             mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.white));
-            mSmallProfile.setVisibility(View.VISIBLE);
-            mActionBarDisplayName.setVisibility(View.VISIBLE);
             mLinear.setVisibility(View.VISIBLE);
         } else {
             mCustomToolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-            mSmallProfile.setVisibility(View.GONE);
             mLinear.setVisibility(View.GONE);
-            mActionBarDisplayName.setVisibility(View.GONE);
         }
     }
 

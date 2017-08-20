@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_margin="@dimen/margin_16"
     android:layout_width="match_parent"
+    android:gravity="center"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -12,29 +13,24 @@
         android:scaleType="fitCenter"
         android:id="@+id/profile_header"/>
 
-    <LinearLayout
+    <TextView
+        android:layout_marginTop="@dimen/margin_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical">
+        android:id="@+id/display_name"
+        android:textSize="@dimen/option_title_size"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:text="Hung Q Nguyen"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/display_name"
-            android:textSize="@dimen/option_title_size"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="Hung Q Nguyen"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nick_name"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_14"
+        android:textColor="@color/gray_alpha"
+        android:text="/@hnguyen123"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nick_name"
-            android:textSize="@dimen/text_12"
-            android:textColor="@color/gray_alpha"
-            android:text="/@hnguyen123"/>
-
-    </LinearLayout>
 </LinearLayout>

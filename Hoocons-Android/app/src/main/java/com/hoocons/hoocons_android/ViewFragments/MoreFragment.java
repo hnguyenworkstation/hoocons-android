@@ -20,6 +20,7 @@ import com.hoocons.hoocons_android.Activities.FindMatchActivity;
 import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +76,19 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
 
         initView();
+        initTypeFaces();
+        initClickListener();
+    }
 
+    private void initTypeFaces() {
+        Context context = getContext();
+
+        // Info name
+        mDisplayName.setTypeface(EasyFonts.robotoBold(context));
+        mNickname.setTypeface(EasyFonts.robotoRegular(context));
+    }
+
+    private void initClickListener() {
         mUserProfile.setOnClickListener(this);
         mFindLove.setOnClickListener(this);
         mHelpCenter.setOnClickListener(this);
