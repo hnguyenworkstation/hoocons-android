@@ -52,6 +52,7 @@ import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -190,6 +191,10 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     LinearLayout mCommentView;
 
     @Nullable
+    @BindView(R.id.comment_text)
+    TextView mCommentText;
+
+    @Nullable
     @BindView(R.id.like_count)
     TextView mLikeCount;
 
@@ -267,6 +272,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                                final EventAdapterListener listener, final int position) {
         initEventHeader(context, response);
         initEventFooter(context, response);
+        initEventTypeFace(context);
 
         assert mTextContent != null;
         if (response.getTextContent() != null && response.getTextContent().length() >  1) {
@@ -293,10 +299,31 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
             if (response.getTextContent() != null && response.getTextContent().length() >  1) {
                 mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
                 mSharedEventTextContent.setVisibility(View.VISIBLE);
+                mSharedEventTextContent.setTypeface(EasyFonts.robotoRegular(context));
             }
         }
 
         initOnClickListener(listener, position);
+    }
+
+    private void initEventTypeFace(final Context context) {
+        assert mLikeCount != null;
+        assert mCommentCount != null;
+        assert mCommentText != null;
+        assert mLoveText != null;
+        assert mTextContent != null;
+        assert mTimeFrame != null;
+        assert mUserDisplayName != null;
+
+        mLoveText.setTypeface(EasyFonts.robotoLight(context));
+        mCommentText.setTypeface(EasyFonts.robotoLight(context));
+        mTimeFrame.setTypeface(EasyFonts.robotoLight(context));
+
+        mLikeCount.setTypeface(EasyFonts.robotoRegular(context));
+        mCommentCount.setTypeface(EasyFonts.robotoRegular(context));
+        mTextContent.setTypeface(EasyFonts.robotoRegular(context));
+
+        mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response) {
@@ -307,6 +334,12 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
         mSharedUserDisplayName.setText(response.getAuthor().getDisplayName());
         mSharedTimeFrame.setText(AppUtils.convertDateTimeFromUTC(response.getCreateAt()));
+
+        mSharedTimeFrame.setTypeface(EasyFonts.robotoLight(context));
+        mSharedUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
+
+        mSharedTimeFrame.setTypeface(EasyFonts.robotoLight(context));
+        mSharedUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
     }
 
     private void initOnClickListener(final EventAdapterListener listener, final int position) {
@@ -434,11 +467,11 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
             loadVideoView(eventResponse.getMedias().get(0));
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
-            loadCheckinMapView(eventResponse);
+            loadCheckinMapView(context, eventResponse);
         }
     }
 
-    private void loadCheckinMapView(final EventResponse eventResponse) {
+    private void loadCheckinMapView(final Context context, final EventResponse eventResponse) {
         assert mCheckinName != null;
         assert mCheckinType != null;
         loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[1]),
@@ -446,6 +479,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
         mCheckinName.setText(eventResponse.getCheckinName());
         mCheckinType.setText(eventResponse.getCheckinAddress());
+
+        mCheckinName.setTypeface(EasyFonts.robotoBold(context));
+        mCheckinType.setTypeface(EasyFonts.robotoRegular(context));
     }
 
     private void loadLocationMapView(String url) {
@@ -583,9 +619,11 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
             assert mDisplayName != null;
             mDisplayName.setText(response.getDisplayName());
+            mDisplayName.setTypeface(EasyFonts.robotoBold(context));
 
             assert mNickname != null;
             mNickname.setText(nickname);
+            mNickname.setTypeface(EasyFonts.robotoRegular(context));
 
             drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
         }
@@ -657,6 +695,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     public void initDummyCardForEvent(final Context context, final boolean isMySelf, final String displayName) {
         assert mDummiesTitle != null;
         mDummiesTitle.setText(context.getResources().getText(R.string.recent_event));
+        mDummiesTitle.setTypeface(EasyFonts.robotoBold(context));
         String details;
 
         if (isMySelf) {
@@ -670,6 +709,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
         assert mDummiesDetail != null;
         mDummiesDetail.setText(details);
+        mDummiesDetail.setTypeface(EasyFonts.robotoRegular(context));
     }
 
     private void loadProfileImage(Context context, String url) {

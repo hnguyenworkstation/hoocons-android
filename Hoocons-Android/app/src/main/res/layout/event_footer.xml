@@ -76,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_4"
                     android:textSize="@dimen/text_14"
+                    android:id="@+id/comment_text"
                     android:textColor="@color/event_timestamp"
                     android:text="Comment"/>
             </LinearLayout>

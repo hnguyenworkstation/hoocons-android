@@ -1,32 +1,65 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.Adapters.MainViewPagerAdapter;
+import com.hoocons.hoocons_android.CustomUI.CustomViewPager;
+import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.viewpager)
-    ViewPager mViewPager;
-    @BindView(R.id.tablayout)
-    TabLayout mTabLayout;
+    CustomViewPager mViewPager;
+    @BindView(R.id.tab_globe)
+    RelativeLayout mTabGlobe;
+    @BindView(R.id.tab_hot)
+    RelativeLayout mTabHot;
+    @BindView(R.id.tab_play)
+    RelativeLayout mTabPlay;
+    @BindView(R.id.tab_chat)
+    RelativeLayout mTabChat;
+    @BindView(R.id.tab_menu)
+    RelativeLayout mTabMenu;
+
+    @BindView(R.id.bottom_tab_globe)
+    ImageView mImageTabGlobe;
+    @BindView(R.id.bottom_tab_hot)
+    ImageView mImageTabHot;
+    @BindView(R.id.bottom_tab_play)
+    ImageView mImageTabPlay;
+    @BindView(R.id.bottom_tab_chat)
+    ImageView mImageTabChat;
+    @BindView(R.id.bottom_tab_menu)
+    ImageView mImageTabMenu;
+
+    @BindView(R.id.left_action)
+    ImageButton mLeftAction;
+    @BindView(R.id.right_action)
+    ImageButton mRightAction;
 
     private MainViewPagerAdapter mMainViewPagerAdapter;
 
-    private final int[] mTabsIcons = {
-            R.drawable.ic_tab_home,
-            R.drawable.ic_tab_discover,
-            R.drawable.ic_tab_chat,
-            R.drawable.ic_tab_notification,
-            R.drawable.ic_tab_setting
-    };
+
+    private static final int LOCATION_PERMISSION_REQUEST = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +70,75 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initViewPager();
-        initTabBar();
+        initClickListener();
+        initViewAt(0);
     }
 
+    private void initClickListener() {
+        mTabGlobe.setOnClickListener(this);
+        mTabHot.setOnClickListener(this);
+        mTabChat.setOnClickListener(this);
+        mTabPlay.setOnClickListener(this);
+        mTabMenu.setOnClickListener(this);
+
+        mRightAction.setOnClickListener(this);
+        mLeftAction.setOnClickListener(this);
+    }
+
+    private void triggerLeftAction() {
+        switch (mViewPager.getCurrentItem()){
+            case 0:
+                if (mayNeedLocationPermission()) {
+                    startNearMeActivity();
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void triggerRightAction() {
+        switch (mViewPager.getCurrentItem()){
+            case 0:
+                startNewCombinationActivity();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private boolean mayNeedLocationPermission() {
+        List<String> permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        return PermissionUtils.requestPermissions(this, LOCATION_PERMISSION_REQUEST, permissions);
+    }
+
+    private void startNearMeActivity() {
+        startActivity(new Intent(this, AroundActivity.class));
+        overridePendingTransition(R.anim.slide_bottom_up, R.anim.fix_anim);
+    }
+
+    private void startNewCombinationActivity() {
+        startActivity(new Intent(this, AddCombinationActivity.class));
+    }
 
     /*
     * SETTING UP BOTTOM BAR
@@ -63,13 +162,8 @@ public class MainActivity extends BaseActivity {
 
                 switch (position) {
                     case 0:
-                        // getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-                        if (mMainViewPagerAdapter.getItem(position) == null) {
-                            mMainViewPagerAdapter.addFragment(new FeaturedFragment(), "Featured");
-                        }
                         break;
                     default:
-                        // getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
                         break;
                 }
             }
@@ -83,17 +177,6 @@ public class MainActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(limit);
     }
 
-
-    private void initTabBar() {
-        mTabLayout.setupWithViewPager(mViewPager);
-        if (mTabLayout != null) {
-            mTabLayout.setupWithViewPager(mViewPager);
-            for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-                mTabLayout.getTabAt(i).setIcon(mTabsIcons[i]);
-            }
-        }
-    }
-
     /*
     * CHANGING MAIN MENU EACH TIME WE CHANGE A FRAGMENT
     * MENUS ARE SET FROM EACH MENU
@@ -105,6 +188,73 @@ public class MainActivity extends BaseActivity {
         invalidateOptionsMenu(); //or respectively its support method.
     }
 
+    private void initViewAt(int position) {
+        switch (position) {
+            case 0:
+                mImageTabGlobe.setSelected(true);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(0);
+                break;
+            case 1:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(true);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(1);
+                break;
+            case 2:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(true);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(2);
+                break;
+            case 3:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(true);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(3);
+                break;
+            case 4:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(true);
+                mViewPager.setCurrentItem(4);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST:
+                Log.i(TAG, "Received response for Location permission request.");
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
+                    startNearMeActivity();
+                } else {
+                    Log.i(TAG, "LOCATION permission was NOT granted.");
+                }
+                return;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -114,4 +264,35 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tab_globe:
+                initViewAt(0);
+                break;
+            case R.id.tab_hot:
+                initViewAt(1);
+                break;
+            case R.id.tab_play:
+                initViewAt(2);
+                break;
+            case R.id.tab_chat:
+                initViewAt(3);
+                break;
+            case R.id.tab_menu:
+                initViewAt(4);
+                break;
+            case R.id.left_action:
+                triggerLeftAction();
+                break;
+            case R.id.right_action:
+                triggerRightAction();
+                break;
+            default:
+                break;
+        }
+    }
+
+
 }

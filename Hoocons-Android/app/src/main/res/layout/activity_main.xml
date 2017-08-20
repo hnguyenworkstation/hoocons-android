@@ -18,31 +18,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:id="@+id/appbar">
+                android:id="@+id/hoocons_tab">
 
-                <android.support.design.widget.TabLayout
-                    android:layout_height="?actionBarSize"
-                    android:layout_width="match_parent"
-                    android:background="@color/white"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:id="@+id/tablayout"
-                    app:tabIndicatorHeight="1dp"
-                    app:tabIndicatorColor="@color/colorPrimary"
-                    app:tabMode="fixed"
-                    app:tabGravity="fill" />
+                <include layout="@layout/custom_main_actionbar"/>
 
-            </android.support.design.widget.AppBarLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/appbar">
+                android:layout_above="@+id/bottom_bar"
+                android:layout_below="@+id/hoocons_tab">
 
-                <android.support.v4.view.ViewPager
+                <com.hoocons.hoocons_android.CustomUI.CustomViewPager
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
@@ -52,6 +44,14 @@
                     android:layout_height="match_parent"
                     android:visibility="gone"
                     android:id="@+id/error_frame"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottom_bar"
+                android:layout_alignParentBottom="true">
+                <include layout="@layout/custom_main_bottom_bar"/>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
