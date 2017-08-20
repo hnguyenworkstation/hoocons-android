@@ -85,7 +85,6 @@ public class MainActivity extends BaseActivity {
 
 
     private void initTabBar() {
-        mTabLayout.setupWithViewPager(mViewPager);
         if (mTabLayout != null) {
             mTabLayout.setupWithViewPager(mViewPager);
             for (int i = 0; i < mTabLayout.getTabCount(); i++) {
