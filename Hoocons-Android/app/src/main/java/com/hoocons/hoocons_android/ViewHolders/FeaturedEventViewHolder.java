@@ -51,6 +51,7 @@ import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -202,6 +203,10 @@ public class FeaturedEventViewHolder extends ViewHolder {
     LinearLayout mCommentView;
 
     @Nullable
+    @BindView(R.id.comment_text)
+    TextView mCommentText;
+
+    @Nullable
     @BindView(R.id.like_count)
     TextView mLikeCount;
 
@@ -228,6 +233,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
                                final EventAdapterListener listener, final int position) {
         initEventHeader(context, response);
         initEventFooter(context, response);
+        initEventTypeFace(context);
 
         assert mTextContent != null;
         if (response.getTextContent() != null && response.getTextContent().length() >  1) {
@@ -254,10 +260,31 @@ public class FeaturedEventViewHolder extends ViewHolder {
             if (response.getTextContent() != null && response.getTextContent().length() >  1) {
                 mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
                 mSharedEventTextContent.setVisibility(View.VISIBLE);
+                mSharedEventTextContent.setTypeface(EasyFonts.robotoRegular(context));
             }
         }
 
         initOnClickListener(listener, position);
+    }
+
+    private void initEventTypeFace(final Context context) {
+        assert mLikeCount != null;
+        assert mCommentCount != null;
+        assert mCommentText != null;
+        assert mLoveText != null;
+        assert mTextContent != null;
+        assert mTimeFrame != null;
+        assert mUserDisplayName != null;
+
+        mLoveText.setTypeface(EasyFonts.robotoLight(context));
+        mCommentText.setTypeface(EasyFonts.robotoLight(context));
+        mTimeFrame.setTypeface(EasyFonts.robotoLight(context));
+
+        mLikeCount.setTypeface(EasyFonts.robotoRegular(context));
+        mCommentCount.setTypeface(EasyFonts.robotoRegular(context));
+        mTextContent.setTypeface(EasyFonts.robotoRegular(context));
+
+        mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response) {
@@ -268,6 +295,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
         mSharedUserDisplayName.setText(response.getAuthor().getDisplayName());
         mSharedTimeFrame.setText(AppUtils.convertDateTimeFromUTC(response.getCreateAt()));
+
+        mSharedTimeFrame.setTypeface(EasyFonts.robotoLight(context));
+        mSharedUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
     }
 
     private void initOnClickListener(final EventAdapterListener listener, final int position) {
@@ -301,6 +331,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
         assert mLikeCount != null;
         assert mCommentCount != null;
         assert mCommentView != null;
+        assert mCommentText != null;
+        assert mLoveIcon != null;
+        assert mLoveText != null;
 
         mCommentBtnScaleSpring = mSpringSystem.createSpring();
         mCommentBtnScaleSpring.addListener(new SimpleSpringListener() {
