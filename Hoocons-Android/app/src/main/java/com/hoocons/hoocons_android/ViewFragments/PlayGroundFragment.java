@@ -9,20 +9,21 @@ import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.R;
 
-public class CommunicationFragment extends Fragment {
+public class PlayGroundFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
 
-    public CommunicationFragment() {
+    public PlayGroundFragment() {
         // Required empty public constructor
     }
 
-    public static CommunicationFragment newInstance(String param1, String param2) {
-        CommunicationFragment fragment = new CommunicationFragment();
+    public static PlayGroundFragment newInstance(String param1, String param2) {
+        PlayGroundFragment fragment = new PlayGroundFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -42,7 +43,8 @@ public class CommunicationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_communication, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_play_ground, container, false);
     }
 
 }

@@ -10,6 +10,7 @@ import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
 import com.hoocons.hoocons_android.ViewFragments.MoreFragment;
 import com.hoocons.hoocons_android.ViewFragments.NotificationFragment;
 import com.hoocons.hoocons_android.ViewFragments.DiscoverFragment;
+import com.hoocons.hoocons_android.ViewFragments.PlayGroundFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     private FeaturedFragment featuredFragment;
     private DiscoverFragment discoverFragment;
     private CommunicationFragment communicationFragment;
+    private PlayGroundFragment playGroundFragment;
     private NotificationFragment notificationFragment;
     private MoreFragment moreFragment;
 
@@ -47,15 +49,15 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
                     discoverFragment = DiscoverFragment.newInstance("0", "test");
                 return discoverFragment;
             case 2:
+                if (playGroundFragment == null) {
+                    playGroundFragment = PlayGroundFragment.newInstance("0", "test");
+                }
+                return playGroundFragment;
+            case 3:
                 if (communicationFragment == null) {
                     communicationFragment = CommunicationFragment.newInstance("0", "test");
                 }
                 return communicationFragment;
-            case 3:
-                if (notificationFragment == null) {
-                    notificationFragment = NotificationFragment.newInstance("0", "test");
-                }
-                return notificationFragment;
             case 4:
                 if (moreFragment == null) {
                     moreFragment = new MoreFragment();
