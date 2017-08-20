@@ -73,21 +73,14 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     RelativeLayout mMainScreen;
     @BindView(R.id.swipe_ref_layout)
     SwipeRefreshLayout mSwipeRefLayout;
-    @BindView(R.id.bottom_menu)
-    RelativeLayout mBottomMenuLayout;
     @BindView(R.id.header_profile)
     ImageView mImageHeader;
-    @BindView(R.id.action_near_me)
-    ImageButton mNearMeBtn;
-    @BindView(R.id.action_add)
-    ImageButton mAddBtn;
 
     @BindView(R.id.featured_recycler)
     RecyclerView mRecycler;
 
     private List<ActivityResponse> activityResponses;
     private final int MAX_ACTIVITIES_PER_PAGE = 20;
-    private final int LOCATION_PERMISSION_REQUEST = 1;
     private final String TAG = FeaturedFragment.class.getSimpleName();
     private boolean isLoading = false;
     private boolean canLoadMore = false;
@@ -163,9 +156,6 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
                         .putExtra(MYSELF, true));
             }
         });
-
-        mAddBtn.setOnClickListener(this);
-        mNearMeBtn.setOnClickListener(this);
     }
 
     private void initView() {
@@ -184,57 +174,11 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
                 .into(mImageHeader);
     }
 
-    private void startNewCombinationActivity() {
-        startActivity(new Intent(getActivity(), AddCombinationActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    private void startNearMeActivity() {
-        startActivity(new Intent(getActivity(), AroundActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        getActivity().overridePendingTransition(R.anim.slide_bottom_up, R.anim.fix_anim);
-    }
-
-    private boolean mayNeedLocationPermission() {
-        List<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-
-        return PermissionUtils.requestPermissions(getActivity(), LOCATION_PERMISSION_REQUEST, permissions);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.action_add:
-                startNewCombinationActivity();
-                break;
-            case R.id.action_near_me:
-                if (mayNeedLocationPermission()) {
-                    startNearMeActivity();
-                }
-                break;
             default:
                 break;
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST:
-                Log.i(TAG, "Received response for Location permission request.");
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
-                    startNearMeActivity();
-                } else {
-                    Log.i(TAG, "LOCATION permission was NOT granted.");
-                }
-                return;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
