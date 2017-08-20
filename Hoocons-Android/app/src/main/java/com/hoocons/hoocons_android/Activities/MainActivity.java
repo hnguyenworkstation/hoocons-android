@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
 import com.hoocons.hoocons_android.Adapters.MainViewPagerAdapter;
+import com.hoocons.hoocons_android.CustomUI.CustomViewPager;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
@@ -14,19 +15,9 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.viewpager)
-    ViewPager mViewPager;
-    @BindView(R.id.tablayout)
-    TabLayout mTabLayout;
+    CustomViewPager mViewPager;
 
     private MainViewPagerAdapter mMainViewPagerAdapter;
-
-    private final int[] mTabsIcons = {
-            R.drawable.ic_tab_home,
-            R.drawable.ic_tab_discover,
-            R.drawable.ic_tab_chat,
-            R.drawable.ic_tab_notification,
-            R.drawable.ic_tab_setting
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +28,6 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initViewPager();
-        initTabBar();
     }
 
 
@@ -81,16 +71,6 @@ public class MainActivity extends BaseActivity {
         });
 
         mViewPager.setOffscreenPageLimit(limit);
-    }
-
-
-    private void initTabBar() {
-        if (mTabLayout != null) {
-            mTabLayout.setupWithViewPager(mViewPager);
-            for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-                mTabLayout.getTabAt(i).setIcon(mTabsIcons[i]);
-            }
-        }
     }
 
     /*
