@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
@@ -61,10 +62,6 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     ProgressBar mMessageProgress;
 
     @Nullable
-    @BindView(R.id.message_state)
-    TextView mMessageState;
-
-    @Nullable
     @BindView(R.id.message_time_frame)
     TextView mMessageTimeFrame;
 
@@ -77,25 +74,79 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_text_content)
     CustomTextView mMessageTextContent;
 
+    /* SIDE FOOTER */
+    @Nullable
+    @BindView(R.id.side_state_layout)
+    RelativeLayout mSideStateLayout;
+
+    @Nullable
+    @BindView(R.id.side_message_state_image)
+    ImageView mSideStateImage;
+
+    @Nullable
+    @BindView(R.id.side_send_message_progress)
+    ProgressBar mSideProgress;
+
+    /* MESSAGE LAYOUT */
+    @Nullable
+    @BindView(R.id.message_layout)
+    RelativeLayout mMessageLayout;
+
     public ChatMessageViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void initMessage(final Context context, ChatMessage message,
-                            OnChatMessageClickListener listener, final int position) {
+    public void initMessage(final Context context, ChatMessage message, ChatMessage previousChatMessage,
+                            OnChatMessageClickListener listener, final int position, final int lastPos) {
+        initGeneralTextView(context, message, previousChatMessage, listener, position, lastPos);
+    }
+
+    private void initGeneralTextView(final Context context, ChatMessage message,
+                                     ChatMessage previousChatMessage,
+                                     final OnChatMessageClickListener listener,
+                                     final int position, final int lastPos) {
+        assert mMessageTextContent != null;
+        assert mMessageProgress != null;
+        assert mMessageStateImage != null;
+        assert mMessageTimeFrame != null;
+        assert mSideStateLayout != null;
+
+        mMessageTextContent.setContent(message.getTextContent());
+        mMessageTimeFrame.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()));
+
         if (message.getUserId() == SharedPreferencesManager.getDefault().getUserId()) {
             if (message.isPosted()) {
+                mMessageTimeFrame.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()));
+                mMessageProgress.setVisibility(View.GONE);
+                mMessageStateImage.setVisibility(View.VISIBLE);
+                mMessageStateImage.setImageDrawable(context.getResources()
+                        .getDrawable(R.drawable.edit_doneblue));
 
+                mSideStateLayout.setVisibility(View.GONE);
+            } else {
+                mMessageTimeFrame.setText(context.getResources().getText(R.string.posting));
+                if (position == lastPos) {
+                    mSideStateLayout.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            assert mMessageFooterLayout != null;
+            if (message.isShownName()) {
+                mMessageFooterLayout.setVisibility(View.VISIBLE);
+            } else {
+                mMessageFooterLayout.setVisibility(View.GONE);
             }
         } else {
 
         }
 
-        assert mMessageTextContent != null;
-        mMessageTextContent.setContent(message.getTextContent());
-
-        assert mMessageTimeFrame != null;
-        mMessageTimeFrame.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()));
+        assert mMessageLayout != null;
+        mMessageLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onMessageClickListener(position);
+            }
+        });
     }
 }

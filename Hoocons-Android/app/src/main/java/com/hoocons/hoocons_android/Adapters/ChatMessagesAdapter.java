@@ -125,7 +125,15 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<ChatMessageViewHol
 
     @Override
     public void onBindViewHolder(ChatMessageViewHolder holder, int position) {
-        holder.initMessage(context, chatMessageList.get(position), listener, position);
+        ChatMessage prev;
+
+        if (position == 0) {
+            prev = null;
+        } else {
+            prev = chatMessageList.get(position - 1);
+        }
+
+        holder.initMessage(context, chatMessageList.get(position), prev, listener, position, chatMessageList.size()-1);
     }
 
     @Override

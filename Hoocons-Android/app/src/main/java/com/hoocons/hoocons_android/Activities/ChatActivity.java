@@ -36,6 +36,7 @@ import com.hoocons.hoocons_android.Adapters.ChatMessagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
@@ -91,6 +92,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     private ChatMessagesAdapter messagesAdapter;
     private boolean isLoading = false;
     private DatabaseReference messageListDataRef;
+    private int lastShownNamePos;
 
     private final TextWatcher editContentWatcher = new TextWatcher() {
         @Override
@@ -138,6 +140,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
+        // Setting up
+        lastShownNamePos = -1;
         chatRoomId = "-Krv7hghcmGczIcdjQCt";
 
         messageListDataRef = BaseApplication.getInstance().getDatabase()
@@ -167,6 +171,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                     ChatMessage message = snapshot.getValue(ChatMessage.class);
                     assert message != null;
                     message.setId(snapshot.getKey());
+                    message.setPosted(true);
                     chatMessageList.add(message);
                 }
 
@@ -376,7 +381,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         ChatMessage message = new ChatMessage(
                 SharedPreferencesManager.getDefault().getUserId(),
                 AppConstant.MESSAGE_TYPE_TEXT,
-                String.valueOf(Calendar.getInstance().getTimeInMillis()),
+                AppUtils.getCurrentUTCTime(),
                 mTextInput.getText().toString(),
                 null, false, null, null, null, false);
         ChatUtils.pushMessage(chatRoomId, message);
@@ -488,7 +493,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onMessageClickListener(int position) {
+        if (lastShownNamePos != -1) {
+            ChatMessage oldMessage = chatMessageList.get(lastShownNamePos);
+            boolean isShown = oldMessage.isShownName();
+            oldMessage.setShownName(!isShown);
+            messagesAdapter.notifyItemChanged(lastShownNamePos);
+        }
 
+        ChatMessage message = chatMessageList.get(position);
+        boolean isShown = message.isShownName();
+        message.setShownName(!isShown);
+        lastShownNamePos = position;
+        messagesAdapter.notifyItemChanged(position);
     }
 
     @Override

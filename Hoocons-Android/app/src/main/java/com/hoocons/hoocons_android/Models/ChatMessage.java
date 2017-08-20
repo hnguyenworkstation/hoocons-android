@@ -34,6 +34,7 @@ public class ChatMessage implements Serializable {
     private boolean isUpdated;
 
     private boolean isPosted;
+    private boolean isShownName;
 
     public ChatMessage() {
     }
@@ -156,5 +157,13 @@ public class ChatMessage implements Serializable {
 
     public void setContactProfileUrl(String contactProfileUrl) {
         this.contactProfileUrl = contactProfileUrl;
+    }
+
+    public boolean isShownName() {
+        return isShownName;
+    }
+
+    public void setShownName(boolean shownName) {
+        isShownName = shownName;
     }
 }
