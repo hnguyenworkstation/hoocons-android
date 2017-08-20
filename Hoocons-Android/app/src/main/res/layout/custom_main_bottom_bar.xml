@@ -11,24 +11,37 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:id="@+id/tab_globe"
         android:layout_weight="1">
 
-        <ImageButton
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_bottom_tab_home"
             android:scaleType="centerInside"
             android:background="@drawable/icon_button"
             android:id="@+id/bottom_tab_globe"/>
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/margin_24"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/ic_online"
+            android:scaleType="centerInside"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:id="@+id/tab_hot"
         android:layout_weight="1">
 
-        <ImageButton
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_bottom_tab_hot"
@@ -41,9 +54,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:id="@+id/tab_play"
         android:layout_weight="1">
 
-        <ImageButton
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_bottom_tab_play"
@@ -56,9 +70,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:id="@+id/tab_chat"
         android:layout_weight="1">
 
-        <ImageButton
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_bottom_tab_chat"
@@ -71,9 +86,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:id="@+id/tab_menu"
         android:layout_weight="1">
 
-        <ImageButton
+        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_bottom_tab_menu"

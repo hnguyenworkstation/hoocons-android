@@ -3,6 +3,9 @@ package com.hoocons.hoocons_android.Activities;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.Adapters.MainViewPagerAdapter;
 import com.hoocons.hoocons_android.CustomUI.CustomViewPager;
@@ -13,9 +16,30 @@ import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.viewpager)
     CustomViewPager mViewPager;
+    @BindView(R.id.tab_globe)
+    RelativeLayout mTabGlobe;
+    @BindView(R.id.tab_hot)
+    RelativeLayout mTabHot;
+    @BindView(R.id.tab_play)
+    RelativeLayout mTabPlay;
+    @BindView(R.id.tab_chat)
+    RelativeLayout mTabChat;
+    @BindView(R.id.tab_menu)
+    RelativeLayout mTabMenu;
+
+    @BindView(R.id.bottom_tab_globe)
+    ImageView mImageTabGlobe;
+    @BindView(R.id.bottom_tab_hot)
+    ImageView mImageTabHot;
+    @BindView(R.id.bottom_tab_play)
+    ImageView mImageTabPlay;
+    @BindView(R.id.bottom_tab_chat)
+    ImageView mImageTabChat;
+    @BindView(R.id.bottom_tab_menu)
+    ImageView mImageTabMenu;
 
     private MainViewPagerAdapter mMainViewPagerAdapter;
 
@@ -28,6 +52,17 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initViewPager();
+        initClickListener();
+
+        initViewAt(0);
+    }
+
+    private void initClickListener() {
+        mTabGlobe.setOnClickListener(this);
+        mTabHot.setOnClickListener(this);
+        mTabChat.setOnClickListener(this);
+        mTabPlay.setOnClickListener(this);
+        mTabMenu.setOnClickListener(this);
     }
 
 
@@ -84,6 +119,53 @@ public class MainActivity extends BaseActivity {
         invalidateOptionsMenu(); //or respectively its support method.
     }
 
+    private void initViewAt(int position) {
+        switch (position) {
+            case 0:
+                mImageTabGlobe.setSelected(true);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(0);
+                break;
+            case 1:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(true);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(1);
+                break;
+            case 2:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(true);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(2);
+                break;
+            case 3:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(true);
+                mImageTabMenu.setSelected(false);
+                mViewPager.setCurrentItem(3);
+                break;
+            case 4:
+                mImageTabGlobe.setSelected(false);
+                mImageTabHot.setSelected(false);
+                mImageTabPlay.setSelected(false);
+                mImageTabChat.setSelected(false);
+                mImageTabMenu.setSelected(true);
+                mViewPager.setCurrentItem(4);
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -92,5 +174,28 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tab_globe:
+                initViewAt(0);
+                break;
+            case R.id.tab_hot:
+                initViewAt(1);
+                break;
+            case R.id.tab_play:
+                initViewAt(2);
+                break;
+            case R.id.tab_chat:
+                initViewAt(3);
+                break;
+            case R.id.tab_menu:
+                initViewAt(4);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -13,33 +13,31 @@ import java.lang.reflect.Field;
  * Created by hungnguyen on 8/20/17.
  */
 public class CustomViewPager  extends ViewPager {
-    private boolean isVertialViewpagerIndex;
-
     public CustomViewPager(Context context) {
         super(context);
-        setCustomScroller();
+        setMyScroller();
     }
 
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setCustomScroller();
+        setMyScroller();
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         // Never allow swiping to switch between pages
-        if (isVertialViewpagerIndex == true) {
-            return super.onInterceptTouchEvent(event);
-        }
-
         return false;
     }
 
-    private void setIsVertialViewPager(boolean isVertialViewPager) {
-        this.isVertialViewpagerIndex = isVertialViewPager;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Never allow swiping to switch between pages
+        return false;
     }
 
-    private void setCustomScroller() {
+    //down one is added for smooth scrolling
+
+    private void setMyScroller() {
         try {
             Class<?> viewpager = ViewPager.class;
             Field scroller = viewpager.getDeclaredField("mScroller");
