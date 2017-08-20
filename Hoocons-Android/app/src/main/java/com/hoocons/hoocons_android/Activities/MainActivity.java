@@ -53,7 +53,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         initViewPager();
         initClickListener();
-
         initViewAt(0);
     }
 
@@ -88,13 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
                 switch (position) {
                     case 0:
-                        // getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-                        if (mMainViewPagerAdapter.getItem(position) == null) {
-                            mMainViewPagerAdapter.addFragment(new FeaturedFragment(), "Featured");
-                        }
                         break;
                     default:
-                        // getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
                         break;
                 }
             }

@@ -24,7 +24,7 @@
                 android:layout_alignParentTop="true"
                 android:id="@+id/hoocons_tab">
 
-                <include layout="@layout/custom_chatroom_toolbar"/>
+                <include layout="@layout/custom_main_actionbar"/>
 
             </RelativeLayout>
 
