@@ -58,10 +58,9 @@ dependencies {
     compile project(':text-link-builder')
     compile project(':image_cropper')
     compile files('libs/rebound-0.3.8.jar')
-    compile("com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1") {
+    compile('com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1') {
         transitive = false
     }
-    compile 'com.android.support:support-core-utils:26.0.0'
     compile 'com.android.support:support-core-utils:26.0.0'
     compile 'com.android.support:appcompat-v7:26.0.0'
     compile 'com.android.support:customtabs:26.0.0'

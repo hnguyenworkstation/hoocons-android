@@ -30,7 +30,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     private NotificationFragment notificationFragment;
     private MoreFragment moreFragment;
 
-    public Context mContext;
+    private Context mContext;
 
     public MainViewPagerAdapter(Context mContext, FragmentManager manager) {
         super(manager);

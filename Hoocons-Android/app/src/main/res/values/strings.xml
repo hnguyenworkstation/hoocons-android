@@ -253,6 +253,9 @@
     <string name="please_tell_channel_desc">Please tell us a little bit about your channel…</string>
     <string name="favorites">Favorites</string>
     <string name="followers">Followers</string>
+    <string name="messaging">Messaging</string>
+    <string name="inbox">Inbox</string>
+    <string name="connection">Connection</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>

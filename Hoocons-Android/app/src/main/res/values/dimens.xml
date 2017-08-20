@@ -258,7 +258,7 @@
     <dimen name="userprof_button_height">40dp</dimen>
 
     <!-- Full Comment Activity -->
-    <dimen name="toolbar_height">50dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
     <dimen name="comment_button_width">60dp</dimen>
 
     <!-- Setting Activity -->
