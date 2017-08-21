@@ -5,6 +5,7 @@ package com.hoocons.hoocons_android.Tasks.JobProperties;
  */
 
 public class JobGroup {
+    public static final String chatroom = "chatroom_group";
     public static final String event = "event_group";
     public static final String channel = "channel_group";
     public static final String userInfo = "user_info_group";

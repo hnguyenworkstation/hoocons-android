@@ -10,9 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hoocons.hoocons_android.EventBus.FetchChatRoomsComplete;
 import com.hoocons.hoocons_android.Interface.OnChatRoomClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchChatRoomsJob;
 import com.vstechlab.easyfonts.EasyFonts;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +56,11 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        EventBus.getDefault().register(this);
+
+        // Fetching chat rooms in background
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchChatRoomsJob());
     }
 
     @Override
@@ -89,6 +100,15 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     @Override
     public void onChatRoomLongClickListener(int position) {
+
+    }
+
+    /**********************************************
+     * EVENTBUS CATCHING FIELDS
+     *  + FetchChatRoomsComplete: received chat rooms
+     ***********************************************/
+    @Subscribe
+    public void onEvent(FetchChatRoomsComplete request) {
 
     }
 }

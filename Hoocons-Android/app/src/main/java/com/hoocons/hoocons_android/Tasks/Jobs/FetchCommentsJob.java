@@ -28,7 +28,7 @@ import retrofit2.Response;
  * Created by hungnguyen on 7/22/17.
  */
 
-public class FetchCommentsJob extends Job implements Serializable {
+public class FetchCommentsJob extends Job {
     private int eventId;
     private int offset;
     private int limit;
