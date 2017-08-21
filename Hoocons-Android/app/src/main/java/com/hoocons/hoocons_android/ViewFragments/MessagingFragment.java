@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ConversationAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
+import com.hoocons.hoocons_android.EventBus.DuplicateObjectError;
 import com.hoocons.hoocons_android.EventBus.FetchChatRoomsComplete;
+import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UserNotFoundError;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
@@ -221,16 +226,22 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         mEmptyAddChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int[] users = {SharedPreferencesManager.getDefault().getUserId(), 1};
+                int[] users = {SharedPreferencesManager.getDefault().getUserId(), 2};
 
                 if (!roomAlreadyExists(users)) {
                     ChatUtils.createNewChatRoomWithUser(users);
+                } else {
+                    Toast.makeText(getContext(), "room exists", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private boolean roomAlreadyExists(int[] users) {
+        if (chatRoomResponses == null || chatRoomResponses.size() == 0) {
+            return false;
+        }
+
         for (ChatRoomResponse response : chatRoomResponses) {
             if (response.getUsers().size() != users.length) {
                 break;
@@ -268,6 +279,11 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     }
 
+    @Override
+    public void onRefresh() {
+
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + FetchChatRoomsComplete: received chat rooms
@@ -281,8 +297,23 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         }
     }
 
-    @Override
-    public void onRefresh() {
+    @Subscribe
+    public void onEvent(TaskCompleteRequest request) {
+        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+    }
 
+    @Subscribe
+    public void onEvent(UserNotFoundError request) {
+        Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(DuplicateObjectError request) {
+        Toast.makeText(getContext(), "duplicate", Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(ServerErrorRequest error) {
+        Toast.makeText(getContext(), "server error", Toast.LENGTH_SHORT).show();
     }
 }

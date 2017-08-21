@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -17,10 +18,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Activities.ChannelActivity;
 import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Activities.FindMatchActivity;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UserNotFoundError;
 import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.R;
 import com.vstechlab.easyfonts.EasyFonts;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -133,7 +138,6 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_header:
-                ChatUtils.initNewChatRoom();
                 startActivity(new Intent(getActivity(), ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.find_love:
@@ -145,6 +149,5 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
-
     }
 }

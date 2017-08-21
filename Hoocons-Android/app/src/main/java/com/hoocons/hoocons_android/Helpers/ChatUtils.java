@@ -4,22 +4,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.ChatRoom;
+import com.hoocons.hoocons_android.Tasks.Jobs.NewChatRoomJob;
 
 /**
  * Created by hungnguyen on 8/19/17.
  */
 
 public class ChatUtils {
-    private static void initNewChatRoom() {
+    private static String initNewChatRoom() {
         DatabaseReference chatRoomPref = BaseApplication.getInstance()
                 .getDatabase().child("chatrooms");
         String chatRoomId = chatRoomPref.push().getKey();
         chatRoomPref.child(chatRoomId)
                 .setValue(new ChatRoom("Testing", AppConstant.CHATROOM_TYPE_SINGLE));
+
+        return chatRoomId;
     }
 
     public static void createNewChatRoomWithUser(int[] users) {
-
+        String newRoomUid = initNewChatRoom();
+        BaseApplication.getInstance().getJobManager()
+                .addJobInBackground(new NewChatRoomJob(users, newRoomUid));
     }
 
     public static void pushMessage(final String chatRoomId, ChatMessage chatMessage) {

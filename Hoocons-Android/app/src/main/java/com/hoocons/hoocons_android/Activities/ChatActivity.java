@@ -2,6 +2,7 @@ package com.hoocons.hoocons_android.Activities;
 
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -140,10 +141,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        chatRoomId = intent.getStringExtra("chatroom_uid");
+
         // Setting up
         lastShownNamePos = -1;
-        chatRoomId = "-Krv7hghcmGczIcdjQCt";
-
         messageListDataRef = BaseApplication.getInstance().getDatabase()
                 .child("messages").child(chatRoomId);
         chatMessageList = new ArrayList<>();
