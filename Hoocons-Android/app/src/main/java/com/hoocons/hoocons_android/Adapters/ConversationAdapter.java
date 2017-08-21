@@ -39,7 +39,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ChatRoomViewHolder
 
     @Override
     public void onBindViewHolder(ChatRoomViewHolder holder, int position) {
-        holder.initView(context, chatRooms.get(position), listener);
+        holder.initView(context, chatRooms.get(position), position, listener);
     }
 
     @Override

@@ -11,20 +11,15 @@ import com.hoocons.hoocons_android.Tasks.Jobs.NewChatRoomJob;
  */
 
 public class ChatUtils {
-    private static String initNewChatRoom() {
+    public static void createNewChatRoomWithUser(int[] users, String roomName) {
         DatabaseReference chatRoomPref = BaseApplication.getInstance()
                 .getDatabase().child("chatrooms");
         String chatRoomId = chatRoomPref.push().getKey();
         chatRoomPref.child(chatRoomId)
-                .setValue(new ChatRoom("Testing", AppConstant.CHATROOM_TYPE_SINGLE));
+                .setValue(new ChatRoom(roomName, AppConstant.CHATROOM_TYPE_SINGLE));
 
-        return chatRoomId;
-    }
-
-    public static void createNewChatRoomWithUser(int[] users) {
-        String newRoomUid = initNewChatRoom();
         BaseApplication.getInstance().getJobManager()
-                .addJobInBackground(new NewChatRoomJob(users, newRoomUid));
+                .addJobInBackground(new NewChatRoomJob(users, chatRoomId));
     }
 
     public static void pushMessage(final String chatRoomId, ChatMessage chatMessage) {

@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,10 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.hoocons.hoocons_android.Activities.ChatActivity;
 import com.hoocons.hoocons_android.Adapters.ConversationAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.DuplicateObjectError;
@@ -34,6 +38,7 @@ import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnChatRoomClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.ChatRoom;
 import com.hoocons.hoocons_android.Networking.Responses.ChatRoomResponse;
 import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
@@ -117,21 +122,21 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_messaging, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_messaging, container, false);
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        // Run first init when created
         mSwipeRefreshLayout.post(
                 new Runnable() {
                     @Override
                     public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
                         BaseApplication.getInstance().getJobManager()
                                 .addJobInBackground(new FetchChatRoomsJob());
                         initView();
@@ -187,31 +192,50 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     private void fetchFireBaseChatRooms(List<ChatRoomResponse> responseList) {
         chatRoomResponses = responseList;
+        final List<String> uids = new ArrayList<>();
 
         for (final ChatRoomResponse response: responseList) {
-            databaseReference.child("chatrooms").child(response.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            try {
-                                ChatRoom chatRoom = dataSnapshot.getValue(ChatRoom.class);
-
-                                assert chatRoom != null;
-                                chatRoom.setUid(response.getUid());
-
-                                chatRooms.add(chatRoom);
-                            } catch (Exception e) {
-                                Log.e(TAG, "onDataChange: " + e.toString());
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+            uids.add(response.getUid());
         }
 
+        databaseReference.child("chatrooms").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatRooms.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (uids.indexOf(snapshot.getKey()) > -1) {
+                        final ChatRoom chatRoom = snapshot.getValue(ChatRoom.class);
+                        assert chatRoom != null;
+                        chatRoom.setUid(snapshot.getKey());
+
+                        Query lastMessageQuery = databaseReference.child("messages").child(snapshot.getKey())
+                                .orderByKey().limitToLast(1);
+                        lastMessageQuery.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                ChatMessage lastMessage = dataSnapshot.getValue(ChatMessage.class);
+                                chatRoom.setLastMessage(lastMessage);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        chatRooms.add(chatRoom);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Log.e(TAG, "fetchFireBaseChatRooms: " + String.valueOf(chatRooms.size()));
         mAdapter.notifyDataSetChanged();
     }
 
@@ -229,7 +253,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
                 int[] users = {SharedPreferencesManager.getDefault().getUserId(), 2};
 
                 if (!roomAlreadyExists(users)) {
-                    ChatUtils.createNewChatRoomWithUser(users);
+                    ChatUtils.createNewChatRoomWithUser(users, "Hung Nguyen");
                 } else {
                     Toast.makeText(getContext(), "room exists", Toast.LENGTH_SHORT).show();
                 }
@@ -271,7 +295,9 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     @Override
     public void onChatRoomClickListener(int position) {
-        
+        Intent chatRoomIntent = new Intent(getActivity(), ChatActivity.class);
+        chatRoomIntent.putExtra("chatroom_uid", chatRooms.get(position).getUid());
+        startActivity(chatRoomIntent);
     }
 
     @Override
@@ -281,7 +307,10 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     @Override
     public void onRefresh() {
-
+        mSwipeRefreshLayout.setRefreshing(true);
+        BaseApplication.getInstance().getJobManager()
+                .addJobInBackground(new FetchChatRoomsJob());
+        initView();
     }
 
     /**********************************************
@@ -295,6 +324,8 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         } else {
             initEmptyScreen();
         }
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Subscribe
@@ -314,6 +345,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
     @Subscribe
     public void onEvent(ServerErrorRequest error) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getContext(), "server error", Toast.LENGTH_SHORT).show();
     }
 }

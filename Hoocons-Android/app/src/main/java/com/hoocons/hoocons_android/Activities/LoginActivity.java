@@ -75,6 +75,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void completeLoginActivity() {
+        AppUtils.signInAnonymously(this);
         SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="59dp"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:id="@+id/chatroom_rootlayout"
     android:gravity="center_vertical" >
 
     <ImageView
+        android:layout_margin="@dimen/margin_12"
         android:id="@+id/chatroom_profile"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -20,12 +22,12 @@
         android:text="Hung Nguyen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_12"
-        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_12"
         android:layout_toEndOf="@+id/chatroom_profile"
         android:textStyle="bold"
         android:textColor="#000"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_18" />
 
     <TextView
         android:id="@+id/chatroom_lastmsg_time"
@@ -34,7 +36,7 @@
         android:text="14:11 PM"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="7dp"
-        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_12"
         android:textColor="#888888"
         android:textSize="13sp" />
 
@@ -47,13 +49,13 @@
         android:layout_below="@+id/chatroom_lastmsg_time"
         android:background="@drawable/unread_bubble"
         android:layout_marginEnd="@dimen/margin_20"
-        android:layout_centerVertical="true"
         android:textColor="@android:color/white"
         android:textSize="12sp"
         />
 
     <TextView
-        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginStart="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_4"
         android:id="@+id/chatroom_last_message"
         android:layout_toStartOf="@id/chatroom_lastmsg_time"
         android:layout_below="@+id/chatroom_name"
@@ -63,8 +65,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textStyle="normal"
-        android:padding="@dimen/margin_4"
         android:text="asdknasdkaskdasnkdnakdnksn dkansdkasndkasndkandk aksndkasndka naksdnak naksdnaksdnaksnd knsdaknd kansd"
         android:textColor="#888888"
-        android:textSize="@dimen/text_14" />
+        android:textSize="@dimen/text_16" />
 </RelativeLayout>

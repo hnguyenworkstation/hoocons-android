@@ -42,7 +42,24 @@ public class ChatRoomViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initView(Context context, ChatRoom chatRoom, OnChatRoomClickListener listener) {
+    public void initView(Context context, ChatRoom chatRoom, final int position, OnChatRoomClickListener listener) {
+        initOnClick(position, listener);
+    }
 
+    private void initOnClick(final int position, final OnChatRoomClickListener listener) {
+        roomLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onChatRoomClickListener(position);
+            }
+        });
+
+        roomLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onChatRoomLongClickListener(position);
+                return false;
+            }
+        });
     }
 }
