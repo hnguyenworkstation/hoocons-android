@@ -16,10 +16,12 @@ public class ChatRoom implements Serializable {
     @SerializedName("room_type")
     private String roomType;
 
+    private String uid;
     private ChatMessage lastMessage;
     private String roomProfileUrl;
 
     public ChatRoom() {
+
     }
 
     public ChatRoom(String roomType) {
@@ -29,6 +31,14 @@ public class ChatRoom implements Serializable {
     public ChatRoom(String roomName, String roomType) {
         this.roomName = roomName;
         this.roomType = roomType;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getRoomProfileUrl() {
