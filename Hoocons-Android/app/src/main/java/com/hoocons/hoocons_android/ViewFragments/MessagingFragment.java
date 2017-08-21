@@ -4,22 +4,25 @@ package com.hoocons.hoocons_android.ViewFragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hoocons.hoocons_android.Interface.OnChatRoomClickListener;
 import com.hoocons.hoocons_android.R;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessagingFragment extends Fragment {
-    @BindView(R.id.communicate_unread_textview)
-    TextView mUnreadTitle;
+public class MessagingFragment extends Fragment implements OnChatRoomClickListener {
     @BindView(R.id.communicate_older_textview)
     TextView mRecentConvsTitle;
+
+    @BindView(R.id.convs_recycler)
+    RecyclerView mConvRecycler;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -75,7 +78,16 @@ public class MessagingFragment extends Fragment {
     }
 
     private void initTypeFaces() {
-        mUnreadTitle.setTypeface(EasyFonts.robotoBold(getContext()));
         mRecentConvsTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+    }
+
+    @Override
+    public void onChatRoomClickListener(int position) {
+        
+    }
+
+    @Override
+    public void onChatRoomLongClickListener(int position) {
+
     }
 }

@@ -1,11 +1,14 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hoocons.hoocons_android.Interface.OnChatRoomClickListener;
+import com.hoocons.hoocons_android.Models.ChatRoom;
 import com.hoocons.hoocons_android.R;
 
 import butterknife.BindView;
@@ -15,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by hungnguyen on 8/20/17.
  */
 
-public class ReadChatRoomViewHolder extends RecyclerView.ViewHolder {
+public class ChatRoomViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.chatroom_profile)
     ImageView roomProfile;
 
@@ -31,11 +34,15 @@ public class ReadChatRoomViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.chatroom_msg_state)
     ImageView roomStatus;
 
-    @BindView(R.id.chatroom_read_rootlayout)
+    @BindView(R.id.chatroom_rootlayout)
     RelativeLayout roomLayout;
 
-    public ReadChatRoomViewHolder(View itemView) {
+    public ChatRoomViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+    }
+
+    public void initView(Context context, ChatRoom chatRoom, OnChatRoomClickListener listener) {
+
     }
 }

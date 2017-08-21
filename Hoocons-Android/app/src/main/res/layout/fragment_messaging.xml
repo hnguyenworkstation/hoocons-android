@@ -27,22 +27,6 @@
 
                 <TextView
                     android:layout_margin="@dimen/margin_10"
-                    android:id="@+id/communicate_unread_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/unread_messages"
-                    android:textSize="@dimen/text_16" />
-
-                <android.support.v7.widget.RecyclerView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/communication_unread_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </android.support.v7.widget.RecyclerView>
-
-                <TextView
-                    android:layout_margin="@dimen/margin_10"
                     android:id="@+id/communicate_older_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +36,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/communication_read_recycler"
+                    android:id="@+id/convs_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </android.support.v7.widget.RecyclerView>
