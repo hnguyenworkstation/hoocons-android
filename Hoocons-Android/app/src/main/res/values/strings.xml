@@ -19,6 +19,10 @@
     <string name="no_connection_tittle">Failed to connect to internet</string>
     <string name="no_connection_message">Please check your device\'s internet connection and try again</string>
 
+    <string name="no_chatroom_title">No Conversation</string>
+    <string name="start_making_conversation">Start chatting with friends now..</string>
+    <string name="start_chat">Start Chat</string>
+
     <!-- NOTIFICATION FRAGMENT -->
     <string name="null_notification_title">No notifications yet</string>
     <string name="null_notification_message">You have not received any notifications from your followed friends yet. Start making friends now! Click here</string>

@@ -10,12 +10,16 @@ import com.hoocons.hoocons_android.Models.ChatRoom;
  */
 
 public class ChatUtils {
-    public static void initNewChatRoom() {
+    private static void initNewChatRoom() {
         DatabaseReference chatRoomPref = BaseApplication.getInstance()
                 .getDatabase().child("chatrooms");
         String chatRoomId = chatRoomPref.push().getKey();
         chatRoomPref.child(chatRoomId)
                 .setValue(new ChatRoom("Testing", AppConstant.CHATROOM_TYPE_SINGLE));
+    }
+
+    public static void createNewChatRoomWithUser(int[] users) {
+
     }
 
     public static void pushMessage(final String chatRoomId, ChatMessage chatMessage) {

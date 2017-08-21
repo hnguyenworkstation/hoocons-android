@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.hoocons.hoocons_android.ViewFragments.MessagingFragment">
 
-    <org.aisen.android.ui.widget.swipyrefresh.SwipyRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe_ref">
@@ -15,7 +15,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
@@ -25,31 +25,39 @@
                     android:layout_height="match_parent">
                 </android.support.v7.widget.RecyclerView>
 
-                <TextView
-                    android:layout_margin="@dimen/margin_10"
-                    android:id="@+id/communicate_older_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/recent_convs"
-                    android:textSize="@dimen/text_16" />
-
-                <android.support.v7.widget.RecyclerView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/convs_recycler"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="match_parent"
+                    android:id="@+id/conversation_list_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_10"
+                        android:id="@+id/communicate_older_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="@string/recent_convs"
+                        android:textSize="@dimen/text_16" />
+
+                    <android.support.v7.widget.RecyclerView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/convs_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginTop="64dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/empty_convs_view">
+                    <include layout="@layout/empty_list_chatrooms_layout"/>
+                </RelativeLayout>
             </LinearLayout>
-
         </android.support.v4.widget.NestedScrollView>
-    </org.aisen.android.ui.widget.swipyrefresh.SwipyRefreshLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:id="@+id/empty_convs_view">
-
-    </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

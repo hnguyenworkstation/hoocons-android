@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,11 +23,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ConversationAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.FetchChatRoomsComplete;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.ChatUtils;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnChatRoomClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.ChatRoom;
 import com.hoocons.hoocons_android.Networking.Responses.ChatRoomResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchChatRoomsJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchFeaturedActivityJob;
@@ -34,6 +40,7 @@ import com.vstechlab.easyfonts.EasyFonts;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +48,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MessagingFragment extends Fragment implements OnChatRoomClickListener, SwipeRefreshLayout.OnRefreshListener {
+    @BindView(R.id.conversation_list_layout)
+    LinearLayout mConversationList;
     @BindView(R.id.communicate_older_textview)
     TextView mRecentConvsTitle;
     @BindView(R.id.convs_recycler)
     RecyclerView mConvRecycler;
     @BindView(R.id.swipe_ref)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    /* Empty View*/
+    @BindView(R.id.empty_add_chat_btn)
+    LinearLayout mEmptyAddChatBtn;
+    @BindView(R.id.empty_convs_view)
+    RelativeLayout mEmptyLayout;
+    @BindView(R.id.title)
+    TextView mEmptyTitle;
+    @BindView(R.id.message)
+    TextView mEmptyMessage;
+    @BindView(R.id.empty_btn_text)
+    TextView mEmptyButtonText;
 
     private final String TAG = MessagingFragment.class.getSimpleName();
     private List<ChatRoom> chatRooms;
@@ -189,6 +210,53 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         mAdapter.notifyDataSetChanged();
     }
 
+    private void initEmptyScreen() {
+        mConversationList.setVisibility(View.GONE);
+        mEmptyLayout.setVisibility(View.VISIBLE);
+
+        mEmptyTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+        mEmptyMessage.setTypeface(EasyFonts.robotoRegular(getContext()));
+        mEmptyButtonText.setTypeface(EasyFonts.robotoBold(getContext()));
+
+        mEmptyAddChatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int[] users = {SharedPreferencesManager.getDefault().getUserId(), 1};
+
+                if (!roomAlreadyExists(users)) {
+                    ChatUtils.createNewChatRoomWithUser(users);
+                }
+            }
+        });
+    }
+
+    private boolean roomAlreadyExists(int[] users) {
+        for (ChatRoomResponse response : chatRoomResponses) {
+            if (response.getUsers().size() != users.length) {
+                break;
+            } else {
+                boolean found = true;
+                List<Integer> listUserIds = new ArrayList<>();
+                for (SemiUserInfoResponse user: response.getUsers()) {
+                    listUserIds.add(user.getUser());
+                }
+
+                for (int id: users) {
+                    if (listUserIds.indexOf(id) == -1){
+                        found = false;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     @Override
     public void onChatRoomClickListener(int position) {
@@ -206,7 +274,11 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
      ***********************************************/
     @Subscribe
     public void onEvent(FetchChatRoomsComplete request) {
-        fetchFireBaseChatRooms(request.getRoomResponseList());
+        if (request.getRoomResponseList().size() > 0) {
+            fetchFireBaseChatRooms(request.getRoomResponseList());
+        } else {
+            initEmptyScreen();
+        }
     }
 
     @Override
