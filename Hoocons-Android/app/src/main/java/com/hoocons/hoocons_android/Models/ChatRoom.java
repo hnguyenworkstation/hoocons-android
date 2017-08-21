@@ -16,6 +16,9 @@ public class ChatRoom implements Serializable {
     @SerializedName("room_type")
     private String roomType;
 
+    private ChatMessage lastMessage;
+    private String roomProfileUrl;
+
     public ChatRoom() {
     }
 
@@ -26,6 +29,14 @@ public class ChatRoom implements Serializable {
     public ChatRoom(String roomName, String roomType) {
         this.roomName = roomName;
         this.roomType = roomType;
+    }
+
+    public String getRoomProfileUrl() {
+        return roomProfileUrl;
+    }
+
+    public void setRoomProfileUrl(String roomProfileUrl) {
+        this.roomProfileUrl = roomProfileUrl;
     }
 
     public String getRoomName() {
@@ -42,5 +53,13 @@ public class ChatRoom implements Serializable {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public ChatMessage getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(ChatMessage lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }

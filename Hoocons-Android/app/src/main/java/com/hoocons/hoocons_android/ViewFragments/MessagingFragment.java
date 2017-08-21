@@ -81,6 +81,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         mRecentConvsTitle.setTypeface(EasyFonts.robotoBold(getContext()));
     }
 
+
     @Override
     public void onChatRoomClickListener(int position) {
         

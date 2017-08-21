@@ -4,6 +4,8 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hungnguyen on 8/6/17.
@@ -32,6 +34,8 @@ public class ChatMessage implements Serializable {
     private String contactProfileUrl;
     @SerializedName("is_updated")
     private boolean isUpdated;
+    @SerializedName("is_seen_by")
+    private List<Integer> isSeenBy;
 
     private boolean isPosted;
     private boolean isShownName;
@@ -53,6 +57,14 @@ public class ChatMessage implements Serializable {
         this.contactName = contactName;
         this.contactProfileUrl = contactProfileUrl;
         this.isUpdated = isUpdated;
+    }
+
+    public List<Integer> getIsSeenBy() {
+        return isSeenBy;
+    }
+
+    public void setIsSeenBy(List<Integer> isSeenBy) {
+        this.isSeenBy = isSeenBy;
     }
 
     public boolean isUpdated() {
