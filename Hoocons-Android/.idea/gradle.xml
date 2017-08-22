@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/text-link-builder" />
             <option value="$PROJECT_DIR$/web_agent" />
             <option value="$PROJECT_DIR$/xhs-emoji" />
+            <option value="$PROJECT_DIR$/xhs-keyboard" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
