@@ -107,17 +107,15 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     private void initTimeHeader(final Context context, ChatMessage message, ChatMessage nextMessage) {
         assert mTimeTitle != null;
         assert mTimeFrameHeaderLayout != null;
-
-        if (message.isShouldShowTimeHeader()) {
-            mTimeFrameHeaderLayout.setVisibility(View.VISIBLE);
-            mTimeTitle.setTypeface(EasyFonts.robotoBold(context));
+        long diffTime = 0;
+        if (nextMessage != null) {
+            diffTime = AppUtils.diffTime(nextMessage.getCreatedTime(), message.getCreatedTime());
         }
 
-        if (nextMessage != null) {
-            long diffTime = AppUtils.diffTime(message.getCreatedTime(), nextMessage.getCreatedTime());
-            if (diffTime > 480 || diffTime < -480) {
-                nextMessage.setShouldShowTimeHeader(true);
-            }
+        if (message.isShouldShowTimeHeader() || diffTime > 480 || diffTime < -480) {
+            mTimeFrameHeaderLayout.setVisibility(View.VISIBLE);
+            mTimeTitle.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()).toUpperCase());
+            mTimeTitle.setTypeface(EasyFonts.robotoBold(context));
         }
     }
 
