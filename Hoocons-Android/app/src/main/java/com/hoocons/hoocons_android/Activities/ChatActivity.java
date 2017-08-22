@@ -16,7 +16,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ChatMessagesAdapter;
-import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
@@ -50,7 +48,6 @@ import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.ViewFragments.CommonEmojiFragment;
 import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 
 import org.aisen.android.common.utils.BitmapUtil;
@@ -58,7 +55,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -87,7 +83,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     View mRootContainer;
 
     private StickerCombinationFragment stickerCombinationFragment;
-    private CommonEmojiFragment commonEmojiFragment;
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
     private String chatRoomId;
@@ -152,19 +147,21 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                 .child("messages").child(chatRoomId);
         chatMessageList = new ArrayList<>();
 
-        stickerCombinationFragment = new StickerCombinationFragment();
-        commonEmojiFragment = CommonEmojiFragment.newInstance("1", "1");
-
-        getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                commonEmojiFragment, "EmotionFragment").commit();
-
 
         mSendButton.setEnabled(false);
 
+        initCommonEmojiLayout();
         initRecyclerView();
         initDataChangeListener();
         initEmotionLayout();
         initOnListener();
+    }
+
+    private void initCommonEmojiLayout() {
+        stickerCombinationFragment = new StickerCombinationFragment();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
+                stickerCombinationFragment, "EmotionFragment").commit();
     }
 
     private void initDataChangeListener() {

@@ -1,23 +1,8 @@
 package com.sj.emoji;
 
-/**
- * Created by sj on 6/13/16.
- */
-/**
- * Created by sj on 16/3/22.
- */
 public class DefEmoticons {
+    private static EmojiBean[] sDefEmojiArray;
 
-    public static EmojiBean[] sDefEmojiArray;
-
-    /**
-     * there are some high frequency of use of emoji
-     * <p>
-     * see that on res/mipmap-xhdpi.
-     * the complete emoji image source -> https://github.com/w446108264/AndroidEmoji/blob/master/AndroidEmoji/simple/assets.
-     * </p>
-     * @return
-     */
     public static EmojiBean[] getDefEmojiArray() {
         if (sDefEmojiArray == null || sDefEmojiArray.length == 0) {
             sDefEmojiArray = new EmojiBean[]{

@@ -5,6 +5,9 @@ package com.hoocons.hoocons_android.Helpers;
  */
 
 public class AppConstant {
+    public static int EMOTICON_CLICK_TEXT = 1;
+    public static int EMOTICON_CLICK_BIGIMAGE = 2;
+
     // AWS S3 Path constants
     public static final String CHANNEL_PATH = "channels";
 
