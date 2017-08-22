@@ -39,6 +39,7 @@ public class ChatMessage implements Serializable {
 
     private boolean isPosted;
     private boolean isShownName;
+    private boolean shouldShowTimeHeader;
 
     public ChatMessage() {
     }
@@ -177,5 +178,13 @@ public class ChatMessage implements Serializable {
 
     public void setShownName(boolean shownName) {
         isShownName = shownName;
+    }
+
+    public boolean isShouldShowTimeHeader() {
+        return shouldShowTimeHeader;
+    }
+
+    public void setShouldShowTimeHeader(boolean shouldShowTimeHeader) {
+        this.shouldShowTimeHeader = shouldShowTimeHeader;
     }
 }

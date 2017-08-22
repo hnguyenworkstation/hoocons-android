@@ -16,6 +16,7 @@ import com.hoocons.hoocons_android.Interface.OnChatMessageClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.w3c.dom.Text;
 
@@ -33,7 +34,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
     @Nullable
     @BindView(R.id.time_header)
-    LinearLayout mTimeFrameLayout;
+    LinearLayout mTimeFrameHeaderLayout;
 
     /* MESSAGE HEADER LAYOUT */
     @Nullable
@@ -97,13 +98,30 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initMessage(final Context context, ChatMessage message, ChatMessage previousChatMessage,
+    public void initMessage(final Context context, ChatMessage message, ChatMessage nextMessage,
                             OnChatMessageClickListener listener, final int position, final int lastPos) {
-        initGeneralTextView(context, message, previousChatMessage, listener, position, lastPos);
+        initTimeHeader(context, message, nextMessage);
+        initGeneralTextView(context, message, listener, position, lastPos);
+    }
+
+    private void initTimeHeader(final Context context, ChatMessage message, ChatMessage nextMessage) {
+        assert mTimeTitle != null;
+        assert mTimeFrameHeaderLayout != null;
+
+        if (message.isShouldShowTimeHeader()) {
+            mTimeFrameHeaderLayout.setVisibility(View.VISIBLE);
+            mTimeTitle.setTypeface(EasyFonts.robotoBold(context));
+        }
+
+        if (nextMessage != null) {
+            long diffTime = AppUtils.diffTime(message.getCreatedTime(), nextMessage.getCreatedTime());
+            if (diffTime > 480 || diffTime < -480) {
+                nextMessage.setShouldShowTimeHeader(true);
+            }
+        }
     }
 
     private void initGeneralTextView(final Context context, ChatMessage message,
-                                     ChatMessage previousChatMessage,
                                      final OnChatMessageClickListener listener,
                                      final int position, final int lastPos) {
         assert mMessageTextContent != null;
@@ -123,7 +141,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
                 mMessageStateImage.setImageDrawable(context.getResources()
                         .getDrawable(R.drawable.edit_doneblue));
 
-                mSideStateLayout.setVisibility(View.GONE);
+                mSideStateLayout.setVisibility(View.INVISIBLE);
             } else {
                 mMessageTimeFrame.setText(context.getResources().getText(R.string.posting));
                 if (position == lastPos) {

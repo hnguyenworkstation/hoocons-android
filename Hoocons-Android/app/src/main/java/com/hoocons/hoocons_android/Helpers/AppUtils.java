@@ -243,6 +243,58 @@ public class AppUtils {
         return parcel;
     }
 
+    public static long diffTime(String dateTime1, String dateTime2) {
+        String tempDate1 = parseRightTimeFormat(dateTime1);
+        String tempDate2 = parseRightTimeFormat(dateTime2);
+
+        assert tempDate1 != null;
+        assert tempDate2 != null;
+
+        Calendar cal2 = Calendar.getInstance();
+        if (tempDate2.length() == 13) {
+            try {
+                cal2.setTimeInMillis(Long.parseLong(tempDate2));
+            } catch (Exception e) {
+                cal2.setTimeInMillis(Date.parse(tempDate2));
+            }
+        } else {
+            cal2.setTimeInMillis(Date.parse(tempDate2));
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        if (tempDate1.length() == 13) {
+            try {
+                cal1.setTimeInMillis(Long.parseLong(tempDate1));
+            } catch (Exception e) {
+                cal1.setTimeInMillis(Date.parse(tempDate1));
+            }
+        } else {
+            cal1.setTimeInMillis(Date.parse(tempDate1));
+        }
+
+        return (cal2.getTimeInMillis() - cal1.getTimeInMillis()) / 1000;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private static String parseRightTimeFormat(String time) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            TimeZone tz = cal.getTimeZone();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            output.setTimeZone(tz);
+
+            Date d = sdf.parse(time);
+
+            return String.valueOf(d.getTime());
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
     @SuppressLint("SimpleDateFormat")
     public static String getCurrentUTCTime() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

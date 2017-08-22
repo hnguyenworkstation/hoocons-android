@@ -174,7 +174,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                     assert message != null;
                     message.setId(snapshot.getKey());
                     message.setPosted(true);
-                    chatMessageList.add(message);
+                    chatMessageList.add(0, message);
                 }
 
                 messagesAdapter.notifyDataSetChanged();
@@ -241,14 +241,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     private void initRecyclerView() {
         messagesAdapter = new ChatMessagesAdapter(this, chatMessageList, this);
 
-        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
+        mLayoutManager.setReverseLayout(true);
+
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(messagesAdapter);
-        mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(mLayoutManager) {
 
             @Override
             protected void loadMoreItems() {
@@ -390,8 +392,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
 
         // Add temporary message to the list
         message.setPosted(false);
-        chatMessageList.add(chatMessageList.size(), message);
-        mRecyclerView.smoothScrollToPosition(chatMessageList.size() - 1);
+        chatMessageList.add(0, message);
+        mRecyclerView.smoothScrollToPosition(0);
 
         mTextInput.setText("");
     }
