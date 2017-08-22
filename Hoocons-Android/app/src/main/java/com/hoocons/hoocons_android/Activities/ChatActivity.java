@@ -50,6 +50,7 @@ import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.hoocons.hoocons_android.ViewFragments.CommonEmojiFragment;
 import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 
 import org.aisen.android.common.utils.BitmapUtil;
@@ -86,6 +87,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     View mRootContainer;
 
     private StickerCombinationFragment stickerCombinationFragment;
+    private CommonEmojiFragment commonEmojiFragment;
     private int emotionHeight;
     private final LayoutTransition transitioner = new LayoutTransition();
     private String chatRoomId;
@@ -151,8 +153,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         chatMessageList = new ArrayList<>();
 
         stickerCombinationFragment = new StickerCombinationFragment();
+        commonEmojiFragment = CommonEmojiFragment.newInstance("1", "1");
+
         getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                stickerCombinationFragment, "EmotionFragment").commit();
+                commonEmojiFragment, "EmotionFragment").commit();
 
 
         mSendButton.setEnabled(false);
