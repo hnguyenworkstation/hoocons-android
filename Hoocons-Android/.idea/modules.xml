@@ -15,6 +15,8 @@
       <module fileurl="file://$PROJECT_DIR$/swipecard_library/swipecard_library.iml" filepath="$PROJECT_DIR$/swipecard_library/swipecard_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/text-link-builder/text-link-builder.iml" filepath="$PROJECT_DIR$/text-link-builder/text-link-builder.iml" />
       <module fileurl="file://$PROJECT_DIR$/web_agent/web_agent.iml" filepath="$PROJECT_DIR$/web_agent/web_agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xhs-emoji/xhs-emoji.iml" filepath="$PROJECT_DIR$/xhs-emoji/xhs-emoji.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xhs-keyboard/xhs-keyboard.iml" filepath="$PROJECT_DIR$/xhs-keyboard/xhs-keyboard.iml" />
     </modules>
   </component>
 </project>

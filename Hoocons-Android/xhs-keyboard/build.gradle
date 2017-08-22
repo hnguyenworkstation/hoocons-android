@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+
+group='com.github.w446108264'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 22
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:25.3.1'
+}

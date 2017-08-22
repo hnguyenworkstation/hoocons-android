@@ -57,6 +57,8 @@ dependencies {
     compile project(':dialogs-commons')
     compile project(':text-link-builder')
     compile project(':image_cropper')
+    compile project(':xhs-keyboard')
+    compile project(':xhs-emoji')
     compile files('libs/rebound-0.3.8.jar')
     compile('com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1') {
         transitive = false
