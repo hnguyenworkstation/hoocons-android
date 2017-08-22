@@ -26,46 +26,18 @@
                 <include layout="@layout/custom_chatroom_toolbar"/>
             </LinearLayout>
 
-            <LinearLayout
+            <sj.keyboard.XhsEmoticonsKeyBoard
+                android:layout_below="@+id/custom_toolbar"
+                android:id="@+id/ek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/root_layout"
-                android:layout_below="@+id/custom_toolbar"
-                android:orientation="vertical">
-
-                <LinearLayout
+                android:orientation="vertical"
+                app:layout_behavior="com.xhsemoticonskeyboard.common.widget.AutoHeightBehavior">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/message_list"
                     android:layout_width="match_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:id="@+id/root_container">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dip"
-                        android:layout_weight="1">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/message_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
-
-                    <include
-                        layout="@layout/chatroom_footer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chatroom_footer"/>
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/emo_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#343434"
-                    android:visibility="gone"/>
-            </LinearLayout>
+                    android:layout_height="match_parent"/>
+            </sj.keyboard.XhsEmoticonsKeyBoard>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

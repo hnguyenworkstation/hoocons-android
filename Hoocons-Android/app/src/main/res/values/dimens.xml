@@ -315,6 +315,7 @@
     <dimen name="meetout_image_height">200dp</dimen>
     <dimen name="meetout_card_height">400dp</dimen>
     <dimen name="meetout_header_image">248dp</dimen>
+    <dimen name="item_emoticon_size_big">60dp</dimen>
 
 
 </resources>
