@@ -55,7 +55,7 @@ import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.Parcel.UserParcel;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchPostedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetUserInfoJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
@@ -117,8 +117,10 @@ public class UserProfileActivity extends DraggerActivity
 
     private UserInfoResponse userInfoResponse;
     private UserRelatedDetailsAdapter mEventsAdapter;
+    private boolean loadComplete = false;
     private boolean isLoading = false;
     private UserParcel userParcel;
+    private int currentPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,15 +357,15 @@ public class UserProfileActivity extends DraggerActivity
     public void onEvent(FetchUserInfoCompleteEvBusRequest request) {
         initViewWithCompleteInfo(request.getmResponse());
 
-        jobManager.addJobInBackground(new FetchCreatedEventJob(eventResponseList.size(),
-                eventResponseList.size() + EVENT_PACK));
+        // Load page 1 after complete getting user data
+        jobManager.addJobInBackground(new FetchPostedEventJob(userParcel.getUserId(), 1));
     }
 
     @Subscribe
     public void onEvent(FetchEventListSuccessEvBusRequest request) {
-        canLoadMore = request.getResponseList().size() >= EVENT_PACK;
-
-        eventResponseList.addAll(request.getResponseList());
+        canLoadMore = request.getApiViewSet().getNext() != null;
+        currentPage++;
+        eventResponseList.addAll(request.getApiViewSet().getResults());
         mEventsAdapter.notifyDataSetChanged();
     }
 

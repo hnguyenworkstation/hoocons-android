@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.EventBus;
 
+import com.hoocons.hoocons_android.Networking.ApiViewSets.EventsApiViewSet;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 
 import java.util.List;
@@ -9,17 +10,17 @@ import java.util.List;
  */
 
 public class FetchEventListSuccessEvBusRequest {
-    private List<EventResponse> responseList;
+    private EventsApiViewSet apiViewSet;
 
-    public FetchEventListSuccessEvBusRequest(List<EventResponse> list) {
-        this.responseList = list;
+    public FetchEventListSuccessEvBusRequest(EventsApiViewSet apiViewSet) {
+        this.apiViewSet = apiViewSet;
     }
 
-    public List<EventResponse> getResponseList() {
-        return responseList;
+    public EventsApiViewSet getApiViewSet() {
+        return apiViewSet;
     }
 
-    public void setResponseList(List<EventResponse> responseList) {
-        this.responseList = responseList;
+    public void setApiViewSet(EventsApiViewSet apiViewSet) {
+        this.apiViewSet = apiViewSet;
     }
 }

@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.ApiViewSets.EventsApiViewSet;
 import com.hoocons.hoocons_android.Networking.Requests.CommentRequest;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
@@ -16,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by hungnguyen on 7/12/17.
@@ -30,6 +32,16 @@ public interface EventServices {
      ********************************** */
     @POST("/event/create/")
     Call<Void> postEvent(@Body EventInfoRequest request);
+
+
+    /**********************************
+     * @Method: POST
+     * @Name: postEvent
+     * @Argument: EventInfoRequest
+     * @Purpose: post a new event
+     ********************************** */
+    @GET("/api/v1/user/{userId}/events/")
+    Call<EventsApiViewSet> getEventPosted(@Path("userId") int userId, @Query("page") int pageNum);
 
 
     /**********************************

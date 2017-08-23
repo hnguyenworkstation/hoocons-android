@@ -8,6 +8,7 @@ import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.JobFailureEvBusRequest;
+import com.hoocons.hoocons_android.Networking.ApiViewSets.EventsApiViewSet;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
@@ -27,14 +28,15 @@ import retrofit2.Response;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class FetchCreatedEventJob extends Job implements Serializable{
-    private int start;
-    private int end;
-    public FetchCreatedEventJob(int start, int end) {
+public class FetchPostedEventJob extends Job implements Serializable{
+    private int userId;
+    private int pageNum;
+
+    public FetchPostedEventJob(int userId, int pageNum) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
 
-        this.start = start;
-        this.end = end;
+        this.userId = userId;
+        this.pageNum = pageNum;
     }
 
     @Override
@@ -45,17 +47,19 @@ public class FetchCreatedEventJob extends Job implements Serializable{
     @Override
     public void onRun() throws Throwable {
         EventServices services = NetContext.instance.create(EventServices.class);
-        services.getCreatedEvent(start, end).enqueue(new Callback<List<EventResponse>>() {
+        services.getEventPosted(userId, pageNum).enqueue(new Callback<EventsApiViewSet>() {
             @Override
-            public void onResponse(Call<List<EventResponse>> call, Response<List<EventResponse>> response) {
+            public void onResponse(Call<EventsApiViewSet> call, Response<EventsApiViewSet> response) {
                 if (response.code() == 200) {
                     // Get something
                     EventBus.getDefault().post(new FetchEventListSuccessEvBusRequest(response.body()));
+                } else if (response.code() == 404) {
+
                 }
             }
 
             @Override
-            public void onFailure(Call<List<EventResponse>> call, Throwable t) {
+            public void onFailure(Call<EventsApiViewSet> call, Throwable t) {
                 EventBus.getDefault().post(new JobFailureEvBusRequest());
             }
         });
