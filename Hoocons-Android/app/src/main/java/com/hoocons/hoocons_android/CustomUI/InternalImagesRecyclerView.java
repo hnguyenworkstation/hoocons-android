@@ -111,7 +111,7 @@ public class InternalImagesRecyclerView extends RelativeLayout {
                     return false;
                 }
 
-                return false;
+                return true;
             }
         });
     }
