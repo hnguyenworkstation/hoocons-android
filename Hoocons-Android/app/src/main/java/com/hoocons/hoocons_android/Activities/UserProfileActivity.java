@@ -49,7 +49,6 @@ import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
-import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
@@ -57,7 +56,7 @@ import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
 import com.hoocons.hoocons_android.Parcel.UserParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
-import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.GetUserInfoJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
@@ -132,10 +131,9 @@ public class UserProfileActivity extends DraggerActivity
         eventResponseList = new ArrayList<>();
         userParcel = (UserParcel) Parcels.unwrap(getIntent().getParcelableExtra("user_info"));
 
-        if (userParcel.getUserId() == SharedPreferencesManager.getDefault().getUserId()) {
-            jobManager.addJobInBackground(new GetSelfInfoJob());
-        } else {
-
+        // getting user data
+        if (userParcel != null) {
+            jobManager.addJobInBackground(new GetUserInfoJob(userParcel.getUserId()));
         }
 
         handler = new Handler();

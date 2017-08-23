@@ -68,6 +68,16 @@ public interface UserServices {
 
 
     /**********************************
+     * @Method: GET
+     * @Name: getUserInfo
+     * @Argument: void
+     * @Purpose: retrieve user info from backend
+     ********************************** */
+    @GET("/api/v1/user/{id}")
+    Call<UserInfoResponse> getUserInfo(@Path("id") int id);
+
+
+    /**********************************
      * @Method: PUT
      * @Name: updateUserInfo
      * @Argument: UserInfoResponse

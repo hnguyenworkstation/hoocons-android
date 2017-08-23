@@ -23,6 +23,6 @@ public interface ActivityServices {
      * @Argument: List<ActivityResponse>
      * @Purpose: getting list of activities from who we follow
      ********************************** */
-    @GET("/activity/feeds/")
+    @GET("/api/v1/activity/feeds/")
     Call<ActivityApiViewSet> getPageActivities(@Query("page") int pageNum);
 }

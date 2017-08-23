@@ -26,9 +26,12 @@ import retrofit2.Response;
  * Created by hungnguyen on 7/14/17.
  */
 
-public class GetSelfInfoJob extends Job implements Serializable {
-    public GetSelfInfoJob() {
+public class GetUserInfoJob extends Job {
+    private int userId;
+
+    public GetUserInfoJob(int userId) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.userInfo));
+        this.userId = userId;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class GetSelfInfoJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+        services.getUserInfo(userId).enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
                 if (response.code() == 200) {
