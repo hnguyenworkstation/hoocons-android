@@ -114,27 +114,25 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       if (canLoadImage) {
         glide.load(new File(photo.getPath()))
             .apply(RequestOptions.centerCropTransform())
-            .apply(RequestOptions.noAnimation())
             .apply(RequestOptions.overrideOf(imageSize, imageSize))
             .thumbnail(0.5f)
-            .apply(RequestOptions.placeholderOf(R.drawable.__picker_ic_photo_black_48dp))
             .apply(RequestOptions.errorOf(R.drawable.__picker_ic_broken_image_black_48dp))
-                .listener(new RequestListener<Drawable>() {
-                  @Override
-                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                  }
+            .listener(new RequestListener<Drawable>() {
+              @Override
+              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                return false;
+              }
 
-                  @Override
-                  public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    if (resource instanceof GifDrawable) {
-                        holder.gifDrawable = (GifDrawable) resource;
-                        holder.gifDrawable.start();
-                    }
+              @Override
+              public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                if (resource instanceof GifDrawable) {
+                    holder.gifDrawable = (GifDrawable) resource;
+                    holder.gifDrawable.start();
+                }
 
-                    return false;
-                  }
-                })
+                return false;
+              }
+            })
             .into(holder.ivPhoto);
       }
 

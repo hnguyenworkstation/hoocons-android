@@ -31,7 +31,6 @@ import me.iwf.photopicker.fragment.ImagePagerFragment;
 import me.iwf.photopicker.fragment.PhotoPickerFragment;
 import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 import me.iwf.photopicker.utils.MediaStoreHelper;
-import me.iwf.photopicker.utils.PermissionsUtils;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;

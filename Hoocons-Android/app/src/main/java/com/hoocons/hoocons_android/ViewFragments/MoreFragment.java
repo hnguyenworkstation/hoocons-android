@@ -138,7 +138,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_header:
-                startActivity(new Intent(getActivity(), ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
                 break;
             case R.id.find_love:
                 startFindMatchActivity();
