@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="moment ago"
         android:id="@+id/message_time_frame"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_12"
         android:layout_gravity="center_vertical"/>
 
     <RelativeLayout

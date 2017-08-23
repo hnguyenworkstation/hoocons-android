@@ -34,7 +34,8 @@ public class FuncLayout extends LinearLayout {
             return;
         }
         mFuncViewArrayMap.put(key, view);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
         addView(view, params);
         view.setVisibility(GONE);
     }

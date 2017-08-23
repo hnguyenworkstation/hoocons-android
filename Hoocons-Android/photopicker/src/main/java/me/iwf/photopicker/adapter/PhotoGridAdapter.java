@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -92,7 +91,6 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
 
   @Override public void onBindViewHolder(final PhotoViewHolder holder, int position) {
-
     if (getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
       List<Photo> photos = getCurrentPhotos();
@@ -107,15 +105,14 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(holder.ivPhoto.getContext());
 
       if (canLoadImage) {
-        glide
-                .load(new File(photo.getPath()))
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.noAnimation())
-                .apply(RequestOptions.overrideOf(imageSize, imageSize))
-                .thumbnail(0.5f)
-                .apply(RequestOptions.placeholderOf(R.drawable.__picker_ic_photo_black_48dp))
-                .apply(RequestOptions.errorOf(R.drawable.__picker_ic_broken_image_black_48dp))
-                .into(holder.ivPhoto);
+        glide.load(new File(photo.getPath()))
+            .apply(RequestOptions.centerCropTransform())
+            .apply(RequestOptions.noAnimation())
+            .apply(RequestOptions.overrideOf(imageSize, imageSize))
+            .thumbnail(0.5f)
+            .apply(RequestOptions.placeholderOf(R.drawable.__picker_ic_photo_black_48dp))
+            .apply(RequestOptions.errorOf(R.drawable.__picker_ic_broken_image_black_48dp))
+            .into(holder.ivPhoto);
       }
 
       final boolean isChecked = isSelected(photo);

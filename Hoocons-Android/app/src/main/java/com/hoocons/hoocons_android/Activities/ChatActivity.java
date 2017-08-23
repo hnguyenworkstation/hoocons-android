@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -36,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ChatMessagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.ChatWrapperKeyboard;
+import com.hoocons.hoocons_android.CustomUI.InternalImagesRecyclerView;
 import com.hoocons.hoocons_android.CustomUI.xhs_common.Constants;
 import com.hoocons.hoocons_android.CustomUI.xhs_common.SimpleCommonUtils;
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
@@ -53,6 +55,7 @@ import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
+import com.hoocons.hoocons_android.ViewFragments.InternalImagesFragment;
 import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 import com.sj.emoji.EmojiBean;
 
@@ -70,7 +73,7 @@ import sj.keyboard.interfaces.EmoticonClickListener;
 import sj.keyboard.widget.EmoticonsEditText;
 import sj.keyboard.widget.FuncLayout;
 
-public class ChatActivity extends BaseActivity
+public class ChatActivity extends FragmentActivity
         implements View.OnClickListener,
         OnStickerPagerFragmentInteractionListener,
         OnChatMessageClickListener,
@@ -152,7 +155,13 @@ public class ChatActivity extends BaseActivity
         SimpleCommonUtils.initEmoticonsEditText(wrapperKeyboard.getEtChat());
         wrapperKeyboard.setAdapter(SimpleCommonUtils.getCommonAdapter(this, emoticonClickListener));
         wrapperKeyboard.addOnFuncKeyBoardListener(this);
-//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PTT, new SimpleQqGridView(this));
+
+        // Init images layout
+        InternalImagesRecyclerView imagesRecyclerView = new InternalImagesRecyclerView(this);
+        imagesRecyclerView.init(this);
+        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_IMAGE,imagesRecyclerView);
+
+
 //        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PTV, new SimpleQqGridView(this));
 //        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PLUG, new SimpleQqGridView(this));
 
@@ -165,8 +174,10 @@ public class ChatActivity extends BaseActivity
         wrapperKeyboard.getBtnSend().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // OnSendBtnClick(ekBar.getEtChat().getText().toString());
-                wrapperKeyboard.getEtChat().setText("");
+                if (wrapperKeyboard.getEtChat().getText().length() > 0) {
+                    sendPlainTextMessage();
+                    wrapperKeyboard.getEtChat().setText("");
+                }
             }
         });
         wrapperKeyboard.getEmoticonsToolBarView().addFixedToolItemView(false, R.drawable.ic_line_plus, null, new View.OnClickListener() {

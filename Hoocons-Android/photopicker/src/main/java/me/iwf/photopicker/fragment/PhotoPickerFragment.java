@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,19 +52,15 @@ import static me.iwf.photopicker.utils.MediaStoreHelper.INDEX_ALL_PHOTOS;
  * Created by donglua on 15/5/31.
  */
 public class PhotoPickerFragment extends Fragment {
-
   private ImageCaptureManager captureManager;
   private PhotoGridAdapter photoGridAdapter;
 
   private PopupDirectoryListAdapter listAdapter;
-  //所有photos的路径
   private List<PhotoDirectory> directories;
-  //传入的已选照片
   private ArrayList<String> originalPhotos;
 
   private int SCROLL_THRESHOLD = 30;
   int column;
-  //目录弹出框的一次最多显示的目录数目
   public static int COUNT_MAX = 4;
   private final static String EXTRA_CAMERA = "camera";
   private final static String EXTRA_COLUMN = "column";
@@ -128,12 +125,12 @@ public class PhotoPickerFragment extends Fragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
     final View rootView = inflater.inflate(R.layout.__picker_fragment_photo_picker, container, false);
 
     RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
     StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(column, OrientationHelper.VERTICAL);
     layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+    ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(photoGridAdapter);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -186,7 +183,6 @@ public class PhotoPickerFragment extends Fragment {
 
     btSwitchDirectory.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-
         if (listPopupWindow.isShowing()) {
           listPopupWindow.dismiss();
         } else if (!getActivity().isFinishing()) {

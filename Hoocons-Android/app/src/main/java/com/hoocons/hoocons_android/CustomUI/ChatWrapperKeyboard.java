@@ -95,6 +95,7 @@ public class ChatWrapperKeyboard extends AutoHeightLayout implements
     }
 
     private void initClickListener() {
+        mGalleryBtn.setOnClickListener(this);
         mEmojiBtn.setOnClickListener(this);
     }
 
@@ -313,6 +314,10 @@ public class ChatWrapperKeyboard extends AutoHeightLayout implements
         switch (view.getId()) {
             case R.id.emoji_btn:
                 toggleFuncView(FUNC_TYPE_EMOTICON);
+                setFuncViewHeight(EmoticonsKeyboardUtils.dip2px(getContext(), APPS_HEIGHT));
+                break;
+            case R.id.gallery_btn:
+                toggleFuncView(FUNC_TYPE_IMAGE);
                 setFuncViewHeight(EmoticonsKeyboardUtils.dip2px(getContext(), APPS_HEIGHT));
                 break;
             default:
