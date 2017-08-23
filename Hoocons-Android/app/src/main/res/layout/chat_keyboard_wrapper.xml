@@ -4,9 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
-
+    <include layout="@layout/ic_spitview_horizontal"/>
     <include layout="@layout/chatroom_footer" />
-
     <sj.keyboard.widget.FuncLayout
         android:id="@+id/ly_kvml"
         android:layout_width="match_parent"

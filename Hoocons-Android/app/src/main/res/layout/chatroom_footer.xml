@@ -14,7 +14,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
             android:orientation="horizontal"
             android:id="@+id/action_buttons"
             android:layout_alignParentTop="true">
@@ -38,10 +37,10 @@
             <ImageButton
                 android:layout_width="0dip"
                 android:layout_height="@dimen/chat_input"
-                android:src="@drawable/ic_file_input"
+                android:src="@drawable/ic_contact_input"
                 android:background="@drawable/icon_button"
                 android:layout_weight="1"
-                android:id="@+id/attachfile_btn"/>
+                android:id="@+id/contact_btn"/>
 
             <ImageButton
                 android:layout_width="0dip"
@@ -62,10 +61,11 @@
             <ImageButton
                 android:layout_width="0dip"
                 android:layout_height="@dimen/chat_input"
-                android:src="@drawable/ic_voice_input"
+                android:src="@drawable/ic_line_plus"
+                android:scaleType="centerInside"
                 android:background="@drawable/icon_button"
                 android:layout_weight="1"
-                android:id="@+id/voice_btn"/>
+                android:id="@+id/attach_file_btn"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -98,13 +98,12 @@
             <sj.keyboard.widget.EmoticonsEditText
                 android:layout_centerInParent="true"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/chat_input"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/margin_8"
                 android:background="@null"
                 android:id="@+id/chat_input_content"
                 android:hint="@string/write_a_message"
                 android:textSize="@dimen/text_18"
-                android:maxLines="4"
                 android:layout_toEndOf="@+id/emoji_btn"
                 android:layout_toStartOf="@+id/chatroom_send"/>
 

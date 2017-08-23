@@ -45,14 +45,14 @@ public class ChatWrapperKeyboard extends AutoHeightLayout implements
     ImageButton mCameraBtn;
     @BindView(R.id.gallery_btn)
     ImageButton mGalleryBtn;
-    @BindView(R.id.attachfile_btn)
-    ImageButton mAttachFile;
+    @BindView(R.id.contact_btn)
+    ImageButton mContactBtn;
     @BindView(R.id.gif_btn)
     ImageButton mGifBtn;
     @BindView(R.id.location_btn)
     ImageButton mLocBtn;
-    @BindView(R.id.voice_btn)
-    ImageButton mVoiceBtn;
+    @BindView(R.id.attach_file_btn)
+    ImageButton mAttachBtn;
 
     @BindView(R.id.emoji_btn)
     ImageButton mEmojiBtn;
