@@ -42,6 +42,7 @@ import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.UserUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
@@ -272,7 +273,7 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(parcel.getUserProfileUrl());
 
-        UserInfoResponse fakeResponse = new UserInfoResponse();
+        UserInfoResponse fakeResponse = UserUtils.getFakeUserResponse(userParcel);
         mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, fakeResponse, this);
         initEventRecyclerView();
     }

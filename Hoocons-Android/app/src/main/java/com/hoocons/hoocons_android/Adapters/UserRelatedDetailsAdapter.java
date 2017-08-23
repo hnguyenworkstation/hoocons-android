@@ -128,9 +128,9 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     }
 
     public void updateUserProfile(UserInfoResponse response) {
-        if (userInfoResponse != null) {
+        if (response != null) {
             userInfoResponse = response;
-            notifyItemChanged(1);
+            notifyItemChanged(0);
         }
     }
 

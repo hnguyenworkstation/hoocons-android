@@ -611,22 +611,18 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
     public void initUserInfo(final Context context, final UserInfoResponse response,
                              final OnUserInfoClickListener infoListener) {
-        if (response.isSelf()) {
-            // Load profile to both side
-            loadProfileImage(context, response.getProfileUrl());
+        loadProfileImage(context, response.getProfileUrl());
+        String nickname = "@" + response.getNickname();
 
-            String nickname = "@" + response.getNickname();
+        assert mDisplayName != null;
+        mDisplayName.setText(response.getDisplayName());
+        mDisplayName.setTypeface(EasyFonts.robotoBold(context));
 
-            assert mDisplayName != null;
-            mDisplayName.setText(response.getDisplayName());
-            mDisplayName.setTypeface(EasyFonts.robotoBold(context));
+        assert mNickname != null;
+        mNickname.setText(nickname);
+        mNickname.setTypeface(EasyFonts.robotoRegular(context));
 
-            assert mNickname != null;
-            mNickname.setText(nickname);
-            mNickname.setTypeface(EasyFonts.robotoRegular(context));
-
-            drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
-        }
+        drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
     }
 
     private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts,
