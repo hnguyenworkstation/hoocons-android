@@ -83,4 +83,12 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_margin_view"
+        android:layout_below="@+id/message_bubble"
+        android:visibility="gone">
+        <include layout="@layout/empty_margin_view"/>
+    </LinearLayout>
 </RelativeLayout>

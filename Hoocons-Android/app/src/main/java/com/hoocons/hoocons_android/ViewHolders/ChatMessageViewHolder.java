@@ -93,6 +93,10 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_layout)
     RelativeLayout mMessageLayout;
 
+    @Nullable
+    @BindView(R.id.bottom_margin_view)
+    LinearLayout mBottomMarginView;
+
     public ChatMessageViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -100,6 +104,11 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
     public void initMessage(final Context context, ChatMessage message, ChatMessage nextMessage,
                             OnChatMessageClickListener listener, final int position, final int lastPos) {
+        assert mBottomMarginView != null;
+        if (position == 0) {
+            mBottomMarginView.setVisibility(View.VISIBLE);
+        }
+
         initTimeHeader(context, message, nextMessage);
         initGeneralTextView(context, message, listener, position, lastPos);
     }

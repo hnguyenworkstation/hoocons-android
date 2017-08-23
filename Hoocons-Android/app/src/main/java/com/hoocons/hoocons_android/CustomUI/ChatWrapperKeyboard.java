@@ -40,7 +40,6 @@ public class ChatWrapperKeyboard extends AutoHeightLayout implements
         EmoticonsToolBarView.OnToolBarItemClickListener,
         EmoticonsEditText.OnBackKeyClickListener,
         FuncLayout.OnFuncChangeListener, View.OnClickListener{
-
     @BindView(R.id.camera_btn)
     ImageButton mCameraBtn;
     @BindView(R.id.gallery_btn)
