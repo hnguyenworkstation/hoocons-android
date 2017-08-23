@@ -89,6 +89,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     private Handler handler;
 
     private DividerItemDecoration spaceDecoration;
+    private int currentPage = 1;
 
     private final String MYSELF = "IS_MY_SELF";
 
@@ -140,7 +141,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
                     @Override
                     public void run() {
                         BaseApplication.getInstance().getJobManager()
-                                .addJobInBackground(new FetchFeaturedActivityJob());
+                                .addJobInBackground(new FetchFeaturedActivityJob(1));
                         initRecyclerView();
                     }
                 }
@@ -245,8 +246,11 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Subscribe
     public void onEvent(FetchFeaturedActivitySuccess ev) {
-        activityResponses.addAll(ev.getActivityResponses());
-        canLoadMore = ev.getActivityResponses().size() >= MAX_ACTIVITIES_PER_PAGE;
+        activityResponses.addAll(ev.getActivityResponse().getResults());
+        canLoadMore = ev.getActivityResponse().getNext() != null;
+
+        currentPage++;
+
         mSwipeRefLayout.setRefreshing(false);
         mAdapter.notifyDataSetChanged();
     }
@@ -409,7 +413,8 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchFeaturedActivityJob());
+        currentPage = 0;
+        BaseApplication.getInstance().getJobManager().addJobInBackground(new FetchFeaturedActivityJob(1));
         initRecyclerView();
     }
 }

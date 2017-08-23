@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.EventBus;
 
+import com.hoocons.hoocons_android.Networking.ApiViewSets.ActivityApiViewSet;
 import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 
 import java.util.List;
@@ -9,17 +10,17 @@ import java.util.List;
  */
 
 public class FetchFeaturedActivitySuccess {
-    private List<ActivityResponse> activityResponses;
+    private ActivityApiViewSet activityResponse;
 
-    public FetchFeaturedActivitySuccess(List<ActivityResponse> activityResponses) {
-        this.activityResponses = activityResponses;
+    public FetchFeaturedActivitySuccess(ActivityApiViewSet activityResponses) {
+        this.activityResponse = activityResponses;
     }
 
-    public List<ActivityResponse> getActivityResponses() {
-        return activityResponses;
+    public ActivityApiViewSet getActivityResponse() {
+        return activityResponse;
     }
 
-    public void setActivityResponses(List<ActivityResponse> activityResponses) {
-        this.activityResponses = activityResponses;
+    public void setActivityResponse(ActivityApiViewSet activityResponses) {
+        this.activityResponse = activityResponses;
     }
 }

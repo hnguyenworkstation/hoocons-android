@@ -9,6 +9,7 @@ import com.birbit.android.jobqueue.RetryConstraint;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.FetchFeaturedActivitySuccess;
 import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
+import com.hoocons.hoocons_android.Networking.ApiViewSets.ActivityApiViewSet;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 import com.hoocons.hoocons_android.Networking.Services.ActivityServices;
@@ -28,9 +29,11 @@ import retrofit2.Response;
  */
 
 public class FetchFeaturedActivityJob extends Job {
+    private int pageNum;
 
-    public FetchFeaturedActivityJob() {
+    public FetchFeaturedActivityJob(int pageNum) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
+        this.pageNum = pageNum;
     }
 
     @Override
@@ -41,12 +44,11 @@ public class FetchFeaturedActivityJob extends Job {
     @Override
     public void onRun() throws Throwable {
         ActivityServices services = NetContext.instance.create(ActivityServices.class);
-        services.getActivities().enqueue(new Callback<List<ActivityResponse>>() {
+        services.getPageActivities(pageNum).enqueue(new Callback<ActivityApiViewSet>() {
             @Override
-            public void onResponse(Call<List<ActivityResponse>> call,
-                                   Response<List<ActivityResponse>> response) {
+            public void onResponse(Call<ActivityApiViewSet> call,
+                                   Response<ActivityApiViewSet> response) {
                 if (response.code() == 200) {
-                    // 200 is OK
                     EventBus.getDefault().post(new FetchFeaturedActivitySuccess(response.body()));
                 } else {
                     EventBus.getDefault().post(new BadRequest());
@@ -54,7 +56,7 @@ public class FetchFeaturedActivityJob extends Job {
             }
 
             @Override
-            public void onFailure(Call<List<ActivityResponse>> call, Throwable t) {
+            public void onFailure(Call<ActivityApiViewSet> call, Throwable t) {
                 EventBus.getDefault().post(new ServerErrorRequest());
             }
         });

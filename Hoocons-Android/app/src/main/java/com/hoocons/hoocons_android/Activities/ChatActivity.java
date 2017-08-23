@@ -340,7 +340,6 @@ public class ChatActivity extends FragmentActivity
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
