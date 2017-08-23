@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -114,8 +115,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       if (canLoadImage) {
         glide.load(new File(photo.getPath()))
             .apply(RequestOptions.centerCropTransform())
+            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
             .apply(RequestOptions.overrideOf(imageSize, imageSize))
-            .thumbnail(0.5f)
             .apply(RequestOptions.errorOf(R.drawable.__picker_ic_broken_image_black_48dp))
             .listener(new RequestListener<Drawable>() {
               @Override
@@ -128,6 +129,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                 if (resource instanceof GifDrawable) {
                     holder.gifDrawable = (GifDrawable) resource;
                     holder.gifDrawable.start();
+                } else {
+                    holder.gifDrawable = null;
                 }
 
                 return false;

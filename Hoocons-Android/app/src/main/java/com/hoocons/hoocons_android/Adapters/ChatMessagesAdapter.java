@@ -127,9 +127,9 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<ChatMessageViewHol
     public void onBindViewHolder(ChatMessageViewHolder holder, int position) {
         ChatMessage currentMessage = chatMessageList.get(position);
         ChatMessage nextMessage = null;
-        if (position == chatMessageList.size() - 1) {
+        if (position == 0) {
             currentMessage.setShouldShowTimeHeader(true);
-        } else {
+        } else if (position != getItemCount() - 1) {
             nextMessage = chatMessageList.get(position + 1);
         }
 

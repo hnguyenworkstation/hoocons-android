@@ -105,7 +105,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     public void initMessage(final Context context, ChatMessage message, ChatMessage nextMessage,
                             OnChatMessageClickListener listener, final int position, final int lastPos) {
         assert mBottomMarginView != null;
-        if (position == 0) {
+        if (position == lastPos) {
             mBottomMarginView.setVisibility(View.VISIBLE);
         }
 
@@ -121,7 +121,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
             diffTime = AppUtils.diffTime(nextMessage.getCreatedTime(), message.getCreatedTime());
         }
 
-        if (message.isShouldShowTimeHeader() || diffTime > 480 || diffTime < -480) {
+        if (message.isShouldShowTimeHeader() || diffTime > 600 || diffTime < -600) {
             mTimeFrameHeaderLayout.setVisibility(View.VISIBLE);
             mTimeTitle.setText(AppUtils.convertDateTimeFromUTC(message.getCreatedTime()).toUpperCase());
             mTimeTitle.setTypeface(EasyFonts.robotoBold(context));

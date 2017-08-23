@@ -160,15 +160,10 @@ public class ChatActivity extends FragmentActivity
         InternalImagesRecyclerView imagesRecyclerView = new InternalImagesRecyclerView(this);
         imagesRecyclerView.init(this);
         wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_IMAGE,imagesRecyclerView);
-
-
-//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PTV, new SimpleQqGridView(this));
-//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PLUG, new SimpleQqGridView(this));
-
         wrapperKeyboard.getEtChat().setOnSizeChangedListener(new EmoticonsEditText.OnSizeChangedListener() {
             @Override
             public void onSizeChanged(int w, int h, int oldw, int oldh) {
-                // scrollToBottom();
+                scrollToBottom();
             }
         });
         wrapperKeyboard.getBtnSend().setOnClickListener(new View.OnClickListener() {
@@ -194,6 +189,16 @@ public class ChatActivity extends FragmentActivity
         });
     }
 
+    private void scrollToBottom() {
+        mRecyclerView.requestLayout();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.smoothScrollToPosition(mRecyclerView.getBottom());
+            }
+        });
+    }
+
     private void initDataChangeListener() {
         messageListDataRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -205,10 +210,11 @@ public class ChatActivity extends FragmentActivity
                     assert message != null;
                     message.setId(snapshot.getKey());
                     message.setPosted(true);
-                    chatMessageList.add(0, message);
+                    chatMessageList.add(message);
                 }
 
                 messagesAdapter.notifyDataSetChanged();
+                scrollToBottom();
             }
 
             @Override
@@ -274,8 +280,6 @@ public class ChatActivity extends FragmentActivity
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
-        mLayoutManager.setReverseLayout(true);
-
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -294,9 +298,8 @@ public class ChatActivity extends FragmentActivity
 
             @Override
             public boolean isLastItem() {
-//                return ((LinearLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition()
-//                        == (mEventsAdapter.getItemCount() - 1);
-                return false;
+                return ((LinearLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition()
+                      == (messagesAdapter.getItemCount() - 1);
             }
 
             @Override
@@ -317,10 +320,11 @@ public class ChatActivity extends FragmentActivity
 
         // Add temporary message to the list
         message.setPosted(false);
-        chatMessageList.add(0, message);
-        mRecyclerView.smoothScrollToPosition(0);
-
+        chatMessageList.add(message);
         wrapperKeyboard.getEtChat().setText("");
+
+        scrollToBottom();
+        messagesAdapter.notifyItemInserted(messagesAdapter.getItemCount());
     }
 
     @Override
