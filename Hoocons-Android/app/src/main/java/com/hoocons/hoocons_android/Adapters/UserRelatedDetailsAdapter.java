@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
@@ -45,7 +46,6 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     private final int USER_OTHER_INFO = 98;
 
     private final int USER_INFO_TAG_CARD = -1;
-    private boolean isMyself;
     private EventAdapterListener listener;
     private OnUserInfoClickListener userProfileListener;
 
@@ -53,11 +53,11 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     private final Handler handler = new Handler();
 
     public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
-                                     final EventAdapterListener listener, boolean isMyself,
-                                     UserInfoResponse userInfoResponse, OnUserInfoClickListener userProfileListener) {
+                                     final EventAdapterListener listener,
+                                     UserInfoResponse userInfoResponse,
+                                     OnUserInfoClickListener userProfileListener) {
         this.context = context;
         this.responseList = responsesList;
-        this.isMyself = isMyself;
         this.listener = listener;
         this.userInfoResponse = userInfoResponse;
         this.userProfileListener = userProfileListener;
@@ -127,13 +127,21 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
         return new UserRelatedDetailsViewHolder(view);
     }
 
+    public void updateUserProfile(UserInfoResponse response) {
+        if (userInfoResponse != null) {
+            userInfoResponse = response;
+            notifyItemChanged(1);
+        }
+    }
+
     @Override
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
             holder.initUserInfo(context, userInfoResponse, userProfileListener);
         } else if (position == 1) {
             if (responseList != null && responseList.size() > 0) {
-                holder.initDummyCardForEvent(context, isMyself,
+                holder.initDummyCardForEvent(context,
+                        SharedPreferencesManager.getDefault().getUserId() == userInfoResponse.getUserPK(),
                         responseList.get(0).getAuthor().getDisplayName());
             }
         } else {

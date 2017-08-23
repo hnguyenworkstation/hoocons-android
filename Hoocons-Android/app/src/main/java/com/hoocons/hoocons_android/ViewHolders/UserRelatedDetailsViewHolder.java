@@ -692,7 +692,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         }
     }
 
-    public void initDummyCardForEvent(final Context context, final boolean isMySelf, final String displayName) {
+    public void initDummyCardForEvent(final Context context,
+                                      final boolean isMySelf,
+                                      final String displayName) {
         assert mDummiesTitle != null;
         mDummiesTitle.setText(context.getResources().getText(R.string.recent_event));
         mDummiesTitle.setTypeface(EasyFonts.robotoBold(context));

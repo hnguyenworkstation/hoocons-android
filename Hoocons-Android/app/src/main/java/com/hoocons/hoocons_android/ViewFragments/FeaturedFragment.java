@@ -42,14 +42,17 @@ import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
+import com.hoocons.hoocons_android.Helpers.UserUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
+import com.hoocons.hoocons_android.Parcel.UserParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchFeaturedActivityJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
@@ -94,7 +97,6 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     private final String MYSELF = "IS_MY_SELF";
 
     public FeaturedFragment() {
-        // Required empty public constructor
     }
 
     public static FeaturedFragment newInstance(String param1, String param2) {
@@ -153,8 +155,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), UserProfileActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        .putExtra(MYSELF, true));
+                        .putExtra("user_info", Parcels.wrap(UserUtils.getSelfParcel())));
             }
         });
     }
@@ -306,6 +307,26 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
 
         startActivity(listImages);
+    }
+
+    @Override
+    public void onEventHeaderClicked(int position) {
+
+    }
+
+    @Override
+    public void onUserInfoClicked(int position) {
+        SemiUserInfoResponse response = activityResponses.get(position).getActor();
+        UserParcel parcel = UserUtils.getUserParcelFromSemiResponse(response);
+
+        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+        intent.putExtra("user_info", Parcels.wrap(parcel));
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSharedUserInfoClicked(int position) {
+
     }
 
     @Override

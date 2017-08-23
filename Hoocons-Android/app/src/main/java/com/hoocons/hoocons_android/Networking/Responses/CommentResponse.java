@@ -34,7 +34,8 @@ public class CommentResponse {
                            String createdAt, String textContent,
                            String commentType, String commentMediaUrl,
                            int likeCount, int replyCount, boolean isLiked,
-                           boolean isUploaded, boolean isUploadFailed, String commentTag) {
+                           boolean isUploaded, boolean isUploadFailed,
+                           String commentTag) {
         this.commentBy = commentBy;
         this.createdAt = createdAt;
         this.textContent = textContent;

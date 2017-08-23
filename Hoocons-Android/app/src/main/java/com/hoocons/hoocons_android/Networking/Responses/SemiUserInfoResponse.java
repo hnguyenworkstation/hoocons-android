@@ -1,8 +1,11 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Models.Topic;
+import com.hoocons.hoocons_android.Parcel.MultiTopicsParcel;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
 
 import java.util.List;
 
@@ -19,6 +22,8 @@ public class SemiUserInfoResponse {
     private String nickname;
     @SerializedName("profile_url")
     private String profileUrl;
+    @SerializedName("wallpaper_url")
+    private String wallpaperUrl;
     @SerializedName("last_action_at")
     private String lastActionAt;
     @SerializedName("location")
@@ -27,8 +32,10 @@ public class SemiUserInfoResponse {
     private boolean isSharingLocation;
     @SerializedName("is_friend")
     private boolean isFriend;
+
+    @ParcelPropertyConverter(MultiTopicsParcel.class)
     @SerializedName("hobbies")
-    private List<String> hobbies;
+    private List<Topic> hobbies;
 
     public SemiUserInfoResponse() {
     }
@@ -119,11 +126,19 @@ public class SemiUserInfoResponse {
         isFriend = friend;
     }
 
-    public List<String> getHobbies() {
+    public List<Topic> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(List<String> hobbies) {
+    public void setHobbies(List<Topic> hobbies) {
         this.hobbies = hobbies;
+    }
+
+    public String getWallpaperUrl() {
+        return wallpaperUrl;
+    }
+
+    public void setWallpaperUrl(String wallpaperUrl) {
+        this.wallpaperUrl = wallpaperUrl;
     }
 }

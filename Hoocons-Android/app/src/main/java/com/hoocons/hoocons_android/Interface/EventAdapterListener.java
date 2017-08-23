@@ -7,19 +7,25 @@ import android.view.View;
  */
 
 public interface EventAdapterListener {
-    void onLikeClicked(int position);
+    void onEventHeaderClicked(final int position);
 
-    void onCommentClicked(int position);
+    void onUserInfoClicked(final int position);
+
+    void onSharedUserInfoClicked(final int position);
+
+    void onLikeClicked(final int position);
+
+    void onCommentClicked(final int position);
 
     void onShareClicked(final View view, int position);
 
-    void onPhotoClicked(int position);
+    void onPhotoClicked(final int position);
 
-    void onVideoClicked(int position);
+    void onVideoClicked(final int position);
 
-    void onWebThumbClicked(int position);
+    void onWebThumbClicked(final int position);
 
-    void onEventImageClicked(int eventPos, int imagePos);
+    void onEventImageClicked(final int eventPos, final int imagePos);
 
     void onOptionClicked(View view, final int position);
 }

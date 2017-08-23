@@ -251,7 +251,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
             initEventContent(context, response, position);
         } else {
             assert mSharedEventTextContent != null;
-            initSharedEventHeader(context, response.getContainEvent());
+            initSharedEventHeader(context, response.getContainEvent(), listener, position);
             mSharedEventTextContent.setVisibility(View.VISIBLE);
             mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
             initEventContent(context, response.getContainEvent(), position);
@@ -287,7 +287,8 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
     }
 
-    private void initSharedEventHeader(final Context context, final EventResponse response) {
+    private void initSharedEventHeader(final Context context, final EventResponse response,
+                                       final EventAdapterListener listener, final int position) {
         loadUserProfileImage(context, response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
 
         assert mSharedTimeFrame != null;
@@ -298,10 +299,30 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
         mSharedTimeFrame.setTypeface(EasyFonts.robotoLight(context));
         mSharedUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
+
+        mSharedUserDisplayName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onSharedUserInfoClicked(position);
+            }
+        });
+
+        mSharedUserProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onSharedUserInfoClicked(position);
+            }
+        });
     }
 
     private void initOnClickListener(final EventAdapterListener listener, final int position) {
         assert mLoveView != null;
+        assert mCommentView != null;
+        assert mHeaderMoreButton != null;
+        assert mUserDisplayName != null;
+        assert mUserProfileImage != null;
+        assert mSharedUserDisplayName != null;
+
         mLoveView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,7 +330,6 @@ public class FeaturedEventViewHolder extends ViewHolder {
             }
         });
 
-        assert mCommentView != null;
         mCommentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,11 +337,23 @@ public class FeaturedEventViewHolder extends ViewHolder {
             }
         });
 
-        assert mHeaderMoreButton != null;
         mHeaderMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onOptionClicked(mHeaderMoreButton, position);
+            }
+        });
+
+        mUserDisplayName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onUserInfoClicked(position);
+            }
+        });
+        mUserProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onUserInfoClicked(position);
             }
         });
     }

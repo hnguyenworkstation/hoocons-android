@@ -48,10 +48,12 @@ import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
+import com.hoocons.hoocons_android.Parcel.UserParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchCreatedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetSelfInfoJob;
@@ -104,17 +106,8 @@ public class UserProfileActivity extends DraggerActivity
     private View mOverlayView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
-    private boolean isMySelf;
-    private Intent mIntent;
     private Handler handler;
     private DividerItemDecoration spaceDecoration;
-
-    private final String USERID = "USERID";
-    private final String USER_DISPLAY_NAME = "USER_DISPLAY_NAME";
-    private final String USER_NICKNAME = "USER_NICKNAME";
-    private final String IS_FRIEND = "IS_FRIEND";
-    private final String USER_PROFILE_URL = "USER_PROFILE_URL";
-    private final String MYSELF = "IS_MY_SELF";
 
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private List<EventResponse> eventResponseList;
@@ -125,6 +118,7 @@ public class UserProfileActivity extends DraggerActivity
     private UserInfoResponse userInfoResponse;
     private UserRelatedDetailsAdapter mEventsAdapter;
     private boolean isLoading = false;
+    private UserParcel userParcel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,14 +128,17 @@ public class UserProfileActivity extends DraggerActivity
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
-        mIntent = getIntent();
-
         eventResponseList = new ArrayList<>();
-        isMySelf = mIntent.getBooleanExtra(MYSELF, false);
+        userParcel = (UserParcel) Parcels.unwrap(getIntent().getParcelableExtra("user_info"));
 
-        jobManager.addJobInBackground(new GetSelfInfoJob());
+        if (userParcel.getUserId() == SharedPreferencesManager.getDefault().getUserId()) {
+            jobManager.addJobInBackground(new GetSelfInfoJob());
+        } else {
+
+        }
 
         handler = new Handler();
+        initTempViewWithParcel(userParcel);
         initGeneralView();
     }
 
@@ -263,19 +260,37 @@ public class UserProfileActivity extends DraggerActivity
                 .into(mWallpaperImage);
     }
 
+    private void initTempViewWithParcel(UserParcel parcel) {
+        if (parcel.getUserWallpaperUrl() != null) {
+            loadWallPaperImage(parcel.getUserWallpaperUrl());
+        } else {
+            loadWallPaperImage("https://c1.staticflickr.com/1/256/19767218293_aa4a9248d3.jpg");
+        }
+
+        assert mActionBarDisplayName != null;
+        mActionBarDisplayName.setText(parcel.getUserDisplayName());
+
+        loadActionBarProfileImage(parcel.getUserProfileUrl());
+
+        UserInfoResponse fakeResponse = new UserInfoResponse();
+        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, fakeResponse, this);
+        initEventRecyclerView();
+    }
+
     private void initViewWithCompleteInfo(UserInfoResponse info) {
         userInfoResponse = info;
 
-        loadWallPaperImage("https://c1.staticflickr.com/1/256/19767218293_aa4a9248d3.jpg");
+        if (info.getWallPaperUrl() != null) {
+            loadWallPaperImage(info.getWallPaperUrl());
+        } else {
+            loadWallPaperImage("https://c1.staticflickr.com/1/256/19767218293_aa4a9248d3.jpg");
+        }
 
         assert mActionBarDisplayName != null;
         mActionBarDisplayName.setText(info.getDisplayName());
 
         loadActionBarProfileImage(info.getProfileUrl());
-
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, isMySelf, userInfoResponse, this);
-
-        initEventRecyclerView();
+        mEventsAdapter.updateUserProfile(userInfoResponse);
     }
 
     @Override
@@ -423,6 +438,21 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
+    public void onEventHeaderClicked(int position) {
+
+    }
+
+    @Override
+    public void onUserInfoClicked(int position) {
+
+    }
+
+    @Override
+    public void onSharedUserInfoClicked(int position) {
+
+    }
+
+    @Override
     public void onLikeClicked(int position) {
         EventResponse response = eventResponseList.get(position);
         String likeTag = "LIKE-" + String.valueOf(response.getEventId());
@@ -523,7 +553,6 @@ public class UserProfileActivity extends DraggerActivity
 
         eventPopup.show();
     }
-
 
     @Override
     public void onUserProfileClicked() {

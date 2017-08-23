@@ -45,6 +45,9 @@ public class UserInfoResponse {
     @SerializedName("hobbies")
     private List<Topic> hobbies;
 
+    public UserInfoResponse() {
+    }
+
     public UserInfoResponse(String displayName, String nickname, String profileUrl) {
         this.displayName = displayName;
         this.nickname = nickname;
