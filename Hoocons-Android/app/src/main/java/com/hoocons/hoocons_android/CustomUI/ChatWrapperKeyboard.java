@@ -66,7 +66,7 @@ public class ChatWrapperKeyboard extends AutoHeightLayout implements
     @BindView(R.id.ly_kvml)
     FuncLayout mFuncLayout;
 
-    public final int APPS_HEIGHT = 256;
+    public final int APPS_HEIGHT = 264;
 
     public static final int FUNC_TYPE_PTT = 1;
     public static final int FUNC_TYPE_PTV = 2;

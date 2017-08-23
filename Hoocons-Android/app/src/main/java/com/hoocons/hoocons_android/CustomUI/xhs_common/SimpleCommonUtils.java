@@ -96,7 +96,7 @@ public class SimpleCommonUtils {
 
         return pageSetAdapter;
     }
-    
+
     private static void addEmojiPageSetEntity(PageSetAdapter pageSetAdapter, Context context, final EmoticonClickListener emoticonClickListener) {
         ArrayList<EmojiBean> emojiArray = new ArrayList<>();
         Collections.addAll(emojiArray, DefEmoticons.getDefEmojiArray());
