@@ -1,10 +1,8 @@
 package com.hoocons.hoocons_android.CustomUI;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -41,13 +39,13 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
 /**
  * Created by hungnguyen on 8/23/17.
  */
-
 public class InternalImagesRecyclerView extends RelativeLayout {
     private View view;
     private Context context;
 
     private int SCROLL_THRESHOLD = 30;
     private int MAX_COUNT = 6;
+    private final int MAX_ROWS = 3;
     private RequestManager mGlideRequestManager;
     private PhotoGridAdapter photoGridAdapter;
 
@@ -70,7 +68,7 @@ public class InternalImagesRecyclerView extends RelativeLayout {
         RecyclerView recyclerView = view.findViewById(R.id.merge_recycler);
         final List<PhotoDirectory> directories = new ArrayList<>();
         photoGridAdapter = new PhotoGridAdapter(activity, mGlideRequestManager,
-                directories, null, 3);
+                directories, null, MAX_ROWS);
         photoGridAdapter.setShowCamera(false);
         photoGridAdapter.setPreviewEnable(true);
 
@@ -121,7 +119,8 @@ public class InternalImagesRecyclerView extends RelativeLayout {
     }
 
     private void initRecyclerView(RecyclerView recyclerView, final PhotoGridAdapter photoGridAdapter) {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(MAX_ROWS,
+                OrientationHelper.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerView.setLayoutManager(layoutManager);

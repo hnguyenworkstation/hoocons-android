@@ -1,6 +1,8 @@
 package me.iwf.photopicker.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -9,7 +11,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,6 +119,22 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             .thumbnail(0.5f)
             .apply(RequestOptions.placeholderOf(R.drawable.__picker_ic_photo_black_48dp))
             .apply(RequestOptions.errorOf(R.drawable.__picker_ic_broken_image_black_48dp))
+                .listener(new RequestListener<Drawable>() {
+                  @Override
+                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    return false;
+                  }
+
+                  @Override
+                  public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    if (resource instanceof GifDrawable) {
+                        holder.gifDrawable = (GifDrawable) resource;
+                        holder.gifDrawable.start();
+                    }
+
+                    return false;
+                  }
+                })
             .into(holder.ivPhoto);
       }
 
@@ -167,6 +190,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {
     private ImageView ivPhoto;
     private View vSelected;
+    private GifDrawable gifDrawable;
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
