@@ -1,4 +1,4 @@
-package com.hoocons.hoocons_android.CustomUI;
+package com.hoocons.hoocons_android.ImplementedView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -69,7 +69,7 @@ public class InternalImagesRecyclerView extends RelativeLayout {
         photoGridAdapter = new PhotoGridAdapter(activity, mGlideRequestManager,
                 directories, null, MAX_ROWS);
         photoGridAdapter.setShowCamera(false);
-        photoGridAdapter.setPreviewEnable(true);
+        photoGridAdapter.setPreviewEnable(false);
 
         Bundle mediaStoreArgs = new Bundle();
         mediaStoreArgs.putBoolean(EXTRA_SHOW_GIF, true);

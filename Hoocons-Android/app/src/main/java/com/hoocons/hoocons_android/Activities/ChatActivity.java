@@ -1,10 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,21 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.text.style.ImageSpan;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,31 +20,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ChatMessagesAdapter;
 import com.hoocons.hoocons_android.CustomUI.ChatWrapperKeyboard;
-import com.hoocons.hoocons_android.CustomUI.InternalImagesRecyclerView;
+import com.hoocons.hoocons_android.ImplementedView.InternalImagesRecyclerView;
 import com.hoocons.hoocons_android.CustomUI.xhs_common.Constants;
 import com.hoocons.hoocons_android.CustomUI.xhs_common.SimpleCommonUtils;
-import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.ChatUtils;
-import com.hoocons.hoocons_android.Helpers.SystemUtils;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnChatMessageClickListener;
 import com.hoocons.hoocons_android.Interface.OnStickerPagerFragmentInteractionListener;
-import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.ChatMessage;
-import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.ViewFragments.InternalImagesFragment;
-import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
 import com.sj.emoji.EmojiBean;
-
-import org.aisen.android.common.utils.BitmapUtil;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +131,7 @@ public class ChatActivity extends FragmentActivity
         // Init images layout
         InternalImagesRecyclerView imagesRecyclerView = new InternalImagesRecyclerView(this);
         imagesRecyclerView.init(this);
-        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_IMAGE,imagesRecyclerView);
+        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_IMAGE, imagesRecyclerView);
         wrapperKeyboard.getEtChat().setOnSizeChangedListener(new EmoticonsEditText.OnSizeChangedListener() {
             @Override
             public void onSizeChanged(int w, int h, int oldw, int oldh) {

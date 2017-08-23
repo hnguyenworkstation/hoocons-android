@@ -153,6 +153,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             } else {
               holder.vSelected.performClick();
             }
+          } else {
+              holder.vSelected.performClick();
           }
         }
       });
