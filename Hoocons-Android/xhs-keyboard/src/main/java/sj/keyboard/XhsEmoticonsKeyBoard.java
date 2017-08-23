@@ -30,8 +30,10 @@ import sj.keyboard.widget.EmoticonsIndicatorView;
 import sj.keyboard.widget.EmoticonsToolBarView;
 import sj.keyboard.widget.FuncLayout;
 
-public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnClickListener, EmoticonsFuncView.OnEmoticonsPageViewListener,
-        EmoticonsToolBarView.OnToolBarItemClickListener, EmoticonsEditText.OnBackKeyClickListener, FuncLayout.OnFuncChangeListener {
+public class XhsEmoticonsKeyBoard extends AutoHeightLayout
+        implements View.OnClickListener, EmoticonsFuncView.OnEmoticonsPageViewListener,
+        EmoticonsToolBarView.OnToolBarItemClickListener,
+        EmoticonsEditText.OnBackKeyClickListener, FuncLayout.OnFuncChangeListener {
 
     public static final int FUNC_TYPE_EMOTION = -1;
     public static final int FUNC_TYPE_APPPS = -2;

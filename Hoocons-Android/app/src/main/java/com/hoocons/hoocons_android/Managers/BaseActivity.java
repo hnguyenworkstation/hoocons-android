@@ -15,7 +15,8 @@ import java.util.Locale;
 /**
  * Created by hungnguyen on 6/3/17.
  */
-public class BaseActivity extends AppCompatActivity implements BitmapOwner, ITaskManager, AsToolbar.OnToolbarDoubleClick{
+public class BaseActivity extends AppCompatActivity
+        implements BitmapOwner, ITaskManager, AsToolbar.OnToolbarDoubleClick{
     public static final String TAG = BaseActivity.class.getSimpleName();
     private static BaseActivity mInstance;
     private static BaseActivity runningActivity;

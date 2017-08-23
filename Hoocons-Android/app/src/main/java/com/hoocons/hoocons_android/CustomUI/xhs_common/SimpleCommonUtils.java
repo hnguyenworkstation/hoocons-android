@@ -94,27 +94,10 @@ public class SimpleCommonUtils {
 
         addEmojiPageSetEntity(pageSetAdapter, context, emoticonClickListener);
 
-        addXhsPageSetEntity(pageSetAdapter, context, emoticonClickListener);
-
-        addWechatPageSetEntity(pageSetAdapter, context, emoticonClickListener);
-
-        addGoodGoodStudyPageSetEntity(pageSetAdapter, context, emoticonClickListener);
-
-        addKaomojiPageSetEntity(pageSetAdapter, context, emoticonClickListener);
-
-        addTestPageSetEntity(pageSetAdapter, context);
-
         return pageSetAdapter;
     }
-
-    /**
-     * 插入emoji表情集
-     *
-     * @param pageSetAdapter
-     * @param context
-     * @param emoticonClickListener
-     */
-    public static void addEmojiPageSetEntity(PageSetAdapter pageSetAdapter, Context context, final EmoticonClickListener emoticonClickListener) {
+    
+    private static void addEmojiPageSetEntity(PageSetAdapter pageSetAdapter, Context context, final EmoticonClickListener emoticonClickListener) {
         ArrayList<EmojiBean> emojiArray = new ArrayList<>();
         Collections.addAll(emojiArray, DefEmoticons.getDefEmojiArray());
         EmoticonPageSetEntity emojiPageSetEntity

@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import sj.keyboard.interfaces.PageViewInstantiateListener;
 
 public class EmoticonPageSetEntity<T> extends PageSetEntity<EmoticonPageEntity> {
-
-    final int mLine;
-    final int mRow;
-    final EmoticonPageEntity.DelBtnStatus mDelBtnStatus;
-    final ArrayList<T> mEmoticonList;
+    private final int mLine;
+    private final int mRow;
+    private final EmoticonPageEntity.DelBtnStatus mDelBtnStatus;
+    private final ArrayList mEmoticonList;
 
     public EmoticonPageSetEntity(final Builder builder) {
         super(builder);

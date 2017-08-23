@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.hoocons.hoocons_android.CustomUI.ChatWrapperKeyboard
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
+    android:id="@+id/keyboard_wrapper"
     tools:context="com.hoocons.hoocons_android.Activities.ChatActivity">
 
     <android.support.v7.widget.CardView
@@ -32,40 +33,25 @@
                 android:id="@+id/root_layout"
                 android:layout_below="@+id/custom_toolbar"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:id="@+id/root_container">
+                    android:layout_weight="1">
 
-                    <LinearLayout
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/message_list"
                         android:layout_width="match_parent"
-                        android:layout_height="0dip"
-                        android:layout_weight="1">
+                        android:layout_height="match_parent"/>
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/message_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
-
-                    <include
-                        layout="@layout/chatroom_footer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chatroom_footer"/>
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/emo_container"
+                <include
+                    layout="@layout/chatroom_footer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#343434"
-                    android:visibility="gone"/>
+                    android:id="@+id/chatroom_footer"/>
+
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
-</LinearLayout>
+</com.hoocons.hoocons_android.CustomUI.ChatWrapperKeyboard>
