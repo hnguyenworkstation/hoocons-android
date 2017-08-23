@@ -15,8 +15,8 @@ import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +35,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.hoocons.hoocons_android.Adapters.ChatMessagesAdapter;
-import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
+import com.hoocons.hoocons_android.CustomUI.ChatWrapperKeyboard;
+import com.hoocons.hoocons_android.CustomUI.xhs_common.Constants;
+import com.hoocons.hoocons_android.CustomUI.xhs_common.SimpleCommonUtils;
 import com.hoocons.hoocons_android.EventBus.SmallEmotionClicked;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
@@ -50,22 +53,29 @@ import com.hoocons.hoocons_android.Models.ChatMessage;
 import com.hoocons.hoocons_android.Models.Emotion;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
-import com.hoocons.hoocons_android.ViewFragments.CommonEmojiFragment;
 import com.hoocons.hoocons_android.ViewFragments.StickerCombinationFragment;
+import com.sj.emoji.EmojiBean;
 
 import org.aisen.android.common.utils.BitmapUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import sj.keyboard.data.EmoticonEntity;
+import sj.keyboard.interfaces.EmoticonClickListener;
+import sj.keyboard.widget.EmoticonsEditText;
+import sj.keyboard.widget.FuncLayout;
 
-public class ChatActivity extends BaseActivity implements View.OnClickListener,
-        OnStickerPagerFragmentInteractionListener, OnChatMessageClickListener {
+public class ChatActivity extends BaseActivity
+        implements View.OnClickListener,
+        OnStickerPagerFragmentInteractionListener,
+        OnChatMessageClickListener,
+        FuncLayout.OnFuncKeyBoardListener {
+
     @BindView(R.id.user_state)
     TextView mUserState;
     @BindView(R.id.user_name)
@@ -73,73 +83,21 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
     @BindView(R.id.message_list)
     RecyclerView mRecyclerView;
 
-    @BindView(R.id.chatroom_send)
-    ImageButton mSendButton;
-    @BindView(R.id.chatroom_emoji)
-    ImageButton mEmojiButton;
-    @BindView(R.id.emo_container)
-    View mEmoContainer;
-    @BindView(R.id.chat_input_content)
-    EditText mTextInput;
-    @BindView(R.id.root_layout)
-    ViewGroup mRootLayout;
-    @BindView(R.id.root_container)
-    View mRootContainer;
+    @BindView(R.id.keyboard_wrapper)
+    ChatWrapperKeyboard wrapperKeyboard;
 
-    private StickerCombinationFragment stickerCombinationFragment;
-    private CommonEmojiFragment commonEmojiFragment;
     private int emotionHeight;
-    private final LayoutTransition transitioner = new LayoutTransition();
     private String chatRoomId;
     private List<ChatMessage> chatMessageList;
     private ChatMessagesAdapter messagesAdapter;
     private boolean isLoading = false;
     private DatabaseReference messageListDataRef;
     private int lastShownNamePos;
-
-    private final TextWatcher editContentWatcher = new TextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (mTextInput.getText().toString().length() > 0) {
-                mSendButton.setEnabled(true);
-            } else {
-                mSendButton.setEnabled(false);
-            }
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    private final View.OnKeyListener keyListener = new View.OnKeyListener() {
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_DEL)
-            {
-                Log.e(TAG, "onKey: DELETE");
-                shouldRemoveLastIcon();
-                return true;
-            } else if (keyCode==KeyEvent.KEYCODE_ENTER)
-            {
-                // Just ignore the [Enter] key
-                return true;
-            }
-
-            return  false;
-        }
-    };
+    private EmoticonClickListener emoticonClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
@@ -152,19 +110,77 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
                 .child("messages").child(chatRoomId);
         chatMessageList = new ArrayList<>();
 
-        stickerCombinationFragment = new StickerCombinationFragment();
-        commonEmojiFragment = CommonEmojiFragment.newInstance("1", "1");
-
-        getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                commonEmojiFragment, "EmotionFragment").commit();
-
-
-        mSendButton.setEnabled(false);
-
+        initCommonEmojiLayout();
         initRecyclerView();
         initDataChangeListener();
-        initEmotionLayout();
-        initOnListener();
+    }
+
+    private void initCommonEmojiLayout() {
+        emoticonClickListener = new EmoticonClickListener() {
+            @Override
+            public void onEmoticonClick(Object o, int actionType, boolean isDelBtn) {
+
+                if (isDelBtn) {
+                    SimpleCommonUtils.delClick(wrapperKeyboard.getEtChat());
+                } else {
+                    if (o == null) {
+                        return;
+                    }
+                    if (actionType == Constants.EMOTICON_CLICK_BIGIMAGE) {
+                        if (o instanceof EmoticonEntity) {
+                            // OnSendImage(((EmoticonEntity)o).getIconUri());
+                        }
+                    } else {
+                        String content = null;
+                        if (o instanceof EmojiBean) {
+                            content = ((EmojiBean) o).emoji;
+                        } else if (o instanceof EmoticonEntity) {
+                            content = ((EmoticonEntity) o).getContent();
+                        }
+
+                        if (TextUtils.isEmpty(content)) {
+                            return;
+                        }
+                        int index = wrapperKeyboard.getEtChat().getSelectionStart();
+                        Editable editable = wrapperKeyboard.getEtChat().getText();
+                        editable.insert(index, content);
+                    }
+                }
+            }
+        };
+
+        SimpleCommonUtils.initEmoticonsEditText(wrapperKeyboard.getEtChat());
+        wrapperKeyboard.setAdapter(SimpleCommonUtils.getCommonAdapter(this, emoticonClickListener));
+        wrapperKeyboard.addOnFuncKeyBoardListener(this);
+//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PTT, new SimpleQqGridView(this));
+//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PTV, new SimpleQqGridView(this));
+//        wrapperKeyboard.addFuncView(ChatWrapperKeyboard.FUNC_TYPE_PLUG, new SimpleQqGridView(this));
+
+        wrapperKeyboard.getEtChat().setOnSizeChangedListener(new EmoticonsEditText.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int w, int h, int oldw, int oldh) {
+                // scrollToBottom();
+            }
+        });
+        wrapperKeyboard.getBtnSend().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // OnSendBtnClick(ekBar.getEtChat().getText().toString());
+                wrapperKeyboard.getEtChat().setText("");
+            }
+        });
+        wrapperKeyboard.getEmoticonsToolBarView().addFixedToolItemView(false, R.drawable.ic_line_plus, null, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ChatActivity.this, "ADD", Toast.LENGTH_SHORT).show();
+            }
+        });
+        wrapperKeyboard.getEmoticonsToolBarView().addToolItemView(R.drawable.ic_setting_unselected, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ChatActivity.this, "SETTING", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initDataChangeListener() {
@@ -279,118 +295,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         });
     }
 
-    private void initEmotionLayout() {
-        if (stickerCombinationFragment == null) {
-            stickerCombinationFragment = StickerCombinationFragment.newInstance();
-
-            getSupportFragmentManager().beginTransaction().add(R.id.emo_container,
-                    stickerCombinationFragment, "EmotionFragment").commit();
-        }
-
-        ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "translationY",
-                SystemUtils.getScreenHeight(this), emotionHeight).
-                setDuration(transitioner.getDuration(LayoutTransition.APPEARING));
-        transitioner.setAnimator(LayoutTransition.APPEARING, animIn);
-
-        ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "translationY", emotionHeight,
-                SystemUtils.getScreenHeight(this)).
-                setDuration(transitioner.getDuration(LayoutTransition.DISAPPEARING));
-        transitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
-        mRootLayout.setLayoutTransition(transitioner);
-
-        mTextInput.setFilters(new InputFilter[] { emotionFilter });
-        mTextInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideEmotionView(true);
-            }
-        });
-    }
-
-    private void initOnListener() {
-        mSendButton.setOnClickListener(this);
-        mEmojiButton.setOnClickListener(this);
-
-        mTextInput.addTextChangedListener(editContentWatcher);
-        mTextInput.setOnKeyListener(keyListener);
-    }
-
-    private void switchEmotionSoftInput() {
-        if (mEmoContainer.isShown()) {
-            hideEmotionView(true);
-        } else {
-            showEmotionView(SystemUtils.isKeyBoardShow(this));
-
-        }
-    }
-
-    private void showEmotionView(boolean showAnimation) {
-        mEmojiButton.setSelected(true);
-
-        if (showAnimation) {
-            transitioner.setDuration(200);
-        } else {
-            transitioner.setDuration(0);
-        }
-
-        int statusBarHeight = SystemUtils.getStatusBarHeight(ChatActivity.this);
-        emotionHeight = SystemUtils.getKeyboardHeight(ChatActivity.this);
-
-        SystemUtils.hideSoftInput(this, mTextInput);
-        mEmoContainer.getLayoutParams().height = emotionHeight;
-        mEmoContainer.setVisibility(View.VISIBLE);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        int lockHeight = SystemUtils.getAppContentHeight(this);
-        lockContainerHeight(lockHeight);
-    }
-
-    private void lockContainerHeight(int paramInt) {
-        LinearLayout.LayoutParams localLayoutParams = (LinearLayout.LayoutParams)
-                mRootContainer.getLayoutParams();
-        localLayoutParams.height = paramInt;
-        localLayoutParams.weight = 0.0F;
-    }
-
-    private void hideEmotionView(boolean showKeyBoard) {
-        mEmojiButton.setSelected(false);
-
-        if (mEmoContainer.isShown()) {
-            if (showKeyBoard) {
-                LinearLayout.LayoutParams localLayoutParams = (LinearLayout.LayoutParams)
-                        mRootContainer.getLayoutParams();
-
-                localLayoutParams.height = mEmoContainer.getTop();
-                localLayoutParams.weight = 0.0F;
-
-                mEmoContainer.setVisibility(View.GONE);
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-                SystemUtils.showKeyBoard(this, mTextInput);
-                mTextInput.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        unlockContainerHeightDelayed();
-                    }
-                }, 200L);
-            } else {
-                mEmoContainer.setVisibility(View.GONE);
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                unlockContainerHeightDelayed();
-            }
-        }
-    }
-
-    public void unlockContainerHeightDelayed() {
-        ((LinearLayout.LayoutParams) mRootContainer.getLayoutParams()).weight = 1.0F;
-    }
-
     private void sendPlainTextMessage() {
         ChatMessage message = new ChatMessage(
                 SharedPreferencesManager.getDefault().getUserId(),
                 AppConstant.MESSAGE_TYPE_TEXT,
                 AppUtils.getCurrentUTCTime(),
-                mTextInput.getText().toString(),
+                wrapperKeyboard.getEtChat().getText().toString(),
                 null, false, null, null, null, false);
         ChatUtils.pushMessage(chatRoomId, message);
 
@@ -399,17 +309,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         chatMessageList.add(0, message);
         mRecyclerView.smoothScrollToPosition(0);
 
-        mTextInput.setText("");
+        wrapperKeyboard.getEtChat().setText("");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.chatroom_emoji:
-                switchEmotionSoftInput();
-                break;
-            case R.id.chatroom_send:
-                if (mTextInput.getText().length() > 0) {
+            case R.id.btn_send:
+                if (wrapperKeyboard.getEtChat().getText().length() > 0) {
                     sendPlainTextMessage();
                 }
                 break;
@@ -418,80 +325,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private InputFilter emotionFilter = new InputFilter() {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            if ("".equals(source)) {
-                return null;
-            }
-
-            byte[] emotionBytes = EmotionsDB.getEmotion(source.toString());
-            if (emotionBytes != null) {
-                byte[] data = emotionBytes;
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                int size = BaseActivity.getRunningActivity().getResources()
-                        .getDimensionPixelSize(R.dimen.publish_emotion_size);
-                bitmap = BitmapUtil.zoomBitmap(bitmap, size);
-                SpannableString emotionSpanned = new SpannableString(source.toString());
-                ImageSpan span = new ImageSpan(ChatActivity.this, bitmap);
-                emotionSpanned.setSpan(span, 0, source.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                return emotionSpanned;
-            } else {
-                return source;
-            }
-        }
-    };
-
-    private void insertToTextInput(Emotion emotion) {
-        Editable editAble = mTextInput.getEditableText();
-        int start = mTextInput.getSelectionStart();
-        if ("[最右]".equals(emotion.getKey()))
-            editAble.insert(start, "→_→");
-        else
-            editAble.insert(start, emotion.getKey());
-
-        // now set click listener when add new fragment -> push event bus
-    }
-
-    private void shouldRemoveLastIcon() {
-        String text = mTextInput.getText().toString();
-        int index = 0;
-        if (text.charAt(text.length() - 1) == ']') {
-            for(int i = text.length() - 1; i > 0 ; i--) {
-                if (text.charAt(i) == '[') {
-                    index = i;
-                    break;
-                }
-            }
-        } else {
-            return;
-        }
-
-        String bracket = text.substring(index, text.length() - 1);
-        byte[] emotionBytes = EmotionsDB.getEmotion(bracket);
-
-        if (emotionBytes != null) {
-            if (index > 0) {
-                text = text.substring(0, index - 1);
-            } else {
-                text = "";
-            }
-            mTextInput.setText(text);
-        }
-    }
 
     @Override
     public void onBackPressed() {
-        if (mEmoContainer.isShown()) {
-            hideEmotionView(false);
-        }
-
         super.onBackPressed();
-    }
-
-    @Subscribe
-    public void onEvent(SmallEmotionClicked request) {
-        insertToTextInput(request.getEmotion());
     }
 
     @Override
@@ -527,6 +364,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onMessageContactClickListener(int position) {
+
+    }
+
+    @Override
+    public void OnFuncPop(int height) {
+
+    }
+
+    @Override
+    public void OnFuncClose() {
 
     }
 }
