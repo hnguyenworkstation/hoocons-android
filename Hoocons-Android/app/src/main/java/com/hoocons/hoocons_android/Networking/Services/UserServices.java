@@ -10,6 +10,7 @@ import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -95,4 +96,5 @@ public interface UserServices {
      ********************************** */
     @PUT("/user/update/gcm/token={old_token}")
     Call<Void> updateFcmToken(@Path("old_token") String oldToken, @Body FCMTokenRequest request);
+
 }
