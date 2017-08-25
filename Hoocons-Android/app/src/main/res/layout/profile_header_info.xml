@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/display_name"
             android:textSize="@dimen/option_title_size"
+            android:maxLines="2"
             android:textColor="@color/black"
             android:text="Hung Q Nguyen"/>
 
@@ -45,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nick_name"
-            android:textSize="@dimen/text_12"
+            android:textSize="@dimen/text_14"
             android:textColor="@color/gray_alpha"
             android:text="/@hnguyen123"/>
 
@@ -53,12 +54,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8"
+            android:weightSum="5"
             android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_8"
+                android:visibility="gone"
+                android:layout_weight="4"
+                android:id="@+id/action_huge_send_message"
+                style="@style/wrapping_button"
+                app:bootstrapText="{fa_comments} Messages"
+                app:bootstrapBrand="warning"
+                app:buttonMode="regular"
+                app:showOutline="false"
+                app:roundedCorners="true"
+                app:bootstrapSize="lg"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/action_friend_status"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_14"
@@ -66,21 +82,51 @@
                 app:bootstrapBrand="secondary"
                 app:buttonMode="regular"
                 app:showOutline="true"
+                android:layout_weight="3"
                 app:roundedCorners="true"
-                app:bootstrapSize="md"/>
+                app:bootstrapSize="lg"/>
 
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/action_send_message"
                 style="@style/wrapping_button"
+                app:bootstrapText="{fa_comments}"
+                app:bootstrapBrand="secondary"
+                app:buttonMode="regular"
+                app:showOutline="true"
+                app:roundedCorners="true"
+                android:layout_weight="1"
+                app:bootstrapSize="lg"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/action_more"
+                style="@style/wrapping_button"
+                app:bootstrapText="{fa_caret_down}"
+                app:bootstrapBrand="secondary"
+                app:buttonMode="regular"
+                app:showOutline="true"
+                app:roundedCorners="true"
+                android:layout_weight="1"
+                app:bootstrapSize="lg"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:visibility="gone"
+                android:layout_weight="5"
+                android:id="@+id/action_edit_profile"
+                style="@style/wrapping_button"
                 android:textSize="@dimen/text_14"
                 app:bootstrapText="{fa_comments} Chat"
-                app:bootstrapBrand="warning"
+                app:bootstrapBrand="secondary"
                 app:buttonMode="regular"
-                app:showOutline="false"
+                app:showOutline="true"
                 app:roundedCorners="true"
-                app:bootstrapSize="md"/>
+                app:bootstrapSize="lg"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -44,6 +44,8 @@ public class UserInfoResponse {
     private boolean isFriend;
     @SerializedName("hobbies")
     private List<Topic> hobbies;
+    @SerializedName("friend_requested")
+    private boolean isFriendRequested;
 
     public UserInfoResponse() {
     }
@@ -52,6 +54,14 @@ public class UserInfoResponse {
         this.displayName = displayName;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
+    }
+
+    public boolean isFriendRequested() {
+        return isFriendRequested;
+    }
+
+    public void setFriendRequested(boolean friendRequested) {
+        isFriendRequested = friendRequested;
     }
 
     public int getUserPK() {

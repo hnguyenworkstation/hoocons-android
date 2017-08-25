@@ -5,36 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="@dimen/flexible_space_image_height"
+        android:background="@android:color/transparent" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/flexible_space_image_height"
-            android:background="@android:color/transparent" />
+    <LinearLayout
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/profile_header_info"/>
+    </LinearLayout>
 
-        <LinearLayout
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include layout="@layout/profile_header_info"/>
-        </LinearLayout>
+    <LinearLayout
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/profile_info_details"/>
+    </LinearLayout>
 
-        <LinearLayout
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include layout="@layout/profile_info_details"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include layout="@layout/profile_meetout_created"/>
-        </LinearLayout>
+    <LinearLayout
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/profile_meetout_created"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -46,6 +48,7 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
@@ -222,6 +225,18 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.action_send_message)
     BootstrapButton mSendMessageBtn;
+
+    @Nullable
+    @BindView(R.id.action_huge_send_message)
+    BootstrapButton mHugeSendMessageBtn;
+
+    @Nullable
+    @BindView(R.id.action_edit_profile)
+    BootstrapButton mProfileEditBtn;
+
+    @Nullable
+    @BindView(R.id.action_more)
+    BootstrapButton mProfileMoreOptionBtn;
 
     @Nullable
     @BindView(R.id.profile_progress_bar)
@@ -622,7 +637,51 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mNickname.setText(nickname);
         mNickname.setTypeface(EasyFonts.robotoRegular(context));
 
+        initRelationshipInfo(context, response, infoListener);
         drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
+    }
+
+    private void initRelationshipInfo(final Context context, final UserInfoResponse response,
+                                      final OnUserInfoClickListener infoListener) {
+        assert mAddFriendBtn != null;
+        assert mProfileEditBtn != null;
+        assert mProfileMoreOptionBtn != null;
+        assert mSendMessageBtn != null;
+        assert mHugeSendMessageBtn != null;
+
+        if (response.getUserPK() == SharedPreferencesManager.getDefault().getUserId()) {
+            mProfileEditBtn.setBootstrapText(new BootstrapText.Builder(context)
+                    .addFontAwesomeIcon(FontAwesome.FA_PENCIL_SQUARE_O)
+                    .addText(" " + context.getResources().getText(R.string.edit_profile))
+                    .build());
+
+            mAddFriendBtn.setVisibility(View.GONE);
+            mSendMessageBtn.setVisibility(View.GONE);
+            mProfileEditBtn.setVisibility(View.VISIBLE);
+            mProfileMoreOptionBtn.setVisibility(View.GONE);
+            mHugeSendMessageBtn.setVisibility(View.GONE);
+        } else if (response.isFriend()) {
+            mHugeSendMessageBtn.setBootstrapText(new BootstrapText.Builder(context)
+                    .addFontAwesomeIcon(FontAwesome.FA_COMMENT_O)
+                    .addText(" " + context.getResources().getText(R.string.messages))
+                    .build());
+
+            mAddFriendBtn.setVisibility(View.GONE);
+            mSendMessageBtn.setVisibility(View.GONE);
+            mProfileEditBtn.setVisibility(View.GONE);
+            mProfileMoreOptionBtn.setVisibility(View.VISIBLE);
+            mHugeSendMessageBtn.setVisibility(View.VISIBLE);
+        } else if (response.isFriendRequested()) {
+            mAddFriendBtn.setVisibility(View.VISIBLE);
+            mAddFriendBtn.setBootstrapText(new BootstrapText.Builder(context)
+                    .addFontAwesomeIcon(FontAwesome.FA_SPINNER)
+                    .addText(" " + context.getResources().getText(R.string.requested))
+                    .build());
+            mSendMessageBtn.setVisibility(View.VISIBLE);
+            mProfileEditBtn.setVisibility(View.GONE);
+            mProfileMoreOptionBtn.setVisibility(View.VISIBLE);
+            mHugeSendMessageBtn.setVisibility(View.GONE);
+        }
     }
 
     private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts,

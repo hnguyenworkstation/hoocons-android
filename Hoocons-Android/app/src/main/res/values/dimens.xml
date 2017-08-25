@@ -108,7 +108,7 @@
     <dimen name="option_row_padding">10dp</dimen>
     <dimen name="option_text_size">15sp</dimen>
     <dimen name="option_text_detail">18sp</dimen>
-    <dimen name="option_title_size">28sp</dimen>
+    <dimen name="option_title_size">24sp</dimen>
 
     <!-- People Around dimens -->
     <dimen name="pparound_logo_size">50dp</dimen>
@@ -291,7 +291,7 @@
 
     <!-- Override Bottombar dimens-->
     <dimen name="design_bottom_navigation_height" tools:override="true">56dp</dimen>
-    <dimen name="profile_header_large_size">128dp</dimen>
+    <dimen name="profile_header_large_size">100dp</dimen>
     <dimen name="emotion_size">18dip</dimen>
     <dimen name="publish_emotion_size">24dip</dimen>
     <dimen name="rippleStrokeWidth">2dp</dimen>

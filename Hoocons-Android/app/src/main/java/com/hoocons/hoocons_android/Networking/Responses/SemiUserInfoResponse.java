@@ -32,7 +32,8 @@ public class SemiUserInfoResponse {
     private boolean isSharingLocation;
     @SerializedName("is_friend")
     private boolean isFriend;
-
+    @SerializedName("friend_requested")
+    private boolean isFriendRequested;
     @ParcelPropertyConverter(MultiTopicsParcel.class)
     @SerializedName("hobbies")
     private List<Topic> hobbies;
@@ -44,6 +45,14 @@ public class SemiUserInfoResponse {
         this.user = user;
         this.displayName = displayName;
         this.profileUrl = profileUrl;
+    }
+
+    public boolean isFriendRequested() {
+        return isFriendRequested;
+    }
+
+    public void setFriendRequested(boolean friendRequested) {
+        isFriendRequested = friendRequested;
     }
 
     public int getUser() {
