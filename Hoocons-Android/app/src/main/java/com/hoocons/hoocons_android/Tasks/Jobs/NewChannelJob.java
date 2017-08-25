@@ -65,7 +65,7 @@ public class NewChannelJob extends Job {
             @Override
             public void onResponse(Call<IdResponse> call, Response<IdResponse> response) {
                 if (response.code() == 200) {
-                    EventBus.getDefault().post(new TaskCompleteRequest(AppConstant.CREATE_NEW_CHANNEL,
+                    EventBus.getDefault().post(new TaskCompleteRequest(AppConstant.CREATE_NEW_CHANNEL_TAG,
                             response.body().getId()));
                 }
             }

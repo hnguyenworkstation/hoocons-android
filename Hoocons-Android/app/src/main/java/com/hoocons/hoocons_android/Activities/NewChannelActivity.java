@@ -35,7 +35,6 @@ import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Topic;
-import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
 import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
@@ -57,7 +56,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.iwf.photopicker.PhotoPicker;
 
 public class NewChannelActivity extends BaseActivity {
@@ -397,7 +395,7 @@ public class NewChannelActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(TaskCompleteRequest task) {
-        if (task.getTag().equals(AppConstant.CREATE_NEW_CHANNEL)) {
+        if (task.getTag().equals(AppConstant.CREATE_NEW_CHANNEL_TAG)) {
             cancelDialog();
             Toast.makeText(this, getResources().getString(R.string.created_channel) + String.valueOf(task.getId()),
                     Toast.LENGTH_SHORT).show();
