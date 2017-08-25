@@ -59,14 +59,14 @@
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginEnd="@dimen/margin_8"
                 android:visibility="gone"
                 android:layout_weight="4"
                 android:id="@+id/action_huge_send_message"
                 style="@style/wrapping_button"
                 app:bootstrapText="{fa_comments} Messages"
-                app:bootstrapBrand="warning"
+                app:bootstrapBrand="regular"
                 app:buttonMode="regular"
                 app:showOutline="false"
                 app:roundedCorners="true"
@@ -74,12 +74,12 @@
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:id="@+id/action_friend_status"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_14"
                 app:bootstrapText="{fa_plus} Add Friend"
-                app:bootstrapBrand="secondary"
+                app:bootstrapBrand="regular"
                 app:buttonMode="regular"
                 app:showOutline="true"
                 android:layout_weight="3"
@@ -88,11 +88,11 @@
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:id="@+id/action_send_message"
                 style="@style/wrapping_button"
                 app:bootstrapText="{fa_comments}"
-                app:bootstrapBrand="secondary"
+                app:bootstrapBrand="regular"
                 app:buttonMode="regular"
                 app:showOutline="true"
                 app:roundedCorners="true"
@@ -101,11 +101,11 @@
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:id="@+id/action_more"
                 style="@style/wrapping_button"
                 app:bootstrapText="{fa_caret_down}"
-                app:bootstrapBrand="secondary"
+                app:bootstrapBrand="regular"
                 app:buttonMode="regular"
                 app:showOutline="true"
                 app:roundedCorners="true"
@@ -114,7 +114,7 @@
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginEnd="@dimen/margin_8"
                 android:visibility="gone"
                 android:layout_weight="5"
@@ -122,7 +122,7 @@
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_14"
                 app:bootstrapText="{fa_comments} Chat"
-                app:bootstrapBrand="secondary"
+                app:bootstrapBrand="regular"
                 app:buttonMode="regular"
                 app:showOutline="true"
                 app:roundedCorners="true"

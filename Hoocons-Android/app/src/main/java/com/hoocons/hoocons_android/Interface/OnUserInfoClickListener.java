@@ -8,6 +8,10 @@ import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 
 public interface OnUserInfoClickListener {
     void onUserProfileClicked();
+    void onAddFriendClicked();
+    void onEditProfileClicked();
+    void onStartChatClicked();
+    void onProfileMoreClicked();
     void onMeetOutViewClicked(final MeetOutParcel meetOutParcel);
     void onViewMoreMeetOutClicked();
 }

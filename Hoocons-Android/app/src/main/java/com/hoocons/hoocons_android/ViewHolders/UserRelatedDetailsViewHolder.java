@@ -638,7 +638,51 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mNickname.setTypeface(EasyFonts.robotoRegular(context));
 
         initRelationshipInfo(context, response, infoListener);
+        initOnProfileButtonClick(infoListener);
         drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
+    }
+
+    private void initOnProfileButtonClick(final OnUserInfoClickListener infoListener) {
+        assert mAddFriendBtn != null;
+        assert mProfileEditBtn != null;
+        assert mProfileMoreOptionBtn != null;
+        assert mSendMessageBtn != null;
+        assert mHugeSendMessageBtn != null;
+
+        mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoListener.onAddFriendClicked();
+            }
+        });
+
+        mProfileEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoListener.onEditProfileClicked();
+            }
+        });
+
+        mProfileMoreOptionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoListener.onProfileMoreClicked();
+            }
+        });
+
+        mSendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoListener.onStartChatClicked();
+            }
+        });
+
+        mHugeSendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoListener.onStartChatClicked();
+            }
+        });
     }
 
     private void initRelationshipInfo(final Context context, final UserInfoResponse response,

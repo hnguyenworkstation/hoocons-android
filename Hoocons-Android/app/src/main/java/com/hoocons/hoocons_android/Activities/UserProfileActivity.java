@@ -561,6 +561,26 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
+    public void onAddFriendClicked() {
+
+    }
+
+    @Override
+    public void onEditProfileClicked() {
+
+    }
+
+    @Override
+    public void onStartChatClicked() {
+
+    }
+
+    @Override
+    public void onProfileMoreClicked() {
+
+    }
+
+    @Override
     public void onMeetOutViewClicked(final MeetOutParcel meetOutParcel) {
         Intent intent = new Intent(UserProfileActivity.this, MeetOutActivity.class);
         intent.putExtra("meetout",
