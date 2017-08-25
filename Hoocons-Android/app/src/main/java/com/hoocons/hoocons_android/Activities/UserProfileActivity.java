@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -20,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.TagConstraint;
 import com.bumptech.glide.Glide;
@@ -39,8 +42,11 @@ import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
+import com.hoocons.hoocons_android.EventBus.FriendRequestAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
+import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.UserUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
@@ -58,6 +64,7 @@ import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchPostedEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.GetUserInfoJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.SendFriendRequestJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
 
 import org.greenrobot.eventbus.EventBus;
@@ -114,6 +121,7 @@ public class UserProfileActivity extends DraggerActivity
     private final int EVENT_PACK = 15;
     private boolean canLoadMore = false;
     private PopupMenu eventPopup;
+    private String currentRequestTag;
 
     private UserInfoResponse userInfoResponse;
     private UserRelatedDetailsAdapter mEventsAdapter;
@@ -121,6 +129,8 @@ public class UserProfileActivity extends DraggerActivity
     private boolean isLoading = false;
     private UserParcel userParcel;
     private int currentPage = 0;
+
+    private MaterialDialog mCancelFriendRequestDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +149,35 @@ public class UserProfileActivity extends DraggerActivity
         }
 
         handler = new Handler();
+        initDialogs();
         initTempViewWithParcel(userParcel);
         initGeneralView();
+    }
+
+    private void initDialogs() {
+        mCancelFriendRequestDialog = new MaterialDialog.Builder(this)
+                .title(R.string.withdraw_friend_request)
+                .content(R.string.withdraw_friend_request_content)
+                .positiveText(R.string.withdraw)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if(userInfoResponse.isFriendRequested() && currentRequestTag != null) {
+                            BaseApplication.getInstance().getJobManager().cancelJobsInBackground(null,
+                                    TagConstraint.ANY, currentRequestTag);
+                        } else if (userInfoResponse.isFriendRequested()) {
+
+                        }
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .build();
     }
 
     private void initEventRecyclerView() {
@@ -294,6 +331,10 @@ public class UserProfileActivity extends DraggerActivity
         mEventsAdapter.updateUserProfile(userInfoResponse);
     }
 
+    private void showCancelFriendRequestDialog() {
+        mCancelFriendRequestDialog.show();
+    }
+
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         setSlideEnabled(scrollY == 0);
@@ -347,64 +388,6 @@ public class UserProfileActivity extends DraggerActivity
             Log.i("ChannelActivity", "nothing on backstack, calling super");
             super.onBackPressed();
         }
-    }
-
-    /**********************************************
-     * EVENTBUS CATCHING FIELDS
-     *  + PublicModeRequest: Request Public Mode
-     ***********************************************/
-    @Subscribe
-    public void onEvent(FetchUserInfoCompleteEvBusRequest request) {
-        initViewWithCompleteInfo(request.getmResponse());
-
-        // Load page 1 after complete getting user data
-        jobManager.addJobInBackground(new FetchPostedEventJob(userParcel.getUserId(), 1));
-    }
-
-    @Subscribe
-    public void onEvent(FetchEventListSuccessEvBusRequest request) {
-        canLoadMore = request.getApiViewSet().getNext() != null;
-        currentPage++;
-        eventResponseList.addAll(request.getApiViewSet().getResults());
-        mEventsAdapter.notifyDataSetChanged();
-    }
-
-    @Subscribe
-    public void onEvent(StartEventChildImages request) {
-        MultiImagesEventClickedParcel parcel = new MultiImagesEventClickedParcel();
-
-        if (eventResponseList.get(request.getEventPosition()).getContainEvent() == null) {
-            parcel.setResponseList(eventResponseList
-                    .get(request.getEventPosition())
-                    .getMedias());
-            parcel.setClickedPosition( request.getImagePosition());
-            parcel.setTextContent(eventResponseList
-                    .get(request.getEventPosition())
-                    .getTextContent());
-            parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition())
-                    .getAuthor()
-                    .getDisplayName());
-        } else {
-            parcel.setResponseList(eventResponseList.get(request.getEventPosition())
-                    .getContainEvent().getMedias());
-            parcel.setClickedPosition(request.getImagePosition());
-            parcel.setTextContent(eventResponseList.get(request.getEventPosition()).getContainEvent().getTextContent());
-            parcel.setUserDisplayName(eventResponseList
-                    .get(request.getEventPosition())
-                    .getContainEvent()
-                    .getAuthor().getDisplayName());
-        }
-
-        Intent listImages = new Intent(UserProfileActivity.this, FullEventImagesActivity.class);
-        listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
-
-        startActivity(listImages);
-    }
-
-    @Subscribe
-    public void onEvent(OnMeetOutViewClicked request) {
-        Toast.makeText(this, String.valueOf(request.getMeetOutId()), Toast.LENGTH_SHORT).show();
-        // Todo: Trigger full meetout from here
     }
 
     @Override
@@ -562,7 +545,19 @@ public class UserProfileActivity extends DraggerActivity
 
     @Override
     public void onAddFriendClicked() {
-
+        if (userInfoResponse.isFriendRequested()) {
+            showCancelFriendRequestDialog();
+        } else if (userInfoResponse.isFriendRequested()) {
+            showCancelFriendRequestDialog();
+        } else {
+            if (currentRequestTag != null) {
+                showCancelFriendRequestDialog();
+            } else {
+                currentRequestTag = "REQUEST-" + String.valueOf(userInfoResponse.getUserPK());;
+                BaseApplication.getInstance().getJobManager()
+                        .addJobInBackground(new SendFriendRequestJob(currentRequestTag, userInfoResponse.getUserPK()));
+            }
+        }
     }
 
     @Override
@@ -597,4 +592,77 @@ public class UserProfileActivity extends DraggerActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
+    /**********************************************
+     * EVENTBUS CATCHING FIELDS
+     *  + PublicModeRequest: Request Public Mode
+     ***********************************************/
+    @Subscribe
+    public void onEvent(FetchUserInfoCompleteEvBusRequest request) {
+        initViewWithCompleteInfo(request.getmResponse());
+
+        // Load page 1 after complete getting user data
+        jobManager.addJobInBackground(new FetchPostedEventJob(userParcel.getUserId(), 1));
+    }
+
+    @Subscribe
+    public void onEvent(FriendRequestAddedToDisk request) {
+        userInfoResponse.setFriendRequested(true);
+        mEventsAdapter.notifyItemChanged(0);
+    }
+
+    @Subscribe
+    public void onEvent(TaskCompleteRequest request) {
+        if (request.getTag().equals(AppConstant.FRIEND_REQUEST_TAG)){
+            currentRequestTag = null;
+        }
+    }
+
+    @Subscribe
+    public void onEvent(FetchEventListSuccessEvBusRequest request) {
+        canLoadMore = request.getApiViewSet().getNext() != null;
+        currentPage++;
+        eventResponseList.addAll(request.getApiViewSet().getResults());
+        mEventsAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe
+    public void onEvent(StartEventChildImages request) {
+        MultiImagesEventClickedParcel parcel = new MultiImagesEventClickedParcel();
+
+        if (eventResponseList.get(request.getEventPosition()).getContainEvent() == null) {
+            parcel.setResponseList(eventResponseList
+                    .get(request.getEventPosition())
+                    .getMedias());
+            parcel.setClickedPosition( request.getImagePosition());
+            parcel.setTextContent(eventResponseList
+                    .get(request.getEventPosition())
+                    .getTextContent());
+            parcel.setUserDisplayName(eventResponseList.get(request.getEventPosition())
+                    .getAuthor()
+                    .getDisplayName());
+        } else {
+            parcel.setResponseList(eventResponseList.get(request.getEventPosition())
+                    .getContainEvent().getMedias());
+            parcel.setClickedPosition(request.getImagePosition());
+            parcel.setTextContent(eventResponseList.get(request.getEventPosition()).getContainEvent().getTextContent());
+            parcel.setUserDisplayName(eventResponseList
+                    .get(request.getEventPosition())
+                    .getContainEvent()
+                    .getAuthor().getDisplayName());
+        }
+
+        Intent listImages = new Intent(UserProfileActivity.this, FullEventImagesActivity.class);
+        listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
+
+        startActivity(listImages);
+    }
+
+    @Subscribe
+    public void onEvent(OnMeetOutViewClicked request) {
+        Toast.makeText(this, String.valueOf(request.getMeetOutId()), Toast.LENGTH_SHORT).show();
+        // Todo: Trigger full meetout from here
+    }
+
 }

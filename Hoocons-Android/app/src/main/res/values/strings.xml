@@ -78,6 +78,10 @@
     <string name="birthday">Birthday</string>
     <string name="updating">Updating</string>
     <string name="bad_request">Can not connect to server!</string>
+    <string name="relationship">Relationship</string>
+    <string name="withdraw_friend_request">Withdraw friend request?</string>
+    <string name="withdraw_friend_request_content">Other longer will no longer see your friend request!</string>
+    <string name="withdraw">Withdraw</string>
 
     <!-- Setting Strings -->
     <string name="setting">Settings</string>

@@ -7,6 +7,7 @@ import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
+import com.hoocons.hoocons_android.EventBus.FriendRequestAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Networking.NetContext;
@@ -25,16 +26,20 @@ import retrofit2.Response;
  */
 
 public class SendFriendRequestJob extends Job {
+    private static final int JOB_DELAY = 5000;
     private int userId;
 
-    public SendFriendRequestJob(int userId) {
-        super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
+    public SendFriendRequestJob(String tag, int userId) {
+        super(new Params(Priority.HIGH).requireNetwork().persist()
+                .groupBy(JobGroup.event)
+                .addTags(tag)
+                .delayInMs(JOB_DELAY));
         this.userId = userId;
     }
 
     @Override
     public void onAdded() {
-
+        EventBus.getDefault().post(new FriendRequestAddedToDisk());
     }
 
     @Override

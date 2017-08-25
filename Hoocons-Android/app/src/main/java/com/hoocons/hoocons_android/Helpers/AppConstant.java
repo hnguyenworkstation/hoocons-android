@@ -52,6 +52,7 @@ public class AppConstant {
 
     // Constant TAGs for JOBS
     public static final String CREATE_NEW_CHANNEL_TAG = "create_new_channel";
-    public static final String FRIEND_REQUEST = "friend_request";
-    public static final String UNFRIEND_REQUEST = "unfriend_request";
+    public static final String CANCEL_FRIEND_REQUEST_TAG = "cancel_friend_request";
+    public static final String FRIEND_REQUEST_TAG = "friend_request";
+    public static final String UNFRIEND_REQUEST_TAG = "unfriend_request";
 }
