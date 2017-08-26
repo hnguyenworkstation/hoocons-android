@@ -265,6 +265,7 @@
     <dimen name="setting_title_text">14sp</dimen>
     <dimen name="setting_name_text">16sp</dimen>
     <dimen name="setting_name_small_text">12sp</dimen>
+    <dimen name="circle_button_size">32dp</dimen>
 
     <!-- Discuss Fragment-->
     <dimen name="discuss_row_height">150dp</dimen>
