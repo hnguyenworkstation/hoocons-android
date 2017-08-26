@@ -390,7 +390,7 @@ public class AppUtils {
     }
 
     public static void loadCircleImage(final Context context, final String url, ImageView imageView, final ProgressBar progressBar) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.circleCropTransform())
@@ -557,7 +557,7 @@ public class AppUtils {
 
     public static void loadCropImageWithProgressBar(final Context context, final String url,
                                                     final ImageView image, final ProgressBar progressBar) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.centerCropTransform())
@@ -580,7 +580,7 @@ public class AppUtils {
 
     public static void loadCropBlurImageWithProgressBar(final Context context, final String url,
                                                     final ImageView image, final ProgressBar progressBar) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.bitmapTransform(new MultiTransformation<Bitmap>(new CenterCrop(),
@@ -604,7 +604,7 @@ public class AppUtils {
 
     public static void loadCropSquareImageFromUri(final Context context, final Uri uri,
                                                   final ImageView imageView, final ProgressBar progressBar) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(uri)
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

@@ -343,7 +343,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response) {
-        loadUserProfileImage(context, response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
+        loadUserProfileImage(response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
 
         assert mSharedTimeFrame != null;
         assert mSharedUserDisplayName != null;
@@ -465,7 +465,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
-        loadUserProfileImage(context, eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
+        loadUserProfileImage( eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
         mUserDisplayName.setText(eventResponse.getAuthor().getDisplayName());
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
     }
@@ -835,7 +835,33 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                 .into(mProfileImage);
     }
 
-    private void loadUserProfileImage(final Context context, final String url, ImageView imageView) {
+    public void onViewRecycled() {
+        if (mUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mUserProfileImage);
+        }
+
+        if (mSharedUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mSharedUserProfileImage);
+        }
+
+        if (mProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mProfileImage);
+        }
+
+        if (mSingleMediaView != null) {
+            BaseApplication.getInstance().getGlide().clear(mSingleMediaView);
+        }
+
+        if (mLocationMapView != null) {
+            BaseApplication.getInstance().getGlide().clear(mLocationMapView);
+        }
+
+        if (mUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mUserProfileImage);
+        }
+    }
+
+    private void loadUserProfileImage(final String url, ImageView imageView) {
         BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.hoocons.hoocons_android.EventBus.OnImageViewClicked;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.R;
 
@@ -60,7 +61,7 @@ public class EventImagesViewpagerAdapter extends PagerAdapter {
             }
         });
 
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(mediaResponses.get(position).getUrl())
                 .apply(RequestOptions.fitCenterTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

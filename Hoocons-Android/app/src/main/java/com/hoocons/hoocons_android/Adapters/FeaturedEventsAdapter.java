@@ -169,6 +169,12 @@ public class FeaturedEventsAdapter extends RecyclerView.Adapter<FeaturedEventVie
         }
     }
 
+    @Override
+    public void onViewRecycled(FeaturedEventViewHolder holder) {
+        holder.onViewRecycled();
+        super.onViewRecycled(holder);
+    }
+
     public void addLoadingFooter() {
         final Runnable r = new Runnable() {
             public void run() {

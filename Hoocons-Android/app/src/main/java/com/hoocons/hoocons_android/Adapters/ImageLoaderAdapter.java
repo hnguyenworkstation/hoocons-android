@@ -39,6 +39,12 @@ public class ImageLoaderAdapter extends RecyclerView.Adapter<SquaredImageViewHol
     }
 
     @Override
+    public void onViewRecycled(SquaredImageViewHolder holder) {
+        holder.onViewRecycled();
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public int getItemCount() {
         if (imageList.size() > MAX_ITEMS)
             return MAX_ITEMS;

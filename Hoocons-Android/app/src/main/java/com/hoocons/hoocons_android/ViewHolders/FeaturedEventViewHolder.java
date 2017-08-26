@@ -605,4 +605,26 @@ public class FeaturedEventViewHolder extends ViewHolder {
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }
+
+    public void onViewRecycled() {
+        if (mUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mUserProfileImage);
+        }
+
+        if (mSharedUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mSharedUserProfileImage);
+        }
+
+        if (mSingleMediaView != null) {
+            BaseApplication.getInstance().getGlide().clear(mSingleMediaView);
+        }
+
+        if (mLocationMapView != null) {
+            BaseApplication.getInstance().getGlide().clear(mLocationMapView);
+        }
+
+        if (mUserProfileImage != null) {
+            BaseApplication.getInstance().getGlide().clear(mUserProfileImage);
+        }
+    }
 }

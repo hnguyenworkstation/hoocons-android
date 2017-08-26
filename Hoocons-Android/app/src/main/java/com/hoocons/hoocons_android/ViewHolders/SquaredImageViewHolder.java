@@ -113,6 +113,10 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    public void onViewRecycled() {
+        BaseApplication.getInstance().getGlide().clear(mImageView);
+    }
+
     private class ImageSpringListener extends SimpleSpringListener {
         @Override
         public void onSpringUpdate(Spring spring) {

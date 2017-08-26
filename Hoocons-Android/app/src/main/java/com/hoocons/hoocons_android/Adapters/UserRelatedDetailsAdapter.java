@@ -64,6 +64,12 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     }
 
     @Override
+    public void onViewRecycled(UserRelatedDetailsViewHolder holder) {
+        holder.onViewRecycled();
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public UserRelatedDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
