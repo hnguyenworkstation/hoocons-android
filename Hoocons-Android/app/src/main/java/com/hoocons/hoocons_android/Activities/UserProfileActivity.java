@@ -42,7 +42,7 @@ import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
-import com.hoocons.hoocons_android.EventBus.FriendRequestAddedToDisk;
+import com.hoocons.hoocons_android.EventBus.JobAddedToDisk;
 import com.hoocons.hoocons_android.EventBus.OnMeetOutViewClicked;
 import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
@@ -167,7 +167,7 @@ public class UserProfileActivity extends DraggerActivity
                             BaseApplication.getInstance().getJobManager().cancelJobsInBackground(null,
                                     TagConstraint.ANY, currentRequestTag);
                         } else if (userInfoResponse.isFriendRequested()) {
-
+                            // todo: added cancel friend request api here
                         }
                     }
                 })
@@ -556,6 +556,11 @@ public class UserProfileActivity extends DraggerActivity
                 currentRequestTag = "REQUEST-" + String.valueOf(userInfoResponse.getUserPK());;
                 BaseApplication.getInstance().getJobManager()
                         .addJobInBackground(new SendFriendRequestJob(currentRequestTag, userInfoResponse.getUserPK()));
+
+                userInfoResponse.setFriendRequested(true);
+                mEventsAdapter.notifyItemChanged(0);
+                Toast.makeText(this, getResources().getString(R.string.request_ready),
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -607,9 +612,11 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Subscribe
-    public void onEvent(FriendRequestAddedToDisk request) {
-        userInfoResponse.setFriendRequested(true);
-        mEventsAdapter.notifyItemChanged(0);
+    public void onEvent(JobAddedToDisk request) {
+        if (request.getTag().equals(AppConstant.FRIEND_REQUEST_TAG)) {
+            userInfoResponse.setFriendRequested(true);
+            mEventsAdapter.notifyItemChanged(0);
+        }
     }
 
     @Subscribe

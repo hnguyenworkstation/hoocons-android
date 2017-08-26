@@ -19,6 +19,7 @@ public class UserUtils {
         parcel.setUserNickname(response.getNickname());
         parcel.setUserProfileUrl(response.getProfileUrl());
         parcel.setUserWallpaperUrl(response.getWallpaperUrl());
+        parcel.setFriendRequested(response.isFriendRequested());
 
         return parcel;
     }
@@ -44,6 +45,7 @@ public class UserUtils {
         response.setProfileUrl(parcel.getUserProfileUrl());
         response.setWallPaperUrl(parcel.getUserWallpaperUrl());
         response.setFriend(parcel.isFriend());
+        response.setFriendRequested(parcel.isFriendRequested());
         return response;
     }
 }

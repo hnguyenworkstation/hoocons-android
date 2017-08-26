@@ -20,9 +20,18 @@ public class UserParcel {
     @ParcelPropertyConverter(MultiTopicsParcel.class)
     List<Topic> hobbies;
     boolean isFriend;
+    boolean isFriendRequested;
 
     public UserParcel() {
 
+    }
+
+    public boolean isFriendRequested() {
+        return isFriendRequested;
+    }
+
+    public void setFriendRequested(boolean friendRequested) {
+        isFriendRequested = friendRequested;
     }
 
     public List<Topic> getHobbies() {
