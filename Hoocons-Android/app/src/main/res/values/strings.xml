@@ -215,6 +215,7 @@
     <string name="meetout_location_request">Need to provide location for this meetout</string>
     <string name="meetout_medias_missing">Missing Medias</string>
     <string name="meetout_medias_missing_desc">Please add some pictures so people might be interested</string>
+    <string name="let_be_friend">Let\'s be friends</string>
 
     <!-- APIS & Secret Fields -->
     <string name="google_web_service">AIzaSyDmiCmSGlRSOLgjouHiR1NginjFjBRrUnU</string>

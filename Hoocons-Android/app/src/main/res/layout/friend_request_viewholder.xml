@@ -7,20 +7,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_margin="@dimen/margin_8"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/user_profile"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/logo_avatar"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_profile_layout"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_margin="@dimen/margin_8"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/user_profile"
+            android:src="@drawable/logo_avatar"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/user_profile"
+        android:layout_toEndOf="@+id/user_profile_layout"
         android:layout_toStartOf="@+id/bottons">
 
         <TextView
