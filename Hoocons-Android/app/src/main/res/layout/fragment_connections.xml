@@ -31,35 +31,53 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:text="@string/incoming_request"
-                        android:textSize="@dimen/text_12" />
+                        android:textSize="@dimen/text_14" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/fr_request_recycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:visibility="gone"
-                    android:id="@+id/view_more_request"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_margin="@dimen/margin_12"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btn_tv"
-                        android:text="@string/view_all_request"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/text_14"
-                        android:textColor="@color/profile2"/>
+                        android:minHeight="64dp"
+                        >
+
+                        <LinearLayout
+                            android:id="@+id/friend_request_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/fr_request_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                            </android.support.v7.widget.RecyclerView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:visibility="gone"
+                                android:id="@+id/view_more_request"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_margin="@dimen/margin_12"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/btn_tv"
+                                    android:text="@string/view_all_request"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold"
+                                    android:textAlignment="center"
+                                    android:textSize="@dimen/text_14"
+                                    android:textColor="@color/profile2"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerInParent="true"/>
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -75,13 +93,23 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:text="@string/connections"
-                        android:textSize="@dimen/text_12" />
+                        android:textSize="@dimen/text_14" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/friends_recycler"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </android.support.v7.widget.RecyclerView>
+                        android:layout_height="wrap_content"
+                        android:minHeight="64dp">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/friends_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                        <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <RelativeLayout

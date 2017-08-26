@@ -49,6 +49,9 @@ public class ConnectionsFragment extends Fragment {
     @BindView(R.id.btn_tv)
     TextView mViewMoreTextView;
 
+    @BindView(R.id.friend_request_content)
+    LinearLayout mFriendRequestContent;
+
     public ConnectionsFragment() {
         // Required empty public constructor
     }
