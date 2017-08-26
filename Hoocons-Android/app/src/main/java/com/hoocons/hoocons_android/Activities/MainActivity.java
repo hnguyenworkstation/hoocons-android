@@ -173,7 +173,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
             }
         });
-
         mViewPager.setOffscreenPageLimit(limit);
     }
 

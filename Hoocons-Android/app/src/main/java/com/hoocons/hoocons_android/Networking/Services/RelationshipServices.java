@@ -26,7 +26,7 @@ public interface RelationshipServices {
      * @Purpose: get my friends
      ********************************** */
     @GET("/api/v1/relationship/friends/")
-    Call<UserApiViewSet> getFriendList(@Query("page") int pageNum);
+    Call<List<RelationshipResponse>> getFriendList();
 
 
     /**********************************
@@ -36,7 +36,7 @@ public interface RelationshipServices {
      * @Purpose: get my blocks user
      ***********************************/
     @GET("/api/v1/relationship/blocks/")
-    Call<UserApiViewSet> getBlocksList(@Query("page") int pageNum);
+    Call<List<RelationshipResponse>> getBlocksList();
 
 
     /**********************************
@@ -75,18 +75,8 @@ public interface RelationshipServices {
      * @Argument: none
      * @Purpose: get friends list
      ********************************** */
-    @GET("/api/v1/friend/request/friends/")
-    Call<List<RelationshipResponse>> getFriendRequest();
-
-
-    /**********************************
-     * @Method: GET
-     * @Name: getBlocksRequest
-     * @Argument: none
-     * @Purpose: get blocks list
-     ********************************** */
-    @GET("/api/v1/friend/request/blocks/")
-    Call<List<RelationshipResponse>> getBlocksRequest();
+    @GET("/api/v1/friend/request/")
+    Call<FriendshipRequestApiViewSet> getFriendRequest();
 
 
     /**********************************

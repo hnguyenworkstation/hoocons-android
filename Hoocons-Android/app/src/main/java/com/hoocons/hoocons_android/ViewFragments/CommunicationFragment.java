@@ -27,6 +27,7 @@ public class CommunicationFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+    private CommunicateViewPagerAdapter adapter;
 
 
     public CommunicationFragment() {
@@ -66,13 +67,18 @@ public class CommunicationFragment extends Fragment {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        CommunicateViewPagerAdapter adapter =
-                new CommunicateViewPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(MessagingFragment.newInstance("1", "1"), getResources().getString(R.string.messaging));
-        adapter.addFragment(InboxFragment.newInstance("1", "1"), getResources().getString(R.string.inbox));
-        adapter.addFragment(ConnectionsFragment.newInstance("1", "1"), getResources().getString(R.string.connection));
+        if (adapter == null) {
+            adapter = new CommunicateViewPagerAdapter(getChildFragmentManager());
+            adapter.addFragment(MessagingFragment.newInstance("1", "1"), getResources().getString(R.string.messaging));
+            adapter.addFragment(InboxFragment.newInstance("1", "1"), getResources().getString(R.string.inbox));
+            adapter.addFragment(ConnectionsFragment.newInstance("1", "1"), getResources().getString(R.string.connection));
+        }
+
+        /** the ViewPager requires a minimum of 1 as OffscreenPageLimit */
+        int limit = (adapter.getCount() > 1 ? adapter.getCount() - 1 : 1);
 
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(limit);
         mTabBar.setupWithViewPager(viewPager);
         mTabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

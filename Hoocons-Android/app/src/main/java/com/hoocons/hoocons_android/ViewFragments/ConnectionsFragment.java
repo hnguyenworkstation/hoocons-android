@@ -15,13 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hoocons.hoocons_android.Adapters.FriendConnectionsAdapter;
 import com.hoocons.hoocons_android.Adapters.FriendRequestAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.EventBus.FetchFriendRequestComplete;
+import com.hoocons.hoocons_android.EventBus.FetchRelationshipComplete;
+import com.hoocons.hoocons_android.Interface.OnFriendConnectionAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnFriendRequestAdapterListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.ApiViewSets.FriendshipRequestApiViewSet;
 import com.hoocons.hoocons_android.Networking.Responses.FriendshipRequestResponse;
+import com.hoocons.hoocons_android.Networking.Responses.RelationshipResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.FetchSemiFriendRequestJob;
 
@@ -34,7 +38,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConnectionsFragment extends Fragment implements OnFriendRequestAdapterListener{
+public class ConnectionsFragment extends Fragment implements
+        OnFriendRequestAdapterListener, OnFriendConnectionAdapterListener {
     @BindView(R.id.swipe_ref)
     SwipeRefreshLayout mSwipeRef;
 
@@ -70,7 +75,9 @@ public class ConnectionsFragment extends Fragment implements OnFriendRequestAdap
 
     private FriendshipRequestApiViewSet friendshipRequestApiViewSet;
     private FriendRequestAdapter friendRequestAdapter;
+    private FriendConnectionsAdapter friendConnectionsAdapter;
     private List<FriendshipRequestResponse> requestResponseList;
+    private List<RelationshipResponse> friendRelationships;
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -108,6 +115,7 @@ public class ConnectionsFragment extends Fragment implements OnFriendRequestAdap
                 .addJobInBackground(new FetchSemiFriendRequestJob());
 
         requestResponseList = new ArrayList<>();
+        friendRelationships = new ArrayList<>();
 
         initRequestView();
         initFriendListView();
@@ -124,14 +132,29 @@ public class ConnectionsFragment extends Fragment implements OnFriendRequestAdap
         mFriendRequestRecycler.setAdapter(friendRequestAdapter);
     }
 
+    private void initFriendListView() {
+        friendConnectionsAdapter = new FriendConnectionsAdapter(getContext(), friendRelationships, this);
+
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false);
+        mFriendsRecycler.setFocusable(false);
+        mFriendsRecycler.setLayoutManager(mLayoutManager);
+        mFriendsRecycler.setHasFixedSize(false);
+        mFriendsRecycler.setAdapter(friendConnectionsAdapter);
+    }
+
     private void initCompleteRequestView() {
         if (friendshipRequestApiViewSet.getCount() == 0) {
             mFriendRequestLayout.setVisibility(View.GONE);
         }
-    }
 
-    private void initFriendListView() {
+        if (friendRelationships.size() == 0) {
+            mFriendsLayout.setVisibility(View.GONE);
+        }
 
+        if (friendshipRequestApiViewSet.getCount() == 0 && friendRelationships.size() == 0) {
+
+        }
     }
 
     @Subscribe
@@ -139,6 +162,13 @@ public class ConnectionsFragment extends Fragment implements OnFriendRequestAdap
         friendshipRequestApiViewSet = requestComplete.getFriendshipRequestApiViewSet();
         requestResponseList = requestComplete.getFriendshipRequestApiViewSet().getResults();
         friendRequestAdapter.notifyDataSetChanged();
+        initCompleteRequestView();
+    }
+
+    @Subscribe
+    public void onEvent(FetchRelationshipComplete relationshipComplete) {
+        friendRelationships = relationshipComplete.getRelationshipResponseList();
+        friendConnectionsAdapter.notifyDataSetChanged();
         initCompleteRequestView();
     }
 }
