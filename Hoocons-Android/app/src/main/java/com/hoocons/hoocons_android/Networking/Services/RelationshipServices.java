@@ -58,6 +58,16 @@ public interface RelationshipServices {
 
     /**********************************
      * @Method: GET
+     * @Name: getSemiFriendRequest
+     * @Argument: none
+     * @Purpose: get friend requests that sent to me but smaller size
+     ********************************** */
+    @GET("/api/v1/friend/request/semi/")
+    Call<FriendshipRequestApiViewSet> getSemiFriendRequest();
+
+
+    /**********************************
+     * @Method: GET
      * @Name: getFriendRequest
      * @Argument: none
      * @Purpose: get friend requests that sent to me
