@@ -2,6 +2,9 @@ package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Networking.ApiViewSets.FriendshipRequestApiViewSet;
 import com.hoocons.hoocons_android.Networking.ApiViewSets.UserApiViewSet;
+import com.hoocons.hoocons_android.Networking.Responses.RelationshipResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -70,10 +73,20 @@ public interface RelationshipServices {
      * @Method: GET
      * @Name: getFriendRequest
      * @Argument: none
-     * @Purpose: get friend requests that sent to me
+     * @Purpose: get friends list
      ********************************** */
-    @GET("/api/v1/friend/request/")
-    Call<FriendshipRequestApiViewSet> getFriendRequest(@Query("page") int pageNum);
+    @GET("/api/v1/friend/request/friends/")
+    Call<List<RelationshipResponse>> getFriendRequest();
+
+
+    /**********************************
+     * @Method: GET
+     * @Name: getBlocksRequest
+     * @Argument: none
+     * @Purpose: get blocks list
+     ********************************** */
+    @GET("/api/v1/friend/request/blocks/")
+    Call<List<RelationshipResponse>> getBlocksRequest();
 
 
     /**********************************

@@ -131,7 +131,7 @@ public class ConnectionsFragment extends Fragment implements OnFriendRequestAdap
     }
 
     private void initFriendListView() {
-        
+
     }
 
     @Subscribe

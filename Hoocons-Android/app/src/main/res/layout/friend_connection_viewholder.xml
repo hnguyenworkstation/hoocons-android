@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_profile_layout"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_margin="@dimen/margin_8"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/user_profile"
+            android:src="@drawable/logo_avatar"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/user_profile_layout"
+        android:layout_toStartOf="@+id/more_action">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_name"
+            android:text="Hoocons User"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/text_16"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/location"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Let's be friend"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/text_14"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/time_frame"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Friends since two weeks ago"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/text_12"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="2dp"
+        android:id="@+id/more_action"
+        android:background="@drawable/icon_button"
+        android:src="@drawable/ic_more_vert"
+        android:textSize="30sp"
+        android:layout_width="@dimen/circle_button_size"
+        android:layout_height="@dimen/circle_button_size"/>
+</RelativeLayout>
