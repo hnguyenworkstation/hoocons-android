@@ -122,8 +122,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_messaging, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_messaging, container, false);
     }
 
     @Override
@@ -187,7 +186,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     }
 
     private void initTypeFaces() {
-        mRecentConvsTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+        mRecentConvsTitle.setTypeface(EasyFonts.robotoRegular(getContext()));
     }
 
     private void fetchFireBaseChatRooms(List<ChatRoomResponse> responseList) {

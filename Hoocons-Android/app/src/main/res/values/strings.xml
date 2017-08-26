@@ -199,6 +199,7 @@
     <string name="new_activity">Create new activity</string>
 
     <!-- MeetOut Strings -->
+    <string name="view_all_request">View all requests</string>
     <string name="view_more">View More</string>
     <string name="meetout_created">Meetout hosted</string>
     <string name="view_details">Details</string>
@@ -270,6 +271,8 @@
     <string name="connection">Connection</string>
     <string name="unread_messages">Unread Messages</string>
     <string name="recent_convs">Recent Conversations</string>
+    <string name="incoming_request">Incoming Requests</string>
+    <string name="connections">Connections</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>

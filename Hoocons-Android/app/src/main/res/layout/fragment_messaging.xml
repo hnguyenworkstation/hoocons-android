@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:text="@string/recent_convs"
-                        android:textSize="@dimen/text_16" />
+                        android:textSize="@dimen/text_12" />
 
                     <android.support.v7.widget.RecyclerView
                         xmlns:android="http://schemas.android.com/apk/res/android"

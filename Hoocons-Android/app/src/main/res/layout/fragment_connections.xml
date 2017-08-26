@@ -4,10 +4,97 @@
     android:layout_height="match_parent"
     tools:context="com.hoocons.hoocons_android.ViewFragments.ConnectionsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/swipe_ref">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/friend_request_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_10"
+                        android:id="@+id/new_friendrequest_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="@string/incoming_request"
+                        android:textSize="@dimen/text_12" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/fr_request_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:id="@+id/view_more_request"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_tv"
+                        android:text="@string/view_all_request"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_14"
+                        android:textColor="@color/profile2"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/friend_list_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_10"
+                        android:id="@+id/friend_list_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="@string/connections"
+                        android:textSize="@dimen/text_12" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/friends_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginTop="64dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/empty_connections_view">
+                    <include layout="@layout/empty_list_chatrooms_layout"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>
