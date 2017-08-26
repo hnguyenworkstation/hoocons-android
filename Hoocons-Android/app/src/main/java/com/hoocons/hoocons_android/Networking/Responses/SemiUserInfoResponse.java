@@ -15,28 +15,28 @@ import java.util.List;
 @Parcel
 public class SemiUserInfoResponse {
     @SerializedName("user")
-    private int user;
+    int user;
     @SerializedName("display_name")
-    private String displayName;
+    String displayName;
     @SerializedName("nickname")
-    private String nickname;
+    String nickname;
     @SerializedName("profile_url")
-    private String profileUrl;
+    String profileUrl;
     @SerializedName("wallpaper_url")
-    private String wallpaperUrl;
+    String wallpaperUrl;
     @SerializedName("last_action_at")
-    private String lastActionAt;
+    String lastActionAt;
     @SerializedName("location")
-    private LocationResponse location;
+    LocationResponse location;
     @SerializedName("is_sharing_location")
-    private boolean isSharingLocation;
+    boolean isSharingLocation;
     @SerializedName("is_friend")
-    private boolean isFriend;
+    boolean isFriend;
     @SerializedName("friend_requested")
-    private boolean isFriendRequested;
+    boolean isFriendRequested;
     @ParcelPropertyConverter(MultiTopicsParcel.class)
     @SerializedName("hobbies")
-    private List<Topic> hobbies;
+    List<Topic> hobbies;
 
     public SemiUserInfoResponse() {
     }

@@ -18,10 +18,12 @@
     <!-- FAILED CONNECTION SCREEN -->
     <string name="no_connection_tittle">Failed to connect to internet</string>
     <string name="no_connection_message">Please check your device\'s internet connection and try again</string>
-
     <string name="no_chatroom_title">No Conversation</string>
+    <string name="no_rel_title">No relationship</string>
+    <string name="start_inviting_friends">Start making friends by inviting them to Hoocons</string>
     <string name="start_making_conversation">Start chatting with friends now..</string>
     <string name="start_chat">Start Chat</string>
+    <string name="invite">Invite</string>
 
     <!-- NOTIFICATION FRAGMENT -->
     <string name="null_notification_title">No notifications yet</string>

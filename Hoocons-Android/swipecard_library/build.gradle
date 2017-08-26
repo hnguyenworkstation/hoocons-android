@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 android {
     compileSdkVersion Integer.parseInt(project.TARGET_SDK)
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         minSdkVersion MIN_SDK
@@ -22,5 +22,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:26.0.1'
 }

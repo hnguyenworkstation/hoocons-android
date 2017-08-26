@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -36,7 +35,6 @@ import org.aisen.android.network.task.ITaskManager;
 import org.aisen.android.network.task.TaskManager;
 import org.aisen.android.network.task.WorkTask;
 import org.aisen.android.support.inject.InjectUtility;
-import org.aisen.android.ui.activity.basic.BaseActivityHelper;
 import org.aisen.android.ui.fragment.ABaseFragment;
 import org.aisen.android.ui.widget.AsToolbar.OnToolbarDoubleClick;
 
