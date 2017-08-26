@@ -10,6 +10,7 @@ import com.hoocons.hoocons_android.Interface.OnFriendRequestAdapterListener;
 import com.hoocons.hoocons_android.Networking.ApiViewSets.FriendshipRequestApiViewSet;
 import com.hoocons.hoocons_android.Networking.Responses.FriendshipRequestResponse;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.ViewHolders.FriendConnectionViewHolder;
 import com.hoocons.hoocons_android.ViewHolders.FriendRequestViewHolder;
 
 import java.util.List;
@@ -45,5 +46,11 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestView
     @Override
     public int getItemCount() {
         return friendshipRequestResponseList.size();
+    }
+
+    @Override
+    public void onViewRecycled(FriendRequestViewHolder holder) {
+        holder.onViewRecycled();
+        super.onViewRecycled(holder);
     }
 }

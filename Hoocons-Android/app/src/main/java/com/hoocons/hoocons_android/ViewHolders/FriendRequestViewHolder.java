@@ -78,4 +78,8 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder {
                 })
                 .into(mUserProfile);
     }
+
+    public void onViewRecycled() {
+        BaseApplication.getInstance().getGlide().clear(mUserProfile);
+    }
 }
