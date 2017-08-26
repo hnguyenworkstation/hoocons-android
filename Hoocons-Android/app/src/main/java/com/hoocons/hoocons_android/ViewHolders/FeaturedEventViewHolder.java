@@ -45,6 +45,7 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
@@ -231,7 +232,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
     public void initViewHolder(final Context context, final EventResponse response,
                                final EventAdapterListener listener, final int position) {
-        initEventHeader(context, response);
+        initEventHeader(response);
         initEventFooter(context, response);
         initEventTypeFace(context);
 
@@ -289,7 +290,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
     private void initSharedEventHeader(final Context context, final EventResponse response,
                                        final EventAdapterListener listener, final int position) {
-        loadUserProfileImage(context, response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
+        loadUserProfileImage(response.getAuthor().getProfileUrl(), mSharedUserProfileImage);
 
         assert mSharedTimeFrame != null;
         assert mSharedUserDisplayName != null;
@@ -438,11 +439,11 @@ public class FeaturedEventViewHolder extends ViewHolder {
         });
     }
 
-    private void initEventHeader(final Context context, final EventResponse eventResponse) {
+    private void initEventHeader(final EventResponse eventResponse) {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
-        loadUserProfileImage(context, eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
+        loadUserProfileImage(eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
         mUserDisplayName.setText(eventResponse.getAuthor().getDisplayName());
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
     }
@@ -452,9 +453,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
 
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
-            loadSingleImage(context, eventResponse.getMedias().get(0).getUrl());
+            loadSingleImage(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
-            loadSingleGif(context, eventResponse.getMedias().get(0).getUrl());
+            loadSingleGif(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
             loadMultipleImages(context, eventResponse.getMedias(), eventPosition);
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
@@ -476,7 +477,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
     private void loadLocationMapView(String url) {
         assert mLocationMapView != null;
-        Glide.with(mLocationMapView.getContext())
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -499,7 +500,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
     private void loadVideoView(MediaResponse mediaResponse) {
         assert mVideoPlayer != null;
         mVideoPlayer.setUp(mediaResponse.getUrl(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "Testing");
-        Glide.with(mVideoPlayer.getContext())
+        BaseApplication.getInstance().getGlide()
                 .load(AppUtils.getDefaultProfileUrl())
                 .into(mVideoPlayer.thumbImageView);
     }
@@ -528,9 +529,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mMultiMediaRecycler.setNestedScrollingEnabled(false);
     }
 
-    private void loadSingleGif(final Context context, final String url) {
+    private void loadSingleGif(final String url) {
         assert mSingleMediaView != null;
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
@@ -560,10 +561,6 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mSingleMediaView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("giphy_url", url);
-                clipboard.setPrimaryClip(clip);
-
                 if (gifDrawable != null) {
                     if (gifDrawable.isRunning()) {
                         gifDrawable.stop();
@@ -576,9 +573,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
     }
 
-    private void loadSingleImage(final Context context, String url) {
+    private void loadSingleImage(String url) {
         assert mSingleMediaView != null;
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -600,8 +597,8 @@ public class FeaturedEventViewHolder extends ViewHolder {
     }
 
 
-    private void loadUserProfileImage(final Context context, final String url, ImageView imageView) {
-        Glide.with(context)
+    private void loadUserProfileImage(final String url, ImageView imageView) {
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())

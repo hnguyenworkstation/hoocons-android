@@ -26,6 +26,7 @@ import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.SquareImageView;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 
 import java.io.File;
@@ -85,7 +86,7 @@ public class SquaredImageViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(imageUri)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())

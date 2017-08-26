@@ -21,6 +21,7 @@ import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.CommentAdapterListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.CommentResponse;
 import com.hoocons.hoocons_android.R;
 
@@ -68,7 +69,7 @@ public class CommentViewHolder extends ViewHolder {
     }
 
     private void loadUserProfile(final Context context, final String url) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 12, 0)))
                 .apply(RequestOptions.centerCropTransform())

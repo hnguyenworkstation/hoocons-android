@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.Interface.OnStickerClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Sticker;
 import com.hoocons.hoocons_android.R;
 
@@ -42,7 +43,7 @@ public class StickerViewHolder extends RecyclerView.ViewHolder {
 
     public void initStickerHolder(final Context context, final Sticker sticker,
                                   final int position, final OnStickerClickListener listener) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(sticker.getValue())
                 .apply(RequestOptions.fitCenterTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))

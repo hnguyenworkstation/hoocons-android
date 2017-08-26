@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.MeetOutResponse;
 import com.hoocons.hoocons_android.R;
 
@@ -69,7 +70,7 @@ public class MeetOutCardViewHolder extends RecyclerView.ViewHolder {
                                    final int position) {
 
         // Load Image View
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(response.getPromotedMedias().get(0))
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))

@@ -20,6 +20,8 @@ import com.birbit.android.jobqueue.config.Configuration;
 import com.birbit.android.jobqueue.log.CustomLogger;
 import com.birbit.android.jobqueue.scheduling.FrameworkJobSchedulerService;
 import com.birbit.android.jobqueue.scheduling.GcmJobSchedulerService;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.facebook.FacebookSdk;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.appevents.AppEventsLogger;
@@ -59,6 +61,7 @@ public class BaseApplication extends GlobalContext {
     private JobManager jobManager;
     private AmazonS3Client s3Client;
     private DatabaseReference mDatabase;
+    private RequestManager mGlideRequestManager;
 
     @Override
     public void onCreate() {
@@ -192,6 +195,14 @@ public class BaseApplication extends GlobalContext {
         }
 
         return s3Client;
+    }
+
+    public synchronized RequestManager getGlide() {
+        if (mGlideRequestManager == null) {
+            mGlideRequestManager = Glide.with(this);
+        }
+
+        return mGlideRequestManager;
     }
 
     public static synchronized BaseApplication getInstance() {

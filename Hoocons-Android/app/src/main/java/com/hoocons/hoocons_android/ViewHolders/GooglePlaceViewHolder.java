@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.OnGooglePlaceClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.GooglePlace;
 import com.hoocons.hoocons_android.R;
 
@@ -36,7 +37,7 @@ public class GooglePlaceViewHolder extends RecyclerView.ViewHolder {
 
     public void initView(final Context context, final GooglePlace place,
                          final OnGooglePlaceClickListener listener, final int position) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(place.getIcon())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.circleCropTransform())

@@ -48,6 +48,7 @@ import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -474,9 +475,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
 
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_IMAGE)) {
-            loadSingleImage(context, eventResponse.getMedias().get(0).getUrl());
+            loadSingleImage(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_GIF)) {
-            loadSingleGif(context, eventResponse.getMedias().get(0).getUrl());
+            loadSingleGif(eventResponse.getMedias().get(0).getUrl());
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
             loadMultipleImages(context, eventResponse.getMedias(), eventPosition);
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
@@ -501,7 +502,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
     private void loadLocationMapView(String url) {
         assert mLocationMapView != null;
-        Glide.with(mLocationMapView.getContext())
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -524,7 +525,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     private void loadVideoView(MediaResponse mediaResponse) {
         assert mVideoPlayer != null;
         mVideoPlayer.setUp(mediaResponse.getUrl(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "Testing");
-        Glide.with(mVideoPlayer.getContext())
+        BaseApplication.getInstance().getGlide()
                 .load(AppUtils.getDefaultProfileUrl())
                 .into(mVideoPlayer.thumbImageView);
     }
@@ -553,9 +554,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mMultiMediaRecycler.setNestedScrollingEnabled(false);
     }
 
-    private void loadSingleGif(final Context context, final String url) {
+    private void loadSingleGif(final String url) {
         assert mSingleMediaView != null;
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
@@ -585,10 +586,6 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mSingleMediaView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("giphy_url", url);
-                clipboard.setPrimaryClip(clip);
-
                 if (gifDrawable != null) {
                     if (gifDrawable.isRunning()) {
                         gifDrawable.stop();
@@ -601,9 +598,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
     }
 
-    private void loadSingleImage(final Context context, String url) {
+    private void loadSingleImage(String url) {
         assert mSingleMediaView != null;
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -815,7 +812,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
     private void loadProfileImage(Context context, String url) {
         assert mProfileImage != null;
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 6, 6)))
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
@@ -839,7 +836,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     }
 
     private void loadUserProfileImage(final Context context, final String url, ImageView imageView) {
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())

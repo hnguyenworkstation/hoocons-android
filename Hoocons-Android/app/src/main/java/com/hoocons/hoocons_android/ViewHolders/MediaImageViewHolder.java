@@ -27,6 +27,7 @@ import com.facebook.rebound.SpringUtil;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.SquareImageView;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 
 
@@ -60,7 +61,7 @@ public class MediaImageViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initImage(final Context context, final String url, final int position,
+    public void initImage(final String url, final int position,
                           final boolean isLast, final int listSize, final int eventPosition,
                           final OnChildImageClickListener listener) {
         this.position = position;
@@ -90,7 +91,7 @@ public class MediaImageViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        Glide.with(context)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())

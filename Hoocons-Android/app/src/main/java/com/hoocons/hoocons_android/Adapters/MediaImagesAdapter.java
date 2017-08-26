@@ -44,7 +44,7 @@ public class MediaImagesAdapter extends RecyclerView.Adapter<MediaImageViewHolde
 
     @Override
     public void onBindViewHolder(MediaImageViewHolder holder, int position) {
-        holder.initImage(context, mediaResponses.get(position).getUrl(),
+        holder.initImage(mediaResponses.get(position).getUrl(),
                 position, position == MAX_ITEMS - 1, mediaResponses.size(), eventListPosition, listener);
     }
 
