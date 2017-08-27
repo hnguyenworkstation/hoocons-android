@@ -9,7 +9,7 @@
     app:cardElevation="4dp">
 
     <RelativeLayout
-        android:layout_width="328dp"
+        android:layout_width="298dp"
         android:layout_height="@dimen/hot_panel_height">
 
         <com.hoocons.hoocons_android.CustomUI.AdjustableImageView

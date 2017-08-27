@@ -103,6 +103,19 @@
         <item>@color/dot_dark_screen4</item>
     </array>
 
+    <array name="array_topic_color">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+        <item>@color/dot_dark_screen4</item>
+        <item>#f67f67</item>
+        <item>@color/profile1</item>
+        <item>@color/profile2</item>
+        <item>@color/profile3</item>
+        <item>@color/profile6</item>
+        <item>@color/profile7</item>
+    </array>
+
     <color name="user_title">#4c4c4c</color>
     <color name="rounded_favorite_button">#f67f67</color>
     <color name="text_blur_background">#b2000000</color>
