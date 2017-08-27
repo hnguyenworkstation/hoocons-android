@@ -51,15 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.bottom_tab_menu)
     ImageView mImageTabMenu;
 
-    @BindView(R.id.left_action)
-    ImageButton mLeftAction;
-    @BindView(R.id.right_action)
-    ImageButton mRightAction;
-
     private MainViewPagerAdapter mMainViewPagerAdapter;
-
-
-    private static final int LOCATION_PERMISSION_REQUEST = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,64 +72,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabChat.setOnClickListener(this);
         mTabPlay.setOnClickListener(this);
         mTabMenu.setOnClickListener(this);
-
-        mRightAction.setOnClickListener(this);
-        mLeftAction.setOnClickListener(this);
-    }
-
-    private void triggerLeftAction() {
-        switch (mViewPager.getCurrentItem()){
-            case 0:
-                if (mayNeedLocationPermission()) {
-                    startNearMeActivity();
-                }
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void triggerRightAction() {
-        switch (mViewPager.getCurrentItem()){
-            case 0:
-                startNewCombinationActivity();
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
-        }
-    }
-
-    private boolean mayNeedLocationPermission() {
-        List<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-
-        return PermissionUtils.requestPermissions(this, LOCATION_PERMISSION_REQUEST, permissions);
-    }
-
-    private void startNearMeActivity() {
-        startActivity(new Intent(this, AroundActivity.class));
-        overridePendingTransition(R.anim.slide_bottom_up, R.anim.fix_anim);
-    }
-
-    private void startNewCombinationActivity() {
-        startActivity(new Intent(this, AddCombinationActivity.class));
     }
 
     /*
@@ -234,26 +168,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST:
-                Log.i(TAG, "Received response for Location permission request.");
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
-                    startNearMeActivity();
-                } else {
-                    Log.i(TAG, "LOCATION permission was NOT granted.");
-                }
-                return;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -281,12 +195,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.tab_menu:
                 initViewAt(4);
-                break;
-            case R.id.left_action:
-                triggerLeftAction();
-                break;
-            case R.id.right_action:
-                triggerRightAction();
                 break;
             default:
                 break;

@@ -82,6 +82,11 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     @BindView(R.id.featured_recycler)
     RecyclerView mRecycler;
 
+    @BindView(R.id.left_action)
+    ImageButton mLeftAction;
+    @BindView(R.id.right_action)
+    ImageButton mRightAction;
+
     private List<ActivityResponse> activityResponses;
     private final int MAX_ACTIVITIES_PER_PAGE = 20;
     private final String TAG = FeaturedFragment.class.getSimpleName();
@@ -95,6 +100,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     private int currentPage = 1;
 
     private final String MYSELF = "IS_MY_SELF";
+    private static final int LOCATION_PERMISSION_REQUEST = 1;
 
     public FeaturedFragment() {
     }
@@ -158,6 +164,9 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
                         .putExtra("user_info", Parcels.wrap(UserUtils.getSelfParcel())));
             }
         });
+
+        mRightAction.setOnClickListener(this);
+        mLeftAction.setOnClickListener(this);
     }
 
     private void initView() {
@@ -179,6 +188,12 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.right_action:
+                startNewCombinationActivity();
+                break;
+            case R.id.left_action:
+                startNearMeActivity();
+                break;
             default:
                 break;
         }
@@ -307,6 +322,54 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         listImages.putExtra("event_images_pack", Parcels.wrap(parcel));
 
         startActivity(listImages);
+    }
+
+
+    private boolean mayNeedLocationPermission() {
+        List<String> permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        return PermissionUtils.requestPermissions(getActivity(), LOCATION_PERMISSION_REQUEST, permissions);
+    }
+
+    private void triggerLeftAction() {
+        if (mayNeedLocationPermission()) {
+            startNearMeActivity();
+        }
+    }
+
+    private void startNearMeActivity() {
+        startActivity(new Intent(getActivity(), AroundActivity.class));
+        getActivity().overridePendingTransition(R.anim.slide_bottom_up, R.anim.fix_anim);
+    }
+
+    private void startNewCombinationActivity() {
+        startActivity(new Intent(getActivity(), AddCombinationActivity.class));
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST:
+                Log.i(TAG, "Received response for Location permission request.");
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "LOCATION permission has now been granted. Showing preview.");
+                    startNearMeActivity();
+                } else {
+                    Log.i(TAG, "LOCATION permission was NOT granted.");
+                }
+                return;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void triggerRightAction() {
+        startNewCombinationActivity();
     }
 
     @Override

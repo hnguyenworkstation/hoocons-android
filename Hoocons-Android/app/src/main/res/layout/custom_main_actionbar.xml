@@ -34,5 +34,4 @@
         android:layout_height="@dimen/actionbar_icon_size"
         android:src="@drawable/ic_line_plus"
         android:layout_marginEnd="@dimen/actionbar_margin"/>
-
 </RelativeLayout>

@@ -20,19 +20,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:id="@+id/hoocons_tab">
-
-                <include layout="@layout/custom_main_actionbar"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/bottom_bar"
-                android:layout_below="@+id/hoocons_tab">
+                android:layout_above="@+id/bottom_bar">
 
                 <com.hoocons.hoocons_android.CustomUI.CustomViewPager
                     android:id="@+id/viewpager"

@@ -16,6 +16,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:id="@+id/featured_tab">
+                <include layout="@layout/custom_main_actionbar"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/featured_tab"
                 android:id="@+id/screen_featured_fragment">
 
                 <include android:layout_width="match_parent"

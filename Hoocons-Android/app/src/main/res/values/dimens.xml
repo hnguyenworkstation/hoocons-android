@@ -319,5 +319,8 @@
     <dimen name="meetout_header_image">248dp</dimen>
     <dimen name="item_emoticon_size_big">64dp</dimen>
 
+    <dimen name="hot_panel_height">198dp</dimen>
+    <dimen name="ad_title_text">14sp</dimen>
+    <dimen name="ad_message_text">12sp</dimen>
 
 </resources>
