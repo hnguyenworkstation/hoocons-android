@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/search_bar_height">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_icon"
+        android:src="@drawable/ic_search_colored"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/search_icon"
+        android:layout_marginStart="@dimen/margin_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_20"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="@string/search_hoocons"/>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_alpha"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_4"/>
+</RelativeLayout>
