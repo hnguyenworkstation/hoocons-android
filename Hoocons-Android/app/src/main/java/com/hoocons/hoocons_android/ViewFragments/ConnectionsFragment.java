@@ -1,6 +1,8 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.hoocons.hoocons_android.Adapters.FriendConnectionsAdapter;
 import com.hoocons.hoocons_android.Adapters.FriendRequestAdapter;
 import com.hoocons.hoocons_android.EventBus.FetchFriendRequestComplete;
@@ -86,6 +89,8 @@ public class ConnectionsFragment extends Fragment implements
     TextView mErrorMessage;
     @BindView(R.id.invite_friend_btn)
     LinearLayout mInviteButton;
+
+    private static final int REQUEST_INVITE = 0;
 
     private FriendshipRequestApiViewSet friendshipRequestApiViewSet;
     private FriendRequestAdapter friendRequestAdapter;
@@ -172,6 +177,23 @@ public class ConnectionsFragment extends Fragment implements
                 .apply(RequestOptions.centerInsideTransform())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .into(mErrorImage);
+
+        mInviteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onInviteClicked();
+            }
+        });
+    }
+
+    private void onInviteClicked() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                .setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+                .setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
     }
 
     private void initCompleteRequestView() {
