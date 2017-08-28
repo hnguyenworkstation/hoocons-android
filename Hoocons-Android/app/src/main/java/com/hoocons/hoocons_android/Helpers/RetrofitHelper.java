@@ -27,8 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitHelper {
-
-
     private static final String TAG = RetrofitHelper.class.getSimpleName();
     public static final int STATUS_HTTP_ERROR = -1;
 

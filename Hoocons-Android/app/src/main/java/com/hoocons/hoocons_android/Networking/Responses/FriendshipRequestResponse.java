@@ -20,15 +20,6 @@ public class FriendshipRequestResponse {
     @SerializedName("found_user_from")
     private String foundUserFrom;
 
-    public FriendshipRequestResponse(int id, SemiUserInfoResponse user,
-                                     String requestMadeAt, String message, String foundUserFrom) {
-        this.id = id;
-        this.user = user;
-        this.requestMadeAt = requestMadeAt;
-        this.message = message;
-        this.foundUserFrom = foundUserFrom;
-    }
-
     public int getId() {
         return id;
     }

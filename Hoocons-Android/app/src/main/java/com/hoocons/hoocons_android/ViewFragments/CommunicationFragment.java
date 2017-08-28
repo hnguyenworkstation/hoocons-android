@@ -6,12 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.Adapters.CommunicateViewPagerAdapter;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchFriendConnectionsJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.FetchSemiFriendRequestJob;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,12 +26,18 @@ public class CommunicationFragment extends Fragment {
     @BindView(R.id.comm_viewpager)
     ViewPager mViewPager;
 
+    private boolean sendConnectionsJob = false;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
     private CommunicateViewPagerAdapter adapter;
+
+    private MessagingFragment messagingFragment;
+    private InboxFragment inboxFragment;
+    private ConnectionsFragment connectionsFragment;
 
 
     public CommunicationFragment() {
@@ -67,11 +77,20 @@ public class CommunicationFragment extends Fragment {
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        if (messagingFragment == null)
+            messagingFragment= MessagingFragment.newInstance("1", "1");
+
+        if (inboxFragment == null)
+            inboxFragment = InboxFragment.newInstance("1", "1");
+
+        if (connectionsFragment == null)
+            connectionsFragment = ConnectionsFragment.newInstance("1", "1");
+
         if (adapter == null) {
             adapter = new CommunicateViewPagerAdapter(getChildFragmentManager());
-            adapter.addFragment(MessagingFragment.newInstance("1", "1"), getResources().getString(R.string.messaging));
-            adapter.addFragment(InboxFragment.newInstance("1", "1"), getResources().getString(R.string.inbox));
-            adapter.addFragment(ConnectionsFragment.newInstance("1", "1"), getResources().getString(R.string.connection));
+            adapter.addFragment(messagingFragment, getResources().getString(R.string.messaging));
+            adapter.addFragment(inboxFragment, getResources().getString(R.string.inbox));
+            adapter.addFragment(connectionsFragment, getResources().getString(R.string.connection));
         }
 
         /** the ViewPager requires a minimum of 1 as OffscreenPageLimit */
@@ -79,6 +98,26 @@ public class CommunicationFragment extends Fragment {
 
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(limit);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("ASD", "onPageSelected: " + String.valueOf(position));
+                if (position == 2) {
+                    connectionsFragment.onRestore();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mTabBar.setupWithViewPager(viewPager);
         mTabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

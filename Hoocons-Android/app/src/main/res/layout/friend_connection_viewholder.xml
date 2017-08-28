@@ -14,7 +14,7 @@
         android:layout_alignParentStart="true">
 
         <ImageView
-            android:layout_margin="@dimen/margin_8"
+            android:layout_margin="@dimen/margin_16"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/user_profile"
@@ -68,11 +68,11 @@
     <ImageButton
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_margin="2dp"
+        android:layout_marginEnd="@dimen/margin_12"
         android:id="@+id/more_action"
         android:background="@drawable/icon_button"
         android:src="@drawable/ic_more_vert"
-        android:textSize="30sp"
+        android:scaleType="fitCenter"
         android:layout_width="@dimen/circle_button_size"
         android:layout_height="@dimen/circle_button_size"/>
 </RelativeLayout>

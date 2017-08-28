@@ -30,12 +30,16 @@ import butterknife.ButterKnife;
 public class FriendConnectionViewHolder extends ViewHolder {
     @BindView(R.id.user_profile)
     ImageView mUserProfile;
+
     @BindView(R.id.user_name)
     TextView mUserDisplayName;
+
     @BindView(R.id.location)
     TextView mLocation;
+
     @BindView(R.id.time_frame)
-    ImageButton mTimeFrame;
+    TextView mTimeFrame;
+
     @BindView(R.id.more_action)
     ImageButton mMoreAction;
 

@@ -4,12 +4,14 @@ package com.hoocons.hoocons_android.ViewFragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,11 +97,16 @@ public class ConnectionsFragment extends Fragment implements
     private FriendshipRequestApiViewSet friendshipRequestApiViewSet;
     private FriendRequestAdapter friendRequestAdapter;
     private FriendConnectionsAdapter friendConnectionsAdapter;
+
     private List<FriendshipRequestResponse> requestResponseList;
     private List<RelationshipResponse> friendRelationshipList;
 
+    private List<RelationshipResponse> tempFriendList;
+    private List<FriendshipRequestResponse> tempRequestList;
+
     private boolean fetchRequestCompleted = false;
     private boolean fetchFriendsCompleted = false;
+    private boolean isFirstTime = true;
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -119,18 +126,25 @@ public class ConnectionsFragment extends Fragment implements
 
         }
         EventBus.getDefault().register(this);
+        requestResponseList = new ArrayList<>();
+        friendRelationshipList = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_connections, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_connections, container, false);
+        ButterKnife.bind(this, rootView);
+
+        initRequestView();
+        initFriendListView();
+
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
 
         // Inflate the layout for this fragment
         BaseApplication.getInstance().getJobManager()
@@ -138,12 +152,6 @@ public class ConnectionsFragment extends Fragment implements
 
         BaseApplication.getInstance().getJobManager()
                 .addJobInBackground(new FetchFriendConnectionsJob());
-
-        requestResponseList = new ArrayList<>();
-        friendRelationshipList = new ArrayList<>();
-
-        initRequestView();
-        initFriendListView();
     }
 
     private void initRequestView() {
@@ -151,6 +159,7 @@ public class ConnectionsFragment extends Fragment implements
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
+        mFriendRequestRecycler.setNestedScrollingEnabled(false);
         mFriendRequestRecycler.setFocusable(false);
         mFriendRequestRecycler.setLayoutManager(mLayoutManager);
         mFriendRequestRecycler.setHasFixedSize(false);
@@ -162,10 +171,55 @@ public class ConnectionsFragment extends Fragment implements
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
+        mFriendsRecycler.setNestedScrollingEnabled(false);
         mFriendsRecycler.setFocusable(false);
         mFriendsRecycler.setLayoutManager(mLayoutManager);
         mFriendsRecycler.setHasFixedSize(false);
         mFriendsRecycler.setAdapter(friendConnectionsAdapter);
+    }
+
+    public void onRestore() {
+        if (isFirstTime) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(2000);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (tempFriendList != null) {
+                                        friendRelationshipList.clear();
+                                        friendRelationshipList.addAll(tempFriendList);
+
+                                        tempFriendList.clear();
+                                        tempFriendList = null;
+                                    }
+
+                                    if (tempRequestList != null) {
+                                        requestResponseList.clear();
+                                        requestResponseList.addAll(tempRequestList);
+
+                                        tempRequestList.clear();
+                                        tempRequestList = null;
+                                    }
+
+                                    friendRequestAdapter.notifyDataSetChanged();
+                                    friendConnectionsAdapter.notifyDataSetChanged();
+                                }
+                            });
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    isFirstTime = false;
+                };
+            }.start();
+        }
     }
 
     private void showEmptyConnectionView() {
@@ -201,13 +255,13 @@ public class ConnectionsFragment extends Fragment implements
             mFriendRequestLayout.setVisibility(View.GONE);
         }
 
-        if (fetchFriendsCompleted && friendRelationshipList.size() == 0) {
+        if (fetchFriendsCompleted && tempFriendList.size() == 0) {
             mFriendsLayout.setVisibility(View.GONE);
         }
 
         if (fetchRequestCompleted && fetchFriendsCompleted &&
-                requestResponseList.size() == 0 &&
-                friendRelationshipList.size() == 0) {
+                tempFriendList.size() == 0 &&
+                tempRequestList.size() == 0) {
             showEmptyConnectionView();
         } else {
             BaseApplication.getInstance().getGlide().clear(mErrorImage);
@@ -219,16 +273,14 @@ public class ConnectionsFragment extends Fragment implements
     public void onEvent(FetchFriendRequestComplete requestComplete) {
         fetchRequestCompleted = true;
         friendshipRequestApiViewSet = requestComplete.getFriendshipRequestApiViewSet();
-        requestResponseList = requestComplete.getFriendshipRequestApiViewSet().getResults();
-        friendRequestAdapter.notifyDataSetChanged();
+        tempRequestList = friendshipRequestApiViewSet.getResults();
         initCompleteRequestView();
     }
 
     @Subscribe
     public void onEvent(FetchRelationshipComplete relationshipComplete) {
         fetchFriendsCompleted = true;
-        friendRelationshipList = relationshipComplete.getRelationshipResponseList();
-        friendConnectionsAdapter.notifyDataSetChanged();
+        tempFriendList = relationshipComplete.getRelationshipResponseList();
         initCompleteRequestView();
     }
 }

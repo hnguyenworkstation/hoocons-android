@@ -61,6 +61,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/bottons"
+        android:layout_marginEnd="@dimen/margin_12"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         >
@@ -71,6 +72,7 @@
             android:src="@drawable/ic_dialog_close_light"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
+            android:layout_marginEnd="@dimen/margin_8"
             android:layout_width="@dimen/circle_button_size"
             android:layout_height="@dimen/circle_button_size"
             android:background="@drawable/circle_shape_inactive_button"/>
