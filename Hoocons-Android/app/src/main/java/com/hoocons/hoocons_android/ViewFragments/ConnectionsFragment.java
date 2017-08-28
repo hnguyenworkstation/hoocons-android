@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -49,6 +50,12 @@ import butterknife.ButterKnife;
 
 public class ConnectionsFragment extends Fragment implements
         OnFriendRequestAdapterListener, OnFriendConnectionAdapterListener {
+    @BindView(R.id.content_view)
+    LinearLayout mContentViewLayout;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
     @BindView(R.id.swipe_ref)
     SwipeRefreshLayout mSwipeRef;
 
@@ -195,7 +202,6 @@ public class ConnectionsFragment extends Fragment implements
                                         friendRelationshipList.addAll(tempFriendList);
 
                                         tempFriendList.clear();
-                                        tempFriendList = null;
                                     }
 
                                     if (tempRequestList != null) {
@@ -203,11 +209,13 @@ public class ConnectionsFragment extends Fragment implements
                                         requestResponseList.addAll(tempRequestList);
 
                                         tempRequestList.clear();
-                                        tempRequestList = null;
                                     }
 
                                     friendRequestAdapter.notifyDataSetChanged();
                                     friendConnectionsAdapter.notifyDataSetChanged();
+
+                                    mProgressBar.setVisibility(View.GONE);
+                                    initCompleteRequestView();
                                 }
                             });
 
@@ -255,15 +263,16 @@ public class ConnectionsFragment extends Fragment implements
             mFriendRequestLayout.setVisibility(View.GONE);
         }
 
-        if (fetchFriendsCompleted && tempFriendList.size() == 0) {
+        if (fetchFriendsCompleted && friendRelationshipList.size() == 0) {
             mFriendsLayout.setVisibility(View.GONE);
         }
 
         if (fetchRequestCompleted && fetchFriendsCompleted &&
-                tempFriendList.size() == 0 &&
-                tempRequestList.size() == 0) {
+                friendRelationshipList.size() == 0 &&
+                requestResponseList.size() == 0) {
             showEmptyConnectionView();
         } else {
+            mContentViewLayout.setVisibility(View.VISIBLE);
             BaseApplication.getInstance().getGlide().clear(mErrorImage);
             mEmptyConnectionsView.setVisibility(View.GONE);
         }
@@ -274,13 +283,11 @@ public class ConnectionsFragment extends Fragment implements
         fetchRequestCompleted = true;
         friendshipRequestApiViewSet = requestComplete.getFriendshipRequestApiViewSet();
         tempRequestList = friendshipRequestApiViewSet.getResults();
-        initCompleteRequestView();
     }
 
     @Subscribe
     public void onEvent(FetchRelationshipComplete relationshipComplete) {
         fetchFriendsCompleted = true;
         tempFriendList = relationshipComplete.getRelationshipResponseList();
-        initCompleteRequestView();
     }
 }

@@ -176,7 +176,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void loadImageHeader() {
-        Glide.with(this)
+        BaseApplication.getInstance().getGlide()
                 .load(SharedPreferencesManager.getDefault().getUserProfileUrl())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -324,19 +324,12 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         startActivity(listImages);
     }
 
-
     private boolean mayNeedLocationPermission() {
         List<String> permissions = new ArrayList<>();
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
 
         return PermissionUtils.requestPermissions(getActivity(), LOCATION_PERMISSION_REQUEST, permissions);
-    }
-
-    private void triggerLeftAction() {
-        if (mayNeedLocationPermission()) {
-            startNearMeActivity();
-        }
     }
 
     private void startNearMeActivity() {
@@ -366,10 +359,6 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-    private void triggerRightAction() {
-        startNewCombinationActivity();
     }
 
     @Override

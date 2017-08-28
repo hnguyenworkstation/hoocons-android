@@ -12,32 +12,31 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/friend_request_layout"
+                    android:id="@+id/content_view"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_margin="@dimen/margin_10"
-                        android:id="@+id/new_friendrequest_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="@string/incoming_request"
-                        android:textSize="@dimen/text_14" />
-
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="64dp"
-                        >
+                        android:layout_height="match_parent"
+                        android:id="@+id/friend_request_layout"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_margin="@dimen/margin_10"
+                            android:id="@+id/new_friendrequest_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:text="@string/incoming_request"
+                            android:textSize="@dimen/text_14" />
 
                         <LinearLayout
                             android:id="@+id/friend_request_content"
@@ -72,45 +71,36 @@
                                     android:textColor="@color/profile2"/>
                             </LinearLayout>
                         </LinearLayout>
+                    </LinearLayout>
 
-                        <ProgressBar
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_centerInParent="true"/>
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/friend_list_layout"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_margin="@dimen/margin_10"
-                        android:id="@+id/friend_list_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="@string/connections"
-                        android:textSize="@dimen/text_14" />
-
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="64dp">
+                        android:layout_height="match_parent"
+                        android:id="@+id/friend_list_layout"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_margin="@dimen/margin_10"
+                            android:id="@+id/friend_list_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:text="@string/connections"
+                            android:textSize="@dimen/text_14" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/friends_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
-
-                        <ProgressBar
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_centerInParent="true" />
-                    </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
+
+                <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/progress_bar"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="128dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -121,7 +111,7 @@
                     android:id="@+id/empty_connections_view">
                     <include layout="@layout/empty_connections_layout"/>
                 </RelativeLayout>
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 

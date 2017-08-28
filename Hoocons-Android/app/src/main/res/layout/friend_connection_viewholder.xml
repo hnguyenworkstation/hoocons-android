@@ -73,6 +73,6 @@
         android:background="@drawable/icon_button"
         android:src="@drawable/ic_more_vert"
         android:scaleType="fitCenter"
-        android:layout_width="@dimen/circle_button_size"
-        android:layout_height="@dimen/circle_button_size"/>
+        android:layout_width="24dp"
+        android:layout_height="24dp"/>
 </RelativeLayout>
