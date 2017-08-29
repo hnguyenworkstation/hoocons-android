@@ -60,6 +60,7 @@ dependencies {
     compile project(':xhs-emoji')
     compile project(':xhs-keyboard')
     compile project(':gravitysnaphelper')
+    compile project(':permission_manager')
     compile files('libs/rebound-0.3.8.jar')
     compile('com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1') {
         transitive = false
