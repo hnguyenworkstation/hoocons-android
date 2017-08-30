@@ -118,6 +118,7 @@
     <!-- Topic Item -->
     <dimen name="place_logo_size">24dp</dimen>
     <dimen name="topic_logo_size">36dp</dimen>
+    <dimen name="small_logo_size">24dp</dimen>
     <dimen name="micro_padding">4dp</dimen>
 
     <!-- Event diments -->
