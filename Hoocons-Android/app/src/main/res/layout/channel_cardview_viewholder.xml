@@ -18,9 +18,10 @@
             android:layout_width="@dimen/channel_cardview_width"
             android:layout_height="@dimen/channel_cardview_top_height">
 
-            <ImageView
+            <com.hoocons.hoocons_android.CustomUI.AdjustableImageView
                 android:layout_gravity="top"
                 android:layout_width="match_parent"
+                android:id="@+id/wallpaper"
                 android:layout_height="@dimen/channel_cardview_wallpaper_height"
                 android:src="@color/icon_tint_normal"/>
 
@@ -45,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_corner_frame"
                     android:gravity="center"
+                    android:id="@+id/follow_button"
                     android:layout_marginBottom="2dp"
                     android:orientation="horizontal">
 
@@ -121,6 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
+                        android:id="@+id/location"
                         android:textSize="@dimen/text_12"
                         android:ellipsize="end"
                         android:text="Lowell, MA"/>
