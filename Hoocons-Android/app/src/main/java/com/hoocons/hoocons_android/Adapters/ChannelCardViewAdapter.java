@@ -24,11 +24,17 @@ public class ChannelCardViewAdapter extends RecyclerView.Adapter<ChannelCardView
 
     @Override
     public void onBindViewHolder(ChannelCardViewHolder holder, int position) {
-        
+        holder.init();
     }
 
     @Override
     public int getItemCount() {
         return 10;
+    }
+
+    @Override
+    public void onViewRecycled(ChannelCardViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.onViewRecycled();
     }
 }

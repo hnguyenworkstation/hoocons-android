@@ -7,7 +7,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.Util;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 
 import org.w3c.dom.Text;
@@ -42,6 +46,30 @@ public class ChannelCardViewHolder extends ViewHolder {
     }
 
     public void init() {
+        loadWallpaper("http://img.allw.mn/content/2013/09/22201006_3490.jpg");
+        loadProfile("https://shechive.files.wordpress.com/2012/06/a-cute-cartoons-6.jpg?quality=100&strip=info");
+    }
 
+    private void loadWallpaper(String url) {
+        BaseApplication.getInstance().getGlide()
+                .load(url)
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .into(mWallPaper);
+    }
+
+    private void loadProfile(String url) {
+        BaseApplication.getInstance().getGlide()
+                .load(url)
+                .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .into(mChannelProfile);
+    }
+
+    public void onViewRecycled() {
+        BaseApplication.getInstance().getGlide().clear(mWallPaper);
+        BaseApplication.getInstance().getGlide().clear(mChannelProfile);
     }
 }
