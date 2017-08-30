@@ -38,6 +38,7 @@ public class CommunicationFragment extends Fragment {
     private MessagingFragment messagingFragment;
     private InboxFragment inboxFragment;
     private ConnectionsFragment connectionsFragment;
+    private boolean isFirstTime = true;
 
 
     public CommunicationFragment() {
@@ -72,8 +73,11 @@ public class CommunicationFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
         setupViewPager(mViewPager);
+    }
+
+    public void onRestore() {
+        messagingFragment.onRestore();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -109,6 +113,8 @@ public class CommunicationFragment extends Fragment {
                 Log.e("ASD", "onPageSelected: " + String.valueOf(position));
                 if (position == 2) {
                     connectionsFragment.onRestore();
+                } else if (position == 0) {
+                    messagingFragment.onRestore();
                 }
             }
 

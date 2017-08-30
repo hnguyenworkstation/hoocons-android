@@ -40,6 +40,7 @@ public class DiscoverFragment extends Fragment {
     LinearLayout mFollowedTopicLayout;
 
     private String[] tempTopicsArray;
+    private boolean isFirstTime = true;
 
 
     private DiscoverTopPanelAdapter mPanelAdapter;
@@ -76,9 +77,6 @@ public class DiscoverFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         tempTopicsArray = getResources().getStringArray(R.array.channel_category);
-
-        initTopPanelRecycler();
-        initFollowedTopicsView();
     }
 
     private void initFollowedTopicsView() {
@@ -121,5 +119,33 @@ public class DiscoverFragment extends Fragment {
         mTopPanelRecycler.setAdapter(mPanelAdapter);
 
         snapHelper.attachToRecyclerView(mTopPanelRecycler);
+    }
+
+    public void onRestore() {
+        if (isFirstTime) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(500);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    initTopPanelRecycler();
+                                    initFollowedTopicsView();
+                                }
+                            });
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    isFirstTime = false;
+                };
+            }.start();
+        }
     }
 }

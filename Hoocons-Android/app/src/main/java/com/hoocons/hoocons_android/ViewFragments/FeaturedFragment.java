@@ -324,6 +324,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         startActivity(listImages);
     }
 
+
     private boolean mayNeedLocationPermission() {
         List<String> permissions = new ArrayList<>();
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);

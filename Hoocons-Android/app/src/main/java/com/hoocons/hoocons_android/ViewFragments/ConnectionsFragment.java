@@ -108,9 +108,6 @@ public class ConnectionsFragment extends Fragment implements
     private List<FriendshipRequestResponse> requestResponseList;
     private List<RelationshipResponse> friendRelationshipList;
 
-    private List<RelationshipResponse> tempFriendList;
-    private List<FriendshipRequestResponse> tempRequestList;
-
     private boolean fetchRequestCompleted = false;
     private boolean fetchFriendsCompleted = false;
     private boolean isFirstTime = true;
@@ -197,20 +194,6 @@ public class ConnectionsFragment extends Fragment implements
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (tempFriendList != null) {
-                                        friendRelationshipList.clear();
-                                        friendRelationshipList.addAll(tempFriendList);
-
-                                        tempFriendList.clear();
-                                    }
-
-                                    if (tempRequestList != null) {
-                                        requestResponseList.clear();
-                                        requestResponseList.addAll(tempRequestList);
-
-                                        tempRequestList.clear();
-                                    }
-
                                     friendRequestAdapter.notifyDataSetChanged();
                                     friendConnectionsAdapter.notifyDataSetChanged();
 
@@ -282,12 +265,12 @@ public class ConnectionsFragment extends Fragment implements
     public void onEvent(FetchFriendRequestComplete requestComplete) {
         fetchRequestCompleted = true;
         friendshipRequestApiViewSet = requestComplete.getFriendshipRequestApiViewSet();
-        tempRequestList = friendshipRequestApiViewSet.getResults();
+        requestResponseList = friendshipRequestApiViewSet.getResults();
     }
 
     @Subscribe
     public void onEvent(FetchRelationshipComplete relationshipComplete) {
         fetchFriendsCompleted = true;
-        tempFriendList = relationshipComplete.getRelationshipResponseList();
+        friendRelationshipList = relationshipComplete.getRelationshipResponseList();
     }
 }

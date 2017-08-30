@@ -18,6 +18,8 @@ import com.hoocons.hoocons_android.CustomUI.CustomViewPager;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.ViewFragments.CommunicationFragment;
+import com.hoocons.hoocons_android.ViewFragments.DiscoverFragment;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
 
 import java.util.ArrayList;
@@ -96,6 +98,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 switch (position) {
                     case 0:
+                        break;
+                    case 1:
+                        DiscoverFragment dTemp = (DiscoverFragment) mMainViewPagerAdapter.getItem(position);
+                        if (dTemp != null)
+                            dTemp.onRestore();
+                        break;
+                    case 3:
+                        CommunicationFragment cTemp = (CommunicationFragment) mMainViewPagerAdapter.getItem(position);
+                        if (cTemp != null) {
+                            cTemp.onRestore();
+                        }
                         break;
                     default:
                         break;

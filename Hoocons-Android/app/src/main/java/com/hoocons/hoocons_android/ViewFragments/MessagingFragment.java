@@ -85,12 +85,7 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     private DatabaseReference databaseReference;
     private ConversationAdapter mAdapter;
     private boolean isLoading = false;
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private boolean isFirstTime = true;
 
     public MessagingFragment() {
 
@@ -99,8 +94,6 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     public static MessagingFragment newInstance(String param1, String param2) {
         MessagingFragment fragment = new MessagingFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -109,8 +102,6 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         EventBus.getDefault().register(this);
@@ -142,6 +133,34 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
                     }
                 }
         );
+    }
+
+    public void onRestore() {
+        if (isFirstTime) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(500);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.e(TAG, "fetchFireBaseChatRooms: " + String.valueOf(chatRooms.size()));
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    isFirstTime = false;
+                };
+            }.start();
+        }
     }
 
     private void initView() {
@@ -233,9 +252,6 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
 
             }
         });
-
-        Log.e(TAG, "fetchFireBaseChatRooms: " + String.valueOf(chatRooms.size()));
-        mAdapter.notifyDataSetChanged();
     }
 
     private void initEmptyScreen() {
