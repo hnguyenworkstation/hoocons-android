@@ -283,6 +283,7 @@
     <string name="invitation_custom_image">https://developers.google.com/identity/images/g-logo.png</string>
     <string name="invitation_cta">Install!</string>
     <string name="search_hoocons">Search Hoocons</string>
+    <string name="hoocons_discovery">Hoocons Discovery</string>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>

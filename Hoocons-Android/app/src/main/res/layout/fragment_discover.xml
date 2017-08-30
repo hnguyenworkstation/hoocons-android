@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/custom_toolbar"
         android:layout_alignParentTop="true">
-        <include layout="@layout/search_bar_layout"/>
+        <include layout="@layout/custom_discovery_actionbar"/>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         android:id="@+id/swipe_ref"
         android:layout_below="@+id/custom_toolbar">
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

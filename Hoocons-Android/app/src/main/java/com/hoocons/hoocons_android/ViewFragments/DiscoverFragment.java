@@ -13,6 +13,7 @@ import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +30,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DiscoverFragment extends Fragment {
+    @BindView(R.id.disco_search)
+    ImageButton mSearchButton;
+
     @BindView(R.id.top_panel)
     RecyclerView mTopPanelRecycler;
 
