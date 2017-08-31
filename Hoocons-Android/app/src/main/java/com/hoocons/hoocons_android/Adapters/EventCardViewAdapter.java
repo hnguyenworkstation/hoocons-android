@@ -25,12 +25,12 @@ public class EventCardViewAdapter extends RecyclerView.Adapter<EventCardViewHold
 
     @Override
     public void onBindViewHolder(EventCardViewHolder holder, int position) {
-        holder.initView();
+        holder.initView(position);
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return 30;
     }
 
     @Override

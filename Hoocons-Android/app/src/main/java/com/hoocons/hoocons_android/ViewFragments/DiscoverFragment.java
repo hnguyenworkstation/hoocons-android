@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 import com.hoocons.hoocons_android.Adapters.CommentsAdapter;
 import com.hoocons.hoocons_android.Adapters.DiscoverTopPanelAdapter;
+import com.hoocons.hoocons_android.Adapters.EventCardViewAdapter;
+import com.hoocons.hoocons_android.CustomUI.StaggeredItemDecorator;
 import com.hoocons.hoocons_android.R;
 import com.vstechlab.easyfonts.EasyFonts;
 
@@ -36,14 +39,22 @@ public class DiscoverFragment extends Fragment {
     @BindView(R.id.top_panel)
     RecyclerView mTopPanelRecycler;
 
+    @BindView(R.id.top_events)
+    RecyclerView mTopEventRecycler;
+
     @BindView(R.id.followed_topics)
     LinearLayout mFollowedTopicLayout;
+
+    @BindView(R.id.featured_event_txt)
+    TextView mFeaturedEventTxt;
 
     private String[] tempTopicsArray;
     private boolean isFirstTime = true;
 
-
     private DiscoverTopPanelAdapter mPanelAdapter;
+    private EventCardViewAdapter mEventAdapter;
+
+    private StaggeredItemDecorator staggeredItemDecorator;
 
     public DiscoverFragment() {
         // Required empty public constructor
@@ -121,6 +132,31 @@ public class DiscoverFragment extends Fragment {
         snapHelper.attachToRecyclerView(mTopPanelRecycler);
     }
 
+    private void initTopEventRecycler() {
+        mEventAdapter = new EventCardViewAdapter();
+        final StaggeredGridLayoutManager mLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mTopEventRecycler.setLayoutManager(mLayoutManager);
+        mTopEventRecycler.setItemAnimator(new DefaultItemAnimator());
+        mTopEventRecycler.setAdapter(mEventAdapter);
+        mTopEventRecycler.setNestedScrollingEnabled(false);
+
+        if (staggeredItemDecorator != null) {
+            mTopEventRecycler.removeItemDecoration(staggeredItemDecorator);
+        } else {
+            staggeredItemDecorator = new StaggeredItemDecorator(8);
+        }
+        mTopEventRecycler.addItemDecoration(staggeredItemDecorator);
+    }
+
+    private void updateFinalView() {
+        if (mEventAdapter.getItemCount() > 0) {
+            mFeaturedEventTxt.setTypeface(EasyFonts.robotoBold(getContext()));
+        } else {
+            mFeaturedEventTxt.setVisibility(View.GONE);
+        }
+    }
+
     public void onRestore() {
         if (isFirstTime) {
             new Thread() {
@@ -135,6 +171,8 @@ public class DiscoverFragment extends Fragment {
                                 public void run() {
                                     initTopPanelRecycler();
                                     initFollowedTopicsView();
+                                    initTopEventRecycler();
+                                    updateFinalView();
                                 }
                             });
 
@@ -148,4 +186,5 @@ public class DiscoverFragment extends Fragment {
             }.start();
         }
     }
+
 }

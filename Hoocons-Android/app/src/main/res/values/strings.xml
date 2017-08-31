@@ -275,6 +275,7 @@
     <string name="unread_messages">Unread Messages</string>
     <string name="recent_convs">Recent Conversations</string>
     <string name="incoming_request">Incoming Requests</string>
+    <string name="featured_event">Featured Events</string>
     <string name="connections">Connections</string>
 
     <string name="invitation_title">Send App Invite Quickstart Invitation</string>
