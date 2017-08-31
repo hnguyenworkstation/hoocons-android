@@ -3,7 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="@dimen/margin_12">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:id="@+id/text_content"
-            android:maxLines="3"
+            android:maxLines="4"
             android:ellipsize="end"
             android:text="hello helloh ellohel lohellohe hellohello  asdas aksdkaksdk llohell ohello"/>
     </LinearLayout>
