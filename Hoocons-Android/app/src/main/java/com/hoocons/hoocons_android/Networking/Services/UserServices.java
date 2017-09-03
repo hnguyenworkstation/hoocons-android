@@ -4,6 +4,8 @@ import com.google.android.gms.nearby.messages.internal.Update;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
 import com.hoocons.hoocons_android.Networking.Requests.FCMTokenRequest;
+import com.hoocons.hoocons_android.Networking.Requests.HobbiesRequest;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Requests.ProfileMediaRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UpdatePasswordRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
@@ -100,7 +102,7 @@ public interface UserServices {
 
     /**********************************
      * @Method: PATCH
-     * @Name: changeProfilePicture
+     * @Name: updateProfile
      * @Argument: UpdatePasswordRequest
      * @Purpose: update profile picture
      ********************************** */
@@ -109,11 +111,29 @@ public interface UserServices {
 
     /**********************************
      * @Method: PATCH
-     * @Name: changeProfilePicture
-     * @Argument: UpdatePasswordRequest
-     * @Purpose: update profile picture
+     * @Name: updateWallpaper
+     * @Argument: WallpaperMediaRequest
+     * @Purpose: update wallpaper picture
      ********************************** */
     @PATCH("/api/v1/user/{id}/update_wallpaper/")
     Call<Void> updateWallpaper(@Path("id") int id, @Body WallpaperMediaRequest request);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: updateHobbies
+     * @Argument: HobbiesRequest
+     * @Purpose: update list hobbies or topics related
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/update_hobbies/")
+    Call<Void> updateHobbies(@Path("id") int id, @Body HobbiesRequest request);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: updateLocation
+     * @Argument: LocationRequest
+     * @Purpose: update user's location
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/update_location/")
+    Call<Void> updateLocation(@Path("id") int id, @Body LocationRequest request);
 
 }
