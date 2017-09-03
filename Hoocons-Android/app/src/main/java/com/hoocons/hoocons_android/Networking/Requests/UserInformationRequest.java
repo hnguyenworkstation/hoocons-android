@@ -43,6 +43,17 @@ public class UserInformationRequest {
         this.nickname = nickname;
     }
 
+    public UserInformationRequest(String displayName, String nickname, String gender, String birthday,
+                                  Media profileMedia, double longitude, double latitude) {
+        this.displayName = displayName;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.profileMedia = profileMedia;
+        this.longitude = longitude;
+        this.latitude =latitude;
+    }
+
     public UserInformationRequest(String gender, String displayName, String nickname,
                                   String birthday, String work, Media profileMedia,
                                   Media wallpaperMedia, double longitude, double latitude,

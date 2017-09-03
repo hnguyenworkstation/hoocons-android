@@ -1,9 +1,13 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
+import com.google.android.gms.nearby.messages.internal.Update;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
 import com.hoocons.hoocons_android.Networking.Requests.FCMTokenRequest;
+import com.hoocons.hoocons_android.Networking.Requests.ProfileMediaRequest;
+import com.hoocons.hoocons_android.Networking.Requests.UpdatePasswordRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
+import com.hoocons.hoocons_android.Networking.Requests.WallpaperMediaRequest;
 import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 
@@ -76,14 +80,40 @@ public interface UserServices {
     @PUT("/api/v1/user/{id}/")
     Call<Void> updateUserInfo(@Path("id") int id, @Body UserInformationRequest request);
 
-
     /**********************************
-     * @Method: PUT
+     * @Method: PATCH
      * @Name: updateFcmToken
      * @Argument: new token
      * @Purpose: update GCM token from server
      ********************************** */
     @PATCH("/api/v1/user/{id}/update_fcm")
-    Call<Void> updateFcmToken(@Body FCMTokenRequest request);
+    Call<Void> updateFcmToken(@Path("id") int id, @Body FCMTokenRequest request);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: changePassword
+     * @Argument: UpdatePasswordRequest
+     * @Purpose: update password
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/update_password/")
+    Call<Void> changePassword(@Path("id") int id, @Body UpdatePasswordRequest request);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: changeProfilePicture
+     * @Argument: UpdatePasswordRequest
+     * @Purpose: update profile picture
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/update_profile/")
+    Call<Void> updateProfile(@Path("id") int id, @Body ProfileMediaRequest request);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: changeProfilePicture
+     * @Argument: UpdatePasswordRequest
+     * @Purpose: update profile picture
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/update_wallpaper/")
+    Call<Void> updateWallpaper(@Path("id") int id, @Body WallpaperMediaRequest request);
 
 }

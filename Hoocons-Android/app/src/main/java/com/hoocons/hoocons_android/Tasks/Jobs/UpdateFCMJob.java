@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.FCMTokenRequest;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
@@ -40,7 +41,8 @@ public class UpdateFCMJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.updateFcmToken(new FCMTokenRequest(oldToken, newToken))
+        services.updateFcmToken(SharedPreferencesManager.getDefault().getUserId(),
+                new FCMTokenRequest(oldToken, newToken))
                 .enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
