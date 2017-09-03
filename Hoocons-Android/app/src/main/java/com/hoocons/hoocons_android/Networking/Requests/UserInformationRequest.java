@@ -8,8 +8,6 @@ import com.hoocons.hoocons_android.Models.Media;
  */
 
 public class UserInformationRequest {
-    @SerializedName("profile_media")
-    private Media profileMedia;
     @SerializedName("gender")
     private String gender;
     @SerializedName("display_name")
@@ -18,32 +16,53 @@ public class UserInformationRequest {
     private String nickname;
     @SerializedName("birthday")
     private String birthday;
+    @SerializedName("work")
+    private String work;
+    @SerializedName("profile_media")
+    private Media profileMedia;
+    @SerializedName("wallpaper_media")
+    private Media wallpaperMedia;
     @SerializedName("longitude")
     private double longitude;
     @SerializedName("latitude")
     private double latitude;
+    @SerializedName("location_name")
+    private String locationName;
+    @SerializedName("city")
+    private String city;
+    @SerializedName("province")
+    private String province;
+    @SerializedName("state")
+    private String state;
+    @SerializedName("zipcode")
+    private int zipcode;
+    @SerializedName("country")
+    private String country;
 
     public UserInformationRequest(String nickname) {
         this.nickname = nickname;
     }
 
-    public UserInformationRequest(String displayName, String nickname, String gender, String birthday,
-                                  Media profileMedia, double longitude, double latitude) {
-        this.nickname = nickname;
-        this.displayName = displayName;
+    public UserInformationRequest(String gender, String displayName, String nickname,
+                                  String birthday, String work, Media profileMedia,
+                                  Media wallpaperMedia, double longitude, double latitude,
+                                  String locationName, String city, String province,
+                                  String state, int zipcode, String country) {
         this.gender = gender;
+        this.displayName = displayName;
+        this.nickname = nickname;
         this.birthday = birthday;
+        this.work = work;
         this.profileMedia = profileMedia;
+        this.wallpaperMedia = wallpaperMedia;
         this.longitude = longitude;
         this.latitude = latitude;
-    }
-
-    public Media getProfileMedia() {
-        return profileMedia;
-    }
-
-    public void setProfileMedia(Media profileMedia) {
-        this.profileMedia = profileMedia;
+        this.locationName = locationName;
+        this.city = city;
+        this.province = province;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.country = country;
     }
 
     public String getGender() {
@@ -78,6 +97,30 @@ public class UserInformationRequest {
         this.birthday = birthday;
     }
 
+    public String getWork() {
+        return work;
+    }
+
+    public void setWork(String work) {
+        this.work = work;
+    }
+
+    public Media getProfileMedia() {
+        return profileMedia;
+    }
+
+    public void setProfileMedia(Media profileMedia) {
+        this.profileMedia = profileMedia;
+    }
+
+    public Media getWallpaperMedia() {
+        return wallpaperMedia;
+    }
+
+    public void setWallpaperMedia(Media wallpaperMedia) {
+        this.wallpaperMedia = wallpaperMedia;
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -92,5 +135,53 @@ public class UserInformationRequest {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public int getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

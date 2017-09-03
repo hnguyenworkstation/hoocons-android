@@ -88,8 +88,9 @@ public class UpdateUserInfoJob extends Job implements Serializable {
 
     private void uploadDataToServer(final Media profileMedia) {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.updateUserInfo(new UserInformationRequest(displayName,
-                nickname, gender, birthday, profileMedia, 0, 0))
+        services.updateUserInfo(SharedPreferencesManager.getDefault().getUserId(),
+                new UserInformationRequest(displayName,
+                    nickname, gender, birthday, profileMedia, 0, 0))
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {

@@ -38,7 +38,8 @@ public class CheckNicknameAvailabilityTask extends AsyncTask<String, String, Str
 
     private void checkAvailability(String nickname) {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.checkNicknameAvailability(new UserInformationRequest(nickname)).enqueue(new Callback<Void>() {
+        services.checkNicknameAvailability(new UserInformationRequest(nickname))
+                .enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() ==  200) {

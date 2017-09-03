@@ -40,7 +40,7 @@ public class UpdateFCMJob extends Job implements Serializable {
     @Override
     public void onRun() throws Throwable {
         UserServices services = NetContext.instance.create(UserServices.class);
-        services.updateFcmToken(oldToken, new FCMTokenRequest(newToken))
+        services.updateFcmToken(new FCMTokenRequest(oldToken, newToken))
                 .enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

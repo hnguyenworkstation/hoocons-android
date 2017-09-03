@@ -7,11 +7,22 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class FCMTokenRequest {
+    @SerializedName("old_fcm_token")
+    private String oldFcmToken;
     @SerializedName("new_fcm_token")
     private String newFcmToken;
 
-    public FCMTokenRequest(String newFcmToken) {
+    public FCMTokenRequest(String oldFcmToken, String newFcmToken) {
         this.newFcmToken = newFcmToken;
+        this.oldFcmToken = oldFcmToken;
+    }
+
+    public String getOldFcmToken() {
+        return oldFcmToken;
+    }
+
+    public void setOldFcmToken(String oldFcmToken) {
+        this.oldFcmToken = oldFcmToken;
     }
 
     public String getNewFcmToken() {
