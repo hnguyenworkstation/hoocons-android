@@ -1,8 +1,6 @@
 package com.hoocons.hoocons_android.Parcel;
 
-import com.google.gson.annotations.SerializedName;
-import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
-import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
+import com.hoocons.hoocons_android.Networking.Responses.CoordinateResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Responses.TagResponse;
@@ -30,7 +28,7 @@ public class EventParcel {
 
     @ParcelPropertyConverter(MultiTagsParcel.class)
     List<TagResponse> tags;
-    LocationResponse checkInLocation;
+    CoordinateResponse checkInLocation;
     int reportsCount;
     int likeCount;
     boolean isLiked;
@@ -149,11 +147,11 @@ public class EventParcel {
         this.tags = tags;
     }
 
-    public LocationResponse getCheckInLocation() {
+    public CoordinateResponse getCheckInLocation() {
         return checkInLocation;
     }
 
-    public void setCheckInLocation(LocationResponse checkInLocation) {
+    public void setCheckInLocation(CoordinateResponse checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 

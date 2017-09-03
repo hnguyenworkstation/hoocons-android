@@ -33,9 +33,9 @@ public class EventResponse {
     @SerializedName("contain_event")
     EventResponse containEvent;
     @SerializedName("location")
-    LocationResponse location;
+    CoordinateResponse location;
     @SerializedName("checkin_location")
-    LocationResponse checkInLocation;
+    CoordinateResponse checkInLocation;
     @SerializedName("likes_count")
     int likesCount;
     @SerializedName("comments_count")
@@ -153,19 +153,19 @@ public class EventResponse {
         this.containEvent = containEvent;
     }
 
-    public LocationResponse getLocation() {
+    public CoordinateResponse getLocation() {
         return location;
     }
 
-    public void setLocation(LocationResponse location) {
+    public void setLocation(CoordinateResponse location) {
         this.location = location;
     }
 
-    public LocationResponse getCheckInLocation() {
+    public CoordinateResponse getCheckInLocation() {
         return checkInLocation;
     }
 
-    public void LocationResponse(LocationResponse checkInLocation) {
+    public void LocationResponse(CoordinateResponse checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 
@@ -237,7 +237,7 @@ public class EventResponse {
         this.checkinPlaceId = checkinPlaceId;
     }
 
-    public void setCheckInLocation(LocationResponse checkInLocation) {
+    public void setCheckInLocation(CoordinateResponse checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 

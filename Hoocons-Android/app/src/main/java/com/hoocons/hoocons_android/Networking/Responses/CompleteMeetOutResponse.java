@@ -1,7 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.hoocons.hoocons_android.Models.Media;
 import com.hoocons.hoocons_android.Models.Topic;
 
 import java.util.List;
@@ -36,9 +35,9 @@ public class CompleteMeetOutResponse {
     @SerializedName("is_promoted")
     private boolean isPromoted;
     @SerializedName("posted_at_location")
-    private LocationResponse postedAtLocation;
+    private CoordinateResponse postedAtLocation;
     @SerializedName("meetup_location")
-    private LocationResponse meetupLocation;
+    private CoordinateResponse meetupLocation;
     @SerializedName("meetup_location_name")
     private String meetupLocationName;
     @SerializedName("meetup_location_address")
@@ -66,8 +65,8 @@ public class CompleteMeetOutResponse {
                                    String createAt, String name, String description,
                                    List<MediaResponse> promotedMedias, String fromDateTime,
                                    String toDateTime, String city, String country, String privacy,
-                                   boolean isPromoted, LocationResponse postedAtLocation,
-                                   LocationResponse meetupLocation, String meetupLocationName,
+                                   boolean isPromoted, CoordinateResponse postedAtLocation,
+                                   CoordinateResponse meetupLocation, String meetupLocationName,
                                    String meetupLocationAddress, List<TagResponse> tags,
                                    List<Topic> topics, List<String> goingUsers, int likeCount,
                                    int reportCount, boolean isReported, boolean isOwner,
@@ -195,19 +194,19 @@ public class CompleteMeetOutResponse {
         isPromoted = promoted;
     }
 
-    public LocationResponse getPostedAtLocation() {
+    public CoordinateResponse getPostedAtLocation() {
         return postedAtLocation;
     }
 
-    public void setPostedAtLocation(LocationResponse postedAtLocation) {
+    public void setPostedAtLocation(CoordinateResponse postedAtLocation) {
         this.postedAtLocation = postedAtLocation;
     }
 
-    public LocationResponse getMeetupLocation() {
+    public CoordinateResponse getMeetupLocation() {
         return meetupLocation;
     }
 
-    public void setMeetupLocation(LocationResponse meetupLocation) {
+    public void setMeetupLocation(CoordinateResponse meetupLocation) {
         this.meetupLocation = meetupLocation;
     }
 

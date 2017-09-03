@@ -34,6 +34,7 @@ public class SemiUserInfoResponse {
     boolean isFriend;
     @SerializedName("friend_requested")
     boolean isFriendRequested;
+
     @ParcelPropertyConverter(MultiTopicsParcel.class)
     @SerializedName("hobbies")
     List<Topic> hobbies;

@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Models.Topic;
 
-import org.parceler.Parcel;
-
 import java.util.List;
 
 /**
