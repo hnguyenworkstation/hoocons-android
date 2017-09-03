@@ -121,7 +121,7 @@ public interface UserServices {
     /**********************************
      * @Method: PATCH
      * @Name: updateHobbies
-     * @Argument: HobbiesRequest
+     * @Argument: user id, HobbiesRequest
      * @Purpose: update list hobbies or topics related
      ********************************** */
     @PATCH("/api/v1/user/{id}/update_hobbies/")
@@ -130,10 +130,27 @@ public interface UserServices {
     /**********************************
      * @Method: PATCH
      * @Name: updateLocation
-     * @Argument: LocationRequest
+     * @Argument: user id, LocationRequest
      * @Purpose: update user's location
      ********************************** */
     @PATCH("/api/v1/user/{id}/update_location/")
     Call<Void> updateLocation(@Path("id") int id, @Body LocationRequest request);
 
+    /**********************************
+     * @Method: PATCH
+     * @Name: shareLocation
+     * @Argument: user id
+     * @Purpose: share user's location
+     ********************************** */
+    @PATCH("/api/v1/user/{id}/share_location/")
+    Call<Void> shareLocation(@Path("id") int id);
+
+    /**********************************
+     * @Method: PATCH
+     * @Name: clearLocation
+     * @Argument: user id
+     * @Purpose: clear user's location (unshare location)
+     ********************************** */
+    @DELETE("/api/v1/user/{id}/share_location/")
+    Call<Void> clearLocation(@Path("id") int id);
 }
