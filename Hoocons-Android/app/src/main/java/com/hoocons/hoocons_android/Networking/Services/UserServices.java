@@ -88,7 +88,7 @@ public interface UserServices {
      * @Argument: new token
      * @Purpose: update GCM token from server
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_fcm")
+    @PATCH("/api/v1/user/{id}/fcm")
     Call<Void> updateFcmToken(@Path("id") int id, @Body FCMTokenRequest request);
 
     /**********************************
@@ -97,7 +97,7 @@ public interface UserServices {
      * @Argument: UpdatePasswordRequest
      * @Purpose: update password
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_password/")
+    @PATCH("/api/v1/user/{id}/password/")
     Call<Void> changePassword(@Path("id") int id, @Body UpdatePasswordRequest request);
 
     /**********************************
@@ -106,7 +106,7 @@ public interface UserServices {
      * @Argument: UpdatePasswordRequest
      * @Purpose: update profile picture
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_profile/")
+    @PATCH("/api/v1/user/{id}/profile/")
     Call<Void> updateProfile(@Path("id") int id, @Body ProfileMediaRequest request);
 
     /**********************************
@@ -115,7 +115,7 @@ public interface UserServices {
      * @Argument: WallpaperMediaRequest
      * @Purpose: update wallpaper picture
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_wallpaper/")
+    @PATCH("/api/v1/user/{id}/wallpaper/")
     Call<Void> updateWallpaper(@Path("id") int id, @Body WallpaperMediaRequest request);
 
     /**********************************
@@ -124,7 +124,7 @@ public interface UserServices {
      * @Argument: user id, HobbiesRequest
      * @Purpose: update list hobbies or topics related
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_hobbies/")
+    @PATCH("/api/v1/user/{id}/hobbies/")
     Call<Void> updateHobbies(@Path("id") int id, @Body HobbiesRequest request);
 
     /**********************************
@@ -133,7 +133,7 @@ public interface UserServices {
      * @Argument: user id, LocationRequest
      * @Purpose: update user's location
      ********************************** */
-    @PATCH("/api/v1/user/{id}/update_location/")
+    @PATCH("/api/v1/user/{id}/location/")
     Call<Void> updateLocation(@Path("id") int id, @Body LocationRequest request);
 
     /**********************************
