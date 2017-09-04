@@ -30,7 +30,7 @@ public interface EventServices {
      * @Argument: EventInfoRequest
      * @Purpose: post a new event
      ********************************** */
-    @POST("/event/create/")
+    @POST("/api/v1/event/")
     Call<Void> postEvent(@Body EventInfoRequest request);
 
 
@@ -40,18 +40,8 @@ public interface EventServices {
      * @Argument: EventInfoRequest
      * @Purpose: post a new event
      ********************************** */
-    @GET("/api/v1/user/{userId}/events/")
-    Call<EventsApiViewSet> getEventPosted(@Path("userId") int userId, @Query("page") int pageNum);
-
-
-    /**********************************
-     * @Method: GET
-     * @Name: getCreatedEvent
-     * @Argument: start and end (limit of the list)
-     * @Purpose: get all posted event
-     ********************************** */
-    @GET("/event/get/created/start={start}/end={end}/")
-    Call<List<EventResponse>> getCreatedEvent(@Path("start") int start, @Path("end") int end);
+    @GET("/api/v1/event/")
+    Call<EventsApiViewSet> getEventPosted(@Query("page") int page);
 
 
     /**********************************
@@ -60,17 +50,8 @@ public interface EventServices {
      * @Argument: VOID
      * @Purpose: like a new event
      ********************************** */
-    @POST("/event/like/id={event_id}/")
-    Call<Void> likeEvent(@Path("event_id") int id);
-
-    /**********************************
-     * @Method: POST
-     * @Name: shareEvent
-     * @Argument: VOID
-     * @Purpose: share a new event
-     ********************************** */
-    @POST("/event/share/id={event_id}/")
-    Call<Void> shareEvent(@Path("event_id") int id, @Body EventInfoRequest request);
+    @POST("/api/v1/event/{id}/like/")
+    Call<Void> likeEvent(@Path("id") int id);
 
     /**********************************
      * @Method: DELETE
@@ -78,9 +59,18 @@ public interface EventServices {
      * @Argument: VOID
      * @Purpose: unlikeEvent a event
      ********************************** */
-    @DELETE("/event/like/id={event_id}/")
-    Call<Void> unlikeEvent(@Path("event_id") int id);
+    @DELETE("/api/v1/event/{id}/like/")
+    Call<Void> unlikeEvent(@Path("id") int id);
 
+    /**********************************
+     * @Method: POST
+     * @Name: shareEvent
+     * @Argument: VOID
+     * @Purpose: share a new event
+     ********************************** */
+    @POST("/api/v1/event/{id}/share/")
+    Call<Void> shareEvent(@Path("id") int id, @Body EventInfoRequest request);
+    
 
     /**********************************
      * @Method: POST
