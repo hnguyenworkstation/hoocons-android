@@ -50,11 +50,11 @@ public class LocationResponse {
         this.placeApiType = placeApiType;
     }
 
-    public CoordinateResponse getResponse() {
+    public CoordinateResponse getCoordinateResponse() {
         return response;
     }
 
-    public void setResponse(CoordinateResponse response) {
+    public void setCoordinateResponse(CoordinateResponse response) {
         this.response = response;
     }
 

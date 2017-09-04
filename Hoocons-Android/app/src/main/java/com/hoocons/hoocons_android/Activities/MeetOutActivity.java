@@ -144,8 +144,8 @@ public class MeetOutActivity extends BaseActivity implements
         mMeetOutLocationName.setText(response.getMeetupLocationName());
         mMeetOutLocationAddress.setText(response.getMeetupLocationAddress());
 
-        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(response.getMeetupLocation().getCoordinates()[1]),
-                String.valueOf(response.getMeetupLocation().getCoordinates()[0])));
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(response.getMeetupLocation().getLatitude()),
+                String.valueOf(response.getMeetupLocation().getLongitude())));
 
         initFlowLayoutView(response.getTopics());
     }

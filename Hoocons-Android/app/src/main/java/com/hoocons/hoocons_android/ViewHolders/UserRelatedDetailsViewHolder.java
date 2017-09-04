@@ -406,7 +406,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mLikeCount.setText(likeCount);
         mCommentCount.setText(commentCount);
 
-        if (eventResponse.getIsLiked()) {
+        if (eventResponse.isLiked()) {
             mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_color));
             mLoveText.setText(context.getResources().getText(R.string.loved));
             mLoveText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
@@ -490,11 +490,11 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     private void loadCheckinMapView(final Context context, final EventResponse eventResponse) {
         assert mCheckinName != null;
         assert mCheckinType != null;
-        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[1]),
-                String.valueOf(eventResponse.getCheckInLocation().getCoordinates()[0])));
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLatitude()),
+                String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLongitude())));
 
-        mCheckinName.setText(eventResponse.getCheckinName());
-        mCheckinType.setText(eventResponse.getCheckinAddress());
+        mCheckinName.setText(eventResponse.getCheckInLocation().getLocationName());
+        mCheckinType.setText(eventResponse.getCheckInLocation().getAddress());
 
         mCheckinName.setTypeface(EasyFonts.robotoBold(context));
         mCheckinType.setTypeface(EasyFonts.robotoRegular(context));

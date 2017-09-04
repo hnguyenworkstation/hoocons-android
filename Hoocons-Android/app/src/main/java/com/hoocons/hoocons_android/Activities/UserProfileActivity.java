@@ -442,8 +442,8 @@ public class UserProfileActivity extends DraggerActivity
         String likeTag = "LIKE-" + String.valueOf(response.getEventId());
         String unlikeTag = "UNLIKE-" + String.valueOf(response.getEventId());
 
-        if (response.getIsLiked()) {
-            response.setIsLiked(false);
+        if (response.isLiked()) {
+            response.setLiked(false);
             response.setLikesCount(response.getLikesCount() - 1);
             try {
                 jobManager.cancelJobsInBackground(null, TagConstraint.ANY, likeTag);
@@ -453,7 +453,7 @@ public class UserProfileActivity extends DraggerActivity
                 jobManager.addJobInBackground(new UnLikeEventJob(unlikeTag, response.getEventId()));
             }
         } else {
-            response.setIsLiked(true);
+            response.setLiked(true);
             response.setLikesCount(response.getLikesCount() + 1);
             jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getEventId()));
         }
@@ -468,7 +468,7 @@ public class UserProfileActivity extends DraggerActivity
         EventParcel parcel = new EventParcel();
         parcel.setId(response.getEventId());
         parcel.setLikeCount(response.getLikesCount());
-        parcel.setLiked(response.getIsLiked());
+        parcel.setLiked(response.isLiked());
 
         Intent commentIntent = new Intent(this, CommentEventActivity.class);
         commentIntent.putExtra("event", Parcels.wrap(parcel));

@@ -40,8 +40,8 @@ public interface EventServices {
      * @Argument: EventInfoRequest
      * @Purpose: post a new event
      ********************************** */
-    @GET("/api/v1/event/")
-    Call<EventsApiViewSet> getEventPosted(@Query("page") int page);
+    @GET("/api/v1/user/{id}/events/")
+    Call<EventsApiViewSet> getEventPosted(@Path("id") int id, @Query("page") int page);
 
 
     /**********************************
@@ -70,7 +70,7 @@ public interface EventServices {
      ********************************** */
     @POST("/api/v1/event/{id}/share/")
     Call<Void> shareEvent(@Path("id") int id, @Body EventInfoRequest request);
-    
+
 
     /**********************************
      * @Method: POST

@@ -213,7 +213,8 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
 
     private void getUserInfo() {
         UserServices service = NetContext.instance.create(UserServices.class);
-        service.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+        service.getUserInfo(SharedPreferencesManager.getDefault().getUserId())
+                .enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
                 UserInfoResponse resp = response.body();

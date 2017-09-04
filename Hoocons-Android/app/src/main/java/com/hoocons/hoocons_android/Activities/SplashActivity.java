@@ -102,7 +102,8 @@ public class SplashActivity extends AppCompatActivity {
 
         if (SharedPreferencesManager.getDefault().getUserToken() != null &&
                 SharedPreferencesManager.getDefault().getUserId() == -1) {
-            service.getUserInfo().enqueue(new Callback<UserInfoResponse>() {
+            service.getUserInfo(SharedPreferencesManager.getDefault().getUserId())
+                    .enqueue(new Callback<UserInfoResponse>() {
                 @Override
                 public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
                     UserInfoResponse resp = response.body();
