@@ -1,16 +1,15 @@
 package com.hoocons.hoocons_android.Networking.Requests;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Networking.Responses.CoordinateResponse;
 
 /**
  * Created by hungnguyen on 9/3/17.
  */
 
 public class LocationRequest {
-    @SerializedName("longitude")
-    private double longitude;
-    @SerializedName("latitude")
-    private double latitude;
+    @SerializedName("coordinate")
+    private CoordinateResponse response;
     @SerializedName("location_name")
     private String locationName;
     @SerializedName("city")
@@ -23,34 +22,38 @@ public class LocationRequest {
     private int zipcode;
     @SerializedName("country")
     private String country;
+    @SerializedName("address")
+    private String address;
+    @SerializedName("place_id")
+    private String placeId;
+    @SerializedName("place_api_type")
+    private String placeApiType;
 
-    public LocationRequest(double longitude, double latitude, String locationName,
+    public LocationRequest() {
+    }
+
+    public LocationRequest(CoordinateResponse response, String locationName,
                            String city, String province, String state,
-                           int zipcode, String country) {
-        this.longitude = longitude;
-        this.latitude = latitude;
+                           int zipcode, String country, String address,
+                           String placeId, String placeApiType) {
+        this.response = response;
         this.locationName = locationName;
         this.city = city;
         this.province = province;
         this.state = state;
         this.zipcode = zipcode;
         this.country = country;
+        this.address = address;
+        this.placeId = placeId;
+        this.placeApiType = placeApiType;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public CoordinateResponse getResponse() {
+        return response;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setResponse(CoordinateResponse response) {
+        this.response = response;
     }
 
     public String getLocationName() {
@@ -99,5 +102,29 @@ public class LocationRequest {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public String getPlaceApiType() {
+        return placeApiType;
+    }
+
+    public void setPlaceApiType(String placeApiType) {
+        this.placeApiType = placeApiType;
     }
 }

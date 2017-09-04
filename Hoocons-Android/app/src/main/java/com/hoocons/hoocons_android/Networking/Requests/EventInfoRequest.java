@@ -18,63 +18,43 @@ public class EventInfoRequest {
     private ArrayList<String> tags;
     @SerializedName("privacy")
     private String privacy;
-    @SerializedName("latitude")
-    private long latitude;
-    @SerializedName("longitude")
-    private long longitude;
-    @SerializedName("srid")
-    private final int srid = 4326;
     @SerializedName("event_type")
     private String eventType;
-    @SerializedName("meetup_id")
-    private int meetUpId;
-    @SerializedName("channel_id")
-    private int channelId;
-    @SerializedName("on_profile")
-    private boolean isOnProfile;
-    @SerializedName("checkin_longitude")
-    private double checkinLongitude;
-    @SerializedName("checkin_latitude")
-    private double checkinLatitude;
-    @SerializedName("checkin_name")
-    private String checkinName;
-    @SerializedName("checkin_address")
-    private String checkinAddress;
-    @SerializedName("checkin_place_id")
-    private String checkinPlaceId;
+    @SerializedName("channel_mask")
+    private int channelMaskId;
+    @SerializedName("target_meetup")
+    private int targetMeetup;
+    @SerializedName("target_channel")
+    private int targetChannel;
+    @SerializedName("target_user")
+    private int targetUser;
+    @SerializedName("posted_location")
+    private LocationRequest postedLocation;
+    @SerializedName("tagged_location")
+    private LocationRequest taggedLocation;
+    @SerializedName("checkin_location")
+    private LocationRequest checkinLocation;
 
-    public EventInfoRequest(String textContent, ArrayList<Media> medias,
-                            ArrayList<String> tags, String privacy, long latitude,
-                            long longitude, String eventType, boolean isOnProfile,
-                            double checkinLongitude, double checkinLatitude, String checkinName,
-                            String checkinAddress, String checkinPlaceId) {
-        this.textContent = textContent;
-        this.isOnProfile = isOnProfile;
-
-        if (medias != null) {
-            this.medias = medias;
-        } else {
-            this.medias = new ArrayList<>();
-        }
-
-        if (tags != null) {
-            this.tags = tags;
-        } else {
-            this.tags = new ArrayList<>();
-        }
-
-        this.privacy = privacy;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.eventType = eventType;
-
-        this.checkinPlaceId = checkinPlaceId;
-        this.checkinName = checkinName;
-        this.checkinAddress = checkinAddress;
-        this.checkinLatitude = checkinLatitude;
-        this.checkinLongitude = checkinLongitude;
+    public EventInfoRequest() {
     }
 
+    public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<String> tags,
+                            String privacy, String eventType, int channelMaskId, int targetMeetup,
+                            int targetChannel, int targetUser, LocationRequest postedLocation,
+                            LocationRequest taggedLocation, LocationRequest checkinLocation) {
+        this.textContent = textContent;
+        this.medias = medias;
+        this.tags = tags;
+        this.privacy = privacy;
+        this.eventType = eventType;
+        this.channelMaskId = channelMaskId;
+        this.targetMeetup = targetMeetup;
+        this.targetChannel = targetChannel;
+        this.targetUser = targetUser;
+        this.postedLocation = postedLocation;
+        this.taggedLocation = taggedLocation;
+        this.checkinLocation = checkinLocation;
+    }
 
     public String getTextContent() {
         return textContent;
@@ -108,26 +88,6 @@ public class EventInfoRequest {
         this.privacy = privacy;
     }
 
-    public long getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(long latitude) {
-        this.latitude = latitude;
-    }
-
-    public long getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(long longitude) {
-        this.longitude = longitude;
-    }
-
-    public int getSrid() {
-        return srid;
-    }
-
     public String getEventType() {
         return eventType;
     }
@@ -136,67 +96,59 @@ public class EventInfoRequest {
         this.eventType = eventType;
     }
 
-    public int getMeetUpId() {
-        return meetUpId;
+    public int getChannelMaskId() {
+        return channelMaskId;
     }
 
-    public void setMeetUpId(int meetUpId) {
-        this.meetUpId = meetUpId;
+    public void setChannelMaskId(int channelMaskId) {
+        this.channelMaskId = channelMaskId;
     }
 
-    public int getChannelId() {
-        return channelId;
+    public int getTargetMeetup() {
+        return targetMeetup;
     }
 
-    public void setChannelId(int channelId) {
-        this.channelId = channelId;
+    public void setTargetMeetup(int targetMeetup) {
+        this.targetMeetup = targetMeetup;
     }
 
-    public boolean isOnProfile() {
-        return isOnProfile;
+    public int getTargetChannel() {
+        return targetChannel;
     }
 
-    public void setOnProfile(boolean onProfile) {
-        isOnProfile = onProfile;
+    public void setTargetChannel(int targetChannel) {
+        this.targetChannel = targetChannel;
     }
 
-    public double getCheckinLongitude() {
-        return checkinLongitude;
+    public int getTargetUser() {
+        return targetUser;
     }
 
-    public void setCheckinLongitude(double checkinLongitude) {
-        this.checkinLongitude = checkinLongitude;
+    public void setTargetUser(int targetUser) {
+        this.targetUser = targetUser;
     }
 
-    public double getCheckinLatitude() {
-        return checkinLatitude;
+    public LocationRequest getPostedLocation() {
+        return postedLocation;
     }
 
-    public void setCheckinLatitude(double checkinLatitude) {
-        this.checkinLatitude = checkinLatitude;
+    public void setPostedLocation(LocationRequest postedLocation) {
+        this.postedLocation = postedLocation;
     }
 
-    public String getCheckinName() {
-        return checkinName;
+    public LocationRequest getTaggedLocation() {
+        return taggedLocation;
     }
 
-    public void setCheckinName(String checkinName) {
-        this.checkinName = checkinName;
+    public void setTaggedLocation(LocationRequest taggedLocation) {
+        this.taggedLocation = taggedLocation;
     }
 
-    public String getCheckinAddress() {
-        return checkinAddress;
+    public LocationRequest getCheckinLocation() {
+        return checkinLocation;
     }
 
-    public void setCheckinAddress(String checkinAddress) {
-        this.checkinAddress = checkinAddress;
-    }
-
-    public String getCheckinPlaceId() {
-        return checkinPlaceId;
-    }
-
-    public void setCheckinPlaceId(String checkinPlaceId) {
-        this.checkinPlaceId = checkinPlaceId;
+    public void setCheckinLocation(LocationRequest checkinLocation) {
+        this.checkinLocation = checkinLocation;
     }
 }

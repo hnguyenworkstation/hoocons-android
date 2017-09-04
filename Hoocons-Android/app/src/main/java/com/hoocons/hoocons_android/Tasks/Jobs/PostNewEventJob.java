@@ -37,7 +37,7 @@ import retrofit2.Response;
  * Created by hungnguyen on 7/12/17.
  */
 
-public class PostNewEventJob extends Job implements Serializable {
+public class PostNewEventJob extends Job {
     private long localId;
     private String textContent;
     private ArrayList<String> imagePaths;
@@ -85,8 +85,7 @@ public class PostNewEventJob extends Job implements Serializable {
                 medias = AppUtils.uploadAllEventImage(imagePaths);
             }
 
-            final EventInfoRequest request = new EventInfoRequest(textContent, medias, null,
-                    privacy, 0, 0, eventType, true, chkinLon, chkinLat, chkinName, chkinAddress, chkinId);
+            final EventInfoRequest request = new EventInfoRequest();
 
             EventServices services = NetContext.instance.create(EventServices.class);
             services.postEvent(request)

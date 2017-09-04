@@ -63,8 +63,7 @@ public class ShareNewEventJob extends Job implements Serializable {
 
     @Override
     public void onRun() throws Throwable {
-        final EventInfoRequest request = new EventInfoRequest(textContent, null, null,
-                privacy, 0, 0, eventType, true, chkinLon, chkinLat, chkinName, chkinAddress, chkinId);
+        final EventInfoRequest request = new EventInfoRequest();
 
         EventServices services = NetContext.instance.create(EventServices.class);
         services.shareEvent(shareEventId, request).enqueue(new Callback<Void>() {

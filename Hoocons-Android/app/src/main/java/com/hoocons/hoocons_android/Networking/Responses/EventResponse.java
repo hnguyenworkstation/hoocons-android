@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 
 import java.util.List;
 
@@ -10,8 +11,6 @@ import java.util.List;
 public class EventResponse {
     @SerializedName("id")
     int eventId;
-    @SerializedName("on_profile")
-    boolean onProfile;
     @SerializedName("author")
     SemiUserInfoResponse author;
     @SerializedName("text_content")
@@ -32,10 +31,12 @@ public class EventResponse {
     List<TagResponse> tags;
     @SerializedName("contain_event")
     EventResponse containEvent;
-    @SerializedName("location")
-    CoordinateResponse location;
+    @SerializedName("posted_location")
+    LocationResponse postedLocation;
+    @SerializedName("tagged_location")
+    LocationResponse taggedLocation;
     @SerializedName("checkin_location")
-    CoordinateResponse checkInLocation;
+    LocationResponse checkInLocation;
     @SerializedName("likes_count")
     int likesCount;
     @SerializedName("comments_count")
@@ -46,15 +47,37 @@ public class EventResponse {
     boolean isLiked;
     @SerializedName("is_reported")
     boolean isReported;
-    @SerializedName("checkin_name")
-    String checkinName;
-    @SerializedName("checkin_address")
-    String checkinAddress;
-    @SerializedName("checkin_place_id")
-    String checkinPlaceId;
 
     public EventResponse() {
 
+    }
+
+    public EventResponse(int eventId, SemiUserInfoResponse author, String textContent,
+                         String eventType, String privacy, boolean isEdited, String createAt,
+                         String lastActionAt, List<MediaResponse> medias, List<TagResponse> tags,
+                         EventResponse containEvent, LocationResponse postedLocation,
+                         LocationResponse taggedLocation, LocationResponse checkInLocation,
+                         int likesCount, int commentsCount, int reportsCount,
+                         boolean isLiked, boolean isReported) {
+        this.eventId = eventId;
+        this.author = author;
+        this.textContent = textContent;
+        this.eventType = eventType;
+        this.privacy = privacy;
+        this.isEdited = isEdited;
+        this.createAt = createAt;
+        this.lastActionAt = lastActionAt;
+        this.medias = medias;
+        this.tags = tags;
+        this.containEvent = containEvent;
+        this.postedLocation = postedLocation;
+        this.taggedLocation = taggedLocation;
+        this.checkInLocation = checkInLocation;
+        this.likesCount = likesCount;
+        this.commentsCount = commentsCount;
+        this.reportsCount = reportsCount;
+        this.isLiked = isLiked;
+        this.isReported = isReported;
     }
 
     public int getEventId() {
@@ -63,14 +86,6 @@ public class EventResponse {
 
     public void setEventId(int eventId) {
         this.eventId = eventId;
-    }
-
-    public boolean getOnProfile() {
-        return onProfile;
-    }
-
-    public void setOnProfile(boolean onProfile) {
-        this.onProfile = onProfile;
     }
 
     public SemiUserInfoResponse getAuthor() {
@@ -105,12 +120,12 @@ public class EventResponse {
         this.privacy = privacy;
     }
 
-    public boolean getIsEdited() {
+    public boolean isEdited() {
         return isEdited;
     }
 
-    public void setIsEdited(boolean isEdited) {
-        this.isEdited = isEdited;
+    public void setEdited(boolean edited) {
+        isEdited = edited;
     }
 
     public String getCreateAt() {
@@ -153,19 +168,27 @@ public class EventResponse {
         this.containEvent = containEvent;
     }
 
-    public CoordinateResponse getLocation() {
-        return location;
+    public LocationResponse getPostedLocation() {
+        return postedLocation;
     }
 
-    public void setLocation(CoordinateResponse location) {
-        this.location = location;
+    public void setPostedLocation(LocationResponse postedLocation) {
+        this.postedLocation = postedLocation;
     }
 
-    public CoordinateResponse getCheckInLocation() {
+    public LocationResponse getTaggedLocation() {
+        return taggedLocation;
+    }
+
+    public void setTaggedLocation(LocationResponse taggedLocation) {
+        this.taggedLocation = taggedLocation;
+    }
+
+    public LocationResponse getCheckInLocation() {
         return checkInLocation;
     }
 
-    public void LocationResponse(CoordinateResponse checkInLocation) {
+    public void setCheckInLocation(LocationResponse checkInLocation) {
         this.checkInLocation = checkInLocation;
     }
 
@@ -185,24 +208,12 @@ public class EventResponse {
         this.commentsCount = commentsCount;
     }
 
-    public boolean getIsLiked() {
-        return isLiked;
+    public int getReportsCount() {
+        return reportsCount;
     }
 
-    public void setIsLiked(boolean isLiked) {
-        this.isLiked = isLiked;
-    }
-
-    public boolean isOnProfile() {
-        return onProfile;
-    }
-
-    public boolean isEdited() {
-        return isEdited;
-    }
-
-    public void setEdited(boolean edited) {
-        isEdited = edited;
+    public void setReportsCount(int reportsCount) {
+        this.reportsCount = reportsCount;
     }
 
     public boolean isLiked() {
@@ -211,42 +222,6 @@ public class EventResponse {
 
     public void setLiked(boolean liked) {
         isLiked = liked;
-    }
-
-    public String getCheckinName() {
-        return checkinName;
-    }
-
-    public void setCheckinName(String checkinName) {
-        this.checkinName = checkinName;
-    }
-
-    public String getCheckinAddress() {
-        return checkinAddress;
-    }
-
-    public void setCheckinAddress(String checkinAddress) {
-        this.checkinAddress = checkinAddress;
-    }
-
-    public String getCheckinPlaceId() {
-        return checkinPlaceId;
-    }
-
-    public void setCheckinPlaceId(String checkinPlaceId) {
-        this.checkinPlaceId = checkinPlaceId;
-    }
-
-    public void setCheckInLocation(CoordinateResponse checkInLocation) {
-        this.checkInLocation = checkInLocation;
-    }
-
-    public int getReportsCount() {
-        return reportsCount;
-    }
-
-    public void setReportsCount(int reportsCount) {
-        this.reportsCount = reportsCount;
     }
 
     public boolean isReported() {

@@ -88,7 +88,7 @@ public interface UserServices {
      * @Argument: new token
      * @Purpose: update GCM token from server
      ********************************** */
-    @PATCH("/api/v1/user/{id}/fcm")
+    @PATCH("/api/v1/user/{id}/fcm/")
     Call<Void> updateFcmToken(@Path("id") int id, @Body FCMTokenRequest request);
 
     /**********************************

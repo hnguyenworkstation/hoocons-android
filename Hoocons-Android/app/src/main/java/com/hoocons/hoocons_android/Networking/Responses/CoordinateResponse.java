@@ -13,10 +13,23 @@ import java.util.List;
 public class CoordinateResponse {
     @SerializedName("srid")
     int srid;
-    @SerializedName("coordinates")
-    double[] coordinates;
+    @SerializedName("latitude")
+    double latitude;
+    @SerializedName("longitude")
+    double longitude;
 
     public CoordinateResponse() {
+    }
+
+    public CoordinateResponse(int srid, double latitude, double longitude) {
+        this.srid = srid;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public CoordinateResponse(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int getSrid() {
@@ -27,11 +40,19 @@ public class CoordinateResponse {
         this.srid = srid;
     }
 
-    public double[] getCoordinates() {
-        return coordinates;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setCoordinates(double[] coordinates) {
-        this.coordinates = coordinates;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

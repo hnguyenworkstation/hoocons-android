@@ -1,8 +1,6 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Networking.ApiViewSets.ActivityApiViewSet;
-import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
-import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 
 import java.util.List;
 
