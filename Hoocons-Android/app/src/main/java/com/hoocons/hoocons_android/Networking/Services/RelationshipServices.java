@@ -45,7 +45,7 @@ public interface RelationshipServices {
      * @Argument: user id
      * @Purpose: send friend request to user
      ********************************** */
-    @POST("/api/v1/user/{id}/friendship/")
+    @POST("/api/v1/user/{id}/makefriend/")
     Call<Void> sendFriendRequest(@Path("id") int userId);
 
 
@@ -55,7 +55,7 @@ public interface RelationshipServices {
      * @Argument: user id
      * @Purpose: send friend request to user
      ********************************** */
-    @DELETE("/api/v1/user/{id}/friendship/")
+    @DELETE("/api/v1/user/{id}/makefriend/")
     Call<Void> unFriendRequest(@Path("id") int userId);
 
 
@@ -85,7 +85,7 @@ public interface RelationshipServices {
      * @Argument: int requestId
      * @Purpose: accept friend request
      ********************************** */
-    @PUT("/api/v1/friend/request/{id}/response/")
+    @PUT("/api/v1/friend/request/{id}/")
     Call<Void> acceptFriendRequest(@Path("id") int requestId);
 
 
@@ -95,7 +95,7 @@ public interface RelationshipServices {
      * @Argument: int requestId
      * @Purpose: deny friend request
      ********************************** */
-    @DELETE("/api/v1/friend/request/{id}/response/")
+    @DELETE("/api/v1/friend/request/{id}/")
     Call<Void> declineFriendRequest(@Path("id") int requestId);
 
 }
