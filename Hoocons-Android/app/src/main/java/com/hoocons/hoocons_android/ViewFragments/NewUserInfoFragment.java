@@ -53,10 +53,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     ImageView mProfileImgView;
     @BindView(R.id.display_name_input)
     EditText mDisplayNameInput;
-    @BindView(R.id.nickname_input)
-    EditText mNicknameInput;
-    @BindView(R.id.check_nickname_btn)
-    BootstrapButton mCheckNicknameBtn;
     @BindView(R.id.birthday_txt)
     TextView mBirthDayText;
     @BindView(R.id.gender_male)
@@ -72,8 +68,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
     private final String TAG = NewUserInfoFragment.class.getSimpleName();
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     public static final int PHOTO_PICKER = 5;
 
     private String mParam1;
@@ -84,7 +78,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     private String mProfileImagePath;
 
     private DatePickerDialog datePickerDialog;
-    private SweetAlertDialog pDialog;
 
     public NewUserInfoFragment() {
 
@@ -93,8 +86,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     public static NewUserInfoFragment newInstance(String param1, String param2) {
         NewUserInfoFragment fragment = new NewUserInfoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,8 +94,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
         EventBus.getDefault().register(this);
     }
@@ -115,7 +104,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         View rootView = inflater.inflate(R.layout.fragment_new_user_info, container, false);
         ButterKnife.bind(this, rootView);
 
-        mCheckNicknameBtn.setOnClickListener(this);
         mBirthDayText.setOnClickListener(this);
         mProfileImgView.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
@@ -139,20 +127,6 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         return true;
     }
 
-    private boolean validateNicknameField() {
-        String nickname = mNicknameInput.getText().toString();
-        if (nickname.isEmpty()) {
-            mNicknameInput.setError(getResources().getString(R.string.error_empty_nickname));
-            return false;
-        }
-        if (nickname.matches("[a-zA-Z0-9]*") && nickname.length() >= 5) {
-            return true;
-        } else {
-            mNicknameInput.setError(getResources().getString(R.string.nickname_error));
-            return false;
-        }
-    }
-
     private boolean validateNameField() {
         String name = mDisplayNameInput.getText().toString();
         if (name.isEmpty()) {
@@ -163,31 +137,14 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         return true;
     }
 
-    private void showProcessDialog() {
-        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
-        pDialog.setTitleText(getResources().getString(R.string.updating));
-        pDialog.setCancelable(false);
-        pDialog.show();
-    }
-
     @Override
     public void onDestroy() {
-        if (pDialog != null) {
-            pDialog.dismiss();
-        }
         super.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.check_nickname_btn:
-                if (validateNicknameField()) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    new CheckNicknameAvailabilityTask(mNicknameInput.getText().toString()).execute();
-                }
-                break;
             case R.id.birthday_txt:
                 showDatePickerDialog();
                 break;
@@ -195,19 +152,8 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 AppUtils.startImagePickerFromFragment(getContext(), this, 1, PHOTO_PICKER);
                 break;
             case R.id.submit_button:
-                if (validateNameField() && validateNicknameField() && validateBirthday()) {
-                    showProcessDialog();
+                if (validateNameField() && validateBirthday()) {
 
-                    BaseApplication.getInstance().getJobManager().addJobInBackground(
-                            new UpdateUserInfoJob(
-                                    mDisplayNameInput.getText().toString(),
-                                    mNicknameInput.getText().toString(),
-                                    mGenderFemale.isChecked() ?
-                                            AppConstant.GENDER_FEMALE :
-                                            AppConstant.GENDER_MALE,
-                                    mBirthTime,
-                                    mProfileImagePath)
-                    );
                 }
                 break;
             default:
@@ -247,42 +193,10 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 .into(mProfileImgView);
     }
 
-    private void completeLoginProcess() {
-        pDialog.dismiss();
-        EventBus.getDefault().post(new CompleteLoginRequest());
-    }
-
-
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + FieldAvailableRequest
      *  + FieldUnavailableRequest
      *  + BadRequest
      ********************************************** */
-    @Subscribe
-    public void onEvent(FieldAvailableRequest request) {
-        mProgressBar.setVisibility(View.GONE);
-        mCheckNicknameBtn.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);
-        mCheckNicknameBtn.setBootstrapText(new BootstrapText.Builder(getContext())
-                .addFontAwesomeIcon(FontAwesome.FA_CHECK_CIRCLE)
-                .addText(" " + getContext().getResources().getText(R.string.checked))
-                .build());
-    }
-
-    @Subscribe
-    public void onEvent(FieldUnavailableRequest request) {
-        mProgressBar.setVisibility(View.GONE);
-        mNicknameInput.setError(getResources().getString(R.string.nickname_unavailable));
-    }
-
-    @Subscribe
-    public void onEvent(TaskCompleteRequest request) {
-        completeLoginProcess();
-    }
-
-    @Subscribe
-    public void onEvent(BadRequest request) {
-        pDialog.dismiss();
-        Toast.makeText(getContext(), getResources().getString(R.string.bad_request), Toast.LENGTH_SHORT).show();
-    }
 }

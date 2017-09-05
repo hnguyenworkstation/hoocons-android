@@ -9,11 +9,6 @@ import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InboxFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class InboxFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
