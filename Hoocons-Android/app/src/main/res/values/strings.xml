@@ -232,6 +232,7 @@
     <string name="aws_s3">elasticbeanstalk-ap-southeast-1-845076927108</string>
     <string name="aws_key_id">AKIAJUC2KVVEWYYLJKBQ</string>
     <string name="aws_secret">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</string>
+    <string name="mb_key">pk.eyJ1IjoiaG9vY29ucyIsImEiOiJjajc3ejUyanUyM3h6MnFwYTM1dG9nczZuIn0.M6fTxxwQNOMm3He03JAeWg</string>
     <string name="base_url">http://hconsdev.ap-southeast-1.elasticbeanstalk.com/</string>
 
     <!-- Create new channel strings -->

@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.Managers;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -35,11 +36,16 @@ import com.hoocons.hoocons_android.EventBus.MeetOutPostFailed;
 import com.hoocons.hoocons_android.EventBus.MeetOutPostedSuccess;
 import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
+import com.hoocons.hoocons_android.Helpers.GoogleLocationEngine;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.SQLite.StickerDB;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsJobService;
+import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 
 import org.aisen.android.common.context.GlobalContext;
 import org.aisen.android.component.bitmaploader.BitmapLoader;
@@ -53,7 +59,7 @@ import java.util.List;
 /**
  * Created by hungnguyen on 6/3/17.
  */
-public class BaseApplication extends GlobalContext {
+public class BaseApplication extends GlobalContext implements LocationEngineListener {
     public static final String TAG = BaseApplication.class
             .getSimpleName();
     private static BaseApplication mInstance;
@@ -62,6 +68,7 @@ public class BaseApplication extends GlobalContext {
     private AmazonS3Client s3Client;
     private DatabaseReference mDatabase;
     private RequestManager mGlideRequestManager;
+    private LocationEngine mLocationEngine;
 
     @Override
     public void onCreate() {
@@ -124,6 +131,7 @@ public class BaseApplication extends GlobalContext {
         Configuration.Builder builder = new Configuration.Builder(this)
                 .customLogger(new CustomLogger() {
                     private static final String TAG = "JOBS";
+
                     @Override
                     public boolean isDebugEnabled() {
                         return true;
@@ -182,13 +190,17 @@ public class BaseApplication extends GlobalContext {
         return mDatabase;
     }
 
+    public synchronized String getMapBoxKey() {
+        return getBaseContext().getResources().getString(R.string.mb_key);
+    }
+
     public synchronized String getGoogleServiceKey() {
         return getBaseContext().getResources().getString(R.string.google_web_service);
     }
 
     public synchronized AmazonS3Client getAwsS3Client() {
         if (s3Client == null) {
-            s3Client = new AmazonS3Client( new BasicAWSCredentials(
+            s3Client = new AmazonS3Client(new BasicAWSCredentials(
                     getApplicationContext().getResources().getString(R.string.aws_key_id),
                     getApplicationContext().getResources().getString(R.string.aws_secret)));
             s3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.AP_SOUTHEAST_1));
@@ -205,6 +217,23 @@ public class BaseApplication extends GlobalContext {
         return mGlideRequestManager;
     }
 
+    public synchronized LocationEngine getLocationEngine() {
+        if (mLocationEngine == null) {
+            if (isGooglePlayServicesAvailable()) {
+                mLocationEngine = GoogleLocationEngine.getLocationEngine(this);
+            } else {
+                mLocationEngine = AndroidLocationEngine.getLocationEngine(this);
+            }
+        }
+
+        if (mLocationEngine != null) {
+            mLocationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
+            mLocationEngine.addLocationEngineListener(this);
+        }
+
+        return mLocationEngine;
+    }
+
     public static synchronized BaseApplication getInstance() {
         return mInstance;
     }
@@ -215,6 +244,15 @@ public class BaseApplication extends GlobalContext {
 
     public String getS3AWS() {
         return getResources().getString(R.string.aws_s3);
+    }
+
+    public boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(this);
+        if (status != ConnectionResult.SUCCESS) {
+            return false;
+        }
+        return true;
     }
 
     /**/
@@ -239,5 +277,22 @@ public class BaseApplication extends GlobalContext {
                 Toast.LENGTH_SHORT).show();
 
         // Todo: Handle data in MeetOutPostFailed to allow user to modify and post again
+    }
+
+    @Override
+    public void onConnected() {
+        Log.d(getClass().getSimpleName(), "Connected to engine, we can now request updates.");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLocationEngine.requestLocationUpdates();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 }
