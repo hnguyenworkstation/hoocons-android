@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
@@ -28,6 +29,8 @@ public class CollectNicknameFragment extends Fragment {
     EditText mNicknameInput;
     @BindView(R.id.check_nickname_btn)
     BootstrapButton mCheckNicknameBtn;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

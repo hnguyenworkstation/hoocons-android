@@ -55,4 +55,7 @@ public class AppConstant {
     public static final String CANCEL_FRIEND_REQUEST_TAG = "cancel_friend_request";
     public static final String FRIEND_REQUEST_TAG = "friend_request";
     public static final String UNFRIEND_REQUEST_TAG = "unfriend_request";
+
+    // Constant S3 Folder Path
+    public static final String PROFILE_PATH = "profiles";
 }

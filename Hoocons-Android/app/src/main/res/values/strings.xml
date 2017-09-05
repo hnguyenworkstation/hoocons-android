@@ -77,7 +77,10 @@
     <string name="messages">Messages</string>
     <string name="nickname_unavailable">This nickname is taken</string>
     <string name="error_empty_nickname">Nickname must not be empty</string>
-    <string name="error_empty_name">Display name must be provided</string>
+    <string name="error_empty_name">Please enter your full name</string>
+    <string name="profile_required">Profile Required</string>
+    <string name="upload_failed_tryagain">Upload failed! Please try again</string>
+    <string name="error_empty_profile">Please provide a profile picture</string>
     <string name="birthday">Birthday</string>
     <string name="updating">Updating</string>
     <string name="bad_request">Can not connect to server!</string>
@@ -250,6 +253,7 @@
     <string name="please_choose_a_category">Please pick a category for your channel</string>
     <string name="please_pick_a_name">Please enter your channel name</string>
     <string name="upload_channel_profile">Upload channel profile</string>
+    <string name="uploading_profile">Uploading Profile</string>
     <string name="channel_mode_title">Choose mode for the channel</string>
     <string name="channel_mode_subtitle">Let us know who can join your channel</string>
     <string name="channel_public_mode_explain">Public Mode: everyone can be your channel member and participating in any activity of your channels </string>

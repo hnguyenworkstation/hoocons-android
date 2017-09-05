@@ -2,9 +2,13 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
@@ -29,12 +35,17 @@ import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.FieldAvailableRequest;
 import com.hoocons.hoocons_android.EventBus.FieldUnavailableRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
+import com.hoocons.hoocons_android.EventBus.UploadImageSuccess;
+import com.hoocons.hoocons_android.EventBus.UserBasicInfoCollected;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.CheckNicknameAvailabilityTask;
 import com.hoocons.hoocons_android.Tasks.Jobs.UpdateUserInfoJob;
+import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,10 +74,9 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     Button mSubmitBtn;
     @BindView(R.id.details_txt)
     TextView mDetailsText;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
 
     private final String TAG = NewUserInfoFragment.class.getSimpleName();
+    private String profileUrl;
 
     public static final int PHOTO_PICKER = 5;
 
@@ -78,6 +88,10 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
     private String mProfileImagePath;
 
     private DatePickerDialog datePickerDialog;
+    private MaterialDialog mUploadingDialog;
+
+    private FragmentTransaction mFragTransition;
+    private FragmentManager mFragManager;
 
     public NewUserInfoFragment() {
 
@@ -107,6 +121,17 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         mBirthDayText.setOnClickListener(this);
         mProfileImgView.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
+
+        mUploadingDialog = new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.uploading_profile))
+                .content(getResources().getString(R.string.please_wait))
+                .progress(true, 0)
+                .cancelable(false)
+                .build();
+
+
+        mFragManager = getActivity().getSupportFragmentManager();
+        mFragTransition = mFragManager.beginTransaction();
 
         return rootView;
     }
@@ -142,6 +167,41 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         super.onDestroy();
     }
 
+    private void showWarningEmptyProfileDialog() {
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.profile_required))
+                .content(getResources().getString(R.string.error_empty_profile))
+                .icon(getResources().getDrawable(R.drawable.warning_circle))
+                .positiveText("OK")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .cancelable(true)
+                .cancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .build().show();
+    }
+
+    private boolean validateProfileView() {
+        if (mProfileImagePath != null && !mProfileImagePath.isEmpty()) {
+            return true;
+        } else {
+            showWarningEmptyProfileDialog();
+            return false;
+        }
+    }
+
+    private void showUploadingProfileDialog() {
+        mUploadingDialog.show();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -152,8 +212,12 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 AppUtils.startImagePickerFromFragment(getContext(), this, 1, PHOTO_PICKER);
                 break;
             case R.id.submit_button:
-                if (validateNameField() && validateBirthday()) {
-
+                if (validateNameField() && validateBirthday() && validateProfileView()) {
+                    showUploadingProfileDialog();
+                    BaseApplication.getInstance().getJobManager()
+                            .addJobInBackground(
+                                    new UploadSingleUriImageJob(mProfileImagePath, null,
+                                                AppConstant.PROFILE_PATH));
                 }
                 break;
             default:
@@ -193,10 +257,33 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
                 .into(mProfileImgView);
     }
 
+    private void submitData() {
+        EventBus.getDefault().post(new UserBasicInfoCollected(profileUrl,
+                mDisplayNameInput.getText().toString(), mGenderMale.isSelected()?"Male":"Female"));
+        transferToCollectNicknameStage();
+    }
+
+    private void transferToCollectNicknameStage() {
+        mFragTransition.replace(R.id.info_fragment_container, new CollectNicknameFragment());
+        mFragTransition.commit();
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + FieldAvailableRequest
-     *  + FieldUnavailableRequest
      *  + BadRequest
      ********************************************** */
+    @Subscribe
+    public void onEvent(UploadImageSuccess task) {
+        mUploadingDialog.dismiss();
+        profileUrl = task.getUrl();
+        submitData();
+    }
+
+    @Subscribe
+    public void onEvent(UploadImageFailed task) {
+        mUploadingDialog.dismiss();
+        Toast.makeText(getContext(), getResources().getString(R.string.upload_failed_tryagain),
+                Toast.LENGTH_SHORT).show();
+    }
 }
