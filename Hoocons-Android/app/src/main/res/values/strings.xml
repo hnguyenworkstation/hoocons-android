@@ -189,6 +189,8 @@
     <string name="select_location">Select a location</string>
     <string name="select_topics">Add topics to the meeting</string>
     <string name="select_hobbies">Add Hobbies</string>
+    <string name="example_hobbies">Example Hobbies</string>
+    <string name="pick">Pick</string>
     <string name="new_meeting">Start a meeting</string>
     <string name="from_date">From date time</string>
     <string name="to_date">To date time</string>
@@ -251,6 +253,7 @@
     <string name="pick_channel_tags">Pick channel tags</string>
     <string name="pick_hobbies">Pick your hobbies</string>
     <string name="pick_hobbies_desc">Let other users know what you like</string>
+    <string name="pick_sample_hobbies">choose sample hobbies</string>
     <string name="channel_tags_desc">Let user find your channel through tags</string>
     <string name="click_to_pick_image">Click to pick an image</string>
     <string name="please_choose_a_category">Please pick a category for your channel</string>
@@ -315,5 +318,24 @@
         <item>Sports</item>
         <item>Games</item>
         <item>Other</item>
+    </string-array>
+
+    <string-array name="example_english_hobbies">
+        <item>Gaming</item>
+        <item>Fishing</item>
+        <item>Work Out</item>
+        <item>Soccer</item>
+        <item>Sport</item>
+        <item>Shopping</item>
+        <item>Hanging Out</item>
+        <item>Coding</item>
+        <item>Technical</item>
+        <item>Hacking</item>
+        <item>Writing</item>
+        <item>Gaming</item>
+        <item>Fast Food</item>
+        <item>Game of Thrones</item>
+        <item>Star wars</item>
+        <item>Testing</item>
     </string-array>
 </resources>
