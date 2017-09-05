@@ -67,6 +67,7 @@
     <string name="new_user_question">New User?</string>
     <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>
     <string name="register">Register</string>
+    <string name="not_now">Not Now</string>
     <string name="update">Update</string>
     <string name="nickname_error">Invalid nickname</string>
     <string name="not_enough_ages">too young! you are not allowed here</string>
@@ -270,6 +271,7 @@
     <string name="favorites">Favorites</string>
     <string name="followers">Followers</string>
     <string name="messaging">Messaging</string>
+    <string name="logging_in">Logging in</string>
     <string name="inbox">Inbox</string>
     <string name="connection">Connection</string>
     <string name="unread_messages">Unread Messages</string>

@@ -29,7 +29,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/margin_16"
+                android:layout_margin="@dimen/margin_16"
+                android:maxLines="2"
+                android:textAlignment="center"
                 android:text="@string/welcome"
                 android:layout_below="@id/logo_image"
                 android:layout_centerHorizontal="true"
@@ -42,7 +44,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/slogin_title"
-                android:layout_marginTop="@dimen/margin_16"
                 android:id="@+id/slogin_desc"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
@@ -51,18 +52,19 @@
                 android:textColor="@color/black"/>
 
             <Button
+                android:paddingBottom="@dimen/margin_4"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingStart="@dimen/margin_24"
+                android:paddingEnd="@dimen/margin_24"
                 android:id="@+id/login_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                style="?android:textAppearanceMedium"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/continue_with_phone_number"
                 android:textSize="@dimen/text_16"
                 android:textStyle="normal"
                 android:background="@drawable/active_button"
                 android:textColor="@color/white"
-                android:layout_marginLeft="@dimen/margin_24"
-                android:layout_marginRight="@dimen/margin_24"
-                android:layout_marginBottom="@dimen/margin_10"
                 android:layout_above="@+id/register_btn"
                 android:layout_centerHorizontal="true" />
 

@@ -163,7 +163,7 @@
     <dimen name="dots_margin_bottom">20dp</dimen>
     <dimen name="img_width_height">120dp</dimen>
     <dimen name="slide_title">24sp</dimen>
-    <dimen name="slide_desc">12sp</dimen>
+    <dimen name="slide_desc">14sp</dimen>
     <dimen name="desc_padding">40dp</dimen>
     <dimen name="intro_logo_padding">50dp</dimen>
 

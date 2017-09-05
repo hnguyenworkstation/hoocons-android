@@ -7,6 +7,7 @@ import android.support.annotation.BinderThread;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -27,6 +28,7 @@ import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SocialLoginActivity extends BaseActivity {
+    @BindView(R.id.slogin_title)
+    TextView mLoginTitle;
+    @BindView(R.id.slogin_desc)
+    TextView mLoginDesc;
     @BindView(R.id.login_button)
     Button mLoginBtn;
     @BindView(R.id.register_btn)
@@ -60,6 +66,7 @@ public class SocialLoginActivity extends BaseActivity {
 
         AccountKit.initialize(this);
         checkPermission();
+        initTextAndTypeFace();
 
         callbackManager = CallbackManager.Factory.create();
         FacebookSdk.sdkInitialize(this.getApplicationContext());
@@ -77,6 +84,18 @@ public class SocialLoginActivity extends BaseActivity {
                 phoneRegister();
             }
         });
+    }
+
+    private void initTextAndTypeFace() {
+        mLoginTitle.setText(getResources().getString(R.string.welcome));
+        mLoginDesc.setText(getResources().getString(R.string.welcome_desc));
+        mLoginBtn.setText(getResources().getString(R.string.continue_with_phone_number));
+        mRegisterBtn.setText(getResources().getString(R.string.action_register));
+
+        mLoginTitle.setTypeface(EasyFonts.robotoBold(this));
+        mLoginDesc.setTypeface(EasyFonts.robotoRegular(this));
+        mLoginBtn.setTypeface(EasyFonts.robotoRegular(this));
+        mRegisterBtn.setTypeface(EasyFonts.robotoRegular(this));
     }
 
     private void showLoadingDialog() {

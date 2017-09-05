@@ -1,8 +1,10 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.hbb20.CountryCodePicker;
 import com.hoocons.hoocons_android.Activities.MainActivity;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
@@ -63,7 +67,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     private String mCountryCode;
     private String mPhoneNumber;
 
-    private SweetAlertDialog pDialog;
+    private MaterialDialog pDialog;
 
     public PhoneLoginFragment() {
         // Required empty public constructor
@@ -94,6 +98,11 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
         ButterKnife.bind(this, rootView);
 
         mCountryCode = mCountryCodePicker.getDefaultCountryCodeWithPlus();
+        pDialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.logging_in)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .build();
 
         initView();
         initTypeFace();
@@ -102,7 +111,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void initTypeFace() {
-        mResetPasswordBtn.setTypeface(EasyFonts.robotoBold(getContext()));
+        mResetPasswordBtn.setTypeface(EasyFonts.robotoRegular(getContext()));
         mActionBarTitle.setTypeface(EasyFonts.robotoBold(getContext()));
         mPhoneInput.setTypeface(EasyFonts.robotoRegular(getContext()));
         mPasswordInput.setTypeface(EasyFonts.robotoRegular(getContext()));
@@ -144,10 +153,6 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void showProcessDialog() {
-        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(getContext().getResources().getColor(R.color.colorPrimary));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
         pDialog.show();
     }
 
@@ -172,19 +177,25 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void showWarningDialog() {
-        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                .setTitleText(getResources().getString(R.string.warning))
-                .setContentText(getResources().getString(R.string.account_banned_warn))
-                .setConfirmText("OK")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.warning))
+                .content(getResources().getString(R.string.account_banned_warn))
+                .positiveText("OK")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismiss();
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .cancelable(true)
+                .cancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        dialogInterface.dismiss();
                     }
                 })
                 .show();
     }
-
 
     private void attemptToLogin(final String phoneNumber, final String password) {
         UserServices services = NetContext.instance.create(UserServices.class);
@@ -270,24 +281,30 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void showNewUserDialog() {
-        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                .setTitleText(getResources().getString(R.string.new_user_question))
-                .setContentText(getResources().getString(R.string.new_user_detect_and_req_register))
-                .setConfirmText(getResources().getString(R.string.register))
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.new_user_question))
+                .content(getResources().getString(R.string.new_user_detect_and_req_register))
+                .positiveText(getResources().getString(R.string.register))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         transferToRegisterFlow();
                     }
                 })
+                .negativeText(getResources().getString(R.string.not_now))
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .cancelable(false)
                 .show();
     }
-
 
     private void transferToRegisterFlow() {
 
     }
-
 
     /**********************************************
      * EVENTBUS CATCHING FIELDS
