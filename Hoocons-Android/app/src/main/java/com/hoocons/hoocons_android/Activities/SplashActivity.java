@@ -47,10 +47,23 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
-                    startActivity(new Intent(SplashActivity.this, IntroActivity.class));
+                    Intent intent = new Intent(SplashActivity.this, IntroActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     finish();
                 } else if (SharedPreferencesManager.getDefault().getUserToken() == null) {
-                    startActivity(new Intent(SplashActivity.this, SocialLoginActivity.class));
+                    Intent intent = new Intent(SplashActivity.this, SocialLoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                } else if (SharedPreferencesManager.getDefault().getUserToken() != null &&
+                       SharedPreferencesManager.getDefault().isRequestedInfo()) {
+                    Intent intent = new Intent(SplashActivity.this, CollectUserInfoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     finish();
                 } else {
                     reCaptureToken();
