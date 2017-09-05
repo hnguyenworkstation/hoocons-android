@@ -100,6 +100,7 @@
     <string name="action_phone_login">Phone Verification</string>
     <string name="action_login">Already a member? Login</string>
     <string name="action_reset_password">Forget password? Reset now</string>
+    <string name="action_allow_permission">Allow Permission</string>
     <string name="action_register">Register an account</string>
     <string name="continue_with_phone_number">Continue with phone number</string>
     <string name="login_hint_text">Use phone number and password to identify</string>
@@ -275,6 +276,7 @@
     <string name="toast_cannot_retrieve_cropped_image">Cannot retrieve cropped image</string>
     <string name="toast_unexpected_error">Unexpected error</string>
     <string name="file_provider_authorities">com.yalantis.ucrop.provider</string>
+    <string name="need_location_permission">Please allow Hoocons to use your location!\n We promise not to share it to anyone else unless you allow us to.</string>
 
     <string name="creating_channel">Creating new channel</string>
     <string name="please_wait">Please wait…</string>

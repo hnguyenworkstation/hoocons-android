@@ -1,0 +1,141 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.hoocons.hoocons_android.ViewFragments.CollectUserLocationFragment">
+
+    <android.support.v7.widget.CardView
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/custom_toolbar"
+                android:layout_alignParentTop="true">
+                <include layout="@layout/custom_new_user_info_actionbar"/>
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:layout_below="@+id/custom_toolbar">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/title"
+                        android:text="@string/at_location"
+                        android:textAlignment="center"
+                        android:textColor="@color/dark_text_color"
+                        android:textSize="@dimen/text_24" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="248dp">
+
+                        <android.support.v7.widget.CardView
+                            app:cardCornerRadius="@dimen/margin_8"
+                            app:cardElevation="@dimen/margin_4"
+                            android:layout_margin="@dimen/margin_4"
+                            android:layout_width="match_parent"
+                            android:id="@+id/map_holder"
+                            android:visibility="invisible"
+                            android:layout_height="248dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:id="@+id/map_image"
+                                android:layout_height="248dp" />
+                        </android.support.v7.widget.CardView>
+
+                        <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:id="@+id/progressbar"
+                            android:visibility="gone"
+                            android:layout_centerInParent="true"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:id="@+id/lost_location_view"
+                            android:layout_height="248dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lost_image"
+                                android:src="@drawable/lost_location_permission_image"/>
+
+                            <TextView
+                                android:layout_margin="@dimen/margin_12"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="@string/need_location_permission"/>
+
+                            <Button
+                                style="@style/Widget.AppCompat.Button.Borderless"
+                                android:id="@+id/allow_permission"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/action_allow_permission"
+                                android:textStyle="bold"
+                                android:textAllCaps="false"
+                                android:textSize="@dimen/text_12"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:gravity="center_vertical"
+                        android:id="@+id/address_view">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/location_b"/>
+
+                        <TextView
+                            android:layout_marginStart="@dimen/margin_12"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_18"
+                            android:id="@+id/address"
+                            android:text="Hello"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/gcn_next"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/big_button_height"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/submit"
+                        android:textAllCaps="false"
+                        android:theme="@style/Hoocons.Button" />
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
