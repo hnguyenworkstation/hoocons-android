@@ -208,10 +208,12 @@
             android:theme="@style/Theme.Transparent" />
         <activity android:name=".Activities.MeetOutActivity" />
         <activity android:name=".Activities.NewChannelActivity" />
-        <activity android:name=".Activities.ChannelActivity"
+        <activity
+            android:name=".Activities.ChannelActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"/>
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".Activities.CollectUserInfoActivity"></activity>
     </application>
 
 </manifest>

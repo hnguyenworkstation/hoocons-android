@@ -12,12 +12,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.CredentialRequest;
 import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,13 +133,8 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
     }
 
     private void requestUpdateInfoScreen() {
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fade_in_from_right, R.anim.fade_out_to_left);
-        ft.replace(R.id.login_container, new NewUserInfoFragment(),
-                "new_user_info_fragment");
-        ft.commit();
+        EventBus.getDefault().post(new UserInfoRequest());
     }
-
 
     private boolean isValidPassword(String pass, String repass) {
         if (pass.isEmpty()) {

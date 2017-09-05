@@ -9,6 +9,7 @@ import com.github.ppamorim.dragger.DraggerActivity;
 import com.github.ppamorim.dragger.LazyDraggerActivity;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -85,11 +86,27 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
+    private void collectNewUserInfo() {
+        AppUtils.signInAnonymously(this);
+        SharedPreferencesManager.getDefault().setRequestUpdateInfo(true);
+
+        Intent intent = new Intent(LoginActivity.this, CollectUserInfoActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
     /* *************************************************
     *   EVENTBUS EVENTS CATCHING AREA
     ***************************************************/
     @Subscribe
     public void onEvent(CompleteLoginRequest request) {
         completeLoginActivity();
+    }
+
+    @Subscribe
+    public void onEvent(UserInfoRequest request) {
+        collectNewUserInfo();
     }
 }
