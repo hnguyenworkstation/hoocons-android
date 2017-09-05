@@ -78,12 +78,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_12"
                         android:layout_marginStart="@dimen/margin_8"
+                        android:background="@drawable/rounded_gray_text_input"
                         android:layout_toStartOf="@+id/check_nickname_btn"
                         android:layout_centerVertical="true"
                         android:orientation="vertical">
 
                         <EditText
-                            android:layout_marginTop="@dimen/margin_4"
+                            android:layout_margin="@dimen/margin_8"
                             android:id="@+id/nickname_input"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -94,16 +95,11 @@
                             android:textSize="20sp"
                             android:background="@null"
                             android:textColor="@color/dark_text_color"/>
-
-                        <View
-                            android:layout_marginTop="@dimen/margin_4"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/gray_alpha"/>
                     </LinearLayout>
 
                     <com.beardedhen.androidbootstrap.BootstrapButton
                         android:layout_alignParentEnd="true"
+                        android:layout_marginStart="@dimen/margin_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"

@@ -48,12 +48,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_12"
+                        android:background="@drawable/rounded_gray_text_input"
+                        android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <EditText
+                            android:layout_margin="@dimen/margin_8"
                             android:id="@+id/display_name_input"
                             android:background="@null"
-                            android:layout_marginTop="@dimen/margin_8"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/user_display_name"
@@ -62,27 +64,23 @@
                             android:ellipsize="start"
                             android:textSize="20sp"
                             android:textColor="@android:color/black"/>
-
-                        <View
-                            android:layout_marginTop="@dimen/margin_8"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/gray_alpha"/>
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_20">
+                        android:layout_marginTop="@dimen/margin_8">
 
                         <LinearLayout
                             android:layout_alignParentStart="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_gray_text_input"
                             android:layout_toStartOf="@+id/gender_group"
                             android:orientation="vertical">
 
                             <TextView
+                                android:layout_margin="@dimen/margin_8"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/birthday_txt"
@@ -91,18 +89,13 @@
                                 android:ellipsize="start"
                                 android:textSize="20sp"
                                 android:textColor="@android:color/black"/>
-
-                            <View
-                                android:layout_marginTop="@dimen/margin_8"
-                                android:layout_width="fill_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/gray_alpha"/>
                         </LinearLayout>
 
                         <RadioGroup
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
                             android:id="@+id/gender_group"
                             android:checkedButton="@+id/gender_male"
                             android:orientation="horizontal">

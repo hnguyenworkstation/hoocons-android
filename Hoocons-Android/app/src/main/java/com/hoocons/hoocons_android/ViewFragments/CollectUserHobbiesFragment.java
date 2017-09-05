@@ -135,6 +135,12 @@ public class CollectUserHobbiesFragment extends Fragment {
                 .positiveColor(getResources().getColor(R.color.colorPrimary))
                 .negativeColor(getResources().getColor(R.color.gray_alpha))
                 .negativeText(getResources().getString(R.string.cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        addSelectedExample();
+                    }
+                })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -142,6 +148,16 @@ public class CollectUserHobbiesFragment extends Fragment {
                     }
                 })
                 .build();
+    }
+
+    private void addSelectedExample() {
+        for (int i = 0; i < pickedExampleHobbies.size(); i++) {
+            if (!hobbies.contains(pickedExampleHobbies.get(i))){
+                hobbies.add(pickedExampleHobbies.get(i));
+            }
+        }
+        pickedExampleHobbies.clear();
+        initFlowLayoutView();
     }
 
     private void initCustomDialogLayout() {
