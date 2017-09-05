@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/action_reset_password"
                     android:textAllCaps="false"
-                    android:textSize="@dimen/text_12"/>
+                    android:textSize="@dimen/text_14"/>
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

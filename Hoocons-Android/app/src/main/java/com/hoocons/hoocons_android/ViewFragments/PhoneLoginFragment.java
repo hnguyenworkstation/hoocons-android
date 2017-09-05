@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
@@ -25,6 +26,7 @@ import com.hoocons.hoocons_android.Networking.Responses.TokenResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -50,6 +52,8 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
     EditText mPasswordInput;
     @BindView(R.id.login_button)
     Button mLoginBtn;
+    @BindView(R.id.actionbar_title)
+    TextView mActionBarTitle;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -92,8 +96,17 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
         mCountryCode = mCountryCodePicker.getDefaultCountryCodeWithPlus();
 
         initView();
+        initTypeFace();
 
         return rootView;
+    }
+
+    private void initTypeFace() {
+        mResetPasswordBtn.setTypeface(EasyFonts.robotoBold(getContext()));
+        mActionBarTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+        mPhoneInput.setTypeface(EasyFonts.robotoRegular(getContext()));
+        mPasswordInput.setTypeface(EasyFonts.robotoRegular(getContext()));
+        mCountryCodePicker.setTypeFace(EasyFonts.robotoRegular(getContext()));
     }
 
     private void initView() {

@@ -23,6 +23,7 @@
         android:textSize="@dimen/custom_toolbar_text_size"
         android:textStyle="bold"
         android:textColor="@color/black"
+        android:id="@+id/actionbar_title"
         android:textAlignment="center"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
