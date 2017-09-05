@@ -151,7 +151,10 @@ public class CollectNicknameFragment extends Fragment {
     }
 
     private void initTypeFace() {
-        mReason.setTypeface(EasyFonts.robotoThin(getContext()));
+        mTitle.setText(getResources().getString(R.string.pick_nickname));
+        mReason.setText(getResources().getString(R.string.pick_nickname_reason));
+
+        mReason.setTypeface(EasyFonts.robotoRegular(getContext()));
         mTitle.setTypeface(EasyFonts.robotoBold(getContext()));
         mNicknameInput.setTypeface(EasyFonts.robotoThin(getContext()));
     }

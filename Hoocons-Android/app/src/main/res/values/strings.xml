@@ -262,7 +262,7 @@
     <string name="private_text">Private</string>
     <string name="max_length_description">maximum 200 characters</string>
     <string name="pick_nickname">Let\'s pick a nickname</string>
-    <string name="pick_nickname_reason">Nickname is unique so pick your favorite one fast</string>
+    <string name="pick_nickname_reason">Nickname is unique so pick your favorite one fast\n(you can always change later)</string>
 
     <string name="toast_cannot_retrieve_selected_image">Cannot retrieve selected image</string>
     <string name="toast_cannot_retrieve_cropped_image">Cannot retrieve cropped image</string>
