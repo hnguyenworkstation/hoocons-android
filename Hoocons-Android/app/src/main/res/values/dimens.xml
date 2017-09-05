@@ -58,7 +58,7 @@
     <dimen name="chat_avatar_marginright">30dp</dimen>
     <dimen name="chat_footer_dimen">30dp</dimen>
     <dimen name="custom_toolbar_height">48dp</dimen>
-    <dimen name="custom_toolbar_text_size">18sp</dimen>
+    <dimen name="custom_toolbar_text_size">20sp</dimen>
     <dimen name="custom_channel_toolbar_text_size">22sp</dimen>
     <dimen name="custom_toolbar_small_text_size">14sp</dimen>
     <dimen name="chat_title_text_size">16sp</dimen>

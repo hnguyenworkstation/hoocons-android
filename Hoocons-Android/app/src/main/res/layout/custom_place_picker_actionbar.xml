@@ -24,7 +24,7 @@
         app:searchBackground="@color/searchBackground"
         app:searchBackIcon="@drawable/ic_search_back"
         app:searchCloseIcon="@drawable/ic_search_close"
-        android:textColor="@color/primaryText"
+        android:textColor="@color/dark_text_color"
         android:textColorHint="@color/secondaryText"
         android:hint="@string/place_search"/>
 </RelativeLayout>

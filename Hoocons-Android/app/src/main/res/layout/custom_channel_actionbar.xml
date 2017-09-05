@@ -35,7 +35,7 @@
             android:id="@+id/channel_name"
             android:textSize="@dimen/custom_channel_toolbar_text_size"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_text_color"
             android:textAlignment="center"/>
 
         <TextView

@@ -25,7 +25,7 @@
     <color name="black">#ff000000</color>
 
     <color name="add_sticker_tab">#e3a140</color>
-    <color name="message_color">#444</color>
+    <color name="dark_text_color">#444</color>
     <color name="chat_profile_background">#b0d0f9</color>
     <color name="white_transparent">#40ffffff</color>
     <color name="tab_selected">#e0e0e0</color>

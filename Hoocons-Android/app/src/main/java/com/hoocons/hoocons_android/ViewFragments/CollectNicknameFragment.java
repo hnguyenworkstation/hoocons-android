@@ -4,11 +4,18 @@ package com.hoocons.hoocons_android.ViewFragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
@@ -16,9 +23,12 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.hoocons.hoocons_android.EventBus.FieldAvailableRequest;
 import com.hoocons.hoocons_android.EventBus.FieldUnavailableRequest;
+import com.hoocons.hoocons_android.EventBus.UserNicknameCollected;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.CheckNicknameAvailabilityTask;
+import com.vstechlab.easyfonts.EasyFonts;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
@@ -27,16 +37,30 @@ import butterknife.ButterKnife;
 public class CollectNicknameFragment extends Fragment {
     @BindView(R.id.nickname_input)
     EditText mNicknameInput;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.reason)
+    TextView mReason;
     @BindView(R.id.check_nickname_btn)
     BootstrapButton mCheckNicknameBtn;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    @BindView(R.id.gcn_next)
+    Button mNextBtn;
+
+    private boolean isChecked = false;
+
+    // isRequesting is checking the follow that user submit nickname before checking it
+    private boolean isRequesting = false;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
+
+    private FragmentTransaction mFragTransition;
+    private FragmentManager mFragManager;
 
 
     public CollectNicknameFragment() {
@@ -55,10 +79,14 @@ public class CollectNicknameFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mFragManager = getActivity().getSupportFragmentManager();
+        mFragTransition = mFragManager.beginTransaction();
     }
 
     @Override
@@ -73,6 +101,31 @@ public class CollectNicknameFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        initTypeFace();
+        mNicknameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                isChecked = false;
+                isRequesting = false;
+                mCheckNicknameBtn.setShowOutline(true);
+                mCheckNicknameBtn.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
+                mCheckNicknameBtn.setBootstrapText(new BootstrapText.Builder(getContext())
+                        .addFontAwesomeIcon(FontAwesome.FA_CHECK_CIRCLE)
+                        .addText(" " + getContext().getResources().getText(R.string.check))
+                        .build());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         mCheckNicknameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,6 +135,25 @@ public class CollectNicknameFragment extends Fragment {
                 }
             }
         });
+
+        mNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validateNicknameField() && isChecked) {
+                    EventBus.getDefault().post(new UserNicknameCollected(mNicknameInput.getText().toString()));
+                } else {
+                    isRequesting = true;
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    new CheckNicknameAvailabilityTask(mNicknameInput.getText().toString()).execute();
+                }
+            }
+        });
+    }
+
+    private void initTypeFace() {
+        mReason.setTypeface(EasyFonts.robotoThin(getContext()));
+        mTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+        mNicknameInput.setTypeface(EasyFonts.robotoThin(getContext()));
     }
 
     private boolean validateNicknameField() {
@@ -102,18 +174,27 @@ public class CollectNicknameFragment extends Fragment {
     @Subscribe
     public void onEvent(FieldAvailableRequest request) {
         mProgressBar.setVisibility(View.GONE);
-        mCheckNicknameBtn.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);
-        mCheckNicknameBtn.setBootstrapText(new BootstrapText.Builder(getContext())
-                .addFontAwesomeIcon(FontAwesome.FA_CHECK_CIRCLE)
-                .addText(" " + getContext().getResources().getText(R.string.checked))
-                .build());
+        isChecked = true;
+
+        if (isChecked && isRequesting) {
+            EventBus.getDefault().post(new UserNicknameCollected(mNicknameInput.getText().toString()));
+        } else {
+            mCheckNicknameBtn.setShowOutline(false);
+            mCheckNicknameBtn.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);
+            mCheckNicknameBtn.setBootstrapText(new BootstrapText.Builder(getContext())
+                    .addFontAwesomeIcon(FontAwesome.FA_CHECK_CIRCLE)
+                    .addText(" " + getContext().getResources().getText(R.string.checked))
+                    .build());
+        }
     }
 
 
     @Subscribe
     public void onEvent(FieldUnavailableRequest request) {
         mProgressBar.setVisibility(View.GONE);
-        mNicknameInput.setError(getResources().getString(R.string.nickname_unavailable));
+        isRequesting = false;
+        isChecked = false;
+        Toast.makeText(getContext(), getResources().getString(R.string.nickname_unavailable), Toast.LENGTH_SHORT).show();
     }
 
 }

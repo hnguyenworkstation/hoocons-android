@@ -27,7 +27,7 @@
         android:textSize="@dimen/custom_toolbar_text_size"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_text_color"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
         android:layout_toStartOf="@+id/action_more"/>

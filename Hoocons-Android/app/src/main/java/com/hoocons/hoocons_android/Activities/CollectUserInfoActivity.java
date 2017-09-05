@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.hoocons.hoocons_android.EventBus.UserBasicInfoCollected;
+import com.hoocons.hoocons_android.EventBus.UserNicknameCollected;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.CollectNicknameFragment;
@@ -40,5 +41,10 @@ public class CollectUserInfoActivity extends BaseActivity {
         profileUrl = info.getProfileUrl();
         gender = info.getGender();
         displayName = info.getDisplayName();
+    }
+
+    @Subscribe
+    public void onEvent(UserNicknameCollected info) {
+        nickname = info.getNickname();
     }
 }
