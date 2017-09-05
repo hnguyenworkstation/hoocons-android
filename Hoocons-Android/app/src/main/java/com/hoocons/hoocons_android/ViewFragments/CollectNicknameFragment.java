@@ -141,7 +141,8 @@ public class CollectNicknameFragment extends Fragment {
             public void onClick(View view) {
                 if (validateNicknameField() && isChecked) {
                     EventBus.getDefault().post(new UserNicknameCollected(mNicknameInput.getText().toString()));
-                } else {
+                    commitNextStage();
+                } else if (validateNicknameField()) {
                     isRequesting = true;
                     mProgressBar.setVisibility(View.VISIBLE);
                     new CheckNicknameAvailabilityTask(mNicknameInput.getText().toString()).execute();
@@ -173,6 +174,11 @@ public class CollectNicknameFragment extends Fragment {
         }
     }
 
+    private void commitNextStage() {
+        mFragTransition.replace(R.id.info_fragment_container, new CollectUserHobbiesFragment());
+        mFragTransition.commit();
+    }
+
 
     @Subscribe
     public void onEvent(FieldAvailableRequest request) {
@@ -181,6 +187,7 @@ public class CollectNicknameFragment extends Fragment {
 
         if (isChecked && isRequesting) {
             EventBus.getDefault().post(new UserNicknameCollected(mNicknameInput.getText().toString()));
+            commitNextStage();
         } else {
             mCheckNicknameBtn.setShowOutline(false);
             mCheckNicknameBtn.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);

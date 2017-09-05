@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +17,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -27,30 +27,27 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GetChannelTagsFragment extends Fragment {
+public class CollectUserHobbiesFragment extends Fragment {
     @BindView(R.id.topic_flow_layout)
     CustomFlowLayout mFlowLayout;
     @BindView(R.id.add_topic_btn)
     BootstrapButton mAddTopic;
-    @BindView(R.id.meeting_tags_ed)
+    @BindView(R.id.topic_input)
     EditText mInput;
     @BindView(R.id.gcn_next)
     Button mNext;
 
-    private static final String CHANNEL_CATEGORY = "category";
-    private List<String> topics;
+    private List<String> hobbies;
 
     private String mCategory;
 
-
-    public GetChannelTagsFragment() {
+    public CollectUserHobbiesFragment() {
         // Required empty public constructor
     }
 
-    public static GetChannelTagsFragment newInstance(String mCategory) {
-        GetChannelTagsFragment fragment = new GetChannelTagsFragment();
+    public static CollectUserHobbiesFragment newInstance(String param1, String param2) {
+        CollectUserHobbiesFragment fragment = new CollectUserHobbiesFragment();
         Bundle args = new Bundle();
-        args.putString(CHANNEL_CATEGORY, mCategory);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,18 +55,15 @@ public class GetChannelTagsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mCategory = getArguments().getString(CHANNEL_CATEGORY);
-        }
-        topics = new ArrayList<>();
-
-        topics.add(mCategory);
+        hobbies = new ArrayList<>();
+        hobbies.add(mCategory);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_get_channel_tags, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_collect_user_hobbies, container, false);
     }
 
     @Override
@@ -88,7 +82,7 @@ public class GetChannelTagsFragment extends Fragment {
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new TagsCollected(topics));
+                EventBus.getDefault().post(new TagsCollected(hobbies));
             }
         });
     }
@@ -97,11 +91,11 @@ public class GetChannelTagsFragment extends Fragment {
         if (mInput.getText().length() > 0) {
             String topic = mInput.getText().toString();
 
-            if (topics.contains(topic)) {
+            if (hobbies.contains(topic)) {
                 Toast.makeText(getContext(), getResources().getText(R.string.already_created),
                         Toast.LENGTH_SHORT).show();
             } else {
-                topics.add(topic);
+                hobbies.add(topic);
                 initFlowLayoutView();
             }
 
@@ -112,12 +106,13 @@ public class GetChannelTagsFragment extends Fragment {
     private void initFlowLayoutView() {
         mFlowLayout.removeAllViews();
 
-        for (int i = 0; i < topics.size(); i++) {
+        for (int i = 0; i < hobbies.size(); i++) {
             final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.category_flow_item_layout,
                     mFlowLayout, false);
             TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
 
-            topic.setText(topics.get(i));
+            topic.setText(hobbies.get(i));
+            topic.setTypeface(EasyFonts.robotoRegular(getContext()));
             item.setTag(i);
 
             mFlowLayout.addView(item);
@@ -127,14 +122,14 @@ public class GetChannelTagsFragment extends Fragment {
                     int i = (int) v.getTag();
                     item.setVisibility(View.GONE);
                     updateTags(i);
-                    topics.remove(i);
+                    hobbies.remove(i);
                 }
             });
         }
     }
 
     private void updateTags(int i) {
-        for (i = i + 1; i < topics.size(); i++) {
+        for (i = i + 1; i < hobbies.size(); i++) {
             RelativeLayout flowChild = (RelativeLayout) mFlowLayout.getChildAt(i);
             int temp = (int) flowChild.getTag();
             flowChild.setTag(temp - 1);
