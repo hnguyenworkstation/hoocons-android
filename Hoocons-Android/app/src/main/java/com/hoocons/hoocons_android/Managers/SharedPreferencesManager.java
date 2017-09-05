@@ -95,14 +95,6 @@ public class SharedPreferencesManager {
         sharedPreferences.edit().putString(USER_PASSWORD, credentials[1]).apply();
     }
 
-    public void setRequestUserInfo(boolean isNeed) {
-        sharedPreferences.edit().putBoolean(REQUEST_USER_INFO, isNeed).apply();
-    }
-
-    public boolean isRequestedInfo() {
-        return sharedPreferences.getBoolean(REQUEST_USER_INFO, true);
-    }
-
     public int getUserId() {
         return sharedPreferences.getInt(USER_ID, -1);
     }

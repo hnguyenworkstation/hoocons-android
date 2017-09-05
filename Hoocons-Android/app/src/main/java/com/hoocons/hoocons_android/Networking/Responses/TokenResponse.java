@@ -7,8 +7,26 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class TokenResponse {
+    @SerializedName("user_id")
+    private int userId;
     @SerializedName("token")
     private String accessToken;
+
+    public TokenResponse() {
+    }
+
+    public TokenResponse(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public TokenResponse(int userId) {
+        this.userId = userId;
+    }
+
+    public TokenResponse(int userId, String accessToken) {
+        this.userId = userId;
+        this.accessToken = accessToken;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -16,5 +34,13 @@ public class TokenResponse {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

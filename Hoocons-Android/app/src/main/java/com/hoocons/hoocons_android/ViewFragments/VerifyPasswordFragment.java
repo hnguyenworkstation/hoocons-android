@@ -107,7 +107,7 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
                 public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                     if (response.code() == 201) {
                         Toast.makeText(getContext(), "Register success!", Toast.LENGTH_SHORT).show();
-                        registerSuccess(response.body().getAccessToken(), mPhoneNumber, password);
+                        registerSuccess(response.body(), mPhoneNumber, password);
                     } else {
                         Toast.makeText(getContext(), "Register failed!", Toast.LENGTH_SHORT).show();
                     }
@@ -123,9 +123,11 @@ public class VerifyPasswordFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void registerSuccess(String token, String phoneNumber, String password) {
+    private void registerSuccess(TokenResponse token, String phoneNumber, String password) {
         SharedPreferencesManager.getDefault()
-                .setUserToken(token);
+                .setUserToken(token.getAccessToken());
+        SharedPreferencesManager.getDefault()
+                .setUserId(token.getUserId());
         SharedPreferencesManager.getDefault()
                 .setCredentials(new String[] {phoneNumber, password});
 

@@ -208,6 +208,7 @@ public class PhoneLoginFragment extends Fragment implements View.OnClickListener
                     assert response1 != null;
 
                     SharedPreferencesManager.getDefault().setUserToken(response1.getAccessToken());
+                    SharedPreferencesManager.getDefault().setUserId(response1.getUserId());
                     SharedPreferencesManager.getDefault().setCredentials(new String[] {phoneNumber, password});
                     AppUtils.signInAnonymously(getActivity());
                     getUserInfo();

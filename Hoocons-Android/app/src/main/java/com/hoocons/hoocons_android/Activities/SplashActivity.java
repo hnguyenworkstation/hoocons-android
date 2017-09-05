@@ -58,13 +58,6 @@ public class SplashActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
-                } else if (SharedPreferencesManager.getDefault().getUserToken() != null &&
-                       SharedPreferencesManager.getDefault().isRequestedInfo()) {
-                    Intent intent = new Intent(SplashActivity.this, CollectUserInfoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
                 } else {
                     reCaptureToken();
                 }
@@ -74,8 +67,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private void reCaptureToken() {
         String[] cred = SharedPreferencesManager.getDefault().getCredentials();
-        Log.e(TAG, "reCaptureToken: " + cred[0]);
-        Log.e(TAG, "reCaptureToken: " + cred[1]);
         if (cred[0] != null && cred[1] != null && cred[0].length() > 0 && cred[1].length() > 0) {
             SharedPreferencesManager.getDefault().setUserToken(null);
             service.login(new CredentialRequest(cred[0], cred[1])).enqueue(new Callback<TokenResponse>() {
@@ -85,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                         TokenResponse token = response.body();
 
                         assert token != null;
-                        checkValidState(token.getAccessToken());
+                        checkValidState(token);
                     } else {
                         Toast.makeText(SplashActivity.this,
                                 getResources().getString(R.string.no_connection),
@@ -109,9 +100,11 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private void checkValidState(String token) {
+    private void checkValidState(TokenResponse token) {
         SharedPreferencesManager.getDefault()
-                .setUserToken(token);
+                .setUserToken(token.getAccessToken());
+        SharedPreferencesManager.getDefault()
+                .setUserId(token.getUserId());
 
         if (SharedPreferencesManager.getDefault().getUserToken() != null &&
                 SharedPreferencesManager.getDefault().getUserId() == -1) {
@@ -162,13 +155,21 @@ public class SplashActivity extends AppCompatActivity {
 
     private void commitNextStage() {
         if (SharedPreferencesManager.getDefault().isFirstLaunch()) {
-            startActivity(new Intent(SplashActivity.this, IntroActivity.class));
-        }  else if (SharedPreferencesManager.getDefault().isNeededToRequestInfo()) {
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class)
-                    .putExtra("REQUEST_INFO", true)
-                    .putExtra("SKIP_LOGIN", true));
+            Intent intent = new Intent(SplashActivity.this, IntroActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }  else if (SharedPreferencesManager.getDefault().getUserToken() != null &&
+                SharedPreferencesManager.getDefault().isNeededToRequestInfo()) {
+            Intent intent = new Intent(SplashActivity.this, CollectUserInfoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         this.finish();
