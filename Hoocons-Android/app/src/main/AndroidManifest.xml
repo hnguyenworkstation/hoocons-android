@@ -206,20 +206,24 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".Activities.MeetOutActivity"
+        <activity
+            android:name=".Activities.MeetOutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.NewChannelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.NewChannelActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.ChannelActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".Activities.CollectUserInfoActivity"
+        <activity
+            android:name=".Activities.CollectUserInfoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activities.MapBoxPlaceSearchActivity"></activity>
     </application>
 
 </manifest>

@@ -429,7 +429,7 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void openCustomPlacePicker() {
-        startActivity(new Intent(NewEventActivity.this, PlacePickerActivity.class));
+        startActivity(new Intent(NewEventActivity.this, MapBoxPlaceSearchActivity.class));
     }
 
     @Override
@@ -453,7 +453,7 @@ public class NewEventActivity extends BaseActivity
                 showVideoLibrary();
                 break;
             case R.id.event_add_location:
-                openGooglePlacePicker();
+                openCustomPlacePicker();
                 break;
             case R.id.action_post:
                 if (doesHaveContent()) {
