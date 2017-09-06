@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:id="@+id/channel_actionbar"
     android:background="@color/transparent"
     android:layout_height="?attr/actionBarSize">
 
@@ -23,7 +22,6 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:id="@+id/channel_info"
         android:layout_toEndOf="@+id/action_close"
         android:layout_toStartOf="@+id/action_more"
         android:gravity="center">
@@ -42,7 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/around_me"
-            android:id="@+id/channel_subname"
             android:textSize="@dimen/custom_toolbar_small_text_size"
             android:textAlignment="center"/>
     </LinearLayout>

@@ -78,8 +78,7 @@
         <RelativeLayout
             android:layout_below="@+id/input_frame_holder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/controllers">
+            android:layout_height="wrap_content">
 
             <ImageButton
                 android:layout_gravity="center_vertical"

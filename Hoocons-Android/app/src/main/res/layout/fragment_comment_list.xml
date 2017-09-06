@@ -39,8 +39,7 @@
 
             <include layout="@layout/comment_list_footer"
                 android:layout_width="match_parent"
-                android:layout_height="50dip"
-                android:id="@+id/comment_list_footer"/>
+                android:layout_height="50dip" />
         </LinearLayout>
 
         <RelativeLayout
@@ -54,7 +53,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_view"
         android:layout_below="@+id/custom_toolbar">
         <ProgressBar
             android:layout_width="24dp"

@@ -1,8 +1,4 @@
 <resources>
-    <string name="tabbar_featured">Featured</string>
-    <string name="tabbar_nearme">Near me</string>
-    <string name="tabbar_chatroom">Messages</string>
-    <string name="tabbar_notif">Notification</string>
     <string name="tabbar_more">More</string>
     <string name="threads">Threads</string>
     <string name="feeds">Feeds</string>
@@ -68,7 +64,6 @@
     <string name="new_user_detect_and_req_register">This phone has not registered with us yet! Register now</string>
     <string name="register">Register</string>
     <string name="not_now">Not Now</string>
-    <string name="update">Update</string>
     <string name="nickname_error">Invalid nickname</string>
     <string name="not_enough_ages">too young! you are not allowed here</string>
     <string name="checked">Checked</string>
@@ -82,31 +77,17 @@
     <string name="upload_failed_tryagain">Upload failed! Please try again</string>
     <string name="error_empty_profile">Please provide a profile picture</string>
     <string name="birthday">Birthday</string>
-    <string name="updating">Updating</string>
-    <string name="bad_request">Can not connect to server!</string>
-    <string name="relationship">Relationship</string>
     <string name="withdraw_friend_request">Withdraw friend request?</string>
     <string name="withdraw_friend_request_content">Other user will no longer see your friend request!</string>
     <string name="withdraw">Withdraw</string>
     <string name="request_ready">request ready</string>
 
     <!-- Setting Strings -->
-    <string name="setting">Settings</string>
-    <string name="setting_notif">Notifications</string>
-    <string name="setting_account">Account</string>
-    <string name="setting_emails">Emails</string>
-    <string name="setting_login_as">login as hnguyen3@gmail.com</string>
-    <string name="setting_signout">Sign Out</string>
-    <string name="action_phone_login">Phone Verification</string>
-    <string name="action_login">Already a member? Login</string>
     <string name="action_reset_password">Forget password? Reset now</string>
     <string name="action_allow_permission">Allow Permission</string>
-    <string name="current_location">Current Location</string>
     <string name="action_register">Register an account</string>
     <string name="continue_with_phone_number">Continue with phone number</string>
-    <string name="login_hint_text">Use phone number and password to identify</string>
     <string name="continue_text">Continue</string>
-    <string name="reload">Try to Reload</string>
     <string name="welcome">Welcome to Hoocon community</string>
     <string name="welcome_desc">A newer, stronger way to connect \n everyone over the world</string>
     <string name="help_center">Help Center</string>
@@ -138,18 +119,12 @@
     <string name="delete_warning">All your changes will be permanently removed!</string>
     <string name="discard">Discard</string>
     <string name="new_event_hint">Write a message</string>
-    <string name="event_mode">Mode</string>
     <string name="mode_public">Public. Everyone can see this event</string>
-    <string name="short_public">Public</string>
     <string name="mode_friend">Friends. Only friends can see your event</string>
     <string name="mode_private">Private. Only you can see this event</string>
     <string name="mode_warning">Warning. Make this event under content warning</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
     <string name="action_share">Share</string>
-    <string name="liked">Liked</string>
     <string name="like">Like</string>
-    <string name="comment">Comment</string>
     <string name="reply">Reply</string>
 
     <!-- Map Picker Activity -->
@@ -185,7 +160,6 @@
     <string name="meeting_desc">Meeting Description</string>
     <string name="meeting_activities">Activities at the meeting</string>
     <string name="at_location">At Location</string>
-    <string name="at_what_time">When it happens</string>
     <string name="add_time_frame">Add time frame</string>
     <string name="add_media_for_meeting">Add some medias</string>
     <string name="select_location">Select a location</string>
@@ -238,20 +212,14 @@
     <string name="base_url">http://hconsdev.ap-southeast-1.elasticbeanstalk.com/</string>
 
     <!-- Create new channel strings -->
-    <string name="create_channel">Create New Channel</string>
     <string name="question_channel_name">What is your channel name?</string>
     <string name="hint_channel_name">Let users visualize what your channel is about</string>
-    <string name="question_channel_id">Tell us the id of your channel</string>
-    <string name="hint_channel_id">Let users know a shortcut to your channel</string>
-    <string name="pass_require">Password must be more than 8 characters long and no special chars</string>
-    <string name="pass_not_same">Phonenumber or password doesn\'t match</string>
     <string name="question_channel_desc">What is your channel about?</string>
     <string name="channel_category_asking">Choose a category for your channel</string>
     <string name="channel_category_ask_info">Let user know the category of your channel</string>
     <string name="category">category</string>
     <string name="suggested_category">Our suggested categories</string>
     <string name="semi_question_channel_desc">Let us know a little about what your channel is about in maximum of 200 characters</string>
-    <string name="desc_error">Please write something about your channel</string>
     <string name="pick_channel_profile">Pick channel profile and wallpaper</string>
     <string name="pick_channel_tags">Pick channel tags</string>
     <string name="pick_hobbies">Pick your hobbies</string>
@@ -261,19 +229,10 @@
     <string name="click_to_pick_image">Click to pick an image</string>
     <string name="please_choose_a_category">Please pick a category for your channel</string>
     <string name="please_pick_a_name">Please enter your channel name</string>
-    <string name="upload_channel_profile">Upload channel profile</string>
     <string name="uploading_profile">Uploading Profile</string>
-    <string name="channel_mode_title">Choose mode for the channel</string>
-    <string name="channel_mode_subtitle">Let us know who can join your channel</string>
-    <string name="channel_public_mode_explain">Public Mode: everyone can be your channel member and participating in any activity of your channels </string>
-    <string name="channel_private_mode_explain">Private Mode: Only Admin and Mods decide who will be the members and only members can participate in your channel activities</string>
-    <string name="public_text">Public</string>
-    <string name="private_text">Private</string>
-    <string name="max_length_description">maximum 200 characters</string>
     <string name="pick_nickname">Let\'s pick a nickname</string>
     <string name="pick_nickname_reason">Nickname is unique so pick your favorite one fast\n(you can always change later)</string>
 
-    <string name="toast_cannot_retrieve_selected_image">Cannot retrieve selected image</string>
     <string name="toast_cannot_retrieve_cropped_image">Cannot retrieve cropped image</string>
     <string name="toast_unexpected_error">Unexpected error</string>
     <string name="file_provider_authorities">com.yalantis.ucrop.provider</string>
@@ -284,13 +243,10 @@
     <string name="created_channel">Successfully created new channel</string>
     <string name="invalid_desc">Invalid description</string>
     <string name="please_tell_channel_desc">Please tell us a little bit about your channel…</string>
-    <string name="favorites">Favorites</string>
-    <string name="followers">Followers</string>
     <string name="messaging">Messaging</string>
     <string name="logging_in">Logging in</string>
     <string name="inbox">Inbox</string>
     <string name="connection">Connection</string>
-    <string name="unread_messages">Unread Messages</string>
     <string name="recent_convs">Recent Conversations</string>
     <string name="incoming_request">Incoming Requests</string>
     <string name="featured_event">Featured Events</string>
@@ -301,7 +257,6 @@
     <string name="invitation_deep_link">http://example.com/offer/five_dollar_offer</string>
     <string name="invitation_custom_image">https://developers.google.com/identity/images/g-logo.png</string>
     <string name="invitation_cta">Install!</string>
-    <string name="search_hoocons">Search Hoocons</string>
     <string name="hoocons_discovery">Hoocons Discovery</string>
 
     <string-array name="channel_category">

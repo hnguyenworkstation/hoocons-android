@@ -149,11 +149,6 @@ public class FeaturedEventViewHolder extends ViewHolder {
     @BindView(R.id.single_content_progressbar)
     ProgressBar mSingleContentProgressBar;
 
-    /* EVENT WITH VIDEO MEDIA */
-    @Nullable
-    @BindView(R.id.event_video_player)
-    JCVideoPlayerStandard mVideoPlayer;
-
     /* EVENT MULTI MEDIAS */
     @Nullable
     @BindView(R.id.event_multi_media)
@@ -459,7 +454,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_MULT_IMAGE)) {
             loadMultipleImages(context, eventResponse.getMedias(), eventPosition);
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
-            loadVideoView(eventResponse.getMedias().get(0));
+            // loadVideoView(eventResponse.getMedias().get(0));
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
             loadCheckinMapView(eventResponse);
         }
@@ -495,14 +490,6 @@ public class FeaturedEventViewHolder extends ViewHolder {
                     }
                 })
                 .into(mLocationMapView);
-    }
-
-    private void loadVideoView(MediaResponse mediaResponse) {
-        assert mVideoPlayer != null;
-        mVideoPlayer.setUp(mediaResponse.getUrl(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "Testing");
-        BaseApplication.getInstance().getGlide()
-                .load(AppUtils.getDefaultProfileUrl())
-                .into(mVideoPlayer.thumbImageView);
     }
 
     private void loadMultipleImages(final Context context, final List<MediaResponse> mediaList,

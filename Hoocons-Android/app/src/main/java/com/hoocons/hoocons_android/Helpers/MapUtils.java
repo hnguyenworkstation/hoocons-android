@@ -6,16 +6,21 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
+import com.hoocons.hoocons_android.Networking.Responses.CoordinateResponse;
 import com.hoocons.hoocons_android.R;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -24,8 +29,10 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by hungnguyen on 7/18/17.
@@ -145,4 +152,31 @@ public class MapUtils {
         vectorDrawable.draw(canvas);
         return IconFactory.getInstance(context).fromBitmap(bitmap);
     }
+
+
+
+    public static LocationRequest getLocationFromLatLong(final Context context, double LATITUDE, double LONGITUDE) {
+        try {
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null && addresses.size() > 0) {
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String province = addresses.get(0).getPremises();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+
+                LocationRequest currentLocation = new LocationRequest(new CoordinateResponse(LATITUDE, LONGITUDE),
+                        knownName, city, province, state, postalCode, country, address, null, null);
+                return currentLocation;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

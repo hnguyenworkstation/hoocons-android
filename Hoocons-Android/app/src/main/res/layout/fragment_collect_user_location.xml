@@ -95,7 +95,6 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/lost_image"
                                 android:src="@drawable/lost_location_permission_image"/>
 
                             <TextView
@@ -137,8 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_18"
-                            android:id="@+id/address"
-                            android:text="Hello"/>
+                            android:id="@+id/address"/>
                     </LinearLayout>
 
                     <Button

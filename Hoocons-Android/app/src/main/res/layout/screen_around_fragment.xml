@@ -7,7 +7,6 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:id="@+id/nearme_swiperef"
         android:layout_height="match_parent">
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -38,13 +37,11 @@
                             android:textAllCaps="true"
                             android:layout_weight="4"
                             android:layout_marginLeft="@dimen/margin_10"
-                            android:id="@+id/around_title_user"
                             android:textSize="@dimen/around_list_title_text"
                             android:text="@string/nearme_user"
                             android:textColor="@color/black"/>
 
                         <Button
-                            android:id="@+id/nearme_seemore_user"
                             android:layout_width="wrap_content"
                             android:layout_weight="1"
                             android:layout_height="@dimen/title_button_height"
@@ -59,7 +56,6 @@
                         android:layout_height="wrap_content">
 
                         <android.support.v7.widget.RecyclerView
-                            android:id="@+id/nearme_user_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
@@ -88,13 +84,11 @@
                             android:textAllCaps="true"
                             android:layout_weight="4"
                             android:layout_marginLeft="@dimen/margin_10"
-                            android:id="@+id/around_title_event"
                             android:textSize="@dimen/around_list_title_text"
                             android:text="@string/nearme_event"
                             android:textColor="@color/black"/>
 
                         <Button
-                            android:id="@+id/nearme_seemore_event"
                             android:layout_width="wrap_content"
                             android:layout_weight="1"
                             android:layout_height="@dimen/title_button_height"
@@ -109,7 +103,6 @@
                         android:layout_height="wrap_content">
 
                         <android.support.v7.widget.RecyclerView
-                            android:id="@+id/nearme_event_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
                     </FrameLayout>

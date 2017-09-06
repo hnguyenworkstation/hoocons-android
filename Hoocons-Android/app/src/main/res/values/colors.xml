@@ -5,77 +5,42 @@
     <color name="colorAccent">#2B2E4A</color>
     <color name="colorBackground">#d3d6db</color>
 
-    <color name="blue_accent500">#03A9F4</color>
     <color name="black_alpha_12">#1F000000</color>
     <color name="black_alpha_30">#4D000000</color>
     <color name="gray_alpha">#c2c2c2</color>
-    <color name="light_red">#FFCCBC</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="red1">#990000</color>
-    <color name="green1">#05AE5C</color>
-    <color name="green2">#089651</color>
-    <color name="blue1">#000099</color>
     <color name="orange1">#FF9900</color>
-    <color name="bg_page">#EBEBEB</color>
-    <color name="dark_green">#1e7d5b</color>
-    <color name="darker_green">#124c38</color>
 
-    <color name="chat_warning_color">#6999</color>
     <color name="black">#ff000000</color>
 
-    <color name="add_sticker_tab">#e3a140</color>
     <color name="dark_text_color">#444</color>
-    <color name="chat_profile_background">#b0d0f9</color>
     <color name="white_transparent">#40ffffff</color>
-    <color name="tab_selected">#e0e0e0</color>
-    <color name="tab_default">#f7f7f7</color>
 
     <color name="profile1">#f0878c</color>
     <color name="profile2">#76bbe8</color>
     <color name="profile3">#bace9b</color>
-    <color name="profile4">#f0878c</color>
-    <color name="profile5">#76bbe8</color>
     <color name="profile6">#c198f0</color>
     <color name="profile7">#90d78c</color>
-    <color name="profile8">#ddd8de</color>
 
     <!-- Event item color -->
-    <color name="event_fragment_bg">#d3d6db</color>
-    <color name="event_item_bg">#ffffff</color>
-    <color name="event_item_border">#c2c3c8</color>
-    <color name="event_link">#0a80d1</color>
     <color name="event_timestamp">#a0a3a7</color>
 
     <!-- Toolbar -->
-    <color name="ToolbarBackgroundColor">#f9f9f9</color>
 
     <!-- Chatroom row Colors-->
-    <color name="from">#000000</color>
     <color name="subject">#111111</color>
     <color name="timestamp">#4285f4</color>
-    <color name="message">#7a7a7a</color>
     <color name="icon_tint_normal">#7a7a7a</color>
-    <color name="icon_tint_selected">#fed776</color>
-    <color name="row_activated">#e0e0e0</color>
-    <color name="bg_action_mode">#757575</color>
-    <color name="bg_circle_default">#666666</color>
 
     <!-- Chatroom Colors-->
-    <color name="chatroom_bg">#eceff1</color>
-    <color name="chatroom_toolbar">#37474F</color>
     <color name="chatroom_textcolor">@color/white</color>
-    <color name="bg_chat">#ffe3e4e6</color>
-    <color name="text_brown">#816e67</color>
     <color name="text_white">#ffffff</color>
-    <color name="text_bg_unread">#0192ff</color>
     <color name="transparent">@android:color/transparent</color>
-    <color name="divider">#e6e6e6</color>
     <color name="gray_white">#fff7f7f7</color>
     <color name="rippleColor">#993498db</color>
 
     <!-- post colors -->
-    <color name="event_text_color">#f3f3f3</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#d1395c</color>
@@ -116,7 +81,4 @@
         <item>@color/profile7</item>
     </array>
 
-    <color name="user_title">#4c4c4c</color>
-    <color name="rounded_favorite_button">#f67f67</color>
-    <color name="text_blur_background">#b2000000</color>
 </resources>

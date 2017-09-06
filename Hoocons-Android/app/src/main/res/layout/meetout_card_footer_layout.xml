@@ -17,7 +17,6 @@
         android:background="@color/gray_alpha"/>
 
     <RelativeLayout
-        android:id="@+id/buttons_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -28,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:id="@+id/buttons"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -68,7 +66,6 @@
                 <ImageView
                     android:layout_width="@dimen/action_icon_size"
                     android:layout_height="@dimen/action_icon_size"
-                    android:id="@+id/comment_icon"
                     android:src="@drawable/ic_comment_inactive"/>
 
                 <TextView

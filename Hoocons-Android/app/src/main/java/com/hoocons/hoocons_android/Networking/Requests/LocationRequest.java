@@ -19,7 +19,7 @@ public class LocationRequest {
     @SerializedName("state")
     private String state;
     @SerializedName("zipcode")
-    private int zipcode;
+    private String zipcode;
     @SerializedName("country")
     private String country;
     @SerializedName("address")
@@ -34,7 +34,7 @@ public class LocationRequest {
 
     public LocationRequest(CoordinateResponse response, String locationName,
                            String city, String province, String state,
-                           int zipcode, String country, String address,
+                           String zipcode, String country, String address,
                            String placeId, String placeApiType) {
         this.response = response;
         this.locationName = locationName;
@@ -88,11 +88,11 @@ public class LocationRequest {
         this.state = state;
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(int zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 

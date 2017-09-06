@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:clickable="true"
-    android:id="@+id/topic_flow"
     android:padding="@dimen/margin_8"
     android:background="@drawable/rounded_corner_frame"
     >

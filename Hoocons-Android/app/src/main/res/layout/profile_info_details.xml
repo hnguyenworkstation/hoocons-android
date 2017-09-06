@@ -34,7 +34,6 @@
 
                     <LinearLayout
                         android:layout_centerInParent="true"
-                        android:id="@+id/user_stats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
@@ -160,7 +159,6 @@
                         android:layout_below="@+id/location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/profile_location"
                         android:textSize="@dimen/option_text_detail"
                         android:textStyle="bold"
                         android:textColor="@color/icon_tint_normal"
@@ -218,8 +216,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:id="@+id/hobby_details">
+                        android:layout_marginTop="@dimen/margin_10">
 
                         <ImageView
                             android:layout_width="@dimen/cardview_smallicon_size"

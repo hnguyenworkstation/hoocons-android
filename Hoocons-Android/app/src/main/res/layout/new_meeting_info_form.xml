@@ -15,7 +15,6 @@
         <ImageView
             android:layout_width="@dimen/cardview_smallicon_size"
             android:layout_height="@dimen/cardview_smallicon_size"
-            android:id="@+id/meeting_title_icon"
             android:layout_marginEnd="@dimen/margin_12"
             android:src="@drawable/meeting_title_icon"/>
 
@@ -31,7 +30,6 @@
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/meeting_name_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp">
@@ -45,7 +43,6 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/meeting_desc_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_12">

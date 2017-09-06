@@ -33,7 +33,6 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/shared_event_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/smalll_border"

@@ -50,15 +50,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="MessageText">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-    <style name="MessageText.Primary" parent="@style/MessageText" />
-
-    <style name="MessageText.Primary.Light" parent="@style/MessageText.Primary"/>
-
     <style name="ToolbarTextTitle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -69,41 +60,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">4dp</item>
-    </style>
-
-    <style name="SmallFloatButtonStyle">
-        <item name="fab_size">mini</item>
-        <item name="fab_shadowColor">#888</item>
-        <item name="fab_colorNormal">#816e67</item>
-        <item name="fab_colorPressed">#816e67</item>
-        <item name="fab_colorRipple">#816e67</item>
-    </style>
-
-    <style name="FloatMenuStyle">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="TwoWayView" parent="TwoWayViewBase">
-        <item name="android:orientation">vertical</item>
-        <item name="android:scrollbars">vertical</item>
-    </style>
-
-    <style name="TwoWayViewBase">
-        <item name="android:background">#999999</item>
-    </style>
-
-    <style name="large_bootstrap_btn">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="bootstrapBrand">primary</item>
-        <item name="bootstrapSize">lg</item>
-        <item name="showOutline">true</item>
-        <item name="roundedCorners">true</item>
     </style>
 
     <style name="CardViewStyle">

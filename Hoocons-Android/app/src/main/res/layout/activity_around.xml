@@ -28,13 +28,11 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/content_layout"
                 android:layout_below="@+id/custom_toolbar">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/screen_around_fragment"
                     android:visibility="gone">
 
                     <include android:layout_width="match_parent"

@@ -28,6 +28,8 @@ import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -70,6 +72,7 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
     private DatabaseReference mDatabase;
     private RequestManager mGlideRequestManager;
     private LocationEngine mLocationEngine;
+    private PlaceDetectionClient placeDetectionClient;
     private Mapbox mapbox;
 
     @Override
@@ -107,6 +110,9 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         TypefaceProvider.registerDefaultIconSets();
         FontOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
         FontOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Light.ttf");
+
+        // Construct a PlaceDetectionClient.
+        placeDetectionClient = Places.getPlaceDetectionClient(this, null);
 
         try {
             EmotionsDB.checkEmotions();
@@ -177,6 +183,14 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         }
 
         jobManager = new JobManager(builder.build());
+    }
+
+    public synchronized PlaceDetectionClient getPlaceDetectionClient() {
+        if (placeDetectionClient == null) {
+            placeDetectionClient = Places.getPlaceDetectionClient(this, null);
+        }
+
+        return placeDetectionClient;
     }
 
     public synchronized Mapbox getMapbox() {

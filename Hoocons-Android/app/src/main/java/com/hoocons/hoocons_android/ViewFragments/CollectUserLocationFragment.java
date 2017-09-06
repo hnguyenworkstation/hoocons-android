@@ -32,6 +32,7 @@ import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
 import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
+import com.hoocons.hoocons_android.EventBus.StringDataCollected;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Manifest;
@@ -130,6 +131,7 @@ public class CollectUserLocationFragment extends Fragment {
         mNeedPermissionMessage.setTypeface(EasyFonts.robotoRegular(getContext()));
         mAllowPermission.setTypeface(EasyFonts.robotoBold(getContext()));
         mSubmitBtn.setTypeface(EasyFonts.robotoBold(getContext()));
+        mAddress.setTypeface(EasyFonts.robotoBold(getContext()));
     }
 
     private void initPermissionAllowedLayout() {
@@ -173,6 +175,11 @@ public class CollectUserLocationFragment extends Fragment {
     @Subscribe
     public void onEvent(LocationPermissionDenied req) {
 
+    }
+
+    @Subscribe
+    public void onEvent(StringDataCollected stringDataCollected) {
+        mAddress.setText(stringDataCollected.getData());
     }
 
     @Subscribe

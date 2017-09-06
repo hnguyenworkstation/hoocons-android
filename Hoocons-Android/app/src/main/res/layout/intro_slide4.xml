@@ -46,7 +46,6 @@
             android:textColor="@color/black"/>
 
         <ImageView
-            android:id="@+id/intro1_waves"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/radio_visibility"
         android:checkedButton="@+id/radio_public"
         android:layout_margin="@dimen/margin_8">
 
