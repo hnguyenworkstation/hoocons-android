@@ -182,16 +182,8 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     ImageView mLoveIcon;
 
     @Nullable
-    @BindView(R.id.love_text)
-    TextView mLoveText;
-
-    @Nullable
     @BindView(R.id.comment_event_action)
     LinearLayout mCommentView;
-
-    @Nullable
-    @BindView(R.id.comment_text)
-    TextView mCommentText;
 
     @Nullable
     @BindView(R.id.like_count)
@@ -320,16 +312,11 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     private void initEventTypeFace(final Context context) {
         assert mLikeCount != null;
         assert mCommentCount != null;
-        assert mCommentText != null;
-        assert mLoveText != null;
         assert mTextContent != null;
         assert mTimeFrame != null;
         assert mUserDisplayName != null;
 
-        mLoveText.setTypeface(EasyFonts.robotoLight(context));
-        mCommentText.setTypeface(EasyFonts.robotoLight(context));
         mTimeFrame.setTypeface(EasyFonts.robotoLight(context));
-
         mLikeCount.setTypeface(EasyFonts.robotoRegular(context));
         mCommentCount.setTypeface(EasyFonts.robotoRegular(context));
         mTextContent.setTypeface(EasyFonts.robotoRegular(context));
@@ -396,19 +383,15 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
             }
         });
 
-        String likeCount = String.valueOf(eventResponse.getLikesCount()) + " likes";
-        String commentCount = String.valueOf(eventResponse.getCommentsCount() + " comments");
+        String likeCount = String.valueOf(eventResponse.getLikesCount());
+        String commentCount = String.valueOf(eventResponse.getCommentsCount());
         mLikeCount.setText(likeCount);
         mCommentCount.setText(commentCount);
 
         if (eventResponse.isLiked()) {
             mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_color));
-            mLoveText.setText(context.getResources().getText(R.string.loved));
-            mLoveText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         } else {
             mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_inactive));
-            mLoveText.setText(context.getResources().getText(R.string.love));
-            mLoveText.setTextColor(context.getResources().getColor(R.color.event_timestamp));
         }
 
         // Init Spring

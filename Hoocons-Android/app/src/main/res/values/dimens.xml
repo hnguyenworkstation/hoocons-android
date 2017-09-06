@@ -12,6 +12,9 @@
     <dimen name="sticker_image_size">64dp</dimen>
     <dimen name="popo_image_size">64dp</dimen>
     <dimen name="popo_image_padding">10dp</dimen>
+    <dimen name="event_card_radius">8dp</dimen>
+    <dimen name="event_card_elevator">8dp</dimen>
+    <dimen name="event_card_margin">4dp</dimen>
 
     <!-- Text Dimen -->
     <dimen name="text_10">10sp</dimen>
@@ -36,7 +39,7 @@
     <dimen name="custom_toolbar_small_text_size">14sp</dimen>
     <dimen name="chat_title_text_size">16sp</dimen>
 
-    <dimen name="action_icon_size">12dp</dimen>
+    <dimen name="action_icon_size">22dp</dimen>
     <dimen name="actionbar_icon_size">24dp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
@@ -64,7 +67,7 @@
 
     <!-- Topic Item -->
     <dimen name="place_logo_size">24dp</dimen>
-    <dimen name="topic_logo_size">36dp</dimen>
+    <dimen name="topic_logo_size">48dp</dimen>
     <dimen name="small_logo_size">24dp</dimen>
 
     <!-- Event diments -->
