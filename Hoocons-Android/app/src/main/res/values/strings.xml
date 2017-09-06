@@ -278,7 +278,7 @@
     <string name="toast_unexpected_error">Unexpected error</string>
     <string name="file_provider_authorities">com.yalantis.ucrop.provider</string>
     <string name="need_location_permission">Please allow Hoocons to use your location!\n We promise not to share it to anyone else unless you allow us to.</string>
-
+    <string name="shared_location_permission">Thanks for sharing your location with Hoocons!\n We promise not to share it to anyone else unless you allow us to.</string>
     <string name="creating_channel">Creating new channel</string>
     <string name="please_wait">Please wait…</string>
     <string name="created_channel">Successfully created new channel</string>

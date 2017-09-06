@@ -39,6 +39,7 @@ import com.hoocons.hoocons_android.R;
 import com.karan.churi.PermissionManager.PermissionManager;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +69,10 @@ public class CollectUserLocationFragment extends Fragment {
     TextView mAddress;
     @BindView(R.id.gcn_next)
     Button mSubmitBtn;
+    @BindView(R.id.thanks)
+    TextView mThankText;
+    @BindView(R.id.need_permission_message)
+    TextView mNeedPermissionMessage;
 
     public CollectUserLocationFragment() {
         // Required empty public constructor
@@ -109,23 +114,22 @@ public class CollectUserLocationFragment extends Fragment {
                 EventBus.getDefault().post(new LocationURLRequest());
             }
         });
+
+        initTextAndTypeface();
     }
 
-    private void initLayout(String url) {
-        if (url != null) {
-            mMapHolder.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.VISIBLE);
-            mLostLocationView.setVisibility(View.GONE);
-            mAddressView.setVisibility(View.VISIBLE);
-            mSubmitBtn.setEnabled(true);
-            initMapView(url);
-        } else {
-            mSubmitBtn.setEnabled(false);
-            mLostLocationView.setVisibility(View.VISIBLE);
-            mMapHolder.setVisibility(View.GONE);
-            mProgressBar.setVisibility(View.GONE);
-            mAddressView.setVisibility(View.GONE);
-        }
+    private void initTextAndTypeface() {
+        mThankText.setText(getResources().getString(R.string.shared_location_permission));
+        mTitle.setText(getResources().getString(R.string.at_location));
+        mNeedPermissionMessage.setText(getResources().getString(R.string.need_location_permission));
+        mAllowPermission.setText(getResources().getString(R.string.action_allow_permission));
+        mSubmitBtn.setText(getResources().getString(R.string.submit));
+
+        mThankText.setTypeface(EasyFonts.robotoRegular(getContext()));
+        mTitle.setTypeface(EasyFonts.robotoBold(getContext()));
+        mNeedPermissionMessage.setTypeface(EasyFonts.robotoRegular(getContext()));
+        mAllowPermission.setTypeface(EasyFonts.robotoBold(getContext()));
+        mSubmitBtn.setTypeface(EasyFonts.robotoBold(getContext()));
     }
 
     private void initPermissionAllowedLayout() {
@@ -133,6 +137,7 @@ public class CollectUserLocationFragment extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         mLostLocationView.setVisibility(View.GONE);
         mAddressView.setVisibility(View.VISIBLE);
+        mThankText.setVisibility(View.VISIBLE);
         mSubmitBtn.setEnabled(true);
     }
 
