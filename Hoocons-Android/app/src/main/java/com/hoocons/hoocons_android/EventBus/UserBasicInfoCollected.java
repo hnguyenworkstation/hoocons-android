@@ -8,11 +8,21 @@ public class UserBasicInfoCollected {
     private String profileUrl;
     private String displayName;
     private String gender;
+    private String birthday;
 
-    public UserBasicInfoCollected(String profileUrl, String displayName, String gender) {
+    public UserBasicInfoCollected(String profileUrl, String displayName, String gender, String birthday) {
         this.profileUrl = profileUrl;
         this.displayName = displayName;
         this.gender = gender;
+        this.birthday = birthday;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getProfileUrl() {

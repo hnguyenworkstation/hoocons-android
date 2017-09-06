@@ -3,11 +3,13 @@ package com.hoocons.hoocons_android.Networking.Requests;
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Networking.Responses.CoordinateResponse;
 
+import java.io.Serializable;
+
 /**
  * Created by hungnguyen on 9/3/17.
  */
 
-public class LocationRequest {
+public class LocationRequest implements Serializable {
     @SerializedName("coordinate")
     private CoordinateResponse response;
     @SerializedName("location_name")

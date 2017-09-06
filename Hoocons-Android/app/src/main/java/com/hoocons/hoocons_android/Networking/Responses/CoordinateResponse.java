@@ -4,13 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by hungnguyen on 7/10/17.
  */
 @Parcel
-public class CoordinateResponse {
+public class CoordinateResponse implements Serializable{
     @SerializedName("srid")
     int srid;
     @SerializedName("latitude")

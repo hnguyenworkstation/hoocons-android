@@ -60,7 +60,6 @@ dependencies {
     compile project(':xhs-emoji')
     compile project(':xhs-keyboard')
     compile project(':gravitysnaphelper')
-    compile project(':permission_manager')
     compile files('libs/rebound-0.3.8.jar')
     compile('com.github.bumptech.glide:recyclerview-integration:4.0.0-RC1') {
         transitive = false
@@ -121,6 +120,7 @@ dependencies {
     compile 'org.parceler:parceler-api:1.1.9'
     compile 'com.vstechlab.easyfonts:easyfonts:1.0.0'
     compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.3'
+    compile 'com.github.bumptech.glide:annotations:4.0.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'

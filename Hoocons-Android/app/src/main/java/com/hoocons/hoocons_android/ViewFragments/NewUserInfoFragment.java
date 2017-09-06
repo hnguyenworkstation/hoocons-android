@@ -259,7 +259,8 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
 
     private void submitData() {
         EventBus.getDefault().post(new UserBasicInfoCollected(profileUrl,
-                mDisplayNameInput.getText().toString(), mGenderMale.isSelected()?"Male":"Female"));
+                mDisplayNameInput.getText().toString(), mGenderMale.isSelected()?"Male":"Female",
+                mBirthTime));
         transferToCollectNicknameStage();
     }
 

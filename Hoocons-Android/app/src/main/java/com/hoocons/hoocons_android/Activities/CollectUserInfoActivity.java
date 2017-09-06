@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -23,22 +24,29 @@ import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
+import com.hoocons.hoocons_android.EventBus.JobFailureEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
 import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
+import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
 import com.hoocons.hoocons_android.EventBus.StringDataCollected;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.EventBus.UserBasicInfoCollected;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.EventBus.UserNicknameCollected;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionManager;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.UpdateUserInfoJob;
 import com.hoocons.hoocons_android.ViewFragments.CollectUserLocationFragment;
-import com.karan.churi.PermissionManager.PermissionManager;
+import com.hoocons.hoocons_android.ViewFragments.NewUserInfoFragment;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 
@@ -58,6 +66,7 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     private String gender;
     private String displayName;
     private String nickname;
+    private String birthday;
     private List<String> hobbies;
 
     private Location currentLocation;
@@ -119,7 +128,7 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
         mFragManager = getSupportFragmentManager();
         mFragTransition = mFragManager.beginTransaction();
 
-        mFragTransition.replace(R.id.info_fragment_container, new CollectUserLocationFragment());
+        mFragTransition.replace(R.id.info_fragment_container, new NewUserInfoFragment());
         mFragTransition.commit();
 
         permissionManager.checkAndRequestPermissions(this);
@@ -128,23 +137,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     private void activateLocationEngine() {
         locationEngine.addLocationEngineListener(this);
         locationEngine.activate();
-    }
-
-    @Subscribe
-    public void onEvent(UserBasicInfoCollected info) {
-        profileUrl = info.getProfileUrl();
-        gender = info.getGender();
-        displayName = info.getDisplayName();
-    }
-
-    @Subscribe
-    public void onEvent(UserNicknameCollected info) {
-        nickname = info.getNickname();
-    }
-
-    @Subscribe
-    public void onEvent(TagsCollected topics) {
-        hobbies = topics.getTags();
     }
 
     @Override
@@ -266,6 +258,11 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
 
     private void trySubmitUserInfo() {
         if (isLocationPermissionAllowed()) {
+            BaseApplication.getInstance().getJobManager().addJobInBackground(new
+                    UpdateUserInfoJob(locationRequest, gender, displayName, nickname, birthday,
+                        null, profileUrl, null, hobbies,
+                        currentLocation.getLatitude(), currentLocation.getLongitude()));
+
             showLoadingDialog();
         } else {
             Toast.makeText(this, getResources().getString(R.string.pls_provide_location_permission),
@@ -293,5 +290,49 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     @Subscribe
     public void onEvent(UserInfoRequest request) {
         trySubmitUserInfo();
+    }
+
+    @Subscribe
+    public void onEvent(JobFailureEvBusRequest failure) {
+        mLoadingDialog.dismiss();
+        Toast.makeText(this, getResources().getString(R.string.cannot_get_address),
+                Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Subscribe
+    public void onEvent(UserBasicInfoCollected info) {
+        profileUrl = info.getProfileUrl();
+        gender = info.getGender();
+        displayName = info.getDisplayName();
+        birthday = info.getBirthday();
+    }
+
+    @Subscribe
+    public void onEvent(CompleteLoginRequest request) {
+        mLoadingDialog.dismiss();
+        AppUtils.signInAnonymously(this);
+        SharedPreferencesManager.getDefault().setRequestUpdateInfo(false);
+
+        Intent intent = new Intent(CollectUserInfoActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Subscribe
+    public void onEvent(UserNicknameCollected info) {
+        nickname = info.getNickname();
+    }
+
+    @Subscribe
+    public void onEvent(TagsCollected topics) {
+        hobbies = topics.getTags();
+    }
+
+    @Subscribe
+    public void onEvent(ServerErrorRequest errorRequest) {
+
     }
 }

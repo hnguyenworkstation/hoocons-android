@@ -231,6 +231,7 @@
     <string name="please_choose_a_category">Please pick a category for your channel</string>
     <string name="please_pick_a_name">Please enter your channel name</string>
     <string name="uploading_profile">Uploading Profile</string>
+    <string name="cannot_get_address">Cannot get your address</string>
     <string name="pick_nickname">Let\'s pick a nickname</string>
     <string name="pick_nickname_reason">Nickname is unique so pick your favorite one fast\n(you can always change later)</string>
 

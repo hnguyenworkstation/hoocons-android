@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Tasks.Jobs;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,12 +13,17 @@ import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
+import com.hoocons.hoocons_android.EventBus.JobFailureEvBusRequest;
+import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.Media;
+import com.hoocons.hoocons_android.Models.Topic;
 import com.hoocons.hoocons_android.Networking.NetContext;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Networking.Services.UserServices;
@@ -28,7 +34,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,20 +48,34 @@ import retrofit2.Response;
 
 public class UpdateUserInfoJob extends Job implements Serializable {
     private final String TAG = UpdateUserInfoJob.class.getSimpleName();
+
+    private String gender;
     private String displayName;
     private String nickname;
-    private String gender;
     private String birthday;
-    private String mImagePath;
+    private String work;
+    private String profileUrl;
+    private String wallpaperUrl;
+    private List<String> hobbies;
+    private double latitude;
+    private double longitude;
+    private LocationRequest locationRequest;
 
-    public UpdateUserInfoJob(String displayName, String nickname, String gender,
-                             String birthday, String mImagePath) {
+    public UpdateUserInfoJob(LocationRequest locationRequest, String gender, String displayName, String nickname,
+                             String birthday, String work, String profileUrl, String wallpaperUrl, List<String> hobbies,
+                             double latitude, double longitude) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.userInfo));
+        this.locationRequest = locationRequest;
+        this.gender = gender;
         this.displayName = displayName;
         this.nickname = nickname;
-        this.gender = gender;
         this.birthday = birthday;
-        this.mImagePath = mImagePath;
+        this.work = work;
+        this.profileUrl = profileUrl;
+        this.wallpaperUrl = wallpaperUrl;
+        this.hobbies = hobbies;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     @Override
@@ -63,16 +85,7 @@ public class UpdateUserInfoJob extends Job implements Serializable {
 
     @Override
     public void onRun() throws Throwable {
-        try {
-            Media media = null;
-            if (mImagePath != null) {
-                media = updateImageToS3(mImagePath);
-            }
-
-            uploadDataToServer(media);
-        } catch (Exception e) {
-
-        }
+        uploadDataToServer();
     }
 
     @Override
@@ -86,34 +99,38 @@ public class UpdateUserInfoJob extends Job implements Serializable {
     }
 
 
-    private void uploadDataToServer(final Media profileMedia) {
-        UserServices services = NetContext.instance.create(UserServices.class);
-        services.updateUserInfo(SharedPreferencesManager.getDefault().getUserId(),
-                new UserInformationRequest(displayName,
-                    nickname, gender, birthday, profileMedia, 0, 0))
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.code() == 200) {
-                            if (profileMedia == null) {
+    private void uploadDataToServer() {
+        if (locationRequest != null) {
+            List<Topic> hobbyTopics = new ArrayList<>();
+            for (String hobby: hobbies) {
+                hobbyTopics.add(new Topic(hobby));
+            }
+
+            UserServices services = NetContext.instance.create(UserServices.class);
+            services.updateUserInfo(SharedPreferencesManager.getDefault().getUserId(),
+                    new UserInformationRequest(gender, displayName,
+                            nickname, birthday, work, new Media(profileUrl, AppConstant.MEDIA_TYPE_IMAGE),
+                            wallpaperUrl == null? null: new Media(wallpaperUrl, AppConstant.MEDIA_TYPE_IMAGE),
+                            locationRequest, hobbyTopics))
+                    .enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.code() == 200) {
                                 SharedPreferencesManager.getDefault()
                                         .setUserKeyInfo(new UserInfoResponse(displayName,
-                                                nickname, AppUtils.getDefaultProfileUrl()));
-                            } else {
-                                SharedPreferencesManager.getDefault()
-                                        .setUserKeyInfo(new UserInfoResponse(displayName,
-                                                nickname, profileMedia.getUrl()));
+                                                nickname, profileUrl));
+                                EventBus.getDefault().post(new CompleteLoginRequest());
                             }
-
-                            EventBus.getDefault().post(new CompleteLoginRequest());
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        EventBus.getDefault().post(new BadRequest());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            EventBus.getDefault().post(new ServerErrorRequest());
+                        }
+                    });
+        } else {
+            EventBus.getDefault().post(new JobFailureEvBusRequest());
+        }
     }
 
 

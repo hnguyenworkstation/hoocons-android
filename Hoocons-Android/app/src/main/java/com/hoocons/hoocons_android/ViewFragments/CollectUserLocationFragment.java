@@ -1,14 +1,8 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
-
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -28,20 +22,14 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.firebase.auth.UserInfo;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
 import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
 import com.hoocons.hoocons_android.EventBus.StringDataCollected;
 import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
-import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
-import com.hoocons.hoocons_android.Manifest;
 import com.hoocons.hoocons_android.R;
-import com.karan.churi.PermissionManager.PermissionManager;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
