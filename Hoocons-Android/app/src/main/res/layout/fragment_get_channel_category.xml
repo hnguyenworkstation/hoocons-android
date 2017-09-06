@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/channel_category_asking"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_text_color"
             android:textSize="@dimen/text_24"/>
 
         <TextView
@@ -31,12 +31,12 @@
             android:text="@string/channel_category_ask_info"
             android:layout_marginTop="@dimen/margin_12"
             android:layout_marginBottom="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_text_color"
             android:textSize="@dimen/text_14"/>
 
         <TextView
             android:id="@+id/input"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_text_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/category"

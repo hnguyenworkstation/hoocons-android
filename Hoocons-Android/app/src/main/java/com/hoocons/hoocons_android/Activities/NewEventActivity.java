@@ -3,13 +3,9 @@ package com.hoocons.hoocons_android.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
@@ -17,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -64,25 +59,31 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.hoocons.hoocons_android.Adapters.ImageLoaderAdapter;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
 import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionManager;
 import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
-import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.ShareNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -102,7 +103,7 @@ import xyz.klinker.giphy.GiphyActivity;
 
 public class NewEventActivity extends BaseActivity
         implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
-            GoogleApiClient.ConnectionCallbacks {
+            GoogleApiClient.ConnectionCallbacks, LocationEngineListener{
     @BindView(R.id.action_back)
     ImageButton mBack;
     @BindView(R.id.action_post)
@@ -176,6 +177,14 @@ public class NewEventActivity extends BaseActivity
     @BindView(R.id.shared_event_options)
     ImageButton mSharedEventOption;
 
+    // Tag input view
+    @BindView(R.id.flow_layout)
+    CustomFlowLayout mCustomFlowLayout;
+    @BindView(R.id.tags_input)
+    EditText mTagsInput;
+    @BindView(R.id.add_topic_btn)
+    BootstrapButton mAddTagBtn;
+
     private ArrayList<String> mImagePaths;
     private ImageLoaderAdapter mImagesAdapter;
     private SweetAlertDialog mDialog;
@@ -185,7 +194,8 @@ public class NewEventActivity extends BaseActivity
     private FusedLocationProviderClient mFusedLocationClient;
 
     private final int PHOTO_PICKER = 1;
-    private final int PLACE_PICKER_REQUEST = 2;
+    private final int CHECKIN_PLACE_PICKER_REQUEST = 2;
+    private final int TAGGED_PLACE_PICKER_REQUEST = 4;
     private final int REQUEST_LOCATION_PERMISSION = 3;
     private final int VIDEO_LIBRARY_REQUEST = 5;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
@@ -195,12 +205,17 @@ public class NewEventActivity extends BaseActivity
     private String selectedVideoPath;
     private GoogleApiClient mGoogleApiClient;
     private Location lastKnownLocation;
+    private List<String> tags;
 
     private EventParcel eventParcel;
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
     private LocationRequest checkinLocaiton;
+    private Location currentLocation;
     private GifDrawable gifDrawable;
+
+    private PermissionManager permissionManager;
+    private LocationEngine locationEngine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +224,7 @@ public class NewEventActivity extends BaseActivity
 
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
+        tags = new ArrayList<>();
 
         // init google location client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -230,6 +246,40 @@ public class NewEventActivity extends BaseActivity
             initLocationTracker();
         }
 
+        locationEngine = BaseApplication.getInstance().getLocationEngine();
+        permissionManager = new PermissionManager() {
+            @Override
+            public ArrayList<statusArray> getStatus() {
+                return super.getStatus();
+            }
+
+            @Override
+            public List<String> setPermission() {
+                // If You Don't want to check permission automatically and check your own custom permission
+                // Use super.setPermission(); or Don't override this method if not in use
+                List<String> customPermission = new ArrayList<>();
+                customPermission.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+                customPermission.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+                return customPermission;
+            }
+
+            @Override
+            public void ifCancelledAndCanRequest(Activity activity) {
+                // Do Customized operation if permission is cancelled without checking "Don't ask again"
+                // Use super.ifCancelledAndCanRequest(activity); or Don't override this method if not in use
+                super.ifCancelledAndCanRequest(activity);
+            }
+
+            @Override
+            public void ifCancelledAndCannotRequest(Activity activity) {
+                // Do Customized operation if permission is cancelled with checking "Don't ask again"
+                // Use super.ifCancelledAndCannotRequest(activity); or Don't override this method if not in use
+                super.ifCancelledAndCannotRequest(activity);
+            }
+        };
+
+        permissionManager.checkAndRequestPermissions(this);
+
         initView();
     }
 
@@ -246,6 +296,8 @@ public class NewEventActivity extends BaseActivity
         mAddLocationBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
         mAddVideoBtn.setOnClickListener(this);
+
+        mAddTagBtn.setOnClickListener(this);
 
         mDeleteSingleContent.setOnClickListener(this);
 
@@ -386,13 +438,13 @@ public class NewEventActivity extends BaseActivity
         }
     }
 
-    private void openGooglePlacePicker() {
+    private void openGooglePlacePicker(final int requestCode) {
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
             intentBuilder.setLatLngBounds(MapUtils.getCurrentLatLngBound(lastKnownLocation));
             Intent intent = intentBuilder.build(NewEventActivity.this);
-            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            startActivityForResult(intent, requestCode);
         } catch (GooglePlayServicesRepairableException
                 | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
@@ -431,6 +483,64 @@ public class NewEventActivity extends BaseActivity
         startActivity(new Intent(NewEventActivity.this, MapBoxPlaceSearchActivity.class));
     }
 
+    private void addTag() {
+        if (mTagsInput.getText().length() > 0) {
+            String topic = mTagsInput.getText().toString();
+
+            if (tags.contains(topic)) {
+                Toast.makeText(this, getResources().getText(R.string.already_created),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                tags.add(topic);
+                initFlowLayoutView();
+            }
+
+            mTagsInput.setText("");
+        }
+    }
+
+    private void initFlowLayoutView() {
+        mCustomFlowLayout.removeAllViews();
+
+        if (tags.size() == 0) {
+            mCustomFlowLayout.setVisibility(View.GONE);
+        } else {
+            mCustomFlowLayout.setVisibility(View.VISIBLE);
+        }
+
+        for (int i = 0; i < tags.size(); i++) {
+            final RelativeLayout item = (RelativeLayout) getLayoutInflater().inflate(R.layout.event_tag_item,
+                    mCustomFlowLayout, false);
+            TextView topic = (TextView) item.findViewById(R.id.topic_flow_text);
+
+            topic.setText(tags.get(i));
+            topic.setTypeface(EasyFonts.robotoRegular(this));
+            item.setTag(i);
+
+            mCustomFlowLayout.addView(item);
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int i = (int) v.getTag();
+                    item.setVisibility(View.GONE);
+                    tags.remove(i);
+                    updateTags(i);
+
+                    if (tags.size() == 0) {
+                        mCustomFlowLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+    }
+
+    private void updateTags(int i) {
+        for (i = i + 1; i < tags.size(); i++) {
+            RelativeLayout flowChild = (RelativeLayout) mCustomFlowLayout.getChildAt(i);
+            flowChild.setTag(i - 1);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -453,10 +563,10 @@ public class NewEventActivity extends BaseActivity
                 showVideoLibrary();
                 break;
             case R.id.event_add_location:
-                openGooglePlacePicker();
+                openGooglePlacePicker(CHECKIN_PLACE_PICKER_REQUEST);
                 break;
             case R.id.event_location:
-                openCustomPlacePicker();
+                openGooglePlacePicker(TAGGED_PLACE_PICKER_REQUEST);
                 break;
             case R.id.action_post:
                 if (doesHaveContent()) {
@@ -469,6 +579,9 @@ public class NewEventActivity extends BaseActivity
                 mSingleContentView.setVisibility(View.GONE);
                 mImagePaths.clear();
                 gifUrl = null;
+                break;
+            case R.id.add_topic_btn:
+                addTag();
                 break;
             default:
                 break;
@@ -628,42 +741,27 @@ public class NewEventActivity extends BaseActivity
                     }
                     Toast.makeText(this, selectedVideoPath, Toast.LENGTH_SHORT).show();
                 }
-            } else if (requestCode == PLACE_PICKER_REQUEST) {
+            } else if (requestCode == CHECKIN_PLACE_PICKER_REQUEST) {
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
 
                 initCheckinPlace(place);
+            } else if (requestCode == TAGGED_PLACE_PICKER_REQUEST) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+
+                initTaggedPlace(place);
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            boolean allGranted = false;
-            for (int grantResult : grantResults) {
-                if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                    allGranted = true;
-                } else {
-                    allGranted = false;
-                    break;
-                }
-            }
-
-            if(allGranted){
-                initLocationTracker();
-            } else {
-                // Todo show dialog
-            }
-        }
-    }
-
     private void initCheckinPlace(Place place) {
+        checkinLocaiton = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
+                place.getLatLng().longitude);
         mCheckinView.setVisibility(View.VISIBLE);
 
         LatLng ll = place.getLatLng();
@@ -672,6 +770,15 @@ public class NewEventActivity extends BaseActivity
 
         mCheckinName.setText(place.getName().toString());
         mCheckinType.setText(place.getAddress().toString());
+    }
+
+    private void initTaggedPlace(Place place) {
+        taggedLocation = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
+                place.getLatLng().longitude);
+        mEventLocation.setBootstrapText(new BootstrapText.Builder(this)
+                .addFontAwesomeIcon(FontAwesome.FA_PLANE)
+                .addText(" " + place.getAddress())
+                .build());
     }
 
     private void loadLocationMapView(String url) {
@@ -695,6 +802,51 @@ public class NewEventActivity extends BaseActivity
                 .into(mLocationMapView);
     }
 
+    private void activateLocationEngine() {
+        locationEngine.addLocationEngineListener(this);
+        locationEngine.activate();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        permissionManager.checkResult(requestCode, permissions, grantResults);
+        ArrayList<String> granted = permissionManager.getStatus().get(0).granted;
+
+        if (granted.contains(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                || granted.contains(android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            activateLocationEngine();
+            EventBus.getDefault().post(new LocationPermissionAllowed());
+        } else {
+            EventBus.getDefault().post(new LocationPermissionDenied());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (locationEngine != null && locationEngine.isConnected()) {
+            locationEngine.requestLocationUpdates();
+            locationEngine.addLocationEngineListener(this);
+            locationEngine.activate();
+        }
+    }
+
+    private boolean isLocationPermissionAllowed() {
+        ArrayList<String> granted = permissionManager.getStatus().get(0).granted;
+        if (granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**********************************************
      * EVENTBUS CATCHING FIELDS
@@ -758,5 +910,26 @@ public class NewEventActivity extends BaseActivity
         Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
         Toast.makeText(this, "Trying to reconnect to Google", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected() {
+        Log.d(getClass().getSimpleName(), "Connected to engine, we can now request updates.");
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationEngine.addLocationEngineListener(this);
+        locationEngine.requestLocationUpdates();
+        locationEngine.activate();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            currentLocation = location;
+        }
     }
 }

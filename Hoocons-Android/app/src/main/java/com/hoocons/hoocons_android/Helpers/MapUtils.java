@@ -153,8 +153,6 @@ public class MapUtils {
         return IconFactory.getInstance(context).fromBitmap(bitmap);
     }
 
-
-
     public static LocationRequest getLocationFromLatLong(final Context context, double LATITUDE, double LONGITUDE) {
         try {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());

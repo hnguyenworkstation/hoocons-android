@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:padding="@dimen/margin_4"
+    android:layout_margin="2dp"
+    android:background="@drawable/event_tag_background"
+    >
+
+    <TextView
+        android:layout_marginTop="@dimen/margin_4"
+        android:layout_marginBottom="@dimen/margin_4"
+        android:layout_marginEnd="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_8"
+        android:id="@+id/topic_flow_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_text_color"
+        android:text="flow_layout_tv" />
+</RelativeLayout>

@@ -98,7 +98,8 @@
     <string name="logout">Logout</string>
     <string name="app_info">App Info</string>
     <string name="fun_activities">Fun Activities</string>
-    <string name="add_more_contents">Add more contents</string>
+    <string name="add_more_contents">More contents</string>
+    <string name="add_tag">Add tags</string>
     <string name="find_love">Find your match</string>
 
     <string name="cancel">Cancel</string>
