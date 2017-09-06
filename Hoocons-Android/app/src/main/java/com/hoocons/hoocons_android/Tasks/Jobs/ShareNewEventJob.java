@@ -10,6 +10,7 @@ import com.hoocons.hoocons_android.EventBus.PostEventSuccess;
 import com.hoocons.hoocons_android.EventBus.PostingJobAddedToDisk;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Services.EventServices;
 import com.hoocons.hoocons_android.Tasks.JobProperties.JobGroup;
 import com.hoocons.hoocons_android.Tasks.JobProperties.Priority;
@@ -33,27 +34,23 @@ public class ShareNewEventJob extends Job implements Serializable {
     private String eventType;
     private int shareEventId;
 
-    private double chkinLon;
-    private double chkinLat;
-    private String chkinName;
-    private String chkinAddress;
-    private String chkinId;
+    private LocationRequest postedLocation;
+    private LocationRequest taggedLocation;
+    private LocationRequest checkinLocation;
 
-    public ShareNewEventJob(String text, int shareEventId, String privacy, String eventType,
-                               double chkinLong, double chkinLat,
-                               String chkinName, String chkinAddress, String chkinId) {
+    public ShareNewEventJob(String textContent, String privacy,
+                            String eventType, int shareEventId, LocationRequest postedLocation,
+                            LocationRequest taggedLocation,
+                            LocationRequest checkinLocation) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
-
-        this.textContent = text;
+        this.textContent = textContent;
         this.privacy = privacy;
         this.eventType = eventType;
         this.shareEventId = shareEventId;
 
-        this.chkinLat = chkinLat;
-        this.chkinId = chkinId;
-        this.chkinLon = chkinLong;
-        this.chkinName = chkinName;
-        this.chkinAddress = chkinAddress;
+        this.postedLocation = postedLocation;
+        this.taggedLocation = taggedLocation;
+        this.checkinLocation = checkinLocation;
     }
 
     @Override

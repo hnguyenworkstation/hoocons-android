@@ -76,6 +76,7 @@ import com.hoocons.hoocons_android.Helpers.PermissionUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
@@ -195,14 +196,11 @@ public class NewEventActivity extends BaseActivity
     private GoogleApiClient mGoogleApiClient;
     private Location lastKnownLocation;
 
-    private double checkinLongitude = 0;
-    private double checkinLatitude = 0;
-    private String checkinName;
-    private String checkinAddress;
-    private String checkinPlaceId;
-    private GifDrawable gifDrawable;
-
     private EventParcel eventParcel;
+    private LocationRequest postedLocation;
+    private LocationRequest taggedLocation;
+    private LocationRequest checkinLocaiton;
+    private GifDrawable gifDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +240,7 @@ public class NewEventActivity extends BaseActivity
         mBack.setOnClickListener(this);
         mAddPhotoBtn.setOnClickListener(this);
         mAddGifBtn.setOnClickListener(this);
+        mEventLocation.setOnClickListener(this);
 
         mPrivacyBtn.setOnClickListener(this);
         mAddLocationBtn.setOnClickListener(this);
@@ -442,7 +441,8 @@ public class NewEventActivity extends BaseActivity
                 onBackPressed();
                 break;
             case R.id.event_add_gif:
-                new Giphy.Builder(NewEventActivity.this, AppConstant.GIPHY_PUBLIC_KEY)// their public BETA key
+                new Giphy.Builder(NewEventActivity.this,
+                        AppConstant.GIPHY_PUBLIC_KEY)// their public BETA key
                         .maxFileSize(2 * 1024 * 1024) //2 mb
                         .start();
                 break;
@@ -453,6 +453,9 @@ public class NewEventActivity extends BaseActivity
                 showVideoLibrary();
                 break;
             case R.id.event_add_location:
+                openGooglePlacePicker();
+                break;
+            case R.id.event_location:
                 openCustomPlacePicker();
                 break;
             case R.id.action_post:
@@ -488,7 +491,7 @@ public class NewEventActivity extends BaseActivity
             eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
         } else if (gifUrl != null && gifUrl.length() > 5) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
-        } else if (checkinLatitude != 0 && checkinLongitude != 0) {
+        } else if (checkinLocaiton != null) {
             eventType = AppConstant.EVENT_TYPE_CHECK_IN;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;
@@ -496,15 +499,13 @@ public class NewEventActivity extends BaseActivity
 
         if (eventParcel != null) {
             ShareNewEventJob job =  new ShareNewEventJob (mTextContentInput.getText().toString(),
-                    eventParcel.getId(), mMode, eventType, checkinLongitude, checkinLatitude,
-                    checkinName, checkinAddress, checkinPlaceId);
+                    mMode, eventType, eventParcel.getId(), postedLocation, taggedLocation, checkinLocaiton);
 
             jobManager.addJobInBackground(job);
         } else {
             PostNewEventJob job =  new PostNewEventJob (
                     mTextContentInput.getText().toString(), gifUrl,
-                    mImagePaths, mMode, eventType, checkinLongitude, checkinLatitude,
-                    checkinName, checkinAddress, checkinPlaceId);
+                    mImagePaths, mMode, eventType, postedLocation, taggedLocation, checkinLocaiton);
 
             jobManager.addJobInBackground(job);
         }
@@ -663,12 +664,6 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void initCheckinPlace(Place place) {
-        checkinAddress = place.getAddress().toString();
-        checkinName = place.getName().toString();
-        checkinPlaceId = place.getId();
-        checkinLatitude = place.getLatLng().latitude;
-        checkinLongitude = place.getLatLng().longitude;
-
         mCheckinView.setVisibility(View.VISIBLE);
 
         LatLng ll = place.getLatLng();

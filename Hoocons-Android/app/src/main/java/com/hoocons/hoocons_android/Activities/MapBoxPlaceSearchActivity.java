@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,6 +29,10 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 
@@ -203,7 +208,7 @@ public class MapBoxPlaceSearchActivity extends BaseActivity implements LocationE
                     .build();
 
             mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-                    5000, null);
+                    2000, null);
         }
     }
 
