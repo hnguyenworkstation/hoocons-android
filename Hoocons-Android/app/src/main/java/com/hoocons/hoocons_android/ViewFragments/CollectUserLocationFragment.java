@@ -28,11 +28,13 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.auth.UserInfo;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
 import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
 import com.hoocons.hoocons_android.EventBus.StringDataCollected;
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Manifest;
@@ -116,6 +118,15 @@ public class CollectUserLocationFragment extends Fragment {
             }
         });
 
+        mSubmitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSubmitBtn.isEnabled()) {
+                    EventBus.getDefault().post(new UserInfoRequest());
+                }
+            }
+        });
+
         initTextAndTypeface();
     }
 
@@ -140,7 +151,6 @@ public class CollectUserLocationFragment extends Fragment {
         mLostLocationView.setVisibility(View.GONE);
         mAddressView.setVisibility(View.VISIBLE);
         mThankText.setVisibility(View.VISIBLE);
-        mSubmitBtn.setEnabled(true);
     }
 
     private void initMapView(String url) {

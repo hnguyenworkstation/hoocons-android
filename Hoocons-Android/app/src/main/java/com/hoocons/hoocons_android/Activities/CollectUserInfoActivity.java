@@ -14,7 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
@@ -28,6 +30,7 @@ import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
 import com.hoocons.hoocons_android.EventBus.StringDataCollected;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.EventBus.UserBasicInfoCollected;
+import com.hoocons.hoocons_android.EventBus.UserInfoRequest;
 import com.hoocons.hoocons_android.EventBus.UserNicknameCollected;
 import com.hoocons.hoocons_android.Helpers.MapUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
@@ -64,12 +67,20 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     private LocationRequest locationRequest;
     private boolean isWaitingData = false;
     private PlaceDetectionClient mPlaceDetectionClient;
+    private MaterialDialog mLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect_user_info);
         EventBus.getDefault().register(this);
+
+        mLoadingDialog = new MaterialDialog.Builder(this)
+                .title(R.string.uploading_profile)
+                .content(R.string.please_wait)
+                .cancelable(false)
+                .progress(true, 0)
+                .build();
 
         mPlaceDetectionClient = BaseApplication.getInstance().getPlaceDetectionClient();
 
@@ -167,10 +178,18 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
         }
     }
 
-    private void requestLocationData() {
+    private boolean isLocationPermissionAllowed() {
         ArrayList<String> granted = permissionManager.getStatus().get(0).granted;
         if (granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION) ||
                 granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void requestLocationData() {
+         if (isLocationPermissionAllowed()) {
             activateLocationEngine();
             EventBus.getDefault().post(new LocationPermissionAllowed());
         } else {
@@ -241,6 +260,19 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
         }
     }
 
+    private void showLoadingDialog() {
+        mLoadingDialog.show();
+    }
+
+    private void trySubmitUserInfo() {
+        if (isLocationPermissionAllowed()) {
+            showLoadingDialog();
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.pls_provide_location_permission),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
@@ -256,5 +288,10 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     public void onEvent(LocationURLRequest request) {
         isWaitingData = true;
         requestLocationData();
+    }
+
+    @Subscribe
+    public void onEvent(UserInfoRequest request) {
+        trySubmitUserInfo();
     }
 }
