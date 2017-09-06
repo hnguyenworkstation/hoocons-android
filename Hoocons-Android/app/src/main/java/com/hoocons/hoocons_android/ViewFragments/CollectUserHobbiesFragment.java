@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,9 @@ public class CollectUserHobbiesFragment extends Fragment {
     private List<String> exampleHobbies;
     private List<String> pickedExampleHobbies;
 
+    private FragmentTransaction mFragTransition;
+    private FragmentManager mFragManager;
+
     public CollectUserHobbiesFragment() {
         // Required empty public constructor
     }
@@ -74,6 +79,9 @@ public class CollectUserHobbiesFragment extends Fragment {
         exampleHobbies.addAll(Arrays.asList(temp));
 
         hobbies = new ArrayList<>();
+
+        mFragManager = getActivity().getSupportFragmentManager();
+        mFragTransition = mFragManager.beginTransaction();
     }
 
     @Override
@@ -103,6 +111,7 @@ public class CollectUserHobbiesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(new TagsCollected(hobbies));
+                commitNextStage();
             }
         });
 
@@ -112,6 +121,11 @@ public class CollectUserHobbiesFragment extends Fragment {
                 showExampleHobbiesDialog();
             }
         });
+    }
+
+    private void commitNextStage() {
+        mFragTransition.replace(R.id.info_fragment_container, new CollectUserLocationFragment());
+        mFragTransition.commit();
     }
 
     private void initTextAndTypeFace() {

@@ -1,10 +1,17 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +20,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
+import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
+import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Manifest;
 import com.hoocons.hoocons_android.R;
+import com.karan.churi.PermissionManager.PermissionManager;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +83,9 @@ public class CollectUserLocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         if (getArguments() != null) {
+
         }
     }
 
@@ -68,5 +100,79 @@ public class CollectUserLocationFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        EventBus.getDefault().post(new LocationURLRequest());
+
+        mAllowPermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(new LocationURLRequest());
+            }
+        });
     }
+
+    private void initLayout(String url) {
+        if (url != null) {
+            mMapHolder.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mLostLocationView.setVisibility(View.GONE);
+            mAddressView.setVisibility(View.VISIBLE);
+            mSubmitBtn.setEnabled(true);
+            initMapView(url);
+        } else {
+            mSubmitBtn.setEnabled(false);
+            mLostLocationView.setVisibility(View.VISIBLE);
+            mMapHolder.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
+            mAddressView.setVisibility(View.GONE);
+        }
+    }
+
+    private void initPermissionAllowedLayout() {
+        mMapHolder.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLostLocationView.setVisibility(View.GONE);
+        mAddressView.setVisibility(View.VISIBLE);
+        mSubmitBtn.setEnabled(true);
+    }
+
+    private void initMapView(String url) {
+        if (url != null) {
+            BaseApplication.getInstance().getGlide()
+                    .load(url)
+                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            if (mProgressBar != null) {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    })
+                    .into(mMapImage);
+        }
+    }
+
+    @Subscribe
+    public void onEvent(LocationPermissionAllowed req) {
+        initPermissionAllowedLayout();
+    }
+
+    @Subscribe
+    public void onEvent(LocationPermissionDenied req) {
+
+    }
+
+    @Subscribe
+    public void onEvent(LocationUrlReady request) {
+        initMapView(request.getUrl());
+    }
+
 }

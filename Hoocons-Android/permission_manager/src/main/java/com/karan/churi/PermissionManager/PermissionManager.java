@@ -111,7 +111,6 @@ public abstract class PermissionManager {
     }
 
     public void ifCancelledAndCanRequest(final Activity activity) {
-
         showDialogOK(activity,"Some Permission required for this app, please grant permission for the same",
                 new DialogInterface.OnClickListener() {
                     @Override

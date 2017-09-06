@@ -42,6 +42,7 @@ import com.hoocons.hoocons_android.SQLite.EmotionsDB;
 import com.hoocons.hoocons_android.SQLite.StickerDB;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsGCMJobService;
 import com.hoocons.hoocons_android.Tasks.JobServices.HooconsJobService;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
@@ -69,6 +70,7 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
     private DatabaseReference mDatabase;
     private RequestManager mGlideRequestManager;
     private LocationEngine mLocationEngine;
+    private Mapbox mapbox;
 
     @Override
     public void onCreate() {
@@ -98,6 +100,9 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         // Init bitmap
         BitmapLoader.newInstance(this, getImagePath());
 
+        mapbox = Mapbox.getInstance(getApplicationContext(),
+                getBaseContext().getResources().getString(R.string.mb_key));
+
         // Override font
         TypefaceProvider.registerDefaultIconSets();
         FontOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
@@ -106,9 +111,8 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         try {
             EmotionsDB.checkEmotions();
         } catch (Exception e) {
-        }
 
-        getJobManager();
+        }
     }
 
     public static String getImagePath() {
@@ -175,6 +179,14 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         jobManager = new JobManager(builder.build());
     }
 
+    public synchronized Mapbox getMapbox() {
+        if (mapbox == null) {
+            mapbox = Mapbox.getInstance(getApplicationContext(),
+                    getBaseContext().getResources().getString(R.string.mb_key));
+        }
+        return mapbox;
+    }
+
     public synchronized JobManager getJobManager() {
         if (jobManager == null) {
             configureJobManager();
@@ -188,10 +200,6 @@ public class BaseApplication extends GlobalContext implements LocationEngineList
         }
 
         return mDatabase;
-    }
-
-    public synchronized String getMapBoxKey() {
-        return getBaseContext().getResources().getString(R.string.mb_key);
     }
 
     public synchronized String getGoogleServiceKey() {

@@ -53,12 +53,6 @@ public class CollectNicknameFragment extends Fragment {
     // isRequesting is checking the follow that user submit nickname before checking it
     private boolean isRequesting = false;
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     private FragmentTransaction mFragTransition;
     private FragmentManager mFragManager;
 
@@ -70,8 +64,6 @@ public class CollectNicknameFragment extends Fragment {
     public static CollectNicknameFragment newInstance(String param1, String param2) {
         CollectNicknameFragment fragment = new CollectNicknameFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,8 +73,6 @@ public class CollectNicknameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         mFragManager = getActivity().getSupportFragmentManager();

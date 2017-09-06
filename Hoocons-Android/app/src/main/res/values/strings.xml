@@ -101,6 +101,7 @@
     <string name="action_login">Already a member? Login</string>
     <string name="action_reset_password">Forget password? Reset now</string>
     <string name="action_allow_permission">Allow Permission</string>
+    <string name="current_location">Current Location</string>
     <string name="action_register">Register an account</string>
     <string name="continue_with_phone_number">Continue with phone number</string>
     <string name="login_hint_text">Use phone number and password to identify</string>

@@ -16,11 +16,13 @@ import android.support.v4.content.res.ResourcesCompat;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.R;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
+import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,9 +104,14 @@ public class MapUtils {
                 .setLat(latitude)
                 .setZoom(16)
                 .setBearing(45)
-                .setPitch(60)
+                .setStaticMarkerAnnotations(new StaticMarkerAnnotation.Builder()
+                        .setColor("E84545")
+                        .setName(Constants.PIN_LARGE)
+                        .setLon(longitude)
+                        .setLat(latitude)
+                        .build())
                 .setWidth(SystemUtils.getScreenWidth(activity))
-                .setHeight(300)
+                .setHeight(512)
                 .setRetina(false)
                 .build();
         return staticImage.getUrl().toString();
