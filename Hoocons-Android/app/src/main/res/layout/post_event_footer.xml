@@ -39,10 +39,9 @@
             android:id="@+id/event_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
             android:layout_toStartOf="@+id/event_add_video"
-            android:src="@drawable/ic_gallery_colored"/>
+            android:src="@drawable/ic_rounded_gallery"/>
 
         <ImageButton
             android:layout_gravity="center_vertical"
@@ -53,9 +52,8 @@
             android:layout_toStartOf="@+id/event_add_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_video_colored"/>
+            android:src="@drawable/ic_rounded_video"/>
 
         <ImageButton
             android:layout_gravity="center_vertical"
@@ -66,9 +64,8 @@
             android:layout_toStartOf="@+id/event_add_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_location_colored"/>
+            android:src="@drawable/ic_rounded_pin"/>
 
         <ImageButton
             android:layout_gravity="center_vertical"
@@ -79,9 +76,8 @@
             android:layout_toStartOf="@+id/event_add_gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_recorder_colored"/>
+            android:src="@drawable/ic_rounded_voice"/>
 
         <ImageButton
             android:layout_gravity="center_vertical"
@@ -92,8 +88,7 @@
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_4"
             android:layout_marginEnd="@dimen/margin_8"
-            android:src="@drawable/ic_gif_colored"/>
+            android:src="@drawable/ic_rounded_gif"/>
     </RelativeLayout>
 </RelativeLayout>

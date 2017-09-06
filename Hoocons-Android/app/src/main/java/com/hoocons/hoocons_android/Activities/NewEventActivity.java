@@ -101,7 +101,7 @@ import xyz.klinker.giphy.GiphyActivity;
 
 public class NewEventActivity extends BaseActivity
         implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+            GoogleApiClient.ConnectionCallbacks {
     @BindView(R.id.action_back)
     ImageButton mBack;
     @BindView(R.id.action_post)
@@ -417,8 +417,6 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void loadPickedImages(ArrayList<String> imageList) {
-        updateUIForMultiImageEvent();
-
         mImagePaths.clear();
         mImagePaths.addAll(imageList);
         mImagesAdapter = new ImageLoaderAdapter(this, imageList);
@@ -521,52 +519,6 @@ public class NewEventActivity extends BaseActivity
         }
     }
 
-    private void updateUIForGifEvent() {
-        // display the holder content
-        mSingleContentView.setVisibility(View.VISIBLE);
-        mDeleteSingleContent.bringToFront();
-        mLoadingProgress.bringToFront();
-
-        // update the add more content options
-        mAddPhotoBtn.setVisibility(View.GONE);
-        mAddLocationBtn.setVisibility(View.GONE);
-        mAddVideoBtn.setVisibility(View.GONE);
-        mAddSoundBtn.setVisibility(View.GONE);
-    }
-
-    private void updateUIForSingleImageEvent() {
-        // display the holder content
-        mSingleContentView.setVisibility(View.VISIBLE);
-        mDeleteSingleContent.bringToFront();
-        mLoadingProgress.bringToFront();
-
-        // update the add more content options
-        mAddPhotoBtn.setVisibility(View.VISIBLE);
-        mAddLocationBtn.setVisibility(View.VISIBLE);
-        mAddGifBtn.setVisibility(View.GONE);
-        mAddVideoBtn.setVisibility(View.GONE);
-        mAddSoundBtn.setVisibility(View.GONE);
-    }
-
-    private void updateUIForMultiImageEvent() {
-        // display the holder content
-        mSingleContentView.setVisibility(View.GONE);
-
-        // update the add more content options
-        mAddPhotoBtn.setVisibility(View.VISIBLE);
-        mAddLocationBtn.setVisibility(View.VISIBLE);
-        mAddGifBtn.setVisibility(View.GONE);
-        mAddVideoBtn.setVisibility(View.GONE);
-        mAddSoundBtn.setVisibility(View.GONE);
-    }
-
-    private void updateUIForNormalEvent() {
-        mAddPhotoBtn.setVisibility(View.VISIBLE);
-        mAddLocationBtn.setVisibility(View.VISIBLE);
-        mAddVideoBtn.setVisibility(View.VISIBLE);
-        mAddSoundBtn.setVisibility(View.VISIBLE);
-    }
-
     private void loadGif(final String url) {
         gifUrl = url;
 
@@ -611,8 +563,6 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void loadPickedSingleImage(String path) {
-        updateUIForSingleImageEvent();
-
         mImagePaths.clear();
         mImagePaths.add(path);
 
@@ -659,7 +609,6 @@ public class NewEventActivity extends BaseActivity
             if (requestCode == Giphy.REQUEST_GIPHY) {
                 String downloadUrl = data.getStringExtra(GiphyActivity.GIF_DOWNLOAD_URL);
                 loadGif(downloadUrl);
-                updateUIForGifEvent();
             } else if (requestCode == PHOTO_PICKER) {
                 if (data != null){
                     final ArrayList<String> images = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
