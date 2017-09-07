@@ -177,6 +177,11 @@
     <string name="loved">Loved</string>
     <string name="already_created">already created…</string>
 
+    <string name="posting_as">Posting as a</string>
+    <string name="this_post_is_a">This post is a </string>
+    <string name="does_have_title">Does it has a title?</string>
+    <string name="add_a_title">Add a title</string>
+
     <string name="msg_now">just now</string>
     <string name="msg_today">today</string>
     <string name="msg_yesterday">yesterday</string>

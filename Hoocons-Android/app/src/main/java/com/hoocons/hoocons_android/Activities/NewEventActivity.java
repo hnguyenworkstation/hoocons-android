@@ -132,6 +132,20 @@ public class NewEventActivity extends BaseActivity
     @BindView(R.id.event_warning)
     BootstrapButton mWarningButton;
 
+    @BindView(R.id.posting_as)
+    TextView mPostingAsQuestion;
+
+    @BindView(R.id.type_logo)
+    ImageView mTypeLogoImage;
+    @BindView(R.id.type_name)
+    TextView mTypeName;
+
+    @BindView(R.id.type_picker)
+    RelativeLayout mTypePicker;
+
+    @BindView(R.id.title_count)
+    TextView mTitleCount;
+
     // Single Content view
     @BindView(R.id.new_event_single_content)
     RelativeLayout mSingleContentView;

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_12">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_16"
+            android:textAllCaps="true"
+            android:id="@+id/posting_as"
+            android:textColor="@color/dark_text_color"
+            android:textStyle="bold"
+            android:text="@string/does_have_title"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_14"
+            android:id="@+id/title_count"
+            android:text="0/150"
+            android:fontFamily="roboto"
+            android:layout_marginStart="@dimen/margin_12"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_input"
+        android:textColorHint="@color/gray_alpha"
+        android:hint="@string/add_a_title"
+        android:textColor="@color/dark_text_color"
+        android:background="@color/transparent"
+        android:textSize="@dimen/text_16"
+        android:fontFamily="roboto"/>
+</LinearLayout>

@@ -22,6 +22,16 @@ public class AppConstant {
     public static final String MEDIA_TYPE_VIDEO = "Vid";
     public static final String MEDIA_TYPE_MOMENT = "Mmt";
 
+    // General Event Type
+    public static final String TYPE_QUESTION = "question";
+    public static final String TYPE_STORY = "story";
+    public static final String TYPE_QUOTE = "quote";
+    public static final String TYPE_WISH = "wish";
+    public static final String TYPE_PROMOTION = "promotion";
+    public static final String TYPE_CHECKING = "checking";
+    public static final String TYPE_INVITING = "invitation";
+    public static final String TYPE_ASK = "ask";
+
     // Event type
     public static final String EVENT_TYPE_TEXT = "Txt";
     public static final String EVENT_TYPE_SINGLE_IMAGE = "Sigm";
