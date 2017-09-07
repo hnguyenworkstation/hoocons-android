@@ -266,6 +266,27 @@
     <string name="invitation_custom_image">https://developers.google.com/identity/images/g-logo.png</string>
     <string name="invitation_cta">Install!</string>
     <string name="hoocons_discovery">Hoocons Discovery</string>
+    <string name="select">Select</string>
+    <string name="select_event_type">Select Event Type</string>
+
+    <string name="story">Story</string>
+    <string name="question">Question</string>
+    <string name="quote">Quote</string>
+    <string name="wish">Wish</string>
+    <string name="checking">Checking</string>
+    <string name="invitation">Invitation</string>
+    <string name="ask">Ask</string>
+
+
+    <string-array name="event_type">
+        <item>Story</item>
+        <item>Question</item>
+        <item>Quote</item>
+        <item>Wish</item>
+        <item>Checking</item>
+        <item>Invitation</item>
+        <item>Ask</item>
+    </string-array>
 
     <string-array name="channel_category">
         <item>Local Businesses</item>

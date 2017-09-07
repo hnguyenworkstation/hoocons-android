@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -32,6 +33,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
@@ -135,16 +138,22 @@ public class NewEventActivity extends BaseActivity
     @BindView(R.id.posting_as)
     TextView mPostingAsQuestion;
 
+    @BindView(R.id.type_picker)
+    RelativeLayout mTypePicker;
     @BindView(R.id.type_logo)
     ImageView mTypeLogoImage;
     @BindView(R.id.type_name)
     TextView mTypeName;
 
-    @BindView(R.id.type_picker)
-    RelativeLayout mTypePicker;
-
+    @BindView(R.id.title_question)
+    TextView mTitleQuestion;
     @BindView(R.id.title_count)
     TextView mTitleCount;
+    @BindView(R.id.title_input)
+    EditText mTitleInput;
+
+    @BindView(R.id.posting_content)
+    TextView mPostingContentQuestion;
 
     // Single Content view
     @BindView(R.id.new_event_single_content)
@@ -231,6 +240,8 @@ public class NewEventActivity extends BaseActivity
     private PermissionManager permissionManager;
     private LocationEngine locationEngine;
 
+    private int selectedType = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -299,6 +310,25 @@ public class NewEventActivity extends BaseActivity
         }
 
         initView();
+        initDefaultTextAndTypeFace();
+    }
+
+    private void initDefaultTextAndTypeFace() {
+        mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
+        mPostingAsQuestion.setText(getResources().getString(R.string.posting_as));
+        mTitleQuestion.setText(getResources().getString(R.string.does_have_title));
+        mTitleInput.setHint(getResources().getString(R.string.add_a_title));
+        mPostingContentQuestion.setText(getResources().getString(R.string.content));
+        mTextContentInput.setHint(getResources().getString(R.string.write_a_message));
+        mTypeName.setText(getResources().getString(R.string.story));
+
+        mDisplayName.setTypeface(EasyFonts.robotoRegular(this));
+        mPostingAsQuestion.setTypeface(EasyFonts.robotoBold(this));
+        mTitleQuestion.setTypeface(EasyFonts.robotoBold(this));
+        mTitleInput.setTypeface(EasyFonts.robotoRegular(this));
+        mTypeName.setTypeface(EasyFonts.robotoRegular(this));
+        mPostingContentQuestion.setTypeface(EasyFonts.robotoBold(this));
+        mTextContentInput.setTypeface(EasyFonts.robotoRegular(this));
     }
 
     private void initView() {
@@ -316,6 +346,7 @@ public class NewEventActivity extends BaseActivity
         mAddVideoBtn.setOnClickListener(this);
 
         mAddTagBtn.setOnClickListener(this);
+        mTypePicker.setOnClickListener(this);
 
         mDeleteSingleContent.setOnClickListener(this);
 
@@ -343,8 +374,6 @@ public class NewEventActivity extends BaseActivity
 
             }
         });
-
-        mDisplayName.setText(SharedPreferencesManager.getDefault().getUserDisplayName());
     }
 
     private void initLocationTracker()  {
@@ -361,6 +390,71 @@ public class NewEventActivity extends BaseActivity
 
             }
         }
+    }
+
+    private void initType(int which) {
+        Toast.makeText(this, "Picked" + String.valueOf(which), Toast.LENGTH_SHORT).show();
+
+        switch (which) {
+            case 0:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.story));
+                break;
+            case 1:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.question));
+                break;
+            case 2:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.quote));
+                break;
+            case 3:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.wish));
+                break;
+            case 4:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.checking));
+                break;
+            case 5:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.invitation));
+                break;
+            case 6:
+                selectedType = which;
+                mTypeName.setText(getResources().getString(R.string.ask));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showEventTypePickerDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.select_event_type)
+                .items(R.array.event_type)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        initType(which);
+                        return true;
+                    }
+                })
+                .cancelable(true)
+                .cancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .positiveText(R.string.select)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     private boolean mightNeedLocationPermission() {
@@ -600,6 +694,9 @@ public class NewEventActivity extends BaseActivity
                 break;
             case R.id.add_topic_btn:
                 addTag();
+                break;
+            case R.id.type_picker:
+                showEventTypePickerDialog();
                 break;
             default:
                 break;
