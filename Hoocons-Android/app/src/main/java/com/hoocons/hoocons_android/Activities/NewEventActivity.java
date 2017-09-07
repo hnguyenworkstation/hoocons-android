@@ -210,7 +210,7 @@ public class NewEventActivity extends BaseActivity
     private EventParcel eventParcel;
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
-    private LocationRequest checkinLocaiton;
+    private LocationRequest checkinLocation;
     private Location currentLocation;
     private GifDrawable gifDrawable;
 
@@ -279,6 +279,10 @@ public class NewEventActivity extends BaseActivity
         };
 
         permissionManager.checkAndRequestPermissions(this);
+
+        if (isLocationPermissionAllowed()) {
+            activateLocationEngine();
+        }
 
         initView();
     }
@@ -604,21 +608,28 @@ public class NewEventActivity extends BaseActivity
             eventType = AppConstant.EVENT_TYPE_MULT_IMAGE;
         } else if (gifUrl != null && gifUrl.length() > 5) {
             eventType = AppConstant.EVENT_TYPE_SINGLE_GIF;
-        } else if (checkinLocaiton != null) {
+        } else if (checkinLocation != null && mImagePaths.size() == 0) {
             eventType = AppConstant.EVENT_TYPE_CHECK_IN;
         } else {
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
+        if (currentLocation != null) {
+            postedLocation = MapUtils.getLocationFromLatLong(this, currentLocation.getLatitude(),
+                    currentLocation.getLongitude());
+        }
+
         if (eventParcel != null) {
             ShareNewEventJob job =  new ShareNewEventJob (mTextContentInput.getText().toString(),
-                    mMode, eventType, eventParcel.getId(), postedLocation, taggedLocation, checkinLocaiton);
+                    mMode, eventType, eventParcel.getId(), postedLocation, taggedLocation,
+                    checkinLocation, tags);
 
             jobManager.addJobInBackground(job);
         } else {
-            PostNewEventJob job =  new PostNewEventJob (
+            PostNewEventJob job =  new PostNewEventJob (SharedPreferencesManager.getDefault().getUserId(),
                     mTextContentInput.getText().toString(), gifUrl,
-                    mImagePaths, mMode, eventType, postedLocation, taggedLocation, checkinLocaiton);
+                    mImagePaths, mMode, eventType, postedLocation, taggedLocation,
+                    checkinLocation, tags);
 
             jobManager.addJobInBackground(job);
         }
@@ -760,8 +771,11 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void initCheckinPlace(Place place) {
-        checkinLocaiton = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
+        checkinLocation = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
                 place.getLatLng().longitude);
+        checkinLocation.setLocationName(place.getName().toString());
+        checkinLocation.setAddress(place.getAddress().toString());
+
         mCheckinView.setVisibility(View.VISIBLE);
 
         LatLng ll = place.getLatLng();
@@ -816,9 +830,6 @@ public class NewEventActivity extends BaseActivity
         if (granted.contains(android.Manifest.permission.ACCESS_FINE_LOCATION)
                 || granted.contains(android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
             activateLocationEngine();
-            EventBus.getDefault().post(new LocationPermissionAllowed());
-        } else {
-            EventBus.getDefault().post(new LocationPermissionDenied());
         }
     }
 

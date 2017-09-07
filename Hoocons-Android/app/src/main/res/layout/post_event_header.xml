@@ -57,6 +57,8 @@
                 android:id="@+id/event_location"
                 style="@style/wrapping_button"
                 android:textSize="@dimen/text_12"
+                android:maxLines="1"
+                android:ellipsize="end"
                 app:bootstrapText="{fa_location_arrow}  Off"
                 app:bootstrapBrand="secondary"
                 app:buttonMode="regular"

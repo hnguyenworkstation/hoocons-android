@@ -2,6 +2,7 @@ package com.hoocons.hoocons_android.Networking.Requests;
 
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Models.Media;
+import com.hoocons.hoocons_android.Models.Topic;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class EventInfoRequest {
     @SerializedName("medias")
     private ArrayList<Media> medias;
     @SerializedName("tags")
-    private ArrayList<String> tags;
+    private ArrayList<Topic> tags;
     @SerializedName("privacy")
     private String privacy;
     @SerializedName("event_type")
@@ -38,7 +39,7 @@ public class EventInfoRequest {
     public EventInfoRequest() {
     }
 
-    public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<String> tags,
+    public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<Topic> tags,
                             String privacy, String eventType, int channelMaskId, int targetMeetup,
                             int targetChannel, int targetUser, LocationRequest postedLocation,
                             LocationRequest taggedLocation, LocationRequest checkinLocation) {
@@ -72,11 +73,11 @@ public class EventInfoRequest {
         this.medias = medias;
     }
 
-    public ArrayList<String> getTags() {
+    public ArrayList<Topic> getTags() {
         return tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
+    public void setTags(ArrayList<Topic> tags) {
         this.tags = tags;
     }
 

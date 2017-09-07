@@ -14,6 +14,7 @@ import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Helpers.ImageEncoder;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Media;
+import com.hoocons.hoocons_android.Models.Topic;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.EventInfoRequest;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import retrofit2.Call;
@@ -45,15 +47,20 @@ public class PostNewEventJob extends Job {
     private String privacy;
     private String eventType;
     private String gifUrl;
+    private int toUser;
 
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
     private LocationRequest checkinLocation;
 
-    public PostNewEventJob(String text, String gifUrl, ArrayList<String> imagePaths,
+    private List<String> tags;
+
+    public PostNewEventJob(int toUser, String text, String gifUrl, ArrayList<String> imagePaths,
                            String privacy, String eventType, LocationRequest postedLocation,
-                           LocationRequest taggedLocation, LocationRequest checkinLocation) {
+                           LocationRequest taggedLocation, LocationRequest checkinLocation,
+                           List<String> tags) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
+        this.toUser = toUser;
         localId = -System.currentTimeMillis();
         this.textContent = text;
         this.imagePaths = imagePaths;
@@ -64,6 +71,8 @@ public class PostNewEventJob extends Job {
         this.postedLocation = postedLocation;
         this.taggedLocation = taggedLocation;
         this.checkinLocation = checkinLocation;
+
+        this.tags = tags;
     }
 
     @Override
@@ -82,8 +91,15 @@ public class PostNewEventJob extends Job {
                 medias = AppUtils.uploadAllEventImage(imagePaths);
             }
 
-            final EventInfoRequest request = new EventInfoRequest(
+            ArrayList<Topic> topics = new ArrayList<>();
 
+            for (String tag: tags) {
+                topics.add(new Topic(tag));
+            }
+
+            final EventInfoRequest request = new EventInfoRequest(
+                textContent, medias, topics, privacy, eventType, -1, -1, -1, toUser,
+                    postedLocation, taggedLocation, checkinLocation
             );
 
             EventServices services = NetContext.instance.create(EventServices.class);

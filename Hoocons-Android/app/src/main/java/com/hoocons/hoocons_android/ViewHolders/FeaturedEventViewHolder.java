@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -217,7 +218,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void initViewHolder(final Context context, final EventResponse response,
+    public void initViewHolder(final Activity activity, final Context context, final EventResponse response,
                                final EventAdapterListener listener, final int position) {
         initEventHeader(response);
         initEventFooter(context, response);
@@ -236,13 +237,13 @@ public class FeaturedEventViewHolder extends ViewHolder {
         }
 
         if (response.getContainEvent() == null) {
-            initEventContent(context, response, position);
+            initEventContent(activity, context, response, position);
         } else {
             assert mSharedEventTextContent != null;
             initSharedEventHeader(context, response.getContainEvent(), listener, position);
             mSharedEventTextContent.setVisibility(View.VISIBLE);
             mSharedEventTextContent.setContent(response.getContainEvent().getTextContent());
-            initEventContent(context, response.getContainEvent(), position);
+            initEventContent(activity, context, response.getContainEvent(), position);
 
             assert mTextContent != null;
             if (response.getTextContent() != null && response.getTextContent().length() >  1) {
@@ -424,7 +425,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
     }
 
-    private void initEventContent(final Context context, final EventResponse eventResponse,
+    private void initEventContent(final Activity activity, final Context context, final EventResponse eventResponse,
                                   final int eventPosition) {
         if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_TEXT)) {
 
@@ -437,18 +438,23 @@ public class FeaturedEventViewHolder extends ViewHolder {
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_SINGLE_VIDEO)) {
             // loadVideoView(eventResponse.getMedias().get(0));
         } else if (eventResponse.getEventType().equals(AppConstant.EVENT_TYPE_CHECK_IN)) {
-            loadCheckinMapView(eventResponse);
+            loadCheckinMapView(activity, eventResponse);
         }
     }
 
-    private void loadCheckinMapView(final EventResponse eventResponse) {
+    private void loadCheckinMapView(final Activity activity, final EventResponse eventResponse) {
         assert mCheckinName != null;
         assert mCheckinType != null;
-        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLongitude()),
-                String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLatitude())));
+        loadLocationMapView(
+                MapUtils.getLocalMapBoxMapImage(
+                    activity,
+                    eventResponse.getCheckinLocation().getResponse().getLatitude(),
+                    eventResponse.getCheckinLocation().getResponse().getLongitude()
+                )
+        );
 
-        mCheckinName.setText(eventResponse.getCheckInLocation().getLocationName());
-        mCheckinType.setText(eventResponse.getCheckInLocation().getAddress());
+        mCheckinName.setText(eventResponse.getCheckinLocation().getLocationName());
+        mCheckinType.setText(eventResponse.getCheckinLocation().getAddress());
     }
 
     private void loadLocationMapView(String url) {

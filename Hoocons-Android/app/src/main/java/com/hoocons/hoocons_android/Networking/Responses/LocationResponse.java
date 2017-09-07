@@ -11,6 +11,8 @@ import java.util.List;
  */
 @Parcel
 public class LocationResponse {
+    @SerializedName("id")
+    int id;
     @SerializedName("coordinate")
     CoordinateResponse response;
     @SerializedName("location_name")
@@ -35,6 +37,22 @@ public class LocationResponse {
     public LocationResponse() {
     }
 
+    public LocationResponse(int id, CoordinateResponse response, String locationName,
+                            String city, String province, String state, int zipcode, String country,
+                            String address, String placeId, String placeApiType) {
+        this.id = id;
+        this.response = response;
+        this.locationName = locationName;
+        this.city = city;
+        this.province = province;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.country = country;
+        this.address = address;
+        this.placeId = placeId;
+        this.placeApiType = placeApiType;
+    }
+
     public LocationResponse(CoordinateResponse response, String locationName, String city,
                             String province, String state, int zipcode, String country,
                             String address, String placeId, String placeApiType) {
@@ -50,11 +68,19 @@ public class LocationResponse {
         this.placeApiType = placeApiType;
     }
 
-    public CoordinateResponse getCoordinateResponse() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public CoordinateResponse getResponse() {
         return response;
     }
 
-    public void setCoordinateResponse(CoordinateResponse response) {
+    public void setResponse(CoordinateResponse response) {
         this.response = response;
     }
 

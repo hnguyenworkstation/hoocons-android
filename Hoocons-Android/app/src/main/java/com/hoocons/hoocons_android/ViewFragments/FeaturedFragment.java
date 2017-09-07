@@ -131,7 +131,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         View rootView = inflater.inflate(R.layout.fragment_featured, container, false);
         ButterKnife.bind(this, rootView);
 
-        mAdapter = new FeaturedEventsAdapter(getContext(), activityResponses, this);
+        mAdapter = new FeaturedEventsAdapter(getActivity(), getContext(), activityResponses, this);
 
         initView();
         initOnClickListener();

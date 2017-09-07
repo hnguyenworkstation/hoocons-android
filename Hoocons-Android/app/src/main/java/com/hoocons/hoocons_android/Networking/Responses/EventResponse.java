@@ -10,82 +10,52 @@ import java.util.List;
  */
 public class EventResponse {
     @SerializedName("id")
-    int eventId;
+    private int id;
     @SerializedName("author")
-    SemiUserInfoResponse author;
+    private SemiUserInfoResponse author;
     @SerializedName("text_content")
-    String textContent;
+    private String textContent;
     @SerializedName("event_type")
-    String eventType;
+    private String eventType;
     @SerializedName("privacy")
-    String privacy;
+    private String privacy;
     @SerializedName("is_edited")
-    boolean isEdited;
+    private boolean isEdited;
     @SerializedName("create_at")
-    String createAt;
+    private String createAt;
     @SerializedName("last_action_at")
-    String lastActionAt;
+    private String lastActionAt;
     @SerializedName("medias")
-    List<MediaResponse> medias;
+    private List<MediaResponse> medias;
     @SerializedName("tags")
-    List<TagResponse> tags;
+    private List<TagResponse> tags;
     @SerializedName("contain_event")
-    EventResponse containEvent;
+    private EventResponse containEvent;
     @SerializedName("posted_location")
-    LocationResponse postedLocation;
-    @SerializedName("tagged_location")
-    LocationResponse taggedLocation;
+    private LocationResponse postedLocation;
     @SerializedName("checkin_location")
-    LocationResponse checkInLocation;
+    private LocationResponse checkinLocation;
+    @SerializedName("tagged_location")
+    private LocationResponse taggedLocation;
+    @SerializedName("friend")
+    private MiniUserResponse friend;
     @SerializedName("likes_count")
-    int likesCount;
+    private int likesCount;
     @SerializedName("comments_count")
-    int commentsCount;
+    private int commentsCount;
     @SerializedName("reports_count")
-    int reportsCount;
+    private int reportsCount;
     @SerializedName("is_liked")
-    boolean isLiked;
+    private boolean isLiked;
     @SerializedName("is_reported")
-    boolean isReported;
+    private boolean isReported;
 
-    public EventResponse() {
-
+    public int getId() {
+        return id;
     }
 
-    public EventResponse(int eventId, SemiUserInfoResponse author, String textContent,
-                         String eventType, String privacy, boolean isEdited, String createAt,
-                         String lastActionAt, List<MediaResponse> medias, List<TagResponse> tags,
-                         EventResponse containEvent, LocationResponse postedLocation,
-                         LocationResponse taggedLocation, LocationResponse checkInLocation,
-                         int likesCount, int commentsCount, int reportsCount,
-                         boolean isLiked, boolean isReported) {
-        this.eventId = eventId;
-        this.author = author;
-        this.textContent = textContent;
-        this.eventType = eventType;
-        this.privacy = privacy;
-        this.isEdited = isEdited;
-        this.createAt = createAt;
-        this.lastActionAt = lastActionAt;
-        this.medias = medias;
-        this.tags = tags;
-        this.containEvent = containEvent;
-        this.postedLocation = postedLocation;
-        this.taggedLocation = taggedLocation;
-        this.checkInLocation = checkInLocation;
-        this.likesCount = likesCount;
-        this.commentsCount = commentsCount;
-        this.reportsCount = reportsCount;
-        this.isLiked = isLiked;
-        this.isReported = isReported;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public SemiUserInfoResponse getAuthor() {
@@ -176,6 +146,14 @@ public class EventResponse {
         this.postedLocation = postedLocation;
     }
 
+    public LocationResponse getCheckinLocation() {
+        return checkinLocation;
+    }
+
+    public void setCheckinLocation(LocationResponse checkinLocation) {
+        this.checkinLocation = checkinLocation;
+    }
+
     public LocationResponse getTaggedLocation() {
         return taggedLocation;
     }
@@ -184,12 +162,12 @@ public class EventResponse {
         this.taggedLocation = taggedLocation;
     }
 
-    public LocationResponse getCheckInLocation() {
-        return checkInLocation;
+    public MiniUserResponse getFriend() {
+        return friend;
     }
 
-    public void setCheckInLocation(LocationResponse checkInLocation) {
-        this.checkInLocation = checkInLocation;
+    public void setFriend(MiniUserResponse friend) {
+        this.friend = friend;
     }
 
     public int getLikesCount() {

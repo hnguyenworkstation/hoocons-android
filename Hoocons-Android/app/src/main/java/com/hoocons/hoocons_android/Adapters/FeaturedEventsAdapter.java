@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ public class FeaturedEventsAdapter extends RecyclerView.Adapter<FeaturedEventVie
     private Context context;
     private List<ActivityResponse> activityResponseList;
     private EventAdapterListener listener;
+    private Activity activity;
 
     private final int EVENT_LOADING_END = 100;
 
@@ -46,10 +48,12 @@ public class FeaturedEventsAdapter extends RecyclerView.Adapter<FeaturedEventVie
 
     private final Handler handler = new Handler();
 
-    public FeaturedEventsAdapter(Context context, List<ActivityResponse> activityResponseList, EventAdapterListener listener) {
+    public FeaturedEventsAdapter(Activity activity, Context context,
+                                 List<ActivityResponse> activityResponseList, EventAdapterListener listener) {
         this.context = context;
         this.activityResponseList = activityResponseList;
         this.listener = listener;
+        this.activity = activity;
     }
 
     @Override
@@ -110,7 +114,7 @@ public class FeaturedEventsAdapter extends RecyclerView.Adapter<FeaturedEventVie
 
     @Override
     public void onBindViewHolder(FeaturedEventViewHolder holder, int position) {
-        holder.initViewHolder(context, activityResponseList.get(position).getTarget(),
+        holder.initViewHolder(activity, context, activityResponseList.get(position).getTarget(),
                 listener, position);
     }
 
