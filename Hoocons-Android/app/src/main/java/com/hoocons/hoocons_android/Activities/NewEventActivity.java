@@ -65,8 +65,6 @@ import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
-import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
-import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
 import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
@@ -329,6 +327,31 @@ public class NewEventActivity extends BaseActivity
         mTypeName.setTypeface(EasyFonts.robotoRegular(this));
         mPostingContentQuestion.setTypeface(EasyFonts.robotoBold(this));
         mTextContentInput.setTypeface(EasyFonts.robotoRegular(this));
+    }
+
+    @Nullable
+    @org.jetbrains.annotations.Contract(pure = true)
+    private String getType(int selection) {
+        switch (selection) {
+            case 0:
+                return AppConstant.TYPE_STORY;
+            case 1:
+                return AppConstant.TYPE_QUESTION;
+            case 2:
+                return AppConstant.TYPE_QUOTE;
+            case 3:
+                return AppConstant.TYPE_WISH;
+            case 4:
+                return AppConstant.TYPE_CHECKING;
+            case 5:
+                return AppConstant.TYPE_INVITATION;
+            case 6:
+                return AppConstant.TYPE_ASK;
+            case 7:
+                return AppConstant.TYPE_STORY;
+            default:
+                return null;
+        }
     }
 
     private void initView() {
@@ -732,14 +755,16 @@ public class NewEventActivity extends BaseActivity
 
         if (eventParcel != null) {
             ShareNewEventJob job =  new ShareNewEventJob (mTextContentInput.getText().toString(),
-                    mMode, eventType, eventParcel.getId(), postedLocation, taggedLocation,
+                    mMode,  mTitleInput.getText().toString(), getType(selectedType),
+                    eventType, eventParcel.getId(), postedLocation, taggedLocation,
                     checkinLocation, tags);
 
             jobManager.addJobInBackground(job);
         } else {
             PostNewEventJob job =  new PostNewEventJob (SharedPreferencesManager.getDefault().getUserId(),
                     mTextContentInput.getText().toString(), gifUrl,
-                    mImagePaths, mMode, eventType, postedLocation, taggedLocation,
+                    mImagePaths, mMode, mTitleInput.getText().toString(), getType(selectedType),
+                    eventType, postedLocation, taggedLocation,
                     checkinLocation, tags);
 
             jobManager.addJobInBackground(job);

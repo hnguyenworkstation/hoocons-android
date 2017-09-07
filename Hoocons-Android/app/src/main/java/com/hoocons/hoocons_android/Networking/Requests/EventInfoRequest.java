@@ -43,24 +43,6 @@ public class EventInfoRequest {
     public EventInfoRequest() {
     }
 
-    public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<Topic> tags,
-                            String privacy, String eventType, int channelMaskId, int targetMeetup,
-                            int targetChannel, int targetUser, LocationRequest postedLocation,
-                            LocationRequest taggedLocation, LocationRequest checkinLocation) {
-        this.textContent = textContent;
-        this.medias = medias;
-        this.tags = tags;
-        this.privacy = privacy;
-        this.eventType = eventType;
-        this.channelMaskId = channelMaskId;
-        this.targetMeetup = targetMeetup;
-        this.targetChannel = targetChannel;
-        this.targetUser = targetUser;
-        this.postedLocation = postedLocation;
-        this.taggedLocation = taggedLocation;
-        this.checkinLocation = checkinLocation;
-    }
-
     public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<Topic> tags, String privacy,
                             String title, String generalType, String eventType,
                             int channelMaskId, int targetMeetup, int targetChannel,

@@ -41,8 +41,10 @@ public class ShareNewEventJob extends Job implements Serializable {
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
     private LocationRequest checkinLocation;
+    private String title;
+    private String generalType;
 
-    public ShareNewEventJob(String textContent, String privacy,
+    public ShareNewEventJob(String textContent, String privacy, String title, String generalType,
                             String eventType, int shareEventId, LocationRequest postedLocation,
                             LocationRequest taggedLocation,
                             LocationRequest checkinLocation, List<String> tags) {
@@ -57,6 +59,8 @@ public class ShareNewEventJob extends Job implements Serializable {
         this.checkinLocation = checkinLocation;
 
         this.tags = tags;
+        this.title = title;
+        this.generalType = generalType;
     }
 
     @Override
@@ -72,7 +76,8 @@ public class ShareNewEventJob extends Job implements Serializable {
         }
 
         final EventInfoRequest request = new EventInfoRequest(
-                textContent, null, topics, privacy, eventType, -1, -1, -1,
+                textContent, null, topics, privacy, title, generalType,
+                eventType, -1, -1, -1,
                 SharedPreferencesManager.getDefault().getUserId(),
                 postedLocation, taggedLocation, checkinLocation
         );

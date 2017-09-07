@@ -52,11 +52,14 @@ public class PostNewEventJob extends Job {
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
     private LocationRequest checkinLocation;
+    private String title;
+    private String generalType;
 
     private List<String> tags;
 
     public PostNewEventJob(int toUser, String text, String gifUrl, ArrayList<String> imagePaths,
-                           String privacy, String eventType, LocationRequest postedLocation,
+                           String privacy,  String title, String generalType, String eventType,
+                           LocationRequest postedLocation,
                            LocationRequest taggedLocation, LocationRequest checkinLocation,
                            List<String> tags) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.event));
@@ -73,6 +76,8 @@ public class PostNewEventJob extends Job {
         this.checkinLocation = checkinLocation;
 
         this.tags = tags;
+        this.title = title;
+        this.generalType = generalType;
     }
 
     @Override
@@ -98,7 +103,8 @@ public class PostNewEventJob extends Job {
             }
 
             final EventInfoRequest request = new EventInfoRequest(
-                textContent, medias, topics, privacy, eventType, -1, -1, -1, toUser,
+                textContent, medias, topics, privacy, title, generalType,
+                    eventType, -1, -1, -1, toUser,
                     postedLocation, taggedLocation, checkinLocation
             );
 
