@@ -77,6 +77,22 @@
         <item name="cardElevation">2dp</item>
     </style>
 
+    <style name="EventCardViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorBackground</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardElevation">@dimen/event_card_elevator</item>
+        <item name="cardCornerRadius">@dimen/event_card_radius</item>
+        <item name="android:layout_margin">@dimen/event_card_margin</item>
+    </style>
+
+    <style name="FeaturedEventWrapperStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorBackground</item>
+    </style>
+
     <style name="InputLayout" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/black</item>

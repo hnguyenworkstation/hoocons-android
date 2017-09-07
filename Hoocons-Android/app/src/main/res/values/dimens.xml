@@ -12,8 +12,8 @@
     <dimen name="sticker_image_size">64dp</dimen>
     <dimen name="popo_image_size">64dp</dimen>
     <dimen name="popo_image_padding">10dp</dimen>
-    <dimen name="event_card_radius">8dp</dimen>
-    <dimen name="event_card_elevator">8dp</dimen>
+    <dimen name="event_card_radius">4dp</dimen>
+    <dimen name="event_card_elevator">2dp</dimen>
     <dimen name="event_card_margin">4dp</dimen>
 
     <!-- Text Dimen -->
