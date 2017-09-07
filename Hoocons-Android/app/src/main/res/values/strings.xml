@@ -277,6 +277,8 @@
     <string name="invitation">Invitation</string>
     <string name="ask">Ask</string>
 
+    <string name="posted_from">posted from</string>
+    <string name="posted_to">posted to</string>
 
     <string-array name="event_type">
         <item>Story</item>

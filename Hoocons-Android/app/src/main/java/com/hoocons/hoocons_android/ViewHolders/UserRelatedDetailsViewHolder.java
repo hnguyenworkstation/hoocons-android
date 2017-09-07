@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -73,6 +74,22 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class UserRelatedDetailsViewHolder extends ViewHolder {
     /* EVENT HEADER */
+    @Nullable
+    @BindView(R.id.event_type)
+    RelativeLayout mEventType;
+
+    @Nullable
+    @BindView(R.id.type_logo)
+    ImageView mTypeLocation;
+
+    @Nullable
+    @BindView(R.id.type_name)
+    TextView mTypeName;
+
+    @Nullable
+    @BindView(R.id.location_message)
+    TextView mLocationMessage;
+
     @Nullable
     @BindView(R.id.event_user_profile)
     ImageView mUserProfileImage;
@@ -316,9 +333,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mTimeFrame != null;
         assert mUserDisplayName != null;
 
-        mTimeFrame.setTypeface(EasyFonts.robotoLight(context));
-        mLikeCount.setTypeface(EasyFonts.robotoRegular(context));
-        mCommentCount.setTypeface(EasyFonts.robotoRegular(context));
+        mTimeFrame.setTypeface(EasyFonts.robotoRegular(context));
+        mLikeCount.setTypeface(EasyFonts.robotoBold(context));
+        mCommentCount.setTypeface(EasyFonts.robotoBold(context));
         mTextContent.setTypeface(EasyFonts.robotoRegular(context));
 
         mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
@@ -389,7 +406,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mCommentCount.setText(commentCount);
 
         if (eventResponse.isLiked()) {
-            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_color));
+            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_active));
         } else {
             mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_inactive));
         }

@@ -2,14 +2,20 @@ package com.hoocons.hoocons_android.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by hungnguyen on 7/28/17.
  */
+@Parcel
 public class Topic {
     @SerializedName("id")
-    private int id;
+    int id;
     @SerializedName("topic_name")
-    private String topicName;
+    String topicName;
+
+    public Topic() {
+    }
 
     public Topic(String topicName) {
         this.topicName = topicName;

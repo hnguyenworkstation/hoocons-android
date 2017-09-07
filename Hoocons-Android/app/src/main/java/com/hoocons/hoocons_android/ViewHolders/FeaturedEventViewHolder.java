@@ -19,7 +19,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -48,11 +50,15 @@ import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
+import com.klinker.android.link_builder.Link;
+import com.klinker.android.link_builder.LinkBuilder;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
@@ -83,6 +89,22 @@ public class FeaturedEventViewHolder extends ViewHolder {
     ImageButton mIntroMoreButton;
 
     /* EVENT HEADER */
+    @Nullable
+    @BindView(R.id.event_type)
+    RelativeLayout mEventType;
+
+    @Nullable
+    @BindView(R.id.type_logo)
+    ImageView mTypeLocation;
+
+    @Nullable
+    @BindView(R.id.type_name)
+    TextView mTypeName;
+
+    @Nullable
+    @BindView(R.id.location_message)
+    TextView mLocationMessage;
+
     @Nullable
     @BindView(R.id.event_user_profile)
     ImageView mUserProfileImage;
@@ -220,7 +242,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
     public void initViewHolder(final Activity activity, final Context context, final EventResponse response,
                                final EventAdapterListener listener, final int position) {
-        initEventHeader(response);
+        initEventHeader(context, response);
         initEventFooter(context, response);
         initEventTypeFace(context);
 
@@ -263,9 +285,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
         assert mTimeFrame != null;
         assert mUserDisplayName != null;
 
-        mTimeFrame.setTypeface(EasyFonts.robotoLight(context));
-        mLikeCount.setTypeface(EasyFonts.robotoRegular(context));
-        mCommentCount.setTypeface(EasyFonts.robotoRegular(context));
+        mTimeFrame.setTypeface(EasyFonts.robotoRegular(context));
+        mLikeCount.setTypeface(EasyFonts.robotoBold(context));
+        mCommentCount.setTypeface(EasyFonts.robotoBold(context));
         mTextContent.setTypeface(EasyFonts.robotoRegular(context));
 
         mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
@@ -366,7 +388,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mCommentCount.setText(commentCount);
 
         if (eventResponse.isLiked()) {
-            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_color));
+            mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_active));
         } else {
             mLoveIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_inactive));
         }
@@ -416,13 +438,87 @@ public class FeaturedEventViewHolder extends ViewHolder {
         });
     }
 
-    private void initEventHeader(final EventResponse eventResponse) {
+    private void initEventHeader(final Context context, final EventResponse eventResponse) {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
+        initEventType(context, eventResponse);
+        initLocationMessage(context, eventResponse);
         loadUserProfileImage(eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
         mUserDisplayName.setText(eventResponse.getAuthor().getDisplayName());
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
+    }
+
+    private void initLocationMessage(final Context context, final EventResponse eventResponse) {
+        assert mLocationMessage != null;
+
+        LocationResponse taggedLoc = eventResponse.getTaggedLocation();
+        LocationResponse postedLoc = eventResponse.getPostedLocation();
+
+        if (taggedLoc != null && postedLoc != null) {
+            String address = null;
+            if (postedLoc.getAddress() != null) {
+                address = postedLoc.getAddress();
+            } else {
+                address = String.format("%s, %s", String.valueOf(postedLoc.getResponse().getLatitude()),
+                        String.valueOf(postedLoc.getResponse().getLongitude()));
+            }
+            String message = context.getString(R.string.posted_from) + " " + address;
+            mLocationMessage.setText(message);
+            catchLinkOnMessage(context, address);
+        } else {
+            mLocationMessage.setVisibility(View.GONE);
+        }
+    }
+
+    private void catchLinkOnMessage(final Context context, final String message) {
+        final Link link = new Link(message);
+        link.setTextColor(R.color.dark_text_color);
+        link.setTypeface(EasyFonts.robotoBold(context));
+        link.setBold(true);
+        link.setUnderlined(false);
+
+        link.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
+                Toast.makeText(context, "Clicked" + link.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        LinkBuilder.on(mLocationMessage)
+                .addLink(link)
+                .build();
+    }
+
+    private void initEventType(final Context context, final EventResponse eventResponse){
+        assert mTypeName != null;
+
+        String type = eventResponse.getEventType();
+        switch (type) {
+            case AppConstant.TYPE_STORY:
+                mTypeName.setText(context.getString(R.string.story));
+                break;
+            case AppConstant.TYPE_ASK:
+                mTypeName.setText(context.getString(R.string.ask));
+                break;
+            case AppConstant.TYPE_QUESTION:
+                mTypeName.setText(context.getString(R.string.question));
+                break;
+            case AppConstant.TYPE_QUOTE:
+                mTypeName.setText(context.getString(R.string.quote));
+                break;
+            case AppConstant.TYPE_WISH:
+                mTypeName.setText(context.getString(R.string.wish));
+                break;
+            case AppConstant.TYPE_CHECKING:
+                mTypeName.setText(context.getString(R.string.checking));
+                break;
+            case AppConstant.TYPE_INVITATION:
+                mTypeName.setText(context.getString(R.string.invitation));
+                break;
+            default:
+                break;
+        }
     }
 
     private void initEventContent(final Activity activity, final Context context, final EventResponse eventResponse,
