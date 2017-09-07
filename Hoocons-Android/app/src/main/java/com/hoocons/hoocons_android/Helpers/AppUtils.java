@@ -234,7 +234,7 @@ public class AppUtils {
 
     public static EventParcel getEventParcel(final EventResponse response) {
         EventParcel parcel = new EventParcel();
-        parcel.setId(response.getEventId());
+        parcel.setId(response.getId());
         parcel.setTextContent(response.getTextContent());
         parcel.setUserInfo(response.getAuthor());
         parcel.setEventType(response.getEventType());

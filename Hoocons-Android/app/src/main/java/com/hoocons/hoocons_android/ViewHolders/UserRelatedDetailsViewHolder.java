@@ -468,11 +468,11 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     private void loadCheckinMapView(final Context context, final EventResponse eventResponse) {
         assert mCheckinName != null;
         assert mCheckinType != null;
-        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLatitude()),
-                String.valueOf(eventResponse.getCheckInLocation().getCoordinateResponse().getLongitude())));
+        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(eventResponse.getCheckinLocation().getResponse().getLatitude()),
+                String.valueOf(eventResponse.getCheckinLocation().getResponse().getLongitude())));
 
-        mCheckinName.setText(eventResponse.getCheckInLocation().getLocationName());
-        mCheckinType.setText(eventResponse.getCheckInLocation().getAddress());
+        mCheckinName.setText(eventResponse.getCheckinLocation().getLocationName());
+        mCheckinType.setText(eventResponse.getCheckinLocation().getAddress());
 
         mCheckinName.setTypeface(EasyFonts.robotoBold(context));
         mCheckinType.setTypeface(EasyFonts.robotoRegular(context));

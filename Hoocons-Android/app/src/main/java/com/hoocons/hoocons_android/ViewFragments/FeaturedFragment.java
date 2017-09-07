@@ -386,8 +386,8 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onLikeClicked(int position) {
         JobManager jobManager = BaseApplication.getInstance().getJobManager();
         EventResponse response = activityResponses.get(position).getTarget();
-        String likeTag = "LIKE-" + String.valueOf(response.getEventId());
-        String unlikeTag = "UNLIKE-" + String.valueOf(response.getEventId());
+        String likeTag = "LIKE-" + String.valueOf(response.getId());
+        String unlikeTag = "UNLIKE-" + String.valueOf(response.getId());
 
         if (response.isLiked()) {
             response.setLiked(false);
@@ -397,12 +397,12 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
             } catch (Exception e) {
                 Log.e(TAG, "onLikeClicked: " + e.toString());
             } finally {
-                jobManager.addJobInBackground(new UnLikeEventJob(unlikeTag, response.getEventId()));
+                jobManager.addJobInBackground(new UnLikeEventJob(unlikeTag, response.getId()));
             }
         } else {
             response.setLiked(true);
             response.setLikesCount(response.getLikesCount() + 1);
-            jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getEventId()));
+            jobManager.addJobInBackground(new LikeEventJob(likeTag, response.getId()));
         }
 
         // mEventsAdapter.notifyItemChanged(position + mEventsAdapter.getEXTRA_ITEMS());
@@ -413,7 +413,7 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onCommentClicked(int position) {
         EventResponse response = activityResponses.get(position).getTarget();
         EventParcel parcel = new EventParcel();
-        parcel.setId(response.getEventId());
+        parcel.setId(response.getId());
         parcel.setLikeCount(response.getLikesCount());
         parcel.setLiked(response.isLiked());
 
