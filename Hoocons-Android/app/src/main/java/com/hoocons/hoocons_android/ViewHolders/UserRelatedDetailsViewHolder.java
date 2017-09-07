@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapText;
@@ -53,10 +54,13 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
+import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.MeetOutParcel;
 import com.hoocons.hoocons_android.R;
+import com.klinker.android.link_builder.Link;
+import com.klinker.android.link_builder.LinkBuilder;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
@@ -460,9 +464,50 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mUserDisplayName != null;
         assert mTimeFrame != null;
 
+        initLocationMessage(context, eventResponse);
         loadUserProfileImage( eventResponse.getAuthor().getProfileUrl(), mUserProfileImage);
         mUserDisplayName.setText(eventResponse.getAuthor().getDisplayName());
         mTimeFrame.setText(AppUtils.convertDateTimeFromUTC(eventResponse.getCreateAt()));
+    }
+
+    private void initLocationMessage(final Context context, final EventResponse eventResponse) {
+        assert mLocationMessage != null;
+
+        LocationResponse taggedLoc = eventResponse.getTaggedLocation();
+
+        if (taggedLoc != null) {
+            String address;
+            if (taggedLoc.getAddress() != null) {
+                address = taggedLoc.getAddress();
+            } else {
+                address = String.format("%s, %s", String.valueOf(taggedLoc.getResponse().getLatitude()),
+                        String.valueOf(taggedLoc.getResponse().getLongitude()));
+            }
+            String message = context.getString(R.string.posted_to) + " " + address;
+            mLocationMessage.setText(message);
+            catchLinkOnMessage(context, address);
+        } else {
+            mLocationMessage.setVisibility(View.GONE);
+        }
+    }
+
+    private void catchLinkOnMessage(final Context context, final String message) {
+        final Link link = new Link(message);
+        link.setTextColor(R.color.dark_text_color);
+        link.setTypeface(EasyFonts.robotoBold(context));
+        link.setBold(true);
+        link.setUnderlined(false);
+
+        link.setOnClickListener(new Link.OnClickListener() {
+            @Override
+            public void onClick(String clickedText) {
+                Toast.makeText(context, "Clicked" + link.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        LinkBuilder.on(mLocationMessage)
+                .addLink(link)
+                .build();
     }
 
     private void initEventContent(final Context context, final EventResponse eventResponse,
