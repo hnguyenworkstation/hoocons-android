@@ -3,16 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_margin="@dimen/margin_8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/PanelCardViewStyle"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="@dimen/margin_8">
+        style="@style/EventCardViewStyle">
 
         <RelativeLayout
             android:layout_width="match_parent"

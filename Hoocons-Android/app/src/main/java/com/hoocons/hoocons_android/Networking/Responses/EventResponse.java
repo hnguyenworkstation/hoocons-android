@@ -13,8 +13,12 @@ public class EventResponse {
     private int id;
     @SerializedName("author")
     private SemiUserInfoResponse author;
+    @SerializedName("title")
+    private String title;
     @SerializedName("text_content")
     private String textContent;
+    @SerializedName("general_type")
+    private String generalType;
     @SerializedName("event_type")
     private String eventType;
     @SerializedName("privacy")
@@ -49,6 +53,22 @@ public class EventResponse {
     private boolean isLiked;
     @SerializedName("is_reported")
     private boolean isReported;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getGeneralType() {
+        return generalType;
+    }
+
+    public void setGeneralType(String generalType) {
+        this.generalType = generalType;
+    }
 
     public int getId() {
         return id;

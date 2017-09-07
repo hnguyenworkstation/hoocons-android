@@ -19,6 +19,10 @@ public class EventInfoRequest {
     private ArrayList<Topic> tags;
     @SerializedName("privacy")
     private String privacy;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("general_type")
+    private String generalType;
     @SerializedName("event_type")
     private String eventType;
     @SerializedName("channel_mask")
@@ -55,6 +59,43 @@ public class EventInfoRequest {
         this.postedLocation = postedLocation;
         this.taggedLocation = taggedLocation;
         this.checkinLocation = checkinLocation;
+    }
+
+    public EventInfoRequest(String textContent, ArrayList<Media> medias, ArrayList<Topic> tags, String privacy,
+                            String title, String generalType, String eventType,
+                            int channelMaskId, int targetMeetup, int targetChannel,
+                            int targetUser, LocationRequest postedLocation,
+                            LocationRequest taggedLocation, LocationRequest checkinLocation) {
+        this.textContent = textContent;
+        this.medias = medias;
+        this.tags = tags;
+        this.privacy = privacy;
+        this.title = title;
+        this.generalType = generalType;
+        this.eventType = eventType;
+        this.channelMaskId = channelMaskId;
+        this.targetMeetup = targetMeetup;
+        this.targetChannel = targetChannel;
+        this.targetUser = targetUser;
+        this.postedLocation = postedLocation;
+        this.taggedLocation = taggedLocation;
+        this.checkinLocation = checkinLocation;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getGeneralType() {
+        return generalType;
+    }
+
+    public void setGeneralType(String generalType) {
+        this.generalType = generalType;
     }
 
     public String getTextContent() {
