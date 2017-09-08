@@ -26,5 +26,6 @@ public interface GooglePlaceServices {
                                               @Query("pagetoken") String placeHolder);
 
     @GET("/maps/api/geocode/json")
-    Call<GooglePlaceInformation> getLocationAttributeByLatLng(@Query("latlng") String latlng);
+    Call<GooglePlaceInformation> getLocationAttributeByLatLng(@Query("latlng") String latlng,
+                                                              @Query("key") String keyApi);
 }

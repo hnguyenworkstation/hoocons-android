@@ -20,7 +20,7 @@ public class GooglePlaceAttributes {
     @SerializedName("types")
     private List<String> types;
 
-    private class AddressComponents {
+    public class AddressComponents {
         @SerializedName("long_name")
         private String longName;
         @SerializedName("short_name")
