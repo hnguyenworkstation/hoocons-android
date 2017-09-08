@@ -396,6 +396,12 @@ public class PlacePickerActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         mGoogleClient.connect();

@@ -328,6 +328,12 @@ public class NewChannelActivity extends BaseActivity {
                 profileUrl, topics, "Public", wallpaperUrl));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Subscribe
     public void onEvent(ChannelNameCollected event) {
         channelName = event.getName();

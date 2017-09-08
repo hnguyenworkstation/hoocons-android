@@ -49,6 +49,8 @@ import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -338,10 +340,11 @@ public class HooconsMapActivity extends BaseActivity implements OnMapReadyCallba
     @Override
     public void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
+
         AppIndex.AppIndexApi.end(mGoogleClient, getIndexApiAction());
         mGoogleClient.disconnect();
     }
-
 
     @Override
     public void onPause() {

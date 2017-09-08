@@ -278,6 +278,12 @@ public class MeetOutActivity extends BaseActivity implements
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  +

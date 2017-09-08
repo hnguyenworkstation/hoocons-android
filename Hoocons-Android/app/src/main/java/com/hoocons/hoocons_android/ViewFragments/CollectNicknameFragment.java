@@ -169,6 +169,11 @@ public class CollectNicknameFragment extends Fragment {
         mFragTransition.commit();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Subscribe
     public void onEvent(FieldAvailableRequest request) {

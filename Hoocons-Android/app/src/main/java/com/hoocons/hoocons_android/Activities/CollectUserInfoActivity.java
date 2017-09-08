@@ -203,6 +203,12 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onConnected() {
         Log.d(getClass().getSimpleName(), "Connected to engine, we can now request updates.");
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)

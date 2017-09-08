@@ -51,6 +51,12 @@ public class CommentEventActivity extends DraggerActivity {
                                                     eventParcel.isLiked()), "COMMENT_LIST").commit();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 
     // OnEvent Catching
     @Subscribe

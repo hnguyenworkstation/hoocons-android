@@ -261,6 +261,12 @@ public class ConnectionsFragment extends Fragment implements
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Subscribe
     public void onEvent(FetchFriendRequestComplete requestComplete) {
         fetchRequestCompleted = true;

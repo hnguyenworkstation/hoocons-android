@@ -429,6 +429,12 @@ public class CommentListFragment extends Fragment implements View.OnClickListene
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /* *************************************************
     *   EVENTBUS EVENTS CATCHING AREA
     *   AND LISTENER AREA

@@ -88,4 +88,10 @@ public class FullEventImagesActivity extends BaseActivity {
             mEventTextContent.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }

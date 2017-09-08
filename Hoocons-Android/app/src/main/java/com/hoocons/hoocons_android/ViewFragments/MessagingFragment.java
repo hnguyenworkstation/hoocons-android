@@ -328,6 +328,12 @@ public class MessagingFragment extends Fragment implements OnChatRoomClickListen
         initView();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + FetchChatRoomsComplete: received chat rooms

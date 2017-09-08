@@ -991,6 +991,12 @@ public class NewEventActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     private boolean isLocationPermissionAllowed() {
         ArrayList<String> granted = permissionManager.getStatus().get(0).granted;
         if (granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION) ||

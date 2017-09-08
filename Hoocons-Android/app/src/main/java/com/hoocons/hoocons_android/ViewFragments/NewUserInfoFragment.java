@@ -269,6 +269,12 @@ public class NewUserInfoFragment extends Fragment implements View.OnClickListene
         mFragTransition.commit();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**********************************************
      * EVENTBUS CATCHING FIELDS
      *  + FieldAvailableRequest

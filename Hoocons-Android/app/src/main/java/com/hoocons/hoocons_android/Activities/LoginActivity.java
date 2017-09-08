@@ -97,9 +97,15 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     /* *************************************************
-    *   EVENTBUS EVENTS CATCHING AREA
-    ***************************************************/
+        *   EVENTBUS EVENTS CATCHING AREA
+        ***************************************************/
     @Subscribe
     public void onEvent(CompleteLoginRequest request) {
         completeLoginActivity();

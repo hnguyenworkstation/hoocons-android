@@ -165,6 +165,12 @@ public class CollectUserLocationFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Subscribe
     public void onEvent(LocationPermissionAllowed req) {
         initPermissionAllowedLayout();
