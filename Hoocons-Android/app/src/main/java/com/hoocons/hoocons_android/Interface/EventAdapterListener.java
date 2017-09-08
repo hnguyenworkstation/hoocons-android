@@ -28,4 +28,8 @@ public interface EventAdapterListener {
     void onEventImageClicked(final int eventPos, final int imagePos);
 
     void onOptionClicked(View view, final int position);
+
+    void onQuickCommentClicked(final int position);
+
+    void onBottomProfileClicked(final int position);
 }

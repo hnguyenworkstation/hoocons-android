@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.TagConstraint;
@@ -483,6 +484,16 @@ public class FeaturedFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
 
         eventPopup.show();
+    }
+
+    @Override
+    public void onQuickCommentClicked(int position) {
+        Toast.makeText(getContext(), "Comment " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBottomProfileClicked(int position) {
+
     }
 
     @Override

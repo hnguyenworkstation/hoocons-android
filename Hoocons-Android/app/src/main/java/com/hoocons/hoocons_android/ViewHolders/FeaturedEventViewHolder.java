@@ -49,6 +49,7 @@ import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.OnChildImageClickListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
@@ -225,6 +226,14 @@ public class FeaturedEventViewHolder extends ViewHolder {
     @BindView(R.id.comment_count)
     TextView mCommentCount;
 
+    @Nullable
+    @BindView(R.id.user_bottom_profile)
+    ImageView mUserBottomProfile;
+
+    @Nullable
+    @BindView(R.id.quick_comment)
+    TextView mQuickComment;
+
     /*  OTHER LIST VIEWs */
     @Nullable
     @BindView(R.id.empty_recycler)
@@ -284,6 +293,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
         assert mTextContent != null;
         assert mTimeFrame != null;
         assert mUserDisplayName != null;
+        assert mQuickComment != null;
 
         mTimeFrame.setTypeface(EasyFonts.robotoRegular(context));
         mLikeCount.setTypeface(EasyFonts.robotoBold(context));
@@ -291,6 +301,8 @@ public class FeaturedEventViewHolder extends ViewHolder {
         mTextContent.setTypeface(EasyFonts.robotoRegular(context));
 
         mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
+        mQuickComment.setText(context.getResources().getString(R.string.quick_comment));
+        mQuickComment.setTypeface(EasyFonts.robotoRegular(context));
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response,
@@ -299,6 +311,7 @@ public class FeaturedEventViewHolder extends ViewHolder {
 
         assert mSharedTimeFrame != null;
         assert mSharedUserDisplayName != null;
+        assert mSharedUserProfileImage != null;
 
         mSharedUserDisplayName.setText(response.getAuthor().getDisplayName());
         mSharedTimeFrame.setText(AppUtils.convertDateTimeFromUTC(response.getCreateAt()));
@@ -356,10 +369,19 @@ public class FeaturedEventViewHolder extends ViewHolder {
                 listener.onUserInfoClicked(position);
             }
         });
+
         mUserProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onUserInfoClicked(position);
+            }
+        });
+
+        assert mQuickComment != null;
+        mQuickComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onQuickCommentClicked(position);
             }
         });
     }
@@ -370,6 +392,9 @@ public class FeaturedEventViewHolder extends ViewHolder {
         assert mCommentCount != null;
         assert mCommentView != null;
         assert mLoveIcon != null;
+
+        loadUserProfileImage(SharedPreferencesManager.getDefault().getUserProfileUrl(),
+                mUserBottomProfile);
 
         mCommentBtnScaleSpring = mSpringSystem.createSpring();
         mCommentBtnScaleSpring.addListener(new SimpleSpringListener() {

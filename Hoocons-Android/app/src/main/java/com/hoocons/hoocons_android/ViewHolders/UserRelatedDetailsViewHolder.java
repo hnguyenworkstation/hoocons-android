@@ -214,6 +214,14 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     @BindView(R.id.comment_count)
     TextView mCommentCount;
 
+    @Nullable
+    @BindView(R.id.user_bottom_profile)
+    ImageView mUserBottomProfile;
+
+    @Nullable
+    @BindView(R.id.quick_comment)
+    TextView mQuickComment;
+
     /* USER PROFILE CARDS */
     @Nullable
     @BindView(R.id.profile_header)
@@ -336,6 +344,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mTextContent != null;
         assert mTimeFrame != null;
         assert mUserDisplayName != null;
+        assert mQuickComment != null;
 
         mTimeFrame.setTypeface(EasyFonts.robotoRegular(context));
         mLikeCount.setTypeface(EasyFonts.robotoBold(context));
@@ -343,6 +352,8 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         mTextContent.setTypeface(EasyFonts.robotoRegular(context));
 
         mUserDisplayName.setTypeface(EasyFonts.robotoBold(context));
+        mQuickComment.setText(context.getResources().getString(R.string.quick_comment));
+        mQuickComment.setTypeface(EasyFonts.robotoRegular(context));
     }
 
     private void initSharedEventHeader(final Context context, final EventResponse response) {
@@ -385,6 +396,14 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
                 listener.onOptionClicked(mHeaderMoreButton, position);
             }
         });
+
+        assert mQuickComment != null;
+        mQuickComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onQuickCommentClicked(position);
+            }
+        });
     }
 
     private void initEventFooter(Context context, final EventResponse eventResponse) {
@@ -392,6 +411,9 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mLikeCount != null;
         assert mCommentCount != null;
         assert mCommentView != null;
+
+        loadUserProfileImage(SharedPreferencesManager.getDefault().getUserProfileUrl(),
+                mUserBottomProfile);
 
         mCommentBtnScaleSpring = mSpringSystem.createSpring();
         mCommentBtnScaleSpring.addListener(new SimpleSpringListener() {

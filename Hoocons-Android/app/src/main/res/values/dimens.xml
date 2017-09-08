@@ -41,6 +41,7 @@
 
     <dimen name="action_icon_size">28dp</dimen>
     <dimen name="actionbar_icon_size">24dp</dimen>
+    <dimen name="bottom_logo_event_size">32dp</dimen>
 
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_4">4dp</dimen>

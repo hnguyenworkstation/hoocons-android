@@ -539,6 +539,16 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
+    public void onQuickCommentClicked(int position) {
+        Toast.makeText(this, "Comment " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBottomProfileClicked(int position) {
+
+    }
+
+    @Override
     public void onUserProfileClicked() {
 
     }
