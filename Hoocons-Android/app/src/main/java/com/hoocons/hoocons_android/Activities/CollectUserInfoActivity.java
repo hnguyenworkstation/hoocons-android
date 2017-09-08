@@ -28,6 +28,7 @@ import com.hoocons.hoocons_android.EventBus.CompleteLoginRequest;
 import com.hoocons.hoocons_android.EventBus.JobFailureEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
 import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
+import com.hoocons.hoocons_android.EventBus.LocationRequestCollected;
 import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
 import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
 import com.hoocons.hoocons_android.EventBus.ServerErrorRequest;
@@ -44,6 +45,7 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.GetPlaceAttributesByLatLongJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UpdateUserInfoJob;
 import com.hoocons.hoocons_android.ViewFragments.CollectUserLocationFragment;
 import com.hoocons.hoocons_android.ViewFragments.NewUserInfoFragment;
@@ -69,7 +71,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     private String birthday;
     private List<String> hobbies;
 
-    private Location currentLocation;
     private PermissionManager permissionManager;
     private LocationEngine locationEngine;
     private Place closestPlace;
@@ -77,6 +78,8 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     private boolean isWaitingData = false;
     private PlaceDetectionClient mPlaceDetectionClient;
     private MaterialDialog mLoadingDialog;
+    private LocationRequest currentLocation;
+    private final String LOCATION_REQUEST = "location_request";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,30 +192,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
         }
     }
 
-    private void getCurrentPlace() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Task<PlaceLikelihoodBufferResponse> placeResult = mPlaceDetectionClient.getCurrentPlace(null);
-            placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-                @Override
-                public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                    PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-                    for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                        if (placeLikelihood != null) {
-                            closestPlace = placeLikelihood.getPlace();
-                            EventBus.getDefault().post(new StringDataCollected(closestPlace.getAddress().toString()));
-                            break;
-                        }
-                    }
-                    likelyPlaces.release();
-                }
-            });
-        } else {
-            permissionManager.checkAndRequestPermissions(this);
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -242,7 +221,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
                 MapUtils.getLocalMapBoxMapImage(this, location.getLongitude(), location.getLatitude())
         ));
 
-        locationRequest = MapUtils.getLocationFromLatLong(this, location.getLatitude(), location.getLongitude());
         if (locationRequest != null) {
             EventBus.getDefault().post(new StringDataCollected(
                     String.format("%s, %s, %s", locationRequest.getCity() == null? "" : locationRequest.getCity(),
@@ -260,8 +238,7 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
         if (isLocationPermissionAllowed()) {
             BaseApplication.getInstance().getJobManager().addJobInBackground(new
                     UpdateUserInfoJob(locationRequest, gender, displayName, nickname, birthday,
-                        null, profileUrl, null, hobbies,
-                        currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        null, profileUrl, null, hobbies));
 
             showLoadingDialog();
         } else {
@@ -273,7 +250,12 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            currentLocation = location;
+            if (locationRequest == null) {
+                BaseApplication.getInstance().getJobManager().addJobInBackground(
+                        new GetPlaceAttributesByLatLongJob(location.getLatitude(), location.getLongitude(), LOCATION_REQUEST)
+                );
+            }
+
             if (isWaitingData) {
                 sendLocation(location);
                 isWaitingData = false;
@@ -334,5 +316,12 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     @Subscribe
     public void onEvent(ServerErrorRequest errorRequest) {
 
+    }
+
+    @Subscribe
+    public void onEvent(LocationRequestCollected requestCollected) {
+        if (requestCollected.getTag().equals(LOCATION_REQUEST)) {
+            locationRequest = requestCollected.getRequest();
+        }
     }
 }

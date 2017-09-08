@@ -57,13 +57,10 @@ public class UpdateUserInfoJob extends Job implements Serializable {
     private String profileUrl;
     private String wallpaperUrl;
     private List<String> hobbies;
-    private double latitude;
-    private double longitude;
     private LocationRequest locationRequest;
 
     public UpdateUserInfoJob(LocationRequest locationRequest, String gender, String displayName, String nickname,
-                             String birthday, String work, String profileUrl, String wallpaperUrl, List<String> hobbies,
-                             double latitude, double longitude) {
+                             String birthday, String work, String profileUrl, String wallpaperUrl, List<String> hobbies) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.userInfo));
         this.locationRequest = locationRequest;
         this.gender = gender;
@@ -74,8 +71,6 @@ public class UpdateUserInfoJob extends Job implements Serializable {
         this.profileUrl = profileUrl;
         this.wallpaperUrl = wallpaperUrl;
         this.hobbies = hobbies;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     @Override
