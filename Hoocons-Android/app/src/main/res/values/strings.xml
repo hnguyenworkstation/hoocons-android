@@ -264,6 +264,7 @@
     <string name="all">All</string>
     <string name="people">People</string>
     <string name="channel">Channel</string>
+    <string name="current_location">Current Location</string>
 
     <string name="invitation_title">Send App Invite Quickstart Invitation</string>
     <string name="invitation_message">This app is terrific, give it a try and get $5 off!</string>

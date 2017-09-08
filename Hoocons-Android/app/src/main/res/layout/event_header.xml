@@ -24,10 +24,11 @@
         android:layout_below="@+id/location_message">
 
         <RelativeLayout
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/event_type">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -35,7 +36,7 @@
                 android:orientation="vertical"
                 android:layout_marginStart="@dimen/margin_8"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/event_user_profile">
+                android:layout_toEndOf="@+id/event_user_profile">
 
                 <TextView
                     android:id="@+id/event_user_name"
@@ -79,7 +80,7 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_marginEnd="@dimen/margin_8"
                 android:layout_marginStart="@dimen/margin_8"
                 android:layout_width="@dimen/topic_logo_size"
@@ -92,12 +93,14 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="@dimen/margin_8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_type"
             android:clickable="true"
+            android:minWidth="128dp"
+            android:layout_marginEnd="@dimen/margin_10"
             android:layout_centerVertical="true"
             android:background="@drawable/event_tag_background">
 
@@ -110,6 +113,7 @@
                 android:layout_alignParentStart="true"/>
 
             <TextView
+                android:layout_centerInParent="true"
                 android:layout_marginStart="@dimen/margin_8"
                 android:layout_marginEnd="@dimen/margin_12"
                 android:layout_toEndOf="@+id/type_logo"
@@ -120,7 +124,6 @@
                 android:textSize="@dimen/event_type_text_size"
                 android:textColor="@color/dark_text_color"
                 android:layout_marginTop="@dimen/margin_4"
-                android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:text="Story"/>

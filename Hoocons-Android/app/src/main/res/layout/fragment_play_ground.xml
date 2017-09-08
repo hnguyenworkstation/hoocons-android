@@ -17,13 +17,11 @@
         android:background="@android:color/transparent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            app:elevation="0dp"
-            android:background="@color/white"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            android:layout_height="wrap_content">
+            <include layout="@layout/custom_playground_actionbar"/>
+        </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

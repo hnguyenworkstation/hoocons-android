@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <ImageButton
             android:background="@drawable/icon_button"
             android:layout_gravity="center_vertical"
             android:layout_width="@dimen/action_icon_size"
@@ -21,7 +21,7 @@
             android:id="@+id/event_more"
             android:layout_marginStart="@dimen/margin_8"
             android:layout_marginEnd="@dimen/margin_12"
-            android:src="@drawable/ic_forward_inactive"/>
+            android:src="@drawable/ic_more_inactive"/>
 
         <TextView
             android:layout_toEndOf="@+id/event_more"
@@ -61,7 +61,7 @@
                     android:src="@drawable/ic_favorite_inactive"/>
 
                 <TextView
-                    android:layout_marginStart="@dimen/margin_8"
+                    android:layout_marginStart="@dimen/margin_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="125"
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_8"
+                    android:layout_marginStart="@dimen/margin_4"
                     android:text="125"
                     android:id="@+id/comment_count"
                     android:textSize="@dimen/text_16"
@@ -115,18 +115,15 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_gravity="center_vertical"
             android:background="@drawable/icon_button"
             android:layout_width="@dimen/bottom_logo_event_size"
             android:layout_height="@dimen/bottom_logo_event_size"
             android:id="@+id/user_bottom_profile"
             android:layout_marginStart="@dimen/margin_8"
-            android:layout_marginEnd="@dimen/margin_12"
-            android:src="@drawable/ic_forward_inactive"/>
+            android:layout_marginEnd="@dimen/margin_12"/>
 
         <TextView
             android:layout_marginEnd="@dimen/margin_12"
-            android:layout_marginTop="@dimen/margin_4"
             android:layout_marginBottom="@dimen/margin_4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

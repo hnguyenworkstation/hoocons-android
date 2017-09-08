@@ -2,6 +2,7 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -39,8 +41,6 @@ public class PlayGroundFragment extends Fragment {
     RelativeLayout mSearchAroundView;
     @BindView(R.id.tabbar)
     TabLayout mTabBar;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
 
     private CommunicateViewPagerAdapter adapter;
     private PlayGroundAllFragment playGroundAllFragment;
@@ -199,6 +199,5 @@ public class PlayGroundFragment extends Fragment {
             }
         });
     }
-
 
 }
