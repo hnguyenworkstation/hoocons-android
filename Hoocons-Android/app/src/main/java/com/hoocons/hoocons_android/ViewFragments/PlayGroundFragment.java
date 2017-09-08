@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.hoocons.hoocons_android.Adapters.ChannelCardViewAdapter;
+import com.hoocons.hoocons_android.Adapters.CommunicateViewPagerAdapter;
 import com.hoocons.hoocons_android.Adapters.DiscoverTopPanelAdapter;
 import com.hoocons.hoocons_android.CustomUI.RippleAnimationLayout;
 import com.hoocons.hoocons_android.R;
@@ -28,14 +31,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlayGroundFragment extends Fragment {
-    @BindView(R.id.swipe_ref)
-    SwipeRefreshLayout mSwipeRefLayout;
     @BindView(R.id.playground_viewpager)
     ViewPager mPlaygroundViewPager;
     @BindView(R.id.search_ripple_anim)
     RippleAnimationLayout mRippleAnimLayout;
     @BindView(R.id.search_around_view)
     RelativeLayout mSearchAroundView;
+    @BindView(R.id.tabbar)
+    TabLayout mTabBar;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    private CommunicateViewPagerAdapter adapter;
+    private PlayGroundAllFragment playGroundAllFragment;
+    private PlayGroundPeopleFragment playGroundPeopleFragment;
+    private PlayGroundChannelFragment playGroundChannelFragment;
 
     private boolean isFirstTime = true;
 
@@ -75,6 +85,7 @@ public class PlayGroundFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                setupViewPager(mPlaygroundViewPager);
                 stopAnimation();
             }
         }, 4000);
@@ -119,9 +130,74 @@ public class PlayGroundFragment extends Fragment {
         }
 
         mSearchAroundView.setVisibility(View.GONE);
-        mSwipeRefLayout.setVisibility(View.VISIBLE);
+        mPlaygroundViewPager.setVisibility(View.VISIBLE);
         mRippleAnimLayout.destroyDrawingCache();
         mSearchAroundView.destroyDrawingCache();
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        if (playGroundAllFragment == null)
+            playGroundAllFragment= PlayGroundAllFragment.newInstance("1", "1");
+
+        if (playGroundPeopleFragment == null)
+            playGroundPeopleFragment = PlayGroundPeopleFragment.newInstance("1", "1");
+
+        if (playGroundChannelFragment == null)
+            playGroundChannelFragment = PlayGroundChannelFragment.newInstance("1", "1");
+
+        if (adapter == null) {
+            adapter = new CommunicateViewPagerAdapter(getChildFragmentManager());
+            adapter.addFragment(playGroundAllFragment, getResources().getString(R.string.all));
+            adapter.addFragment(playGroundPeopleFragment, getResources().getString(R.string.people));
+            adapter.addFragment(playGroundChannelFragment, getResources().getString(R.string.channel));
+        }
+
+        /** the ViewPager requires a minimum of 1 as OffscreenPageLimit */
+        int limit = (adapter.getCount() > 1 ? adapter.getCount() - 1 : 1);
+
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(limit);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("ASD", "onPageSelected: " + String.valueOf(position));
+                if (position == 2) {
+                    playGroundChannelFragment.onRestore();
+                } else if (position == 0) {
+                    playGroundAllFragment.onRestore();
+                } else if (position == 1) {
+                    playGroundPeopleFragment.onRestore();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mTabBar.setupWithViewPager(viewPager);
+        mTabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
 

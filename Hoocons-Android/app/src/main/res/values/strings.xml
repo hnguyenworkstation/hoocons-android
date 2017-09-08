@@ -261,6 +261,10 @@
     <string name="featured_event">Featured Events</string>
     <string name="connections">Connections</string>
 
+    <string name="all">All</string>
+    <string name="people">People</string>
+    <string name="channel">Channel</string>
+
     <string name="invitation_title">Send App Invite Quickstart Invitation</string>
     <string name="invitation_message">This app is terrific, give it a try and get $5 off!</string>
     <string name="invitation_deep_link">http://example.com/offer/five_dollar_offer</string>
