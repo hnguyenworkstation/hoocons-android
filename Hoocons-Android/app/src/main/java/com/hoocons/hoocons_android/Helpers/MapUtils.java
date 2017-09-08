@@ -177,4 +177,10 @@ public class MapUtils {
         return null;
     }
 
+    @NonNull
+    private static LatLngBounds getLatLngBounds(LatLng pos) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        builder.include(pos);
+        return builder.build();
+    }
 }

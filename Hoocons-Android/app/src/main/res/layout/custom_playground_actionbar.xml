@@ -13,8 +13,6 @@
         android:layout_toStartOf="@+id/action_more"
         app:cardElevation="0.7dp"
         app:cardCornerRadius="@dimen/margin_4"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/margin_12"
         android:layout_marginEnd="@dimen/margin_12"

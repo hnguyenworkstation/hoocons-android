@@ -3,6 +3,7 @@ package com.hoocons.hoocons_android.ViewFragments;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,7 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.hoocons.hoocons_android.Activities.HooconsMapActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelCardViewAdapter;
 import com.hoocons.hoocons_android.Adapters.CommunicateViewPagerAdapter;
 import com.hoocons.hoocons_android.Adapters.DiscoverTopPanelAdapter;
@@ -35,10 +38,19 @@ import butterknife.ButterKnife;
 public class PlayGroundFragment extends Fragment {
     @BindView(R.id.playground_viewpager)
     ViewPager mPlaygroundViewPager;
+
     @BindView(R.id.search_ripple_anim)
     RippleAnimationLayout mRippleAnimLayout;
+
     @BindView(R.id.search_around_view)
     RelativeLayout mSearchAroundView;
+
+    @BindView(R.id.location_bar)
+    RelativeLayout mLocationBar;
+
+    @BindView(R.id.current_address)
+    TextView mAddressBarText;
+
     @BindView(R.id.tabbar)
     TabLayout mTabBar;
 
@@ -50,7 +62,7 @@ public class PlayGroundFragment extends Fragment {
     private boolean isFirstTime = true;
 
     public PlayGroundFragment() {
-        // Required empty public constructor
+
     }
 
     public static PlayGroundFragment newInstance(String param1, String param2) {
@@ -78,6 +90,13 @@ public class PlayGroundFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        mLocationBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), HooconsMapActivity.class));
+            }
+        });
     }
 
     private void runRippleAnimation() {

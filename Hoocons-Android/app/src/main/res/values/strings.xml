@@ -265,6 +265,8 @@
     <string name="people">People</string>
     <string name="channel">Channel</string>
     <string name="current_location">Current Location</string>
+    <string name="drop_me_here">Drop me here</string>
+    <string name="init_map">Initializing Map! Please wait</string>
 
     <string name="invitation_title">Send App Invite Quickstart Invitation</string>
     <string name="invitation_message">This app is terrific, give it a try and get $5 off!</string>
