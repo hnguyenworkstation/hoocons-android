@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.Networking.Services;
 
 import com.hoocons.hoocons_android.Networking.Requests.UserInformationRequest;
+import com.hoocons.hoocons_android.Networking.Responses.GooglePlaceInformation;
 import com.hoocons.hoocons_android.Networking.Responses.GooglePlaceResponse;
 
 import retrofit2.Call;
@@ -23,4 +24,7 @@ public interface GooglePlaceServices {
     @GET("/maps/api/place/nearbysearch/json")
     Call<GooglePlaceResponse> getNextAroundPlaces(@Query("key") String keyApi,
                                               @Query("pagetoken") String placeHolder);
+
+    @GET("/maps/api/geocode/json")
+    Call<GooglePlaceInformation> getLocationAttributeByLatLng(@Query("latlng") String latlng);
 }
