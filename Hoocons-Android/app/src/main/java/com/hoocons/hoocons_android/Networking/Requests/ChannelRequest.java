@@ -23,6 +23,21 @@ public class ChannelRequest {
     private String privacy;
     @SerializedName("wallpaper_url")
     private String wallpaperUrl;
+    @SerializedName("location")
+    private LocationRequest locationRequest;
+
+    public ChannelRequest(String name, String subname, String about, String profileUrl,
+                          List<String> topics, String privacy, String wallpaperUrl,
+                          LocationRequest locationRequest) {
+        this.name = name;
+        this.subname = subname;
+        this.about = about;
+        this.profileUrl = profileUrl;
+        this.topics = topics;
+        this.privacy = privacy;
+        this.wallpaperUrl = wallpaperUrl;
+        this.locationRequest = locationRequest;
+    }
 
     public ChannelRequest(String name, String subname,
                           String about, String profileUrl,
@@ -90,5 +105,13 @@ public class ChannelRequest {
 
     public void setWallpaperUrl(String wallpaperUrl) {
         this.wallpaperUrl = wallpaperUrl;
+    }
+
+    public LocationRequest getLocationRequest() {
+        return locationRequest;
+    }
+
+    public void setLocationRequest(LocationRequest locationRequest) {
+        this.locationRequest = locationRequest;
     }
 }

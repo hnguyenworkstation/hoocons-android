@@ -2,58 +2,84 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Models.Topic;
+import com.hoocons.hoocons_android.Parcel.MediaListParcel;
+import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
+import com.hoocons.hoocons_android.Parcel.MultiSemiUserProfileParcel;
+import com.hoocons.hoocons_android.Parcel.MultiTagsParcel;
+import com.hoocons.hoocons_android.Parcel.MultiTopicsParcel;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
 
 import java.util.List;
 
 /**
  * Created by hungnguyen on 8/17/17.
  */
-
+@Parcel
 public class ChannelProfileResponse {
     @SerializedName("id")
-    private int id;
+    int id;
     @SerializedName("name")
-    private String name;
+    String name;
     @SerializedName("subname")
-    private String subname;
+    String subname;
     @SerializedName("about")
-    private String about;
+    String about;
     @SerializedName("profile_url")
-    private String profileUrl;
+    String profileUrl;
     @SerializedName("wallpaper_url")
-    private String wallpaperUrl;
+    String wallpaperUrl;
     @SerializedName("privacy")
-    private String privacy;
-    @SerializedName("topics")
-    private List<Topic> topics;
-    @SerializedName("promoted_medias")
-    private List<MediaResponse> promotedMedias;
-    @SerializedName("favorite_count")
-    private int favoriteCount;
-    @SerializedName("members_count")
-    private int membersCount;
-    @SerializedName("followers_count")
-    private int followersCount;
-    @SerializedName("is_member")
-    private boolean isMember;
-    @SerializedName("is_favored")
-    private boolean isFavored;
-    @SerializedName("is_follower")
-    private boolean isFollower;
-    @SerializedName("reports_count")
-    private int reportsCount;
-    @SerializedName("is_reported")
-    private boolean isReported;
-    @SerializedName("is_owner")
-    private boolean isOwner;
+    String privacy;
 
-    public ChannelProfileResponse(int id, String name, String subname,
-                                  String about, String profileUrl, String wallpaperUrl,
-                                  String privacy, List<Topic> topics,
-                                  List<MediaResponse> promotedMedias, int favoriteCount,
-                                  int membersCount, int followersCount, boolean isMember,
-                                  boolean isFavored, boolean isFollower, int reportsCount,
-                                  boolean isReported, boolean isOwner) {
+    @ParcelPropertyConverter(MultiTopicsParcel.class)
+    @SerializedName("topics")
+    List<Topic> topics;
+
+    @ParcelPropertyConverter(MediaListParcel.class)
+    @SerializedName("promoted_medias")
+    List<MediaResponse> promotedMedias;
+
+    @SerializedName("location")
+    LocationResponse location;
+
+    @ParcelPropertyConverter(MultiSemiUserProfileParcel.class)
+    @SerializedName("top_users")
+    List<SemiUserInfoResponse> topUsers;
+
+    @SerializedName("friend_members_count")
+    int friendMembersCount;
+    @SerializedName("favorite_count")
+    int favoriteCount;
+    @SerializedName("members_count")
+    int membersCount;
+    @SerializedName("followers_count")
+    int followersCount;
+    @SerializedName("is_member")
+    boolean isMember;
+    @SerializedName("is_favored")
+    boolean isFavored;
+    @SerializedName("is_follower")
+    boolean isFollower;
+    @SerializedName("is_owner")
+    boolean isOwner;
+    @SerializedName("reports_count")
+    int reportsCount;
+    @SerializedName("is_reported")
+    boolean isReported;
+
+    public ChannelProfileResponse() {
+    }
+
+    public ChannelProfileResponse(int id, String name, String subname, String about,
+                                  String profileUrl, String wallpaperUrl, String privacy,
+                                  List<Topic> topics, List<MediaResponse> promotedMedias,
+                                  LocationResponse location, List<SemiUserInfoResponse> topUsers,
+                                  int friendMembersCount, int favoriteCount, int membersCount,
+                                  int followersCount, boolean isMember, boolean isFavored,
+                                  boolean isFollower, boolean isOwner, int reportsCount,
+                                  boolean isReported) {
         this.id = id;
         this.name = name;
         this.subname = subname;
@@ -63,15 +89,18 @@ public class ChannelProfileResponse {
         this.privacy = privacy;
         this.topics = topics;
         this.promotedMedias = promotedMedias;
+        this.location = location;
+        this.topUsers = topUsers;
+        this.friendMembersCount = friendMembersCount;
         this.favoriteCount = favoriteCount;
         this.membersCount = membersCount;
         this.followersCount = followersCount;
         this.isMember = isMember;
         this.isFavored = isFavored;
         this.isFollower = isFollower;
+        this.isOwner = isOwner;
         this.reportsCount = reportsCount;
         this.isReported = isReported;
-        this.isOwner = isOwner;
     }
 
     public int getId() {
@@ -146,6 +175,30 @@ public class ChannelProfileResponse {
         this.promotedMedias = promotedMedias;
     }
 
+    public LocationResponse getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationResponse location) {
+        this.location = location;
+    }
+
+    public List<SemiUserInfoResponse> getTopUsers() {
+        return topUsers;
+    }
+
+    public void setTopUsers(List<SemiUserInfoResponse> topUsers) {
+        this.topUsers = topUsers;
+    }
+
+    public int getFriendMembersCount() {
+        return friendMembersCount;
+    }
+
+    public void setFriendMembersCount(int friendMembersCount) {
+        this.friendMembersCount = friendMembersCount;
+    }
+
     public int getFavoriteCount() {
         return favoriteCount;
     }
@@ -194,6 +247,14 @@ public class ChannelProfileResponse {
         isFollower = follower;
     }
 
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
+
     public int getReportsCount() {
         return reportsCount;
     }
@@ -208,13 +269,5 @@ public class ChannelProfileResponse {
 
     public void setReported(boolean reported) {
         isReported = reported;
-    }
-
-    public boolean isOwner() {
-        return isOwner;
-    }
-
-    public void setOwner(boolean owner) {
-        isOwner = owner;
     }
 }
