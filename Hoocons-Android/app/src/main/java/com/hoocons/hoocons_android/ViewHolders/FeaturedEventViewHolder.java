@@ -481,9 +481,15 @@ public class FeaturedEventViewHolder extends ViewHolder {
         LocationResponse postedLoc = eventResponse.getPostedLocation();
 
         if (taggedLoc != null && postedLoc != null) {
-            String address = null;
+            String address;
             if (postedLoc.getAddress() != null) {
                 address = postedLoc.getAddress();
+            } else if (postedLoc.getCity() != null && postedLoc.getCountry() != null) {
+                address = String.format("%s, %s", postedLoc.getCity(), postedLoc.getCountry());
+            } else if (postedLoc.getProvince() != null && postedLoc.getCountry() != null) {
+                address = String.format("%s, %s", postedLoc.getProvince(), postedLoc.getCountry());
+            } else if (postedLoc.getState() != null && postedLoc.getCountry() != null) {
+                address = String.format("%s, %s", postedLoc.getState(), postedLoc.getCountry());
             } else {
                 address = String.format("%s, %s", String.valueOf(postedLoc.getResponse().getLatitude()),
                         String.valueOf(postedLoc.getResponse().getLongitude()));

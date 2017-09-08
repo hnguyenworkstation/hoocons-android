@@ -65,6 +65,8 @@ import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.CustomUI.CustomFlowLayout;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.EventBus.FriendModeRequest;
+import com.hoocons.hoocons_android.EventBus.InvalidLocationRequest;
+import com.hoocons.hoocons_android.EventBus.LocationRequestCollected;
 import com.hoocons.hoocons_android.EventBus.PrivateModeRequest;
 import com.hoocons.hoocons_android.EventBus.PublicModeRequest;
 import com.hoocons.hoocons_android.EventBus.WarningContentRequest;
@@ -79,6 +81,7 @@ import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.GetPlaceAttributesByLatLongJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.PostNewEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.ShareNewEventJob;
 import com.hoocons.hoocons_android.ViewFragments.EventModeSheetFragment;
@@ -214,6 +217,11 @@ public class NewEventActivity extends BaseActivity
     private boolean isWarningContent = false;
     private FusedLocationProviderClient mFusedLocationClient;
 
+
+    private final String POSTED_LOCATION = "posted_location";
+    private final String TAGGED_LOCATION = "tagged_location";
+    private final String CHECKIN_LOCATION = "checkin_location";
+
     private final int PHOTO_PICKER = 1;
     private final int CHECKIN_PLACE_PICKER_REQUEST = 2;
     private final int TAGGED_PLACE_PICKER_REQUEST = 4;
@@ -232,11 +240,14 @@ public class NewEventActivity extends BaseActivity
     private LocationRequest postedLocation;
     private LocationRequest taggedLocation;
     private LocationRequest checkinLocation;
-    private Location currentLocation;
+    private boolean isRequestedPostedLocation = false;
     private GifDrawable gifDrawable;
 
     private PermissionManager permissionManager;
     private LocationEngine locationEngine;
+
+    private Place checkinPlace;
+    private Place taggedPlace;
 
     private int selectedType = 0;
 
@@ -300,7 +311,6 @@ public class NewEventActivity extends BaseActivity
                 super.ifCancelledAndCannotRequest(activity);
             }
         };
-
         permissionManager.checkAndRequestPermissions(this);
 
         if (isLocationPermissionAllowed()) {
@@ -748,11 +758,6 @@ public class NewEventActivity extends BaseActivity
             eventType = AppConstant.EVENT_TYPE_TEXT;
         }
 
-        if (currentLocation != null) {
-            postedLocation = MapUtils.getLocationFromLatLong(this, currentLocation.getLatitude(),
-                    currentLocation.getLongitude());
-        }
-
         if (eventParcel != null) {
             ShareNewEventJob job =  new ShareNewEventJob (mTextContentInput.getText().toString(),
                     mMode,  mTitleInput.getText().toString(), getType(selectedType),
@@ -907,24 +912,25 @@ public class NewEventActivity extends BaseActivity
     }
 
     private void initCheckinPlace(Place place) {
-        checkinLocation = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
-                place.getLatLng().longitude);
-        checkinLocation.setLocationName(place.getName().toString());
-        checkinLocation.setAddress(place.getAddress().toString());
+        BaseApplication.getInstance().getJobManager().addJobInBackground(
+                new GetPlaceAttributesByLatLongJob( place.getLatLng().latitude,
+                        place.getLatLng().longitude, CHECKIN_LOCATION));
+        checkinPlace = place;
 
         mCheckinView.setVisibility(View.VISIBLE);
 
         LatLng ll = place.getLatLng();
-        loadLocationMapView(MapUtils.getMapLocationUrl(String.valueOf(ll.latitude),
-                String.valueOf(ll.longitude)));
+        loadLocationMapView(MapUtils.getLocalMapBoxMapImage(this, ll.latitude, ll.longitude));
 
         mCheckinName.setText(place.getName().toString());
         mCheckinType.setText(place.getAddress().toString());
     }
 
     private void initTaggedPlace(Place place) {
-        taggedLocation = MapUtils.getLocationFromLatLong(this, place.getLatLng().latitude,
-                place.getLatLng().longitude);
+        BaseApplication.getInstance().getJobManager().addJobInBackground(
+                new GetPlaceAttributesByLatLongJob( place.getLatLng().latitude,
+                        place.getLatLng().longitude, TAGGED_LOCATION));
+        taggedPlace = place;
         mEventLocation.setBootstrapText(new BootstrapText.Builder(this)
                 .addFontAwesomeIcon(FontAwesome.FA_PLANE)
                 .addText(" " + place.getAddress())
@@ -1076,7 +1082,38 @@ public class NewEventActivity extends BaseActivity
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            currentLocation = location;
+            if (!isRequestedPostedLocation) {
+                BaseApplication.getInstance().getJobManager().addJobInBackground(
+                        new GetPlaceAttributesByLatLongJob(location.getLatitude(),
+                                location.getLongitude(), POSTED_LOCATION)
+                );
+                isRequestedPostedLocation = true;
+            }
+        }
+    }
+
+
+    @Subscribe
+    public void onEvent(InvalidLocationRequest request) {
+
+    }
+
+    @Subscribe
+    public void onEvent(LocationRequestCollected collected) {
+        if (collected.getTag().equals(POSTED_LOCATION)) {
+            postedLocation = collected.getRequest();
+        } else if (collected.getTag().equals(TAGGED_LOCATION)) {
+            taggedLocation = collected.getRequest();
+            if (taggedPlace != null) {
+                taggedLocation.setAddress(taggedPlace.getAddress().toString());
+                taggedLocation.setLocationName(taggedPlace.getName().toString());
+            }
+        } else if (collected.getTag().equals(CHECKIN_LOCATION)) {
+            checkinLocation = collected.getRequest();
+            if (checkinPlace != null) {
+                checkinLocation.setAddress(checkinPlace.getAddress().toString());
+                checkinLocation.setLocationName(checkinPlace.getName().toString());
+            }
         }
     }
 }

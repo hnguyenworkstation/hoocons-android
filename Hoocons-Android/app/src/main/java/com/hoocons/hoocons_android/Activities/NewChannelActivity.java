@@ -26,6 +26,8 @@ import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelImageCropCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
+import com.hoocons.hoocons_android.EventBus.InvalidLocationRequest;
+import com.hoocons.hoocons_android.EventBus.LocationRequestCollected;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
@@ -35,6 +37,7 @@ import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Topic;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
@@ -418,4 +421,5 @@ public class NewChannelActivity extends BaseActivity {
         cancelDialog();
         Toast.makeText(this, getResources().getString(R.string.task_failed), Toast.LENGTH_SHORT).show();
     }
+
 }

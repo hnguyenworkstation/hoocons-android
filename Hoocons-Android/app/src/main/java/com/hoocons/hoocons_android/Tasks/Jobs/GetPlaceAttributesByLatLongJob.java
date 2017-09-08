@@ -77,9 +77,9 @@ public class GetPlaceAttributesByLatLongJob extends Job {
         locationRequest.setResponse(new CoordinateResponse(latitude, longitude));
         for (GooglePlaceAttributes.AddressComponents component:attributes.getAddressComponents()) {
             if (component.getTypes().contains("administrative_area_level_2")) {
-                locationRequest.setProvince(component.getLongName());
-            } else if (component.getTypes().contains("administrative_area_level_1")) {
                 locationRequest.setCity(component.getLongName());
+            } else if (component.getTypes().contains("administrative_area_level_1")) {
+                locationRequest.setState(component.getLongName());
             } else if (component.getTypes().contains("country")) {
                 locationRequest.setCountry(component.getLongName());
             } else if (component.getTypes().contains("postal_code")) {
