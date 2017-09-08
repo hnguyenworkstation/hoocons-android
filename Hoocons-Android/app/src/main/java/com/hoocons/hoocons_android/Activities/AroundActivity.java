@@ -45,7 +45,6 @@ public class AroundActivity extends BaseActivity implements View.OnClickListener
 
     private void runRippleAnimation() {
         startAnimation();
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

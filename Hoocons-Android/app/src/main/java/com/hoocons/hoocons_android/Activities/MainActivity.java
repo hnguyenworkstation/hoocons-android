@@ -21,6 +21,7 @@ import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewFragments.CommunicationFragment;
 import com.hoocons.hoocons_android.ViewFragments.DiscoverFragment;
 import com.hoocons.hoocons_android.ViewFragments.FeaturedFragment;
+import com.hoocons.hoocons_android.ViewFragments.PlayGroundFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +104,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         DiscoverFragment dTemp = (DiscoverFragment) mMainViewPagerAdapter.getItem(position);
                         if (dTemp != null)
                             dTemp.onRestore();
+                        break;
+                    case 2:
+                        PlayGroundFragment playGroundFragment = (PlayGroundFragment) mMainViewPagerAdapter.getItem(position);
+                        if (playGroundFragment != null) {
+                            playGroundFragment.onRestore();
+                        }
                         break;
                     case 3:
                         CommunicationFragment cTemp = (CommunicationFragment) mMainViewPagerAdapter.getItem(position);

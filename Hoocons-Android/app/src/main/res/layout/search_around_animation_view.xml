@@ -13,8 +13,8 @@
     app:rb_scale="7">
 
     <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:layout_centerInParent="true"
         android:src="@drawable/antenna" />
 </com.hoocons.hoocons_android.CustomUI.RippleAnimationLayout>
