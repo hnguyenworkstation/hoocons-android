@@ -39,6 +39,10 @@ import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Topic;
 import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
+import com.hoocons.hoocons_android.Networking.Responses.CoordinateResponse;
+import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
+import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
@@ -105,6 +109,7 @@ public class NewChannelActivity extends BaseActivity {
     private final String UPLOAD_PROFILE_TAG = "upload_profile";
     private final String UPLOAD_WALLPAPER_TAG = "upload_wallpaper";
     private MaterialDialog loadingDialog;
+    private LocationRequest locationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,15 +327,20 @@ public class NewChannelActivity extends BaseActivity {
         startActivity(intent);
     }
 
-
     private void submitNewChannel() {
         jobManager.addJobInBackground(new NewChannelJob(channelName, "subname", channelAbout,
-                profileUrl, topics, "Public", wallpaperUrl));
+                profileUrl, topics, "Public", wallpaperUrl, locationRequest));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 
@@ -414,10 +424,27 @@ public class NewChannelActivity extends BaseActivity {
                 listTopics.add(new Topic(topName));
             }
 
-            ChannelProfileResponse response = new ChannelProfileResponse(task.getId(), channelName, "subname",
-                    channelAbout, profileUrl, wallpaperUrl, "Public", listTopics, null, 0, 0, 0, true, true,
-                    true, 0, false, true);
+            LocationResponse locationResponse = null;
 
+            if (locationRequest != null) {
+                locationResponse = new LocationResponse(
+                        new CoordinateResponse(4326, locationRequest.getResponse().getLatitude(),
+                                locationRequest.getResponse().getLongitude()),
+                        locationRequest.getLocationName(),
+                        locationRequest.getCity(),
+                        locationRequest.getProvince(),
+                        locationRequest.getState(),
+                        Integer.valueOf(locationRequest.getZipcode()),
+                        locationRequest.getCountry(),
+                        locationRequest.getAddress(),
+                        locationRequest.getPlaceId(),
+                        locationRequest.getPlaceApiType()
+                );
+            }
+
+            ChannelProfileResponse response = new ChannelProfileResponse(task.getId(), channelName, "subname", channelAbout, profileUrl, wallpaperUrl,
+                    "Public", listTopics, null, locationResponse, null,0 ,0 ,0 ,0,
+                    false, false, false, true, 0, false);
             transferToNewChannelActivity(response);
         }
     }

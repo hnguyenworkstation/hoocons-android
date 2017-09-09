@@ -2,7 +2,9 @@ package com.hoocons.hoocons_android.Parcel;
 
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Models.Topic;
+import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
+import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelProperty;
@@ -16,6 +18,7 @@ import java.util.List;
 @Parcel
 public class ChannelProfileParcel {
     int id;
+
     String name;
     String subname;
     String about;
@@ -29,17 +32,48 @@ public class ChannelProfileParcel {
     @ParcelPropertyConverter(MediaListParcel.class)
     List<MediaResponse> promotedMedias;
 
+    @ParcelPropertyConverter(MultiSemiUserProfileParcel.class)
+    List<SemiUserInfoResponse> topUsers;
+
+    LocationResponse location;
+
+    int friendMembersCount;
+    int reportsCount;
     int favoriteCount;
     int membersCount;
     int followersCount;
+
     boolean isMember;
     boolean isFavored;
     boolean isFollower;
-    int reportsCount;
     boolean isReported;
     boolean isOwner;
 
     public ChannelProfileParcel() {
+    }
+
+    public List<SemiUserInfoResponse> getTopUsers() {
+        return topUsers;
+    }
+
+    public void setTopUsers(List<SemiUserInfoResponse> topUsers) {
+        this.topUsers = topUsers;
+    }
+
+    public LocationResponse getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationResponse location) {
+        this.location = location;
+    }
+
+    public int getFriendMembersCount() {
+        return friendMembersCount;
+    }
+
+    public void setFriendMembersCount(int friendMembersCount) {
+        this.friendMembersCount = friendMembersCount;
     }
 
     public int getId() {

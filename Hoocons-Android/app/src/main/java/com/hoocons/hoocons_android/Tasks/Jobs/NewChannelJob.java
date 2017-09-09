@@ -11,6 +11,7 @@ import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Networking.NetContext;
 import com.hoocons.hoocons_android.Networking.Requests.ChannelRequest;
+import com.hoocons.hoocons_android.Networking.Requests.LocationRequest;
 import com.hoocons.hoocons_android.Networking.Responses.IdResponse;
 import com.hoocons.hoocons_android.Networking.Services.ChannelServices;
 import com.hoocons.hoocons_android.Tasks.JobProperties.JobGroup;
@@ -36,10 +37,11 @@ public class NewChannelJob extends Job {
     private List<String> topics;
     private String privacy;
     private String wallpaperUrl;
+    private LocationRequest locationRequest;
 
     public NewChannelJob(String channelName, String channelSubName,
                          String channelAbout, String profileUrl, List<String> topics,
-                         String privacy, String wallpaperUrl) {
+                         String privacy, String wallpaperUrl, LocationRequest locationRequest) {
         super(new Params(Priority.HIGH).requireNetwork().persist().groupBy(JobGroup.channel));
         this.channelName = channelName;
         this.channelSubName = channelSubName;
@@ -48,6 +50,7 @@ public class NewChannelJob extends Job {
         this.topics = topics;
         this.privacy = privacy;
         this.wallpaperUrl = wallpaperUrl;
+        this.locationRequest = locationRequest;
     }
 
     @Override

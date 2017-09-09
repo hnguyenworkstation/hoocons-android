@@ -628,6 +628,7 @@ public class AppUtils {
     public static ChannelProfileParcel getChannelProfileParcelFromResponse(ChannelProfileResponse response) {
         ChannelProfileParcel parcel = new ChannelProfileParcel();
 
+        parcel.setId(response.getId());
         parcel.setName(response.getName());
         parcel.setSubname(response.getSubname());
         parcel.setAbout(response.getAbout());
@@ -635,6 +636,20 @@ public class AppUtils {
         parcel.setWallpaperUrl(response.getWallpaperUrl());
         parcel.setPromotedMedias(response.getPromotedMedias());
         parcel.setTopics(response.getTopics());
+
+        parcel.setLocation(response.getLocation());
+        parcel.setTopUsers(response.getTopUsers());
+        parcel.setFriendMembersCount(response.getFriendMembersCount());
+        parcel.setFavoriteCount(response.getFavoriteCount());
+        parcel.setMembersCount(response.getMembersCount());
+        parcel.setFollowersCount(response.getFollowersCount());
+        parcel.setReportsCount(response.getReportsCount());
+
+        parcel.setMember(response.isMember());
+        parcel.setFavored(response.isFavored());
+        parcel.setFollower(response.isFollower());
+        parcel.setOwner(response.isOwner());
+        parcel.setReported(response.isReported());
 
         return parcel;
     }
