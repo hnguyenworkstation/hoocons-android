@@ -322,7 +322,7 @@ public class NewChannelActivity extends BaseActivity {
 
     private void transferToNewChannelActivity(ChannelProfileResponse response) {
         Intent intent = new Intent(NewChannelActivity.this, ChannelActivity.class);
-        intent.putExtra("channel",
+        intent.putExtra("channel_profile",
                 Parcels.wrap(AppUtils.getChannelProfileParcelFromResponse(response)));
         startActivity(intent);
     }

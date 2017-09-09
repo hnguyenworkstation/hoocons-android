@@ -41,7 +41,7 @@
             android:id="@+id/overlay"
             android:layout_width="match_parent"
             android:layout_height="@dimen/flexible_space_image_height"
-            android:background="@color/white_transparent"/>
+            android:background="@color/transparent"/>
 
         <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
             android:id="@+id/obs_scrollview"

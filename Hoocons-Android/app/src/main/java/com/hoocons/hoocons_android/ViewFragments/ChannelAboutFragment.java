@@ -36,10 +36,13 @@ import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
+import com.hoocons.hoocons_android.EventBus.ChannelProfileDataBus;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
+import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +87,7 @@ public class ChannelAboutFragment extends Fragment implements
     private Handler handler;
 
     private DividerItemDecoration spaceDecoration;
+    private ChannelProfileParcel channelProfileParcel;
 
     public ChannelAboutFragment() {
 
@@ -101,6 +105,7 @@ public class ChannelAboutFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -141,6 +146,12 @@ public class ChannelAboutFragment extends Fragment implements
         mActionBack.setOnClickListener(this);
         mActionMore.setOnClickListener(this);
         mWallpaperImage.setOnClickListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initChannelAbout() {
@@ -258,5 +269,10 @@ public class ChannelAboutFragment extends Fragment implements
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
+    }
+
+    @Subscribe
+    public void onEvent(ChannelProfileDataBus channelProfileDataBus) {
+        channelProfileParcel = channelProfileDataBus.getChannelProfileParcel();
     }
 }

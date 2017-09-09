@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,7 +9,11 @@ import android.view.MenuItem;
 
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelViewPagerAdapter;
+import com.hoocons.hoocons_android.EventBus.ChannelProfileDataBus;
+import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,12 +25,24 @@ public class ChannelActivity extends DraggerActivity {
     BottomNavigationView mBottomTabbar;
 
     private ChannelViewPagerAdapter mViewPagerAdapter;
+    private ChannelProfileParcel channelProfileParcel;
+    private boolean isFirstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            channelProfileParcel = (ChannelProfileParcel) intent.getParcelableExtra("channel_profile");
+        }
+
+        if (channelProfileParcel != null && isFirstLoad) {
+            isFirstLoad = false;
+            EventBus.getDefault().post(new ChannelProfileDataBus(channelProfileParcel));
+        }
 
         initBottomBar();
 

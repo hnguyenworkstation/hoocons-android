@@ -150,6 +150,7 @@
     <!-- Override Bottombar dimens-->
     <dimen name="design_bottom_navigation_height" tools:override="true">56dp</dimen>
     <dimen name="profile_header_large_size">100dp</dimen>
+    <dimen name="profile_header_med_size">68dp</dimen>
     <dimen name="emotion_size">18dip</dimen>
     <dimen name="publish_emotion_size">24dip</dimen>
     <dimen name="rippleStrokeWidth">2dp</dimen>
