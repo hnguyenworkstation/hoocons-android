@@ -254,10 +254,9 @@ public class NewEventActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-
         setContentView(R.layout.activity_new_event);
         ButterKnife.bind(this);
+
         tags = new ArrayList<>();
 
         // init google location client
@@ -989,11 +988,19 @@ public class NewEventActivity extends BaseActivity
             locationEngine.addLocationEngineListener(this);
             locationEngine.activate();
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 

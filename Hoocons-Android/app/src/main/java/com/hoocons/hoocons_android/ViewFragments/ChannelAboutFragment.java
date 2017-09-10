@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +29,12 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.hoocons.hoocons_android.Activities.UserProfileActivity;
+import com.hoocons.hoocons_android.Adapters.EventCardViewAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
@@ -51,19 +54,25 @@ public class ChannelAboutFragment extends Fragment implements
         ObservableScrollViewCallbacks, View.OnClickListener {
     @BindView(R.id.custom_toolbar)
     RelativeLayout mCustomToolbar;
+
     @BindView(R.id.obs_scrollview)
-    ObservableRecyclerView mRecyclerView;
+    ObservableScrollView mObsScrollView;
+
+    @BindView(R.id.channel_events)
+    RecyclerView mEventRecycler;
 
     @BindView(R.id.wallpaper_image)
     ImageView mWallpaperImage;
 
     @BindView(R.id.action_close)
     ImageButton mActionBack;
+
     @BindView(R.id.action_more)
     ImageButton mActionMore;
 
     @BindView(R.id.wallpaper_progress_bar)
     ProgressBar mWallpaperProgress;
+
     @BindView(R.id.linear)
     View mLinear;
 
@@ -82,7 +91,6 @@ public class ChannelAboutFragment extends Fragment implements
     private View mOverlayView;
     private int mActionBarSize;
     private int mFlexibleSpaceImageHeight;
-    private boolean isMySelf;
     private Intent mIntent;
     private Handler handler;
 
@@ -134,12 +142,12 @@ public class ChannelAboutFragment extends Fragment implements
 
         mCustomToolbar.bringToFront();
         mOverlayView = view.findViewById(R.id.overlay);
-        mRecyclerView.setScrollViewCallbacks(this);
+        mObsScrollView.setScrollViewCallbacks(this);
 
-        ScrollUtils.addOnGlobalLayoutListener(mRecyclerView, new Runnable() {
+        ScrollUtils.addOnGlobalLayoutListener(mObsScrollView, new Runnable() {
             @Override
             public void run() {
-                mRecyclerView.scrollTo(mFlexibleSpaceImageHeight, 0);
+                mObsScrollView.scrollTo(mFlexibleSpaceImageHeight, 0);
             }
         });
 
@@ -163,25 +171,27 @@ public class ChannelAboutFragment extends Fragment implements
     private void initEventRecyclerView() {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
-        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mEventRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
 
         if (spaceDecoration != null) {
-            mRecyclerView.removeItemDecoration(spaceDecoration);
+            mEventRecycler.removeItemDecoration(spaceDecoration);
         }
         spaceDecoration = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL_LIST);
 
-        mRecyclerView.addItemDecoration(spaceDecoration);
-        mRecyclerView.setFocusable(false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setAdapter(null);
-        mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
+        EventCardViewAdapter mEventAdapter = new EventCardViewAdapter();
+
+        mEventRecycler.addItemDecoration(spaceDecoration);
+        mEventRecycler.setFocusable(false);
+        mEventRecycler.setLayoutManager(mLayoutManager);
+        mEventRecycler.setHasFixedSize(false);
+        mEventRecycler.setAdapter(mEventAdapter);
+        mEventRecycler.setNestedScrollingEnabled(false);
+        mEventRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 if (canLoadMore) {
-                    // loadMoreEvents();
                 }
             }
 
@@ -192,8 +202,6 @@ public class ChannelAboutFragment extends Fragment implements
 
             @Override
             public boolean isLastItem() {
-//                return ((LinearLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition()
-//                        == (mEventsAdapter.getItemCount() - 1);
                 return false;
             }
 

@@ -14,6 +14,7 @@ import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +37,7 @@ public class ChannelActivity extends DraggerActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            channelProfileParcel = (ChannelProfileParcel) intent.getParcelableExtra("channel_profile");
+            channelProfileParcel = (ChannelProfileParcel) Parcels.unwrap(intent.getParcelableExtra("channel_profile"));
         }
 
         if (channelProfileParcel != null && isFirstLoad) {

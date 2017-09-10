@@ -85,7 +85,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect_user_info);
-        EventBus.getDefault().register(this);
 
         mLoadingDialog = new MaterialDialog.Builder(this)
                 .title(R.string.uploading_profile)
@@ -171,6 +170,8 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
             locationEngine.addLocationEngineListener(this);
             locationEngine.activate();
         }
+
+        EventBus.getDefault().register(this);
     }
 
     private boolean isLocationPermissionAllowed() {
@@ -200,6 +201,7 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
             locationEngine.removeLocationEngineListener(this);
             locationEngine.deactivate();
         }
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -252,7 +254,6 @@ public class CollectUserInfoActivity extends BaseActivity implements LocationEng
                     Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {

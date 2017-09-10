@@ -39,7 +39,6 @@ public class FullEventImagesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
 
         setContentView(R.layout.activity_full_event_images);
         ButterKnife.bind(this);
@@ -87,6 +86,18 @@ public class FullEventImagesActivity extends BaseActivity {
             mTitleLayout.setVisibility(View.GONE);
             mEventTextContent.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

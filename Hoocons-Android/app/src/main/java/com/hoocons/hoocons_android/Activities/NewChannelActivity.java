@@ -114,7 +114,6 @@ public class NewChannelActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_new_channel);
         ButterKnife.bind(this);
 
@@ -336,6 +335,12 @@ public class NewChannelActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     @Override
