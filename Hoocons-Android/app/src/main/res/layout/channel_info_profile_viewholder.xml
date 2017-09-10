@@ -19,6 +19,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <include layout="@layout/channel_stats_details"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <include layout="@layout/profile_info_details"/>
     </LinearLayout>
 

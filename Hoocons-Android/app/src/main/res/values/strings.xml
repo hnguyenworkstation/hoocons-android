@@ -20,6 +20,7 @@
     <string name="start_making_conversation">Start chatting with friends now..</string>
     <string name="start_chat">Start Chat</string>
     <string name="invite">Invite</string>
+    <string name="members">Members</string>
 
     <!-- NOTIFICATION FRAGMENT -->
     <string name="null_notification_title">No notifications yet</string>
@@ -287,6 +288,10 @@
 
     <string name="posted_from">posted from</string>
     <string name="posted_to">posted to</string>
+
+    <string name="join">Join</string>
+    <string name="favorite">Favorite</string>
+    <string name="favored">Favored</string>
 
     <string-array name="event_type">
         <item>Story</item>

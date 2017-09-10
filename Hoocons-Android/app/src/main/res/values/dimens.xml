@@ -155,7 +155,7 @@
     <dimen name="publish_emotion_size">24dip</dimen>
     <dimen name="rippleStrokeWidth">2dp</dimen>
     <dimen name="rippleRadius">64dp</dimen>
-
+    <dimen name="channel_action_button_size">32dp</dimen>
 
     <!-- Featured Fragment dimens -->
     <dimen name="profile_size_action_header">48dp</dimen>
