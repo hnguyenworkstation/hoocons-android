@@ -88,6 +88,9 @@
     <!-- Setting Strings -->
     <string name="action_reset_password">Forget password? Reset now</string>
     <string name="action_allow_permission">Allow Permission</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="pick_channel_location">Choose a location that your channel will be most seen</string>
+    <string name="toast_pick_loc">please pick a location</string>
     <string name="action_register">Register an account</string>
     <string name="continue_with_phone_number">Continue with phone number</string>
     <string name="continue_text">Continue</string>

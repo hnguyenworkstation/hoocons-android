@@ -1,9 +1,13 @@
 package com.hoocons.hoocons_android.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -20,20 +24,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hoocons.hoocons_android.EventBus.BadRequest;
 import com.hoocons.hoocons_android.EventBus.ChannelCategoryCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelDescCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelImageCropCollected;
 import com.hoocons.hoocons_android.EventBus.ChannelNameCollected;
 import com.hoocons.hoocons_android.EventBus.InvalidLocationRequest;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionAllowed;
+import com.hoocons.hoocons_android.EventBus.LocationPermissionDenied;
 import com.hoocons.hoocons_android.EventBus.LocationRequestCollected;
+import com.hoocons.hoocons_android.EventBus.LocationURLRequest;
+import com.hoocons.hoocons_android.EventBus.LocationUrlReady;
 import com.hoocons.hoocons_android.EventBus.TagsCollected;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.EventBus.UploadImageFailed;
 import com.hoocons.hoocons_android.EventBus.UploadImageSuccess;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
+import com.hoocons.hoocons_android.Helpers.MapUtils;
+import com.hoocons.hoocons_android.Helpers.PermissionManager;
 import com.hoocons.hoocons_android.Managers.BaseActivity;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Models.Topic;
@@ -44,13 +60,17 @@ import com.hoocons.hoocons_android.Networking.Responses.LocationResponse;
 import com.hoocons.hoocons_android.Networking.Responses.MediaResponse;
 import com.hoocons.hoocons_android.Networking.Responses.SemiUserInfoResponse;
 import com.hoocons.hoocons_android.R;
+import com.hoocons.hoocons_android.Tasks.Jobs.GetPlaceAttributesByLatLongJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.NewChannelJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UploadSingleUriImageJob;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelAboutFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelCategoryFragment;
+import com.hoocons.hoocons_android.ViewFragments.GetChannelLocationFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelNameFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelProfileFragment;
 import com.hoocons.hoocons_android.ViewFragments.GetChannelTagsFragment;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,7 +85,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.iwf.photopicker.PhotoPicker;
 
-public class NewChannelActivity extends BaseActivity {
+public class NewChannelActivity extends BaseActivity  implements LocationEngineListener {
     @BindView(R.id.create_channel_container)
     FrameLayout mFrameContainer;
     @BindView(R.id.action_back)
@@ -85,31 +105,43 @@ public class NewChannelActivity extends BaseActivity {
 
     private FragmentManager mFragManager;
     private FragmentTransaction mFragTransition;
+
     private GetChannelNameFragment getChannelNameFragment;
     private GetChannelAboutFragment getChannelAboutFragment;
     private GetChannelCategoryFragment getChannelCategoryFragment;
     private GetChannelTagsFragment getChannelTagsFragment;
     private GetChannelProfileFragment getChannelProfileFragment;
+    private GetChannelLocationFragment getChannelLocationFragment;
+
     private final String TAG = NewChannelActivity.class.getSimpleName();
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
 
     private final int WALLPAPER_IMG_PICKER = 10;
+    private final int LOCATION_PICKER = 100;
     private static final String WALLPAPER_CROPPED_IMAGE_NAME = "ProfileCroppedImage";
-    private String wallpaperImagePath;
+
     private Uri wallpaperCroppedUri;
     private Uri profileCroppedUri;
+
+    private String wallpaperImagePath;
     private String profileUrl;
     private String wallpaperUrl;
-
     private String channelName;
     private String channelCat;
     private String channelAbout;
+    private final String CHANNEL_LOCATION_REQUEST = "channel_location_request";
+
     private List<String> topics;
 
     private final String UPLOAD_PROFILE_TAG = "upload_profile";
     private final String UPLOAD_WALLPAPER_TAG = "upload_wallpaper";
     private MaterialDialog loadingDialog;
     private LocationRequest locationRequest;
+
+    private Place channelPlace;
+    private Location currentLocation;
+    private LocationEngine locationEngine;
+    private PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +154,43 @@ public class NewChannelActivity extends BaseActivity {
         getChannelNameFragment = new GetChannelNameFragment();
         getChannelAboutFragment = new GetChannelAboutFragment();
         getChannelCategoryFragment = new GetChannelCategoryFragment();
+        getChannelLocationFragment = GetChannelLocationFragment.newInstance();
+
+        permissionManager = new PermissionManager() {
+            @Override
+            public ArrayList<statusArray> getStatus() {
+                return super.getStatus();
+            }
+
+            @Override
+            public List<String> setPermission() {
+                // If You Don't want to check permission automatically and check your own custom permission
+                // Use super.setPermission(); or Don't override this method if not in use
+                List<String> customPermission = new ArrayList<>();
+                customPermission.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+                customPermission.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+                return customPermission;
+            }
+
+            @Override
+            public void ifCancelledAndCanRequest(Activity activity) {
+                // Do Customized operation if permission is cancelled without checking "Don't ask again"
+                // Use super.ifCancelledAndCanRequest(activity); or Don't override this method if not in use
+                super.ifCancelledAndCanRequest(activity);
+            }
+
+            @Override
+            public void ifCancelledAndCannotRequest(Activity activity) {
+                // Do Customized operation if permission is cancelled with checking "Don't ask again"
+                // Use super.ifCancelledAndCannotRequest(activity); or Don't override this method if not in use
+                super.ifCancelledAndCannotRequest(activity);
+            }
+        };
+        permissionManager.checkAndRequestPermissions(this);
+
+        if (isLocationPermissionAllowed()){
+            activateLocationEngine();
+        }
 
         initGeneralView();
         initGetNameView();
@@ -186,12 +255,27 @@ public class NewChannelActivity extends BaseActivity {
         mEditWallpaper.setVisibility(View.VISIBLE);
     }
 
+    private void initGetLocationView() {
+        mFragTransition = mFragManager.beginTransaction();
+        mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
+        mFragTransition.replace(R.id.create_channel_container, getChannelLocationFragment, "get_channel_location");
+        mFragTransition.commit();
+        mEditWallpaper.setVisibility(View.GONE);
+    }
+
     private void initGetTagsView() {
         mFragTransition = mFragManager.beginTransaction();
         mFragTransition.setCustomAnimations(R.anim.fade_out_to_left, R.anim.fade_in_from_right);
         mFragTransition.replace(R.id.create_channel_container, getChannelTagsFragment, "get_channel_tags");
         mFragTransition.commit();
         mEditWallpaper.setVisibility(View.GONE);
+    }
+
+    private void initChannelPlace(Place place) {
+        BaseApplication.getInstance().getJobManager().addJobInBackground(
+                new GetPlaceAttributesByLatLongJob( place.getLatLng().latitude,
+                        place.getLatLng().longitude, CHANNEL_LOCATION_REQUEST));
+        channelPlace = place;
     }
 
     private void hideKeyboard(final Activity activity) {
@@ -260,6 +344,52 @@ public class NewChannelActivity extends BaseActivity {
             } else {
                 handleCropResult(data);
             }
+        } else if (requestCode == LOCATION_PICKER) {
+            if (resultCode == Activity.RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+
+                initChannelPlace(place);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        permissionManager.checkResult(requestCode, permissions, grantResults);
+
+        if (isLocationPermissionAllowed()){
+            activateLocationEngine();
+        }
+    }
+
+    private boolean isLocationPermissionAllowed() {
+        ArrayList<String> granted = permissionManager.getStatus().get(0).granted;
+        if (granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void activateLocationEngine() {
+        locationEngine.addLocationEngineListener(this);
+        locationEngine.activate();
+    }
+
+    private void openGooglePlacePicker(final int requestCode) {
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            intentBuilder.setLatLngBounds(MapUtils.getCurrentLatLngBound(currentLocation));
+            Intent intent = intentBuilder.build(NewChannelActivity.this);
+            startActivityForResult(intent, requestCode);
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
         }
     }
 
@@ -333,8 +463,13 @@ public class NewChannelActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
+        if (locationEngine != null) {
+            locationEngine.removeLocationUpdates();
+            locationEngine.removeLocationEngineListener(this);
+            locationEngine.deactivate();
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -345,8 +480,34 @@ public class NewChannelActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onConnected() {
+        Log.d(getClass().getSimpleName(), "Connected to engine, we can now request updates.");
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationEngine.addLocationEngineListener(this);
+        locationEngine.requestLocationUpdates();
+        locationEngine.activate();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            currentLocation = location;
+        }
+    }
+
+    @Override
+    public void onStop() {
         super.onStop();
+        if (locationEngine != null) {
+            locationEngine.removeLocationUpdates();
+            locationEngine.removeLocationEngineListener(this);
+            locationEngine.deactivate();
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -376,7 +537,7 @@ public class NewChannelActivity extends BaseActivity {
     public void onEvent(TagsCollected ev) {
         getChannelProfileFragment = GetChannelProfileFragment.newInstance(channelName, channelCat,
                 (ArrayList<String>) ev.getTags());
-        initGetProfileView();
+        initGetLocationView();
     }
 
     @Subscribe
@@ -459,6 +620,45 @@ public class NewChannelActivity extends BaseActivity {
     public void onEvent(BadRequest request) {
         cancelDialog();
         Toast.makeText(this, getResources().getString(R.string.task_failed), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onEvent(LocationURLRequest request) {
+        openGooglePlacePicker(LOCATION_PICKER);
+    }
+
+    @Subscribe
+    public void onEvent(LocationRequestCollected request) {
+        if (request.getTag() == null && request.getRequest() == null) {
+            // This is a request to move up to next fragment
+            if (channelPlace != null) {
+                initGetProfileView();
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.toast_pick_loc), Toast.LENGTH_SHORT).show();
+            }
+        } else if (request.getTag().equals(CHANNEL_LOCATION_REQUEST)) {
+            locationRequest = request.getRequest();
+            if (channelPlace != null) {
+                locationRequest.setAddress(channelPlace.getAddress().toString());
+                locationRequest.setLocationName(channelPlace.getName().toString());
+            }
+
+            String address;
+            if (locationRequest.getAddress() != null) {
+                address = locationRequest.getAddress();
+            } else if (locationRequest.getCity() != null && locationRequest.getCountry() != null) {
+                address = String.format("%s, %s", locationRequest.getCity(), locationRequest.getCountry());
+            } else if (locationRequest.getProvince() != null && locationRequest.getCountry() != null) {
+                address = String.format("%s, %s", locationRequest.getProvince(), locationRequest.getCountry());
+            } else if (locationRequest.getState() != null && locationRequest.getCountry() != null) {
+                address = String.format("%s, %s", locationRequest.getState(), locationRequest.getCountry());
+            } else {
+                address = String.format("%s, %s", String.valueOf(locationRequest.getResponse().getLatitude()),
+                        String.valueOf(locationRequest.getResponse().getLongitude()));
+            }
+
+            EventBus.getDefault().post(new LocationUrlReady(address));
+        }
     }
 
 }

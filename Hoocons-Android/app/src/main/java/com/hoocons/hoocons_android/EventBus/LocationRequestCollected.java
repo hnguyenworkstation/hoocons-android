@@ -10,6 +10,9 @@ public class LocationRequestCollected {
     private LocationRequest request;
     private String tag;
 
+    public LocationRequestCollected() {
+    }
+
     public LocationRequestCollected(LocationRequest request, String tag) {
         this.request = request;
         this.tag = tag;
