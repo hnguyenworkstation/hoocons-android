@@ -135,8 +135,6 @@ public class UserProfileActivity extends DraggerActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
@@ -391,8 +389,20 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 

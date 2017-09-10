@@ -39,7 +39,6 @@ public class FullEventImagesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_full_event_images);
         ButterKnife.bind(this);
 

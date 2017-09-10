@@ -113,8 +113,6 @@ public class PlacePickerActivity extends BaseActivity implements
             android.Manifest.permission.ACCESS_FINE_LOCATION})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-
         setContentView(R.layout.activity_place_picker);
         ButterKnife.bind(this);
 
@@ -396,6 +394,12 @@ public class PlacePickerActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
@@ -413,6 +417,7 @@ public class PlacePickerActivity extends BaseActivity implements
         super.onStop();
         AppIndex.AppIndexApi.end(mGoogleClient, getIndexApiAction());
         mGoogleClient.disconnect();
+        EventBus.getDefault().unregister(this);
     }
 
 

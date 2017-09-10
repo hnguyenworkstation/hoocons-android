@@ -324,6 +324,7 @@ public class NewChannelActivity extends BaseActivity {
         intent.putExtra("channel_profile",
                 Parcels.wrap(AppUtils.getChannelProfileParcelFromResponse(response)));
         startActivity(intent);
+        finish();
     }
 
     private void submitNewChannel() {
