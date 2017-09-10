@@ -13,12 +13,7 @@
         android:background="@color/colorBackground">
 
         <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/margin_4"
-            app:cardElevation="2dp"
-            android:layout_marginStart="@dimen/margin_4"
-            android:layout_marginEnd="@dimen/margin_4"
+            style="@style/ChannelDetailCardViewStyle"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_4">
 
@@ -38,13 +33,8 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/member_count_btn">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -65,29 +55,46 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/follower_count_btn">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="485"
+                            android:id="@+id/follower_count"
                             android:textColor="@color/dark_text_color"
                             android:textSize="20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="loves"
+                            android:text="@string/followers"
+                            android:textStyle="bold"
                             android:textColor="@color/dark_text_color"
                             android:textSize="12sp" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/favorite_count_btn"
+                        style="@style/ChannelActionButton">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="485"
+                            android:id="@+id/favorite_count"
+                            android:textColor="@color/dark_text_color"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/favorites"
+                            android:textColor="@color/dark_text_color"
+                            android:textStyle="bold"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <View
@@ -109,20 +116,17 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/join_button">
 
                         <ImageView
                             android:layout_width="@dimen/channel_action_button_size"
                             android:layout_height="@dimen/channel_action_button_size"
+                            android:id="@+id/join_icon"
                             android:src="@drawable/ic_add_inactive" />
 
                         <TextView
+                            android:id="@+id/join_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/join"
@@ -131,20 +135,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/favorite_button">
 
                         <ImageView
+                            android:id="@+id/favorite_icon"
                             android:layout_width="@dimen/channel_action_button_size"
                             android:layout_height="@dimen/channel_action_button_size"
                             android:src="@drawable/ic_favor_inactive"/>
 
                         <TextView
+                            android:id="@+id/favorite_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/favored"
@@ -153,21 +154,18 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/invite_button">
 
                         <ImageView
+                            android:id="@+id/invite_icon"
                             android:layout_width="@dimen/channel_action_button_size"
                             android:layout_height="@dimen/channel_action_button_size"
                             android:src="@drawable/ic_invite_inactive"
                             />
 
                         <TextView
+                            android:id="@+id/invite_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/invite"
@@ -176,20 +174,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        style="@style/ChannelActionButton"
+                        android:id="@+id/more_button">
 
                         <ImageView
+                            android:id="@+id/more_icon"
                             android:layout_width="@dimen/channel_action_button_size"
                             android:layout_height="@dimen/channel_action_button_size"
                             android:src="@drawable/ic_more_inactive" />
 
                         <TextView
+                            android:id="@+id/more_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tabbar_more"

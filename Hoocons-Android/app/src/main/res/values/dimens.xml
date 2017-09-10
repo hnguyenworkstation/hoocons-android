@@ -60,8 +60,9 @@
     <dimen name="message_state_image_size">12dp</dimen>
 
     <!-- Option Fragment dimens-->
-    <dimen name="option_text_size">15sp</dimen>
+    <dimen name="option_text_size">14sp</dimen>
     <dimen name="option_text_detail">18sp</dimen>
+    <dimen name="option_small_text_detail">14sp</dimen>
     <dimen name="option_title_size">24sp</dimen>
     <dimen name="event_type_text_size">16sp</dimen>
 

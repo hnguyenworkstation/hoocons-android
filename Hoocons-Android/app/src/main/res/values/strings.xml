@@ -21,6 +21,8 @@
     <string name="start_chat">Start Chat</string>
     <string name="invite">Invite</string>
     <string name="members">Members</string>
+    <string name="followers">Followers</string>
+    <string name="favorites">Favorites</string>
 
     <!-- NOTIFICATION FRAGMENT -->
     <string name="null_notification_title">No notifications yet</string>
