@@ -1,8 +1,6 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,14 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hoocons.hoocons_android.Activities.HooconsMapActivity;
-import com.hoocons.hoocons_android.Adapters.ChannelCardViewAdapter;
 import com.hoocons.hoocons_android.Adapters.CommunicateViewPagerAdapter;
-import com.hoocons.hoocons_android.Adapters.DiscoverTopPanelAdapter;
 import com.hoocons.hoocons_android.CustomUI.RippleAnimationLayout;
 import com.hoocons.hoocons_android.R;
 
@@ -162,7 +150,7 @@ public class PlayGroundFragment extends Fragment {
             playGroundPeopleFragment = PlayGroundPeopleFragment.newInstance("1", "1");
 
         if (playGroundChannelFragment == null)
-            playGroundChannelFragment = PlayGroundChannelFragment.newInstance("1", "1");
+            playGroundChannelFragment = PlayGroundChannelFragment.newInstance();
 
         if (adapter == null) {
             adapter = new CommunicateViewPagerAdapter(getChildFragmentManager());

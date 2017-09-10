@@ -1,5 +1,6 @@
 package com.hoocons.hoocons_android.ViewHolders;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -12,7 +13,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.util.Util;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
+import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.w3c.dom.Text;
 
@@ -30,6 +33,7 @@ public class ChannelCardViewHolder extends ViewHolder {
     ImageView mChannelProfile;
     @BindView(R.id.follow_button)
     LinearLayout mFollowButton;
+
     @BindView(R.id.channel_name)
     TextView mChannelName;
     @BindView(R.id.channel_desc)
@@ -45,27 +49,39 @@ public class ChannelCardViewHolder extends ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void init() {
-        loadWallpaper("http://img.allw.mn/content/2013/09/22201006_3490.jpg");
-        loadProfile("https://shechive.files.wordpress.com/2012/06/a-cute-cartoons-6.jpg?quality=100&strip=info");
+    public void init(Context context, ChannelProfileResponse response, int pos) {
+        if (response != null) {
+            initTypeFace(context);
+            loadWallpaper(response.getProfileUrl());
+            loadProfile(response.getWallpaperUrl());
+        }
+    }
+
+    private void initTypeFace(Context context) {
+        mChannelName.setTypeface(EasyFonts.robotoRegular(context));
+        mChannelDesc.setTypeface(EasyFonts.robotoRegular(context));
+        mLocation.setTypeface(EasyFonts.robotoRegular(context));
+        mFavoriteCount.setTypeface(EasyFonts.robotoRegular(context));
     }
 
     private void loadWallpaper(String url) {
-        BaseApplication.getInstance().getGlide()
-                .load(url)
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                .apply(RequestOptions.noAnimation())
-                .into(mWallPaper);
+        if (url != null)
+            BaseApplication.getInstance().getGlide()
+                    .load(url)
+                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                    .apply(RequestOptions.noAnimation())
+                    .into(mWallPaper);
     }
 
     private void loadProfile(String url) {
-        BaseApplication.getInstance().getGlide()
-                .load(url)
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                .apply(RequestOptions.noAnimation())
-                .into(mChannelProfile);
+        if (url != null)
+            BaseApplication.getInstance().getGlide()
+                    .load(url)
+                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                    .apply(RequestOptions.noAnimation())
+                    .into(mChannelProfile);
     }
 
     public void onViewRecycled() {
