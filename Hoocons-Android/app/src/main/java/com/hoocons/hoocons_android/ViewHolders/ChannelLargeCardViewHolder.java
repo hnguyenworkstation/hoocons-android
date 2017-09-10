@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by hungnguyen on 8/30/17.
  */
 
-public class ChannelCardViewHolder extends ViewHolder {
+public class ChannelLargeCardViewHolder extends ViewHolder {
     @BindView(R.id.wallpaper)
     AdjustableImageView mWallPaper;
     @BindView(R.id.channel_profile)
@@ -44,7 +44,7 @@ public class ChannelCardViewHolder extends ViewHolder {
     TextView mFavoriteCount;
 
 
-    public ChannelCardViewHolder(View itemView) {
+    public ChannelLargeCardViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

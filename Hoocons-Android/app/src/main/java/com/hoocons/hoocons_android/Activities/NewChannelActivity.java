@@ -187,6 +187,7 @@ public class NewChannelActivity extends BaseActivity  implements LocationEngineL
             }
         };
         permissionManager.checkAndRequestPermissions(this);
+        locationEngine = BaseApplication.getInstance().getLocationEngine();
 
         if (isLocationPermissionAllowed()){
             activateLocationEngine();
@@ -609,8 +610,10 @@ public class NewChannelActivity extends BaseActivity  implements LocationEngineL
                 );
             }
 
-            ChannelProfileResponse response = new ChannelProfileResponse(task.getId(), channelName, "subname", channelAbout, profileUrl, wallpaperUrl,
-                    "Public", listTopics, null, locationResponse, null,0 ,0 ,0 ,0,
+            ChannelProfileResponse response = new ChannelProfileResponse(task.getId(), channelName, "subname",
+                    channelAbout, profileUrl, wallpaperUrl,
+                    "Public", listTopics, null, locationResponse,
+                    null,0 ,0 ,0 ,0,
                     false, false, false, true, 0, false);
             transferToNewChannelActivity(response);
         }

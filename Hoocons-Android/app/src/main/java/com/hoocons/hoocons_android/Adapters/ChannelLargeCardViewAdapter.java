@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.hoocons.hoocons_android.Interface.OnChannelProfileClickListener;
 import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.ViewHolders.ChannelCardViewHolder;
+import com.hoocons.hoocons_android.ViewHolders.ChannelLargeCardViewHolder;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by hungnguyen on 8/30/17.
  */
 
-public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelCardViewHolder> {
+public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelLargeCardViewHolder> {
     private Context context;
     private List<ChannelProfileResponse> channelProfileResponseList;
     private OnChannelProfileClickListener listener;
@@ -30,14 +30,14 @@ public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelCar
     }
 
     @Override
-    public ChannelCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChannelLargeCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_large_cardview_viewholder,
                 parent, false);
-        return new ChannelCardViewHolder(view);
+        return new ChannelLargeCardViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ChannelCardViewHolder holder, int position) {
+    public void onBindViewHolder(ChannelLargeCardViewHolder holder, int position) {
         holder.init(context, channelProfileResponseList.get(position), position);
     }
 
@@ -47,7 +47,7 @@ public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelCar
     }
 
     @Override
-    public void onViewRecycled(ChannelCardViewHolder holder) {
+    public void onViewRecycled(ChannelLargeCardViewHolder holder) {
         super.onViewRecycled(holder);
         holder.onViewRecycled();
     }

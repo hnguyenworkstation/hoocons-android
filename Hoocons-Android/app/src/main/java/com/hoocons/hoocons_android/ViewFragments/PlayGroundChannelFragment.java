@@ -42,14 +42,15 @@ import butterknife.ButterKnife;
 public class PlayGroundChannelFragment extends Fragment implements OnChannelProfileClickListener {
     @BindView(R.id.swipe_ref)
     SwipeRefreshLayout mSwipeRefLayout;
+
     @BindView(R.id.nested_scroll)
     NestedScrollView mNestedScrollView;
-    @BindView(R.id.recycler)
+
+    @BindView(R.id.channel_recycler)
     RecyclerView recyclerView;
+
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-    @BindView(R.id.content_view)
-    RelativeLayout mContentView;
 
     private boolean isFirstTime = true;
     private ChannelApiViewSet channelApiViewSet;
@@ -117,7 +118,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
                                 }
 
                                 mProgressBar.setVisibility(View.GONE);
-                                mContentView.setVisibility(View.VISIBLE);
+                                mNestedScrollView.setVisibility(View.VISIBLE);
                             }
                         });
 
@@ -134,7 +135,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
     private void initView() {
         mAdapter = new ChannelLargeCardViewAdapter(getContext(), responseList, this);
         final RecyclerView.LayoutManager mLayoutManager =
-                new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false);
+                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);

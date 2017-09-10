@@ -44,7 +44,7 @@
 
             <Button
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/pick_location"
+                android:id="@+id/pick_location_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pick_location"

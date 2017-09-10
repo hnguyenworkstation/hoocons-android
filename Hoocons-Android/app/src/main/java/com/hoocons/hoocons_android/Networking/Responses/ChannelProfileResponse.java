@@ -2,75 +2,59 @@ package com.hoocons.hoocons_android.Networking.Responses;
 
 import com.google.gson.annotations.SerializedName;
 import com.hoocons.hoocons_android.Models.Topic;
-import com.hoocons.hoocons_android.Parcel.MediaListParcel;
-import com.hoocons.hoocons_android.Parcel.MultiImagesEventClickedParcel;
-import com.hoocons.hoocons_android.Parcel.MultiSemiUserProfileParcel;
-import com.hoocons.hoocons_android.Parcel.MultiTagsParcel;
-import com.hoocons.hoocons_android.Parcel.MultiTopicsParcel;
 
 import org.parceler.Parcel;
-import org.parceler.ParcelPropertyConverter;
 
 import java.util.List;
 
 /**
  * Created by hungnguyen on 8/17/17.
  */
-@Parcel
 public class ChannelProfileResponse {
     @SerializedName("id")
-    int id;
+    private int id;
     @SerializedName("name")
-    String name;
+    private String name;
     @SerializedName("subname")
-    String subname;
+    private String subname;
     @SerializedName("about")
-    String about;
+    private String about;
     @SerializedName("profile_url")
-    String profileUrl;
+    private String profileUrl;
     @SerializedName("wallpaper_url")
-    String wallpaperUrl;
+    private String wallpaperUrl;
     @SerializedName("privacy")
-    String privacy;
-
-    @ParcelPropertyConverter(MultiTopicsParcel.class)
+    private String privacy;
     @SerializedName("topics")
-    List<Topic> topics;
-
-    @ParcelPropertyConverter(MediaListParcel.class)
+    private List<Topic> topics;
     @SerializedName("promoted_medias")
-    List<MediaResponse> promotedMedias;
-
+    private List<MediaResponse> promotedMedias;
     @SerializedName("location")
-    LocationResponse location;
-
-    @ParcelPropertyConverter(MultiSemiUserProfileParcel.class)
+    private LocationResponse location;
     @SerializedName("top_users")
-    List<SemiUserInfoResponse> topUsers;
-
+    private List<SemiUserInfoResponse> topUsers;
     @SerializedName("friend_members_count")
-    int friendMembersCount;
+    private int friendMembersCount;
     @SerializedName("favorite_count")
-    int favoriteCount;
+    private int favoriteCount;
     @SerializedName("members_count")
-    int membersCount;
+    private int membersCount;
     @SerializedName("followers_count")
-    int followersCount;
+    private int followersCount;
     @SerializedName("is_member")
-    boolean isMember;
+    private boolean isMember;
     @SerializedName("is_favored")
-    boolean isFavored;
+    private boolean isFavored;
     @SerializedName("is_follower")
-    boolean isFollower;
+    private boolean isFollower;
     @SerializedName("is_owner")
-    boolean isOwner;
+    private boolean isOwner;
     @SerializedName("reports_count")
-    int reportsCount;
+    private int reportsCount;
     @SerializedName("is_reported")
-    boolean isReported;
+    private boolean isReported;
 
-    public ChannelProfileResponse() {
-    }
+
 
     public ChannelProfileResponse(int id, String name, String subname, String about,
                                   String profileUrl, String wallpaperUrl, String privacy,
@@ -81,6 +65,35 @@ public class ChannelProfileResponse {
                                   boolean isFollower, boolean isOwner, int reportsCount,
                                   boolean isReported) {
         this.id = id;
+        this.name = name;
+        this.subname = subname;
+        this.about = about;
+        this.profileUrl = profileUrl;
+        this.wallpaperUrl = wallpaperUrl;
+        this.privacy = privacy;
+        this.topics = topics;
+        this.promotedMedias = promotedMedias;
+        this.location = location;
+        this.topUsers = topUsers;
+        this.friendMembersCount = friendMembersCount;
+        this.favoriteCount = favoriteCount;
+        this.membersCount = membersCount;
+        this.followersCount = followersCount;
+        this.isMember = isMember;
+        this.isFavored = isFavored;
+        this.isFollower = isFollower;
+        this.isOwner = isOwner;
+        this.reportsCount = reportsCount;
+        this.isReported = isReported;
+    }
+
+    public ChannelProfileResponse(String name, String subname, String about, String profileUrl,
+                                  String wallpaperUrl, String privacy, List<Topic> topics,
+                                  List<MediaResponse> promotedMedias, LocationResponse location,
+                                  List<SemiUserInfoResponse> topUsers, int friendMembersCount,
+                                  int favoriteCount, int membersCount, int followersCount,
+                                  boolean isMember, boolean isFavored, boolean isFollower,
+                                  boolean isOwner, int reportsCount, boolean isReported) {
         this.name = name;
         this.subname = subname;
         this.about = about;

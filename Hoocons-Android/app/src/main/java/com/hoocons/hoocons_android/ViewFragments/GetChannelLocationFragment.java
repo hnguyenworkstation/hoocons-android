@@ -31,7 +31,7 @@ public class GetChannelLocationFragment extends Fragment {
     LinearLayout mPickLocationView;
     @BindView(R.id.pick_location)
     TextView mPickLocationText;
-    @BindView(R.id.pick_location)
+    @BindView(R.id.pick_location_btn)
     Button mPickLocBtn;
 
     @BindView(R.id.address_view)

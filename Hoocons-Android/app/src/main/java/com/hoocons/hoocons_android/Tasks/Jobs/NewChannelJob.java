@@ -61,7 +61,7 @@ public class NewChannelJob extends Job {
     @Override
     public void onRun() throws Throwable {
         final ChannelRequest request = new ChannelRequest(channelName, "subname", channelAbout,
-                profileUrl, topics, "Public", wallpaperUrl);
+                profileUrl, topics, "Public", wallpaperUrl, locationRequest);
 
         ChannelServices services = NetContext.instance.create(ChannelServices.class);
         services.postNewChannel(request).enqueue(new Callback<IdResponse>() {
