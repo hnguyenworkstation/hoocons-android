@@ -49,7 +49,7 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     private EventAdapterListener listener;
     private OnUserInfoClickListener userProfileListener;
 
-    private final int EXTRA_ITEMS = 2;
+    private final int EXTRA_ITEMS = 1;
     private final Handler handler = new Handler();
 
     public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
@@ -143,8 +143,6 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     @Override
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
-            holder.initUserInfo(context, userInfoResponse, userProfileListener);
-        } else if (position == 1) {
             if (responseList != null && responseList.size() > 0) {
                 holder.initDummyCardForEvent(context,
                         SharedPreferencesManager.getDefault().getUserId() == userInfoResponse.getUserPK(),
