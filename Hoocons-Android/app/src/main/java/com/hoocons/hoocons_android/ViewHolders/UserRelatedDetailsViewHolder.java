@@ -232,10 +232,6 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     TextView mDummiesDetail;
 
     @Nullable
-    @BindView(R.id.meetout_list)
-    LinearLayout mMeetOutList;
-
-    @Nullable
     @BindView(R.id.view_more_meetout_action)
     LinearLayout mMeetOutAction;
 
@@ -251,8 +247,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     @Nullable
     @BindView(R.id.empty_recycler)
     ObservableRecyclerView mEmptyRecycler;
-
-
+    
     private Spring mLikeBtnScaleSpring;
     private Spring mCommentBtnScaleSpring;
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
@@ -374,6 +369,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
         assert mLikeCount != null;
         assert mCommentCount != null;
         assert mCommentView != null;
+        assert mLoveIcon != null;
 
         loadUserProfileImage(SharedPreferencesManager.getDefault().getUserProfileUrl(),
                 mUserBottomProfile);
@@ -668,10 +664,6 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
 
         if (mSharedUserProfileImage != null) {
             BaseApplication.getInstance().getGlide().clear(mSharedUserProfileImage);
-        }
-
-        if (mProfileImage != null) {
-            BaseApplication.getInstance().getGlide().clear(mProfileImage);
         }
 
         if (mSingleMediaView != null) {

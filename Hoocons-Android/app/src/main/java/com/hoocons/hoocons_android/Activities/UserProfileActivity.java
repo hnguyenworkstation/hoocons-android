@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -107,6 +108,7 @@ public class UserProfileActivity extends DraggerActivity
 
     @BindView(R.id.action_back)
     ImageButton mActionBack;
+
     @BindView(R.id.action_more)
     ImageButton mActionMore;
 
@@ -150,12 +152,16 @@ public class UserProfileActivity extends DraggerActivity
     BootstrapButton mProfileEditBtn;
 
     @Nullable
-    @BindView(R.id.action_more)
+    @BindView(R.id.action_profile_more)
     BootstrapButton mProfileMoreOptionBtn;
 
     @Nullable
     @BindView(R.id.profile_progress_bar)
     ProgressBar mProfileProgress;
+
+    @Nullable
+    @BindView(R.id.meetout_list)
+    LinearLayout mMeetOutList;
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
@@ -168,7 +174,6 @@ public class UserProfileActivity extends DraggerActivity
 
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private List<EventResponse> eventResponseList;
-    private final int EVENT_PACK = 15;
     private boolean canLoadMore = false;
     private PopupMenu eventPopup;
     private String currentRequestTag;
@@ -242,10 +247,10 @@ public class UserProfileActivity extends DraggerActivity
         mEventRecycler.addItemDecoration(spaceDecoration);
         mEventRecycler.setFocusable(false);
         mEventRecycler.setLayoutManager(mLayoutManager);
+        mEventRecycler.setNestedScrollingEnabled(false);
         mEventRecycler.setHasFixedSize(false);
         mEventRecycler.setAdapter(mEventsAdapter);
         mEventRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
-
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
@@ -358,8 +363,7 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(parcel.getUserProfileUrl());
 
-        UserInfoResponse fakeResponse = UserUtils.getFakeUserResponse(userParcel);
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, fakeResponse, this);
+        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, this);
         initEventRecyclerView();
     }
 
@@ -376,33 +380,31 @@ public class UserProfileActivity extends DraggerActivity
         mActionBarDisplayName.setText(info.getDisplayName());
 
         loadActionBarProfileImage(info.getProfileUrl());
-        mEventsAdapter.updateUserProfile(userInfoResponse);
+        initUserInfo(userInfoResponse);
     }
 
-
-    public void initUserInfo(final Context context, final UserInfoResponse response,
-                             final OnUserInfoClickListener infoListener) {
-        loadProfileImage(context, response.getProfileUrl());
+    public void initUserInfo(final UserInfoResponse response) {
+        loadProfileImage(response.getProfileUrl());
         String nickname = "@" + response.getNickname();
 
         assert mDisplayName != null;
         mDisplayName.setText(response.getDisplayName());
-        mDisplayName.setTypeface(EasyFonts.robotoBold(context));
+        mDisplayName.setTypeface(EasyFonts.robotoBold(this));
 
         assert mNickname != null;
         mNickname.setText(nickname);
-        mNickname.setTypeface(EasyFonts.robotoRegular(context));
+        mNickname.setTypeface(EasyFonts.robotoRegular(this));
 
-        initRelationshipInfo(context, response, infoListener);
-        initOnProfileButtonClick(infoListener);
-        drawListCreatedMeetOut(context, response.getMeetoutCreatedList(), infoListener);
+        initRelationshipInfo(response);
+        initOnProfileButtonClick();
+        drawListCreatedMeetOut(response.getMeetoutCreatedList());
     }
 
-    private void loadProfileImage(Context context, String url) {
+    private void loadProfileImage(String url) {
         assert mProfileImage != null;
         BaseApplication.getInstance().getGlide()
                 .load(url)
-                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(context, 6, 6)))
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(this, 6, 6)))
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
                 .apply(RequestOptions.centerCropTransform())
@@ -423,7 +425,7 @@ public class UserProfileActivity extends DraggerActivity
                 .into(mProfileImage);
     }
 
-    private void initOnProfileButtonClick(final OnUserInfoClickListener infoListener) {
+    private void initOnProfileButtonClick() {
         assert mAddFriendBtn != null;
         assert mProfileEditBtn != null;
         assert mProfileMoreOptionBtn != null;
@@ -433,41 +435,40 @@ public class UserProfileActivity extends DraggerActivity
         mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                infoListener.onAddFriendClicked();
+                onAddFriendClicked();
             }
         });
 
         mProfileEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                infoListener.onEditProfileClicked();
+                onEditProfileClicked();
             }
         });
 
         mProfileMoreOptionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                infoListener.onProfileMoreClicked();
+                onProfileMoreClicked();
             }
         });
 
         mSendMessageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                infoListener.onStartChatClicked();
+                onStartChatClicked();
             }
         });
 
         mHugeSendMessageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                infoListener.onStartChatClicked();
+                onStartChatClicked();
             }
         });
     }
 
-    private void initRelationshipInfo(final Context context, final UserInfoResponse response,
-                                      final OnUserInfoClickListener infoListener) {
+    private void initRelationshipInfo(final UserInfoResponse response) {
         assert mAddFriendBtn != null;
         assert mProfileEditBtn != null;
         assert mProfileMoreOptionBtn != null;
@@ -475,9 +476,9 @@ public class UserProfileActivity extends DraggerActivity
         assert mHugeSendMessageBtn != null;
 
         if (response.getUserPK() == SharedPreferencesManager.getDefault().getUserId()) {
-            mProfileEditBtn.setBootstrapText(new BootstrapText.Builder(context)
+            mProfileEditBtn.setBootstrapText(new BootstrapText.Builder(this)
                     .addFontAwesomeIcon(FontAwesome.FA_PENCIL_SQUARE_O)
-                    .addText(" " + context.getResources().getText(R.string.edit_profile))
+                    .addText(" " + getResources().getText(R.string.edit_profile))
                     .build());
 
             mAddFriendBtn.setVisibility(View.GONE);
@@ -486,9 +487,9 @@ public class UserProfileActivity extends DraggerActivity
             mProfileMoreOptionBtn.setVisibility(View.GONE);
             mHugeSendMessageBtn.setVisibility(View.GONE);
         } else if (response.isFriend()) {
-            mHugeSendMessageBtn.setBootstrapText(new BootstrapText.Builder(context)
+            mHugeSendMessageBtn.setBootstrapText(new BootstrapText.Builder(this)
                     .addFontAwesomeIcon(FontAwesome.FA_COMMENT_O)
-                    .addText(" " + context.getResources().getText(R.string.messages))
+                    .addText(" " + getResources().getText(R.string.messages))
                     .build());
 
             mAddFriendBtn.setVisibility(View.GONE);
@@ -498,9 +499,9 @@ public class UserProfileActivity extends DraggerActivity
             mHugeSendMessageBtn.setVisibility(View.VISIBLE);
         } else if (response.isFriendRequested()) {
             mAddFriendBtn.setVisibility(View.VISIBLE);
-            mAddFriendBtn.setBootstrapText(new BootstrapText.Builder(context)
+            mAddFriendBtn.setBootstrapText(new BootstrapText.Builder(this)
                     .addFontAwesomeIcon(FontAwesome.FA_SPINNER)
-                    .addText(" " + context.getResources().getText(R.string.requested))
+                    .addText(" " + getResources().getText(R.string.requested))
                     .build());
             mSendMessageBtn.setVisibility(View.VISIBLE);
             mProfileEditBtn.setVisibility(View.GONE);
@@ -509,16 +510,12 @@ public class UserProfileActivity extends DraggerActivity
         }
     }
 
-    private void drawListCreatedMeetOut(final Context context, final List<SimpleMeetout> meetouts,
-                                        final OnUserInfoClickListener infoListener) {
-        assert mMeetOutList != null;
-        mMeetOutList.removeAllViews();
-
+    private void drawListCreatedMeetOut(final List<SimpleMeetout> meetouts) {
         if (meetouts == null || meetouts.size() == 0) {
             mMeetOutList.setVisibility(View.GONE);
         } else {
             for (final SimpleMeetout meetout: meetouts) {
-                View view = LayoutInflater.from(context).inflate(R.layout.simple_profile_meetout_layout,
+                View view = LayoutInflater.from(this).inflate(R.layout.simple_profile_meetout_layout,
                         mMeetOutList, false);
 
                 if (view != null) {
@@ -533,7 +530,7 @@ public class UserProfileActivity extends DraggerActivity
 
                     // Load Image
                     if (meetout.getPromotedMedias() != null && meetout.getPromotedMedias().size() > 0) {
-                        AppUtils.loadCropImageWithProgressBar(context,
+                        AppUtils.loadCropImageWithProgressBar(this,
                                 meetout.getPromotedMedias().get(0).getUrl(), meetoutImage, mProgressBar);
                     }
 
@@ -557,7 +554,7 @@ public class UserProfileActivity extends DraggerActivity
                             }
                             parcel.setMeetOutName(meetout.getName());
 
-                            infoListener.onMeetOutViewClicked(parcel);
+                            onMeetOutViewClicked(parcel);
                         }
                     });
 

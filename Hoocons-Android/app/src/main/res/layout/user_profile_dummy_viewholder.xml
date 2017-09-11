@@ -30,5 +30,4 @@
         android:textSize="@dimen/text_16"
         android:textAlignment="center"
         android:text="@string/new_meeting_desc"/>
-
 </LinearLayout>
