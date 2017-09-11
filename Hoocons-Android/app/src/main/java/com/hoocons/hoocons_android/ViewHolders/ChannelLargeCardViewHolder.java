@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,6 +29,9 @@ import butterknife.ButterKnife;
  */
 
 public class ChannelLargeCardViewHolder extends ViewHolder {
+    @BindView(R.id.cardroot)
+    RelativeLayout rootView;
+
     @BindView(R.id.wallpaper)
     AdjustableImageView mWallPaper;
     @BindView(R.id.channel_name)
@@ -48,8 +52,27 @@ public class ChannelLargeCardViewHolder extends ViewHolder {
     public void init(Context context, ChannelProfileResponse response, int pos, OnChannelProfileClickListener listener) {
         if (response != null) {
             initTypeFace(context);
+            initClickListener(pos, listener);
+
             loadWallpaper(response.getProfileUrl());
         }
+    }
+
+    private void initClickListener(final int position, final OnChannelProfileClickListener listener) {
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onChannelProfileClicked(position);
+            }
+        });
+
+        rootView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onChannelProfileLongClicked(position);
+                return false;
+            }
+        });
     }
 
     private void initTypeFace(Context context) {

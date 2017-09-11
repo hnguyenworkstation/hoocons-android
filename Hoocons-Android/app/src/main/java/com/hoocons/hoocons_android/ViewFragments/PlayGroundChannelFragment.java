@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hoocons.hoocons_android.Activities.ChannelActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelLargeCardViewAdapter;
@@ -170,6 +171,12 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
         intent.putExtra("channel_profile",
                 Parcels.wrap(AppUtils.getChannelProfileParcelFromResponse(response)));
         startActivity(intent);
+    }
+
+    @Override
+    public void onChannelProfileLongClicked(int position) {
+        Toast.makeText(getContext(), "Long clicked: " + String.valueOf(position),
+                Toast.LENGTH_SHORT).show();
     }
 
     /*****************************
