@@ -653,12 +653,6 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_back:
