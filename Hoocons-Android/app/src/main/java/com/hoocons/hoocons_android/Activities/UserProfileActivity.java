@@ -7,15 +7,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +26,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.birbit.android.jobqueue.JobManager;
 import com.birbit.android.jobqueue.TagConstraint;
 import com.bumptech.glide.Glide;
@@ -32,13 +38,15 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.UserRelatedDetailsAdapter;
+import com.hoocons.hoocons_android.Adapters.EventDetailsAdapter;
+import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
+import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
 import com.hoocons.hoocons_android.CustomUI.view.ViewHelper;
 import com.hoocons.hoocons_android.EventBus.FetchEventListSuccessEvBusRequest;
 import com.hoocons.hoocons_android.EventBus.FetchUserInfoCompleteEvBusRequest;
@@ -48,12 +56,12 @@ import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
-import com.hoocons.hoocons_android.Helpers.UserUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
+import com.hoocons.hoocons_android.Models.SimpleMeetout;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.Parcel.EventParcel;
@@ -66,6 +74,7 @@ import com.hoocons.hoocons_android.Tasks.Jobs.GetUserInfoJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.LikeEventJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.SendFriendRequestJob;
 import com.hoocons.hoocons_android.Tasks.Jobs.UnLikeEventJob;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -84,8 +93,11 @@ public class UserProfileActivity extends DraggerActivity
     RelativeLayout mCustomToolbar;
     @BindView(R.id.small_profile)
     RelativeLayout mSmallProfile;
+
     @BindView(R.id.obs_scrollview)
-    ObservableRecyclerView mRecyclerView;
+    ObservableScrollView observableScrollView;
+    @BindView(R.id.event_recycler)
+    RecyclerView mEventRecycler;
 
     @BindView(R.id.small_profile_header)
     ImageView mSmallProfileImage;
@@ -94,6 +106,7 @@ public class UserProfileActivity extends DraggerActivity
 
     @BindView(R.id.action_back)
     ImageButton mActionBack;
+
     @BindView(R.id.action_more)
     ImageButton mActionMore;
 
@@ -107,6 +120,47 @@ public class UserProfileActivity extends DraggerActivity
     @BindView(R.id.user_display_name)
     TextView mActionBarDisplayName;
 
+    /* USER PROFILE CARDS */
+    @Nullable
+    @BindView(R.id.profile_header)
+    ImageView mProfileImage;
+
+    @Nullable
+    @BindView(R.id.display_name)
+    TextView mDisplayName;
+
+    @Nullable
+    @BindView(R.id.nick_name)
+    TextView mNickname;
+
+    @Nullable
+    @BindView(R.id.action_friend_status)
+    BootstrapButton mAddFriendBtn;
+
+    @Nullable
+    @BindView(R.id.action_send_message)
+    BootstrapButton mSendMessageBtn;
+
+    @Nullable
+    @BindView(R.id.action_huge_send_message)
+    BootstrapButton mHugeSendMessageBtn;
+
+    @Nullable
+    @BindView(R.id.action_edit_profile)
+    BootstrapButton mProfileEditBtn;
+
+    @Nullable
+    @BindView(R.id.action_profile_more)
+    BootstrapButton mProfileMoreOptionBtn;
+
+    @Nullable
+    @BindView(R.id.profile_progress_bar)
+    ProgressBar mProfileProgress;
+
+    @Nullable
+    @BindView(R.id.meetout_list)
+    LinearLayout mMeetOutList;
+
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private final String TAG = UserProfileActivity.class.getSimpleName();
 
@@ -118,13 +172,12 @@ public class UserProfileActivity extends DraggerActivity
 
     private final JobManager jobManager = BaseApplication.getInstance().getJobManager();
     private List<EventResponse> eventResponseList;
-    private final int EVENT_PACK = 15;
     private boolean canLoadMore = false;
     private PopupMenu eventPopup;
     private String currentRequestTag;
 
     private UserInfoResponse userInfoResponse;
-    private UserRelatedDetailsAdapter mEventsAdapter;
+    private EventDetailsAdapter mEventsAdapter;
     private boolean loadComplete = false;
     private boolean isLoading = false;
     private UserParcel userParcel;
@@ -181,21 +234,21 @@ public class UserProfileActivity extends DraggerActivity
     private void initEventRecyclerView() {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
-        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mEventRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
 
         if (spaceDecoration != null) {
-            mRecyclerView.removeItemDecoration(spaceDecoration);
+            mEventRecycler.removeItemDecoration(spaceDecoration);
         }
         spaceDecoration = new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST);
 
-        mRecyclerView.addItemDecoration(spaceDecoration);
-        mRecyclerView.setFocusable(false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setAdapter(mEventsAdapter);
-        mRecyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
-
+        mEventRecycler.addItemDecoration(spaceDecoration);
+        mEventRecycler.setFocusable(false);
+        mEventRecycler.setLayoutManager(mLayoutManager);
+        mEventRecycler.setNestedScrollingEnabled(false);
+        mEventRecycler.setHasFixedSize(false);
+        mEventRecycler.setAdapter(mEventsAdapter);
+        mEventRecycler.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) mLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
@@ -260,13 +313,13 @@ public class UserProfileActivity extends DraggerActivity
 
         mCustomToolbar.bringToFront();
         mOverlayView = findViewById(R.id.overlay);
-        mRecyclerView.setScrollViewCallbacks(this);
+        observableScrollView.setScrollViewCallbacks(this);
 
         setTitle(null);
-        ScrollUtils.addOnGlobalLayoutListener(mRecyclerView, new Runnable() {
+        ScrollUtils.addOnGlobalLayoutListener(observableScrollView, new Runnable() {
             @Override
             public void run() {
-                mRecyclerView.scrollTo(mFlexibleSpaceImageHeight, 0);
+                observableScrollView.scrollTo(mFlexibleSpaceImageHeight, 0);
             }
         });
 
@@ -308,8 +361,8 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(parcel.getUserProfileUrl());
 
-        UserInfoResponse fakeResponse = UserUtils.getFakeUserResponse(userParcel);
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, fakeResponse, this);
+        eventResponseList.clear();
+        mEventsAdapter = new EventDetailsAdapter(this, eventResponseList, this);
         initEventRecyclerView();
     }
 
@@ -326,7 +379,194 @@ public class UserProfileActivity extends DraggerActivity
         mActionBarDisplayName.setText(info.getDisplayName());
 
         loadActionBarProfileImage(info.getProfileUrl());
-        mEventsAdapter.updateUserProfile(userInfoResponse);
+        initUserInfo(userInfoResponse);
+    }
+
+    public void initUserInfo(final UserInfoResponse response) {
+        loadProfileImage(response.getProfileUrl());
+        String nickname = "@" + response.getNickname();
+
+        assert mDisplayName != null;
+        mDisplayName.setText(response.getDisplayName());
+        mDisplayName.setTypeface(EasyFonts.robotoBold(this));
+
+        assert mNickname != null;
+        mNickname.setText(nickname);
+        mNickname.setTypeface(EasyFonts.robotoRegular(this));
+
+        initRelationshipInfo(response);
+        initOnProfileButtonClick();
+        drawListCreatedMeetOut(response.getMeetoutCreatedList());
+    }
+
+    private void loadProfileImage(String url) {
+        assert mProfileImage != null;
+        BaseApplication.getInstance().getGlide()
+                .load(url)
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(this, 6, 6)))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
+                .apply(RequestOptions.noAnimation())
+                .apply(RequestOptions.centerCropTransform())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        mProfileImage.setVisibility(View.VISIBLE);
+                        assert mProfileProgress != null;
+                        mProfileProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(mProfileImage);
+    }
+
+    private void initOnProfileButtonClick() {
+        assert mAddFriendBtn != null;
+        assert mProfileEditBtn != null;
+        assert mProfileMoreOptionBtn != null;
+        assert mSendMessageBtn != null;
+        assert mHugeSendMessageBtn != null;
+
+        mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAddFriendClicked();
+            }
+        });
+
+        mProfileEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onEditProfileClicked();
+            }
+        });
+
+        mProfileMoreOptionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onProfileMoreClicked();
+            }
+        });
+
+        mSendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartChatClicked();
+            }
+        });
+
+        mHugeSendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartChatClicked();
+            }
+        });
+    }
+
+    private void initRelationshipInfo(final UserInfoResponse response) {
+        assert mAddFriendBtn != null;
+        assert mProfileEditBtn != null;
+        assert mProfileMoreOptionBtn != null;
+        assert mSendMessageBtn != null;
+        assert mHugeSendMessageBtn != null;
+
+        if (response.getUserPK() == SharedPreferencesManager.getDefault().getUserId()) {
+            mProfileEditBtn.setBootstrapText(new BootstrapText.Builder(this)
+                    .addFontAwesomeIcon(FontAwesome.FA_PENCIL_SQUARE_O)
+                    .addText(" " + getResources().getText(R.string.edit_profile))
+                    .build());
+
+            mAddFriendBtn.setVisibility(View.GONE);
+            mSendMessageBtn.setVisibility(View.GONE);
+            mProfileEditBtn.setVisibility(View.VISIBLE);
+            mProfileMoreOptionBtn.setVisibility(View.GONE);
+            mHugeSendMessageBtn.setVisibility(View.GONE);
+        } else if (response.isFriend()) {
+            mHugeSendMessageBtn.setBootstrapText(new BootstrapText.Builder(this)
+                    .addFontAwesomeIcon(FontAwesome.FA_COMMENT_O)
+                    .addText(" " + getResources().getText(R.string.messages))
+                    .build());
+
+            mAddFriendBtn.setVisibility(View.GONE);
+            mSendMessageBtn.setVisibility(View.GONE);
+            mProfileEditBtn.setVisibility(View.GONE);
+            mProfileMoreOptionBtn.setVisibility(View.VISIBLE);
+            mHugeSendMessageBtn.setVisibility(View.VISIBLE);
+        } else if (response.isFriendRequested()) {
+            mAddFriendBtn.setVisibility(View.VISIBLE);
+            mAddFriendBtn.setBootstrapText(new BootstrapText.Builder(this)
+                    .addFontAwesomeIcon(FontAwesome.FA_SPINNER)
+                    .addText(" " + getResources().getText(R.string.requested))
+                    .build());
+            mSendMessageBtn.setVisibility(View.VISIBLE);
+            mProfileEditBtn.setVisibility(View.GONE);
+            mProfileMoreOptionBtn.setVisibility(View.VISIBLE);
+            mHugeSendMessageBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawListCreatedMeetOut(final List<SimpleMeetout> meetouts) {
+        assert mMeetOutList != null;
+        if (meetouts == null || meetouts.size() == 0) {
+            mMeetOutList.setVisibility(View.GONE);
+        } else {
+            for (final SimpleMeetout meetout: meetouts) {
+                View view = LayoutInflater.from(this).inflate(R.layout.simple_profile_meetout_layout,
+                        mMeetOutList, false);
+
+                if (view != null) {
+                    TextView mMeetoutName= (TextView) view.findViewById(R.id.small_meetout_name);
+                    CustomTextView mMeetoutDesc = (CustomTextView) view.findViewById(R.id.small_meetout_desc);
+                    TextView mSimpleMeetoutTime = (TextView) view.findViewById(R.id.small_meetout_time);
+                    TextView mMeetoutLocName = (TextView) view.findViewById(R.id.small_meetout_location);
+                    ImageButton mSimpleMeetoutJoinBtn = (ImageButton) view.findViewById(R.id.join_meetout_action);
+
+                    ImageView meetoutImage = (ImageView) view.findViewById(R.id.meetout_small_image);
+                    ProgressBar mProgressBar = (ProgressBar) view.findViewById(R.id.meetout_small_progress);
+
+                    // Load Image
+                    if (meetout.getPromotedMedias() != null && meetout.getPromotedMedias().size() > 0) {
+                        AppUtils.loadCropImageWithProgressBar(this,
+                                meetout.getPromotedMedias().get(0).getUrl(), meetoutImage, mProgressBar);
+                    }
+
+                    // Now initview
+                    mMeetoutName.setText(meetout.getName());
+                    mMeetoutDesc.setContent(meetout.getDescription());
+                    mSimpleMeetoutTime.setText(AppUtils.getSimpleMeetOutTimeFrame(meetout.getFromDateTime(),
+                            meetout.getToDateTime()));
+
+                    mMeetoutLocName.setText(meetout.getMeetupLocationName());
+
+                    CardView mRootView = (CardView) view.findViewById(R.id.rootview);
+                    mRootView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            MeetOutParcel parcel = new MeetOutParcel();
+                            parcel.setId(meetout.getId());
+
+                            if (meetout.getPromotedMedias() != null && meetout.getPromotedMedias().size() > 0) {
+                                parcel.setMeetOutMediaUrl(meetout.getPromotedMedias().get(0).getUrl());
+                            }
+                            parcel.setMeetOutName(meetout.getName());
+
+                            onMeetOutViewClicked(parcel);
+                        }
+                    });
+
+                    mMeetOutList.addView(view);
+                }
+            }
+
+            // After all == no views added
+            if (mMeetOutList.getChildCount() == 0) {
+                mMeetOutList.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void showCancelFriendRequestDialog() {

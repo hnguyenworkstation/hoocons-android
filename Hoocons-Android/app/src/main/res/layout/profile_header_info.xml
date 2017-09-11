@@ -102,7 +102,7 @@
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:id="@+id/action_more"
+                android:id="@+id/action_profile_more"
                 style="@style/wrapping_button"
                 app:bootstrapText="{fa_caret_down}"
                 app:bootstrapBrand="regular"

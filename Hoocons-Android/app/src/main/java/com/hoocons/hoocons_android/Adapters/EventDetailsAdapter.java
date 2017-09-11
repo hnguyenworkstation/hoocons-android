@@ -21,9 +21,8 @@ import java.util.List;
 /**
  * Created by hungnguyen on 7/15/17.
  */
-public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
+public class EventDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
     private List<EventResponse> responseList;
-    private UserInfoResponse userInfoResponse;
     private Context context;
 
     private final int EVENT_LOADING_END = 100;
@@ -47,20 +46,15 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
 
     private final int USER_INFO_TAG_CARD = -1;
     private EventAdapterListener listener;
-    private OnUserInfoClickListener userProfileListener;
 
-    private final int EXTRA_ITEMS = 2;
+    private final int EXTRA_ITEMS = 1;
     private final Handler handler = new Handler();
 
-    public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
-                                     final EventAdapterListener listener,
-                                     UserInfoResponse userInfoResponse,
-                                     OnUserInfoClickListener userProfileListener) {
+    public EventDetailsAdapter(Context context, List<EventResponse> responsesList,
+                               final EventAdapterListener listener) {
         this.context = context;
         this.responseList = responsesList;
         this.listener = listener;
-        this.userInfoResponse = userInfoResponse;
-        this.userProfileListener = userProfileListener;
     }
 
     @Override
@@ -81,10 +75,6 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
             case USER_OTHER_INFO:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.empty_recycler_viewholder, parent, false);
-                break;
-            case USER_INFO_TAG_CARD:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.user_info_profile_viewholder, parent, false);
                 break;
             case TYPE_EVENT_TEXT:
                 view = LayoutInflater.from(parent.getContext())
@@ -133,21 +123,13 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
         return new UserRelatedDetailsViewHolder(view);
     }
 
-    public void updateUserProfile(UserInfoResponse response) {
-        if (response != null) {
-            userInfoResponse = response;
-            notifyItemChanged(0);
-        }
-    }
-
     @Override
     public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
         if (position == 0) {
-            holder.initUserInfo(context, userInfoResponse, userProfileListener);
-        } else if (position == 1) {
             if (responseList != null && responseList.size() > 0) {
                 holder.initDummyCardForEvent(context,
-                        SharedPreferencesManager.getDefault().getUserId() == userInfoResponse.getUserPK(),
+                        SharedPreferencesManager.getDefault().getUserId() == responseList.get(position)
+                                .getAuthor().getUser(),
                         responseList.get(0).getAuthor().getDisplayName());
             }
         } else {
@@ -161,8 +143,6 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
-            return USER_INFO_TAG_CARD;
-        } else if (position == 1) {
             return EVENT_DUMMIES_CARD;
         }
 
