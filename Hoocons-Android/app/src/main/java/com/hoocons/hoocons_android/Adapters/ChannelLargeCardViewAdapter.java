@@ -16,16 +16,15 @@ import java.util.List;
 /**
  * Created by hungnguyen on 8/30/17.
  */
-
 public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelLargeCardViewHolder> {
     private Context context;
     private List<ChannelProfileResponse> channelProfileResponseList;
     private OnChannelProfileClickListener listener;
 
-    public ChannelLargeCardViewAdapter(Context context, List<ChannelProfileResponse> channelProfileResponseList,
+    public ChannelLargeCardViewAdapter(Context context, List<ChannelProfileResponse> responses,
                                        OnChannelProfileClickListener listener) {
         this.context = context;
-        this.channelProfileResponseList = channelProfileResponseList;
+        this.channelProfileResponseList = responses;
         this.listener = listener;
     }
 
@@ -38,7 +37,7 @@ public class ChannelLargeCardViewAdapter extends RecyclerView.Adapter<ChannelLar
 
     @Override
     public void onBindViewHolder(ChannelLargeCardViewHolder holder, int position) {
-        holder.init(context, channelProfileResponseList.get(position), position);
+        holder.init(context, channelProfileResponseList.get(position), position, listener);
     }
 
     @Override

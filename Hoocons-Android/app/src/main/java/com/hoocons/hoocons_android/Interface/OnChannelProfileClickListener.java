@@ -5,5 +5,5 @@ package com.hoocons.hoocons_android.Interface;
  */
 
 public interface OnChannelProfileClickListener {
-
+    void onChannelProfileClicked(final int position);
 }

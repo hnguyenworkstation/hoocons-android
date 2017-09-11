@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.util.Util;
 import com.hoocons.hoocons_android.CustomUI.AdjustableImageView;
+import com.hoocons.hoocons_android.Interface.OnChannelProfileClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.Responses.ChannelProfileResponse;
 import com.hoocons.hoocons_android.R;
@@ -49,7 +50,7 @@ public class ChannelLargeCardViewHolder extends ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void init(Context context, ChannelProfileResponse response, int pos) {
+    public void init(Context context, ChannelProfileResponse response, int pos, OnChannelProfileClickListener listener) {
         if (response != null) {
             initTypeFace(context);
             loadWallpaper(response.getProfileUrl());

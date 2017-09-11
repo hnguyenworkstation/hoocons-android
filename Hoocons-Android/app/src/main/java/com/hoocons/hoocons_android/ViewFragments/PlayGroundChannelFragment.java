@@ -56,7 +56,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
     private ChannelApiViewSet channelApiViewSet;
     private ChannelLargeCardViewAdapter mAdapter;
     private DividerItemDecoration spaceDecoration;
-    private List<ChannelProfileResponse> responseList;
+    private List<ChannelProfileResponse> channelProfileResponseList;
 
     public PlayGroundChannelFragment() {
         // Required empty public constructor
@@ -75,7 +75,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
         if (getArguments() != null) {
 
         }
-        responseList = new ArrayList<>();
+        channelProfileResponseList = new ArrayList<>();
         BaseApplication.getInstance().getJobManager().addJobInBackground(
                 new FetchOwnedChannelJob()
         );
@@ -108,17 +108,16 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
             public void run() {
                 try {
                     synchronized (this) {
-                        wait(500);
+                        wait(1000);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (mAdapter != null) {
-                                    mAdapter.notifyDataSetChanged();
-                                }
+                                channelProfileResponseList.clear();
+                                channelProfileResponseList.addAll(channelApiViewSet.getResults());
+                                mAdapter.notifyDataSetChanged();
 
                                 mProgressBar.setVisibility(View.GONE);
-                                mNestedScrollView.setVisibility(View.VISIBLE);
                             }
                         });
 
@@ -133,13 +132,14 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
     }
 
     private void initView() {
-        mAdapter = new ChannelLargeCardViewAdapter(getContext(), responseList, this);
+        mAdapter = new ChannelLargeCardViewAdapter(getContext(), channelProfileResponseList, this);
+
         final RecyclerView.LayoutManager mLayoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
         recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(false);
         if (spaceDecoration != null) {
             recyclerView.removeItemDecoration(spaceDecoration);
         } else {
@@ -147,6 +147,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
                     DividerItemDecoration.VERTICAL_LIST);
         }
         recyclerView.addItemDecoration(spaceDecoration);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -167,12 +168,18 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
         EventBus.getDefault().unregister(this);
     }
 
-    /*
+    @Override
+    public void onChannelProfileClicked(int position) {
+
+    }
+
+
+    /*****************************
     *   EVENT CATCHING
-    * */
+    * *****************************/
     @Subscribe
     public void onEvent(FetchOwnedChannelsComplete fetchOwnedChannelsComplete) {
         channelApiViewSet = fetchOwnedChannelsComplete.getChannelApiViewSet();
-        responseList = channelApiViewSet.getResults();
     }
+
 }
