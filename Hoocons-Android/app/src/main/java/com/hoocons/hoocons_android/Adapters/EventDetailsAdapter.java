@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by hungnguyen on 7/15/17.
  */
-public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
+public class EventDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
 
@@ -46,18 +46,15 @@ public class UserRelatedDetailsAdapter extends RecyclerView.Adapter<UserRelatedD
 
     private final int USER_INFO_TAG_CARD = -1;
     private EventAdapterListener listener;
-    private OnUserInfoClickListener userProfileListener;
 
     private final int EXTRA_ITEMS = 1;
     private final Handler handler = new Handler();
 
-    public UserRelatedDetailsAdapter(Context context, List<EventResponse> responsesList,
-                                     final EventAdapterListener listener,
-                                     OnUserInfoClickListener userProfileListener) {
+    public EventDetailsAdapter(Context context, List<EventResponse> responsesList,
+                               final EventAdapterListener listener) {
         this.context = context;
         this.responseList = responsesList;
         this.listener = listener;
-        this.userProfileListener = userProfileListener;
     }
 
     @Override

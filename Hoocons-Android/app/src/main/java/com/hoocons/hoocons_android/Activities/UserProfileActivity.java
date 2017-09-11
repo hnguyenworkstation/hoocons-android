@@ -1,7 +1,6 @@
 package com.hoocons.hoocons_android.Activities;
 
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ppamorim.dragger.DraggerActivity;
-import com.hoocons.hoocons_android.Adapters.UserRelatedDetailsAdapter;
+import com.hoocons.hoocons_android.Adapters.EventDetailsAdapter;
 import com.hoocons.hoocons_android.CustomUI.CustomTextView;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.RoundedCornersTransformation;
@@ -57,7 +56,6 @@ import com.hoocons.hoocons_android.EventBus.StartEventChildImages;
 import com.hoocons.hoocons_android.EventBus.TaskCompleteRequest;
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Helpers.AppUtils;
-import com.hoocons.hoocons_android.Helpers.UserUtils;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
 import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
@@ -179,7 +177,7 @@ public class UserProfileActivity extends DraggerActivity
     private String currentRequestTag;
 
     private UserInfoResponse userInfoResponse;
-    private UserRelatedDetailsAdapter mEventsAdapter;
+    private EventDetailsAdapter mEventsAdapter;
     private boolean loadComplete = false;
     private boolean isLoading = false;
     private UserParcel userParcel;
@@ -363,7 +361,8 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(parcel.getUserProfileUrl());
 
-        mEventsAdapter = new UserRelatedDetailsAdapter(this, eventResponseList, this, this);
+        eventResponseList.clear();
+        mEventsAdapter = new EventDetailsAdapter(this, eventResponseList, this);
         initEventRecyclerView();
     }
 
@@ -511,6 +510,7 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void drawListCreatedMeetOut(final List<SimpleMeetout> meetouts) {
+        assert mMeetOutList != null;
         if (meetouts == null || meetouts.size() == 0) {
             mMeetOutList.setVisibility(View.GONE);
         } else {
