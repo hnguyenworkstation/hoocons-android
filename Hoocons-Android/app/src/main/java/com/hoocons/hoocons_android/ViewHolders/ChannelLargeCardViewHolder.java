@@ -30,15 +30,10 @@ import butterknife.ButterKnife;
 public class ChannelLargeCardViewHolder extends ViewHolder {
     @BindView(R.id.wallpaper)
     AdjustableImageView mWallPaper;
-    @BindView(R.id.channel_profile)
-    ImageView mChannelProfile;
-    @BindView(R.id.follow_button)
-    LinearLayout mFollowButton;
-
     @BindView(R.id.channel_name)
     TextView mChannelName;
-    @BindView(R.id.channel_desc)
-    TextView mChannelDesc;
+    @BindView(R.id.channel_cat)
+    TextView mChannelCat;
     @BindView(R.id.location)
     TextView mLocation;
     @BindView(R.id.fav_count)
@@ -54,13 +49,12 @@ public class ChannelLargeCardViewHolder extends ViewHolder {
         if (response != null) {
             initTypeFace(context);
             loadWallpaper(response.getProfileUrl());
-            loadProfile(response.getWallpaperUrl());
         }
     }
 
     private void initTypeFace(Context context) {
-        mChannelName.setTypeface(EasyFonts.robotoRegular(context));
-        mChannelDesc.setTypeface(EasyFonts.robotoRegular(context));
+        mChannelName.setTypeface(EasyFonts.robotoBold(context));
+        mChannelCat.setTypeface(EasyFonts.robotoRegular(context));
         mLocation.setTypeface(EasyFonts.robotoRegular(context));
         mFavoriteCount.setTypeface(EasyFonts.robotoRegular(context));
     }
@@ -75,18 +69,7 @@ public class ChannelLargeCardViewHolder extends ViewHolder {
                     .into(mWallPaper);
     }
 
-    private void loadProfile(String url) {
-        if (url != null)
-            BaseApplication.getInstance().getGlide()
-                    .load(url)
-                    .apply(RequestOptions.centerCropTransform())
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                    .apply(RequestOptions.noAnimation())
-                    .into(mChannelProfile);
-    }
-
     public void onViewRecycled() {
         BaseApplication.getInstance().getGlide().clear(mWallPaper);
-        BaseApplication.getInstance().getGlide().clear(mChannelProfile);
     }
 }

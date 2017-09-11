@@ -1,6 +1,7 @@
 package com.hoocons.hoocons_android.ViewFragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.hoocons.hoocons_android.Activities.ChannelActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelLargeCardViewAdapter;
 import com.hoocons.hoocons_android.Adapters.EventCardViewAdapter;
 import com.hoocons.hoocons_android.CustomUI.DividerItemDecoration;
 import com.hoocons.hoocons_android.CustomUI.StaggeredItemDecorator;
 import com.hoocons.hoocons_android.EventBus.FetchOwnedChannelsComplete;
+import com.hoocons.hoocons_android.Helpers.AppUtils;
 import com.hoocons.hoocons_android.Interface.OnChannelProfileClickListener;
 import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Networking.ApiViewSets.ChannelApiViewSet;
@@ -31,6 +34,7 @@ import com.hoocons.hoocons_android.Tasks.Jobs.FetchOwnedChannelJob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,15 +112,12 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
             public void run() {
                 try {
                     synchronized (this) {
-                        wait(1000);
+                        wait(500);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                channelProfileResponseList.clear();
-                                channelProfileResponseList.addAll(channelApiViewSet.getResults());
                                 mAdapter.notifyDataSetChanged();
-
                                 mProgressBar.setVisibility(View.GONE);
                             }
                         });
@@ -132,21 +133,15 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
     }
 
     private void initView() {
+        channelProfileResponseList.clear();
         mAdapter = new ChannelLargeCardViewAdapter(getContext(), channelProfileResponseList, this);
 
         final RecyclerView.LayoutManager mLayoutManager =
-                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
-        if (spaceDecoration != null) {
-            recyclerView.removeItemDecoration(spaceDecoration);
-        } else {
-            spaceDecoration = new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.VERTICAL_LIST);
-        }
-        recyclerView.addItemDecoration(spaceDecoration);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -170,9 +165,12 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
 
     @Override
     public void onChannelProfileClicked(int position) {
-
+        ChannelProfileResponse response = channelProfileResponseList.get(position);
+        Intent intent = new Intent(getActivity(), ChannelActivity.class);
+        intent.putExtra("channel_profile",
+                Parcels.wrap(AppUtils.getChannelProfileParcelFromResponse(response)));
+        startActivity(intent);
     }
-
 
     /*****************************
     *   EVENT CATCHING
@@ -180,6 +178,7 @@ public class PlayGroundChannelFragment extends Fragment implements OnChannelProf
     @Subscribe
     public void onEvent(FetchOwnedChannelsComplete fetchOwnedChannelsComplete) {
         channelApiViewSet = fetchOwnedChannelsComplete.getChannelApiViewSet();
+        channelProfileResponseList.addAll(channelApiViewSet.getResults());
     }
 
 }
