@@ -9,11 +9,14 @@ import android.view.MenuItem;
 
 import com.github.ppamorim.dragger.DraggerActivity;
 import com.hoocons.hoocons_android.Adapters.ChannelViewPagerAdapter;
+import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
+import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.EventBus.ChannelProfileDataBus;
 import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
@@ -37,7 +40,8 @@ public class ChannelActivity extends DraggerActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            channelProfileParcel = (ChannelProfileParcel) Parcels.unwrap(intent.getParcelableExtra("channel_profile"));
+            channelProfileParcel = (ChannelProfileParcel)
+                    Parcels.unwrap(intent.getParcelableExtra("channel_profile"));
         }
 
         if (channelProfileParcel != null && isFirstLoad) {
@@ -124,6 +128,30 @@ public class ChannelActivity extends DraggerActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     /*
     * CHANGING MAIN MENU EACH TIME WE CHANGE A FRAGMENT
     * MENUS ARE SET FROM EACH MENU
@@ -133,5 +161,19 @@ public class ChannelActivity extends DraggerActivity {
             mViewPagerAdapter.getItem(i).setHasOptionsMenu(i == position);
         }
         invalidateOptionsMenu(); //or respectively its support method.
+    }
+
+
+    /*
+    * EVENT BUSES CATCHING
+    * */
+    @Subscribe
+    public void onEvent(AllowSlideDown slideDown) {
+        setSlideEnabled(true);
+    }
+
+    @Subscribe
+    public void onEvent(BlockSlideDown blockSlideDown) {
+        setSlideEnabled(false);
     }
 }
