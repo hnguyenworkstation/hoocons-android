@@ -112,6 +112,7 @@ public class UserProfileActivity extends DraggerActivity
 
     @BindView(R.id.wallpaper_progress_bar)
     ProgressBar mWallpaperProgress;
+
     @BindView(R.id.small_profile_progress_bar)
     ProgressBar mSmallProfileProgress;
 
@@ -191,7 +192,8 @@ public class UserProfileActivity extends DraggerActivity
         setContentView(R.layout.activity_user_profile);
         ButterKnife.bind(this);
 
-        eventResponseList = new ArrayList<>();
+        assert mProfileImage != null;
+
         userParcel = (UserParcel) Parcels.unwrap(getIntent().getParcelableExtra("user_info"));
 
         // getting user data
@@ -200,6 +202,13 @@ public class UserProfileActivity extends DraggerActivity
         }
 
         handler = new Handler();
+
+        // Clear stuff
+        BaseApplication.getInstance().getGlide().clear(mWallpaperImage);
+        BaseApplication.getInstance().getGlide().clear(mProfileImage);
+
+        eventResponseList = new ArrayList<>();
+
         initDialogs();
         initTempViewWithParcel(userParcel);
         initGeneralView();
@@ -232,6 +241,9 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void initEventRecyclerView() {
+        eventResponseList.clear();
+        mEventsAdapter = new EventDetailsAdapter(this, eventResponseList, this);
+
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         ((SimpleItemAnimator) mEventRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -239,8 +251,7 @@ public class UserProfileActivity extends DraggerActivity
         if (spaceDecoration != null) {
             mEventRecycler.removeItemDecoration(spaceDecoration);
         }
-        spaceDecoration = new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST);
+        spaceDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
 
         mEventRecycler.addItemDecoration(spaceDecoration);
         mEventRecycler.setFocusable(false);
@@ -286,7 +297,7 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void loadActionBarProfileImage(String url) {
-        Glide.with(this)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -329,7 +340,7 @@ public class UserProfileActivity extends DraggerActivity
     }
 
     private void loadWallPaperImage(String url) {
-        Glide.with(this)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())
@@ -361,8 +372,6 @@ public class UserProfileActivity extends DraggerActivity
 
         loadActionBarProfileImage(parcel.getUserProfileUrl());
 
-        eventResponseList.clear();
-        mEventsAdapter = new EventDetailsAdapter(this, eventResponseList, this);
         initEventRecyclerView();
     }
 
@@ -379,10 +388,10 @@ public class UserProfileActivity extends DraggerActivity
         mActionBarDisplayName.setText(info.getDisplayName());
 
         loadActionBarProfileImage(info.getProfileUrl());
-        initUserInfo(userInfoResponse);
+        runInitUserInfoInBackground(userInfoResponse);
     }
 
-    public void initUserInfo(final UserInfoResponse response) {
+    private void initUserInfo(final UserInfoResponse response) {
         loadProfileImage(response.getProfileUrl());
         String nickname = "@" + response.getNickname();
 
@@ -397,6 +406,53 @@ public class UserProfileActivity extends DraggerActivity
         initRelationshipInfo(response);
         initOnProfileButtonClick();
         drawListCreatedMeetOut(response.getMeetoutCreatedList());
+    }
+
+    private void runInitUserInfoInBackground(final UserInfoResponse response) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(500);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initUserInfo(response);
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+        }.start();
+    }
+
+    private void runLoadEventsInBackground() {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(500);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mEventsAdapter.notifyDataSetChanged();
+                                Toast.makeText(UserProfileActivity.this, String.valueOf(mEventsAdapter.getItemCount()), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+        }.start();
     }
 
     private void loadProfileImage(String url) {
@@ -885,8 +941,9 @@ public class UserProfileActivity extends DraggerActivity
     public void onEvent(FetchEventListSuccessEvBusRequest request) {
         canLoadMore = request.getApiViewSet().getNext() != null;
         currentPage++;
+
         eventResponseList.addAll(request.getApiViewSet().getResults());
-        mEventsAdapter.notifyDataSetChanged();
+        runLoadEventsInBackground();
     }
 
     @Subscribe

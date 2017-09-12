@@ -15,6 +15,6 @@
         android:top="1dp" />
 
     <stroke
-        android:width="0.6dp"
+        android:width="0.4dp"
         android:color="@color/gray_alpha" />
 </shape>

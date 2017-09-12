@@ -14,7 +14,6 @@ import com.hoocons.hoocons_android.Networking.Responses.ActivityResponse;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
 import com.hoocons.hoocons_android.R;
 import com.hoocons.hoocons_android.ViewHolders.FeaturedEventViewHolder;
-import com.hoocons.hoocons_android.ViewHolders.UserRelatedDetailsViewHolder;
 
 import java.util.List;
 

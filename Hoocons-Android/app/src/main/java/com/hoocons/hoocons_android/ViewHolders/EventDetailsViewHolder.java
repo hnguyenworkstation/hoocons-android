@@ -76,7 +76,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
  * Created by hungnguyen on 7/15/17.
  */
 
-public class UserRelatedDetailsViewHolder extends ViewHolder {
+public class EventDetailsViewHolder extends ViewHolder {
     /* EVENT HEADER */
     @Nullable
     @BindView(R.id.event_type)
@@ -253,7 +253,7 @@ public class UserRelatedDetailsViewHolder extends ViewHolder {
     private final BaseSpringSystem mSpringSystem = SpringSystem.create();
     private GifDrawable gifDrawable;
 
-    public UserRelatedDetailsViewHolder(View itemView) {
+    public EventDetailsViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

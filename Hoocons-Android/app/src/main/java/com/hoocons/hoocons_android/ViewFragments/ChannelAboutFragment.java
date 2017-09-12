@@ -41,6 +41,7 @@ import com.hoocons.hoocons_android.EventBus.AllowSlideDown;
 import com.hoocons.hoocons_android.EventBus.BlockSlideDown;
 import com.hoocons.hoocons_android.EventBus.ChannelProfileDataBus;
 import com.hoocons.hoocons_android.Interface.InfiniteScrollListener;
+import com.hoocons.hoocons_android.Managers.BaseApplication;
 import com.hoocons.hoocons_android.Parcel.ChannelProfileParcel;
 import com.hoocons.hoocons_android.R;
 
@@ -213,7 +214,7 @@ public class ChannelAboutFragment extends Fragment implements
     }
 
     private void loadWallPaperImage(String url) {
-        Glide.with(this)
+        BaseApplication.getInstance().getGlide()
                 .load(url)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.noAnimation())

@@ -9,19 +9,17 @@ import android.view.ViewGroup;
 
 import com.hoocons.hoocons_android.Helpers.AppConstant;
 import com.hoocons.hoocons_android.Interface.EventAdapterListener;
-import com.hoocons.hoocons_android.Interface.OnUserInfoClickListener;
 import com.hoocons.hoocons_android.Managers.SharedPreferencesManager;
 import com.hoocons.hoocons_android.Networking.Responses.EventResponse;
-import com.hoocons.hoocons_android.Networking.Responses.UserInfoResponse;
 import com.hoocons.hoocons_android.R;
-import com.hoocons.hoocons_android.ViewHolders.UserRelatedDetailsViewHolder;
+import com.hoocons.hoocons_android.ViewHolders.EventDetailsViewHolder;
 
 import java.util.List;
 
 /**
  * Created by hungnguyen on 7/15/17.
  */
-public class EventDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetailsViewHolder> {
+public class EventDetailsAdapter extends RecyclerView.Adapter<EventDetailsViewHolder> {
     private List<EventResponse> responseList;
     private Context context;
 
@@ -58,13 +56,13 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetails
     }
 
     @Override
-    public void onViewRecycled(UserRelatedDetailsViewHolder holder) {
+    public void onViewRecycled(EventDetailsViewHolder holder) {
         holder.onViewRecycled();
         super.onViewRecycled(holder);
     }
 
     @Override
-    public UserRelatedDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EventDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
         switch (viewType) {
@@ -120,11 +118,11 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<UserRelatedDetails
                 break;
         }
 
-        return new UserRelatedDetailsViewHolder(view);
+        return new EventDetailsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(UserRelatedDetailsViewHolder holder, int position) {
+    public void onBindViewHolder(EventDetailsViewHolder holder, int position) {
         if (position == 0) {
             if (responseList != null && responseList.size() > 0) {
                 holder.initDummyCardForEvent(context,
