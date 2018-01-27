@@ -1,5 +1,8 @@
-# hoocons
+# Hoocons
 Hoocons Front-End and its related feature applications
+
+# Hoocons' backend project:
+https://github.com/hnguyenworkstation/hoocons_services
 
 # Demo (temporary):
 Dropbox Link:
